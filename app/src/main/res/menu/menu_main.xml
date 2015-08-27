@@ -1,0 +1,46 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity">
+
+    <item
+        android:id="@+id/action_overview"
+        android:icon="@drawable/icon_group"
+        android:orderInCategory="1"
+        android:title="@string/actions_overview"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_history"
+        android:icon="@drawable/icon_history"
+        android:orderInCategory="2"
+        android:title="@string/actions_history"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_newGame"
+        android:orderInCategory="3"
+        android:title="@string/actions_newGame"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_playerColor"
+        android:icon="@drawable/icon_palette"
+        android:orderInCategory="4"
+        android:title="@string/actions_playerColor"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_screen"
+        android:checkable="true"
+        android:orderInCategory="5"
+        android:title="@string/actions_screen"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_about"
+        android:orderInCategory="6"
+        android:title="@string/actions_about"
+        app:showAsAction="never" />
+
+</menu>

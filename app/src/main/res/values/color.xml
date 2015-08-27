@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="edh_blue_main1" type="color">#FF348cac</item>
+    <item name="edh_blue_dark1" type="color">#ff3580a1</item>
+
+    <item name="edh_default_main" type="color">#ff0f0f0f</item>
+    <item name="edh_default_dark" type="color">#ff000000</item>
+    <integer-array name="edh_default">
+        <item>@color/edh_default_main</item>
+        <item>@color/edh_default_dark</item>
+    </integer-array>
+
+    <item name="edh_shield_turquoise_main" type="color">#FF00E5EE</item>
+    <item name="edh_shield_turquoise_dark" type="color">#ff00d0d9</item>
+
+    <item name="edh_shield_purple_main" type="color">#ffb542c3</item>
+    <item name="edh_shield_purple_dark" type="color">#ff983aa6</item>
+
+    <item name="edh_shield_white_main" type="color">#ffdfdfdf</item>
+    <item name="edh_shield_white_dark" type="color">#ffd8d8d8</item>
+
+    <item name="edh_shield_brown_main" type="color">#ffb4663c</item>
+    <item name="edh_shield_brown_dark" type="color">#ffa8583e</item>
+
+    <item name="edh_shield_red_main" type="color">#fff4251e</item>
+    <item name="edh_shield_red_dark" type="color">#ffd4251e</item>
+
+    <item name="edh_shield_black_main" type="color">#ff0f0f0f</item>
+    <item name="edh_shield_black_dark" type="color">#ff000000</item>
+
+    <item name="edh_shield_pink_main" type="color">#ffee1f8f</item>
+    <item name="edh_shield_pink_dark" type="color">#ffd71f77</item>
+
+    <item name="edh_shield_blue_main" type="color">#ff6872e2</item>
+    <item name="edh_shield_blue_dark" type="color">#ff5c5fc2</item>
+
+    <item name="edh_shield_silver_main" type="color">#ffc0c0c0</item>
+    <item name="edh_shield_silver_dark" type="color">#ffb5b5b5</item>
+
+    <item name="edh_shield_orange_main" type="color">#ffffa70d</item>
+    <item name="edh_shield_orange_dark" type="color">#ffe8910d</item>
+
+    <item name="edh_shield_yellow_main" type="color">#fff3e924</item>
+    <item name="edh_shield_yellow_dark" type="color">#ffdbd124</item>
+
+    <item name="edh_shield_gold_main" type="color">#ffeec900</item>
+    <item name="edh_shield_gold_dark" type="color">#ffd5b000</item>
+
+    <item name="edh_shield_green_main" type="color">#ff14bd03</item>
+    <item name="edh_shield_green_dark" type="color">#ff14aa03</item>
+
+    <item name="edh_shield_darkred_main" type="color">#ffab1e19</item>
+    <item name="edh_shield_darkred_dark" type="color">#ff931f19</item>
+
+    <item name="edh_shield_darkblue_main" type="color">#ff494989</item>
+    <item name="edh_shield_darkblue_dark" type="color">#ff3b3b76</item>
+
+    <integer-array name="edh_shield_colors">
+        <item>@color/edh_shield_white_main</item>
+        <item>@color/edh_shield_silver_main</item>
+        <item>@color/edh_shield_turquoise_main</item>
+        <item>@color/edh_shield_blue_main</item>
+        <item>@color/edh_shield_darkblue_main</item>
+        <item>@color/edh_shield_purple_main</item>
+        <item>@color/edh_shield_pink_main</item>
+        <item>@color/edh_shield_red_main</item>
+        <item>@color/edh_shield_darkred_main</item>
+        <item>@color/edh_shield_orange_main</item>
+        <item>@color/edh_shield_yellow_main</item>
+        <item>@color/edh_shield_gold_main</item>
+        <item>@color/edh_shield_brown_main</item>
+        <item>@color/edh_shield_green_main</item>
+        <item>@color/edh_shield_black_main</item>
+    </integer-array>
+
+    <integer-array name="edh_shield_colors_dark">
+        <item>@color/edh_shield_white_dark</item>
+        <item>@color/edh_shield_silver_dark</item>
+        <item>@color/edh_shield_turquoise_dark</item>
+        <item>@color/edh_shield_blue_dark</item>
+        <item>@color/edh_shield_darkblue_dark</item>
+        <item>@color/edh_shield_purple_dark</item>
+        <item>@color/edh_shield_pink_dark</item>
+        <item>@color/edh_shield_red_dark</item>
+        <item>@color/edh_shield_darkred_dark</item>
+        <item>@color/edh_shield_orange_dark</item>
+        <item>@color/edh_shield_yellow_dark</item>
+        <item>@color/edh_shield_gold_dark</item>
+        <item>@color/edh_shield_brown_dark</item>
+        <item>@color/edh_shield_green_dark</item>
+        <item>@color/edh_shield_black_dark</item>
+    </integer-array>
+
+</resources>

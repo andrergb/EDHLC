@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".OverviewActivity">
+    <!--<item-->
+        <!--android:id="@+id/action_playerview"-->
+        <!--android:icon="@drawable/icon_player"-->
+        <!--android:orderInCategory="1"-->
+        <!--android:title="@string/actions_playerView"-->
+        <!--app:showAsAction="always" />-->
+
+    <!--<item-->
+        <!--android:id="@+id/action_history"-->
+        <!--android:icon="@drawable/icon_history"-->
+        <!--android:orderInCategory="2"-->
+        <!--android:title="@string/actions_history"-->
+        <!--app:showAsAction="always" />-->
+</menu>

@@ -1,0 +1,282 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/border"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:weightSum="10"
+    tools:context=".MainActivity$PlaceholderFragment">
+
+    <TextView
+        android:id="@+id/textViewName"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clickable="true"
+        android:gravity="center_vertical|center_horizontal"
+        android:onClick="onClickPlayerName"
+        android:text="Player Name"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="35sp" />
+
+    <LinearLayout
+        android:id="@+id/linearLayoutLife"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        android:orientation="horizontal"
+        android:weightSum="10">
+
+        <TextView
+            android:id="@+id/textViewLife"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="8"
+            android:clickable="true"
+            android:gravity="center_vertical|center_horizontal"
+            android:onClick="onClickPlayerLife"
+            android:text="40"
+            android:textSize="180sp" />
+
+        <LinearLayout
+            android:id="@+id/relativeLifeButtonRelative"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:weightSum="2">
+
+            <Button
+                android:id="@+id/buttonLifePositive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@drawable/icon_up1"
+                android:contentDescription="@string/buttonLifePositive"
+                android:onClick="onClickPlayerLifePlusButton"
+                android:scaleType="centerInside" />
+
+            <Button
+                android:id="@+id/buttonLifeNegative"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@drawable/icon_up1"
+                android:contentDescription="@string/buttonLifeNegative"
+                android:onClick="onClickPlayerLifeMinusButton"
+                android:rotation="180"
+                android:scaleType="centerInside" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayoutEDH"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:orientation="horizontal"
+        android:weightSum="4">
+
+        <LinearLayout
+            android:id="@+id/relativeEDH1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical|center_horizontal"
+            android:orientation="vertical"
+            android:textSize="40sp"
+            android:weightSum="4">
+
+            <Button
+                android:id="@+id/buttonEDH1Positive"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.3"
+                android:background="@drawable/icon_up2"
+                android:onClick="onClickPlayerEDH1PlusButton" />
+
+            <TextView
+                android:id="@+id/textViewEDH1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.9"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="0"
+                android:textSize="35sp" />
+
+            <Button
+                android:id="@+id/buttonEDH1Negative"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.3"
+                android:background="@drawable/icon_down2"
+                android:onClick="onClickPlayerEDH1MinusButton" />
+
+            <TextView
+                android:id="@+id/textViewP1Name"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.5"
+                android:gravity="center_vertical|center_horizontal"
+                android:maxLength="10"
+                android:text="PlayerName"
+                android:textSize="10sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/relativeEDH2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical|center_horizontal"
+            android:orientation="vertical"
+            android:text="0"
+            android:textSize="40sp"
+            android:weightSum="4">
+
+            <Button
+                android:id="@+id/buttonEDH2Positive"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.3"
+                android:background="@drawable/icon_up2"
+                android:onClick="onClickPlayerEDH2PlusButton" />
+
+            <TextView
+                android:id="@+id/textViewEDH2"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.9"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="0"
+                android:textSize="35sp" />
+
+            <Button
+                android:id="@+id/buttonEDH2Negative"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.3"
+                android:background="@drawable/icon_down2"
+                android:onClick="onClickPlayerEDH2MinusButton" />
+
+            <TextView
+                android:id="@+id/textViewP2Name"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.5"
+                android:gravity="center_vertical|center_horizontal"
+                android:maxLength="10"
+                android:text="PlayerName"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/relativeEDH3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical|center_horizontal"
+            android:orientation="vertical"
+            android:textSize="40sp"
+            android:weightSum="4">
+
+            <Button
+                android:id="@+id/buttonEDH3Positive"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.3"
+                android:background="@drawable/icon_up2"
+                android:onClick="onClickPlayerEDH3PlusButton" />
+
+            <TextView
+                android:id="@+id/textViewEDH3"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.9"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="0"
+                android:textSize="35sp" />
+
+            <Button
+                android:id="@+id/buttonEDH3Negative"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.3"
+                android:background="@drawable/icon_down2"
+                android:onClick="onClickPlayerEDH3MinusButton" />
+
+            <TextView
+                android:id="@+id/textViewP3Name"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.5"
+                android:gravity="center_vertical|center_horizontal"
+                android:maxLength="10"
+                android:text="PlayerName"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/relativeEDH4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical|center_horizontal"
+            android:orientation="vertical"
+            android:textSize="40sp"
+            android:weightSum="4">
+
+            <Button
+                android:id="@+id/buttonEDH4Positive"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.3"
+                android:background="@drawable/icon_up2"
+                android:onClick="onClickPlayerEDH4PlusButton" />
+
+            <TextView
+                android:id="@+id/textViewEDH4"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.9"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="0"
+                android:textSize="35sp" />
+
+            <Button
+                android:id="@+id/buttonEDH4Negative"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.3"
+                android:background="@drawable/icon_down2"
+                android:onClick="onClickPlayerEDH4MinusButton" />
+
+            <TextView
+                android:id="@+id/textViewP4Name"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.5"
+                android:gravity="center_vertical|center_horizontal"
+                android:maxLength="10"
+                android:text="PlayerName"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>
