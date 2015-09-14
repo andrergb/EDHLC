@@ -56,6 +56,11 @@ public class HistoryActivity extends ActionBarActivity {
         mPlayer3 = Player.loadPlayerSharedPreferences(this, 3);
         mPlayer4 = Player.loadPlayerSharedPreferences(this, 4);
 
+        if (getSharedPreferences(Player.PREFNAME, MODE_PRIVATE).getInt("SCREEN_ON", 0) == 1)
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        else
+            getWindow().clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
         updateLayout();
     }
 
