@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class OverviewActivity extends ActionBarActivity {
@@ -32,6 +33,7 @@ public class OverviewActivity extends ActionBarActivity {
     private static TextView mTextViewP2EDH3;
     private static TextView mTextViewP2EDH4;
 
+    private static LinearLayout mLinearLayoutP3;
     private static TextView mTextViewP3Name;
     private static TextView mTextViewP3Life;
     private static TextView mTextViewP3EDH1;
@@ -39,12 +41,15 @@ public class OverviewActivity extends ActionBarActivity {
     private static TextView mTextViewP3EDH3;
     private static TextView mTextViewP3EDH4;
 
+    private static LinearLayout mLinearLayoutP4;
     private static TextView mTextViewP4Name;
     private static TextView mTextViewP4Life;
     private static TextView mTextViewP4EDH1;
     private static TextView mTextViewP4EDH2;
     private static TextView mTextViewP4EDH3;
     private static TextView mTextViewP4EDH4;
+
+    private int numPlayers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +62,10 @@ public class OverviewActivity extends ActionBarActivity {
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.setStatusBarColor(this.getResources().getColor(R.color.edh_default_dark));
         }
-        createTextView(this.findViewById(android.R.id.content));
+
+        numPlayers = getSharedPreferences(Player.PREFNAME, MODE_PRIVATE).getInt("NUM_PLAYERS", 4);
+
+        createLayout(this.findViewById(android.R.id.content));
     }
 
     @Override
@@ -73,6 +81,8 @@ public class OverviewActivity extends ActionBarActivity {
         else
             getWindow().clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+        numPlayers = getSharedPreferences(Player.PREFNAME, MODE_PRIVATE).getInt("NUM_PLAYERS", 4);
+
         updateLayout();
     }
 
@@ -84,16 +94,6 @@ public class OverviewActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-//        int id = item.getItemId();
-//        if (id == R.id.action_playerview) {
-//            Intent intent = new Intent(this, MainActivity.class);
-//            startActivity(intent);
-//            this.finish();
-//        } else if (id == R.id.action_history) {
-//            startActivity(new Intent(this, HistoryActivity.class));
-//            this.finish();
-//        }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -105,7 +105,7 @@ public class OverviewActivity extends ActionBarActivity {
         this.finish();
     }
 
-    public void createTextView(View view) {
+    public void createLayout(View view) {
         if (view != null) {
             mTextViewP1Name = (TextView) view.findViewById(R.id.textViewOverviewP1Name);
             mTextViewP1Life = (TextView) view.findViewById(R.id.textViewOverviewP1Life);
@@ -121,6 +121,7 @@ public class OverviewActivity extends ActionBarActivity {
             mTextViewP2EDH3 = (TextView) view.findViewById(R.id.textViewOverviewP2EDH3);
             mTextViewP2EDH4 = (TextView) view.findViewById(R.id.textViewOverviewP2EDH4);
 
+            mLinearLayoutP3 = (LinearLayout) view.findViewById(R.id.linearLayoutP3);
             mTextViewP3Name = (TextView) view.findViewById(R.id.textViewOverviewP3Name);
             mTextViewP3Life = (TextView) view.findViewById(R.id.textViewOverviewP3Life);
             mTextViewP3EDH1 = (TextView) view.findViewById(R.id.textViewOverviewP3EDH1);
@@ -128,12 +129,21 @@ public class OverviewActivity extends ActionBarActivity {
             mTextViewP3EDH3 = (TextView) view.findViewById(R.id.textViewOverviewP3EDH3);
             mTextViewP3EDH4 = (TextView) view.findViewById(R.id.textViewOverviewP3EDH4);
 
+            if (!isPlayerActive(3)) {
+                mLinearLayoutP3.setVisibility(View.GONE);
+            }
+
+            mLinearLayoutP4 = (LinearLayout) view.findViewById(R.id.linearLayoutP4);
             mTextViewP4Name = (TextView) view.findViewById(R.id.textViewOverviewP4Name);
             mTextViewP4Life = (TextView) view.findViewById(R.id.textViewOverviewP4Life);
             mTextViewP4EDH1 = (TextView) view.findViewById(R.id.textViewOverviewP4EDH1);
             mTextViewP4EDH2 = (TextView) view.findViewById(R.id.textViewOverviewP4EDH2);
             mTextViewP4EDH3 = (TextView) view.findViewById(R.id.textViewOverviewP4EDH3);
             mTextViewP4EDH4 = (TextView) view.findViewById(R.id.textViewOverviewP4EDH4);
+
+            if (!isPlayerActive(4)) {
+                mLinearLayoutP4.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -206,16 +216,27 @@ public class OverviewActivity extends ActionBarActivity {
     }
 
     public void onClickP3(View view) {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("TAG", "3");
-        startActivity(intent);
-        this.finish();
+        if (isPlayerActive(3)) {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("TAG", "3");
+            startActivity(intent);
+            this.finish();
+        }
     }
 
     public void onClickP4(View view) {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("TAG", "4");
-        startActivity(intent);
-        this.finish();
+        if (isPlayerActive(4)) {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("TAG", "4");
+            startActivity(intent);
+            this.finish();
+        }
+    }
+
+
+    private boolean isPlayerActive(int i) {
+        if (numPlayers < i)
+            return false;
+        return true;
     }
 }

@@ -9,7 +9,6 @@ import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -23,25 +22,14 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.argb.edhlc.colorpicker.ColorPickerDialog;
 import com.android.argb.edhlc.colorpicker.ColorPickerSwatch;
 
 public class MainActivity extends ActionBarActivity {
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
     SectionsPagerAdapter mSectionsPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
     ViewPager mViewPager;
 
     static Player mPlayer1;
@@ -81,7 +69,6 @@ public class MainActivity extends ActionBarActivity {
 
     private int activeFragment = 0;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +76,7 @@ public class MainActivity extends ActionBarActivity {
         setPlayerBarColor(getResources().getIntArray(R.array.edh_default));
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        mSectionsPagerAdapter.setCount(getSharedPreferences(Player.PREFNAME, MODE_PRIVATE).getInt("NUM_PLAYERS", 4));
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setOffscreenPageLimit(4);
@@ -111,6 +99,8 @@ public class MainActivity extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
         activeFragment = getSharedPreferences(Player.PREFNAME, MODE_PRIVATE).getInt("CURRENT_PAGE", 0);
+        if (activeFragment + 1 > mSectionsPagerAdapter.getCount())
+            activeFragment = 0;
         Bundle extras = getIntent().getExtras();
         if (extras != null && extras.containsKey("TAG"))
             activeFragment = Integer.valueOf(extras.getString("TAG")) - 1;
@@ -146,6 +136,7 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
         if (getSharedPreferences(Player.PREFNAME, MODE_PRIVATE).getInt("SCREEN_ON", 0) == 1) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             menu.findItem(R.id.action_screen).setChecked(true);
@@ -153,6 +144,27 @@ public class MainActivity extends ActionBarActivity {
             menu.findItem(R.id.action_screen).setChecked(false);
             getWindow().clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem menuItem = menu.findItem(R.id.action_add_player);
+        menuItem.setTitle("Add Player " + (mSectionsPagerAdapter.getCount() + 1));
+        if (mSectionsPagerAdapter.getCount() == 4) {
+            menuItem.setEnabled(false);
+        } else {
+            menuItem.setEnabled(true);
+        }
+
+        menuItem = menu.findItem(R.id.action_remove_player);
+        menuItem.setTitle("Remove Player " + (mSectionsPagerAdapter.getCount()));
+        if (mSectionsPagerAdapter.getCount() < 3) {
+            menuItem.setEnabled(false);
+        } else {
+            menuItem.setEnabled(true);
+        }
+
         return true;
     }
 
@@ -182,6 +194,31 @@ public class MainActivity extends ActionBarActivity {
         } else if (id == R.id.action_history) {
             startActivity(new Intent(this, HistoryActivity.class));
             this.finish();
+        } else if (id == R.id.action_add_player) {
+            if (mSectionsPagerAdapter.getCount() < 4) {
+                mSectionsPagerAdapter.setCount(mSectionsPagerAdapter.getCount() + 1);
+                mSectionsPagerAdapter.notifyDataSetChanged();
+
+                mViewPager.setCurrentItem(mSectionsPagerAdapter.getCount());
+
+                getSharedPreferences(Player.PREFNAME, MODE_PRIVATE).edit().putInt("NUM_PLAYERS", mSectionsPagerAdapter.getCount()).commit();
+                Toast.makeText(this, "Player " + mSectionsPagerAdapter.getCount() + " added!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Max == 4 Players", Toast.LENGTH_SHORT).show();
+            }
+        } else if (id == R.id.action_remove_player) {
+            if (mSectionsPagerAdapter.getCount() > 2) {
+                mSectionsPagerAdapter.setCount(mSectionsPagerAdapter.getCount() - 1);
+                mSectionsPagerAdapter.notifyDataSetChanged();
+
+                if (activeFragment + 1 > mSectionsPagerAdapter.getCount())
+                    mViewPager.setCurrentItem(mSectionsPagerAdapter.getCount() - 1);
+
+                getSharedPreferences(Player.PREFNAME, MODE_PRIVATE).edit().putInt("NUM_PLAYERS", mSectionsPagerAdapter.getCount()).commit();
+                Toast.makeText(this, "Player " + (mSectionsPagerAdapter.getCount() + 1) + " removed!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Min == 2 Players", Toast.LENGTH_SHORT).show();
+            }
         }
 
         return super.onOptionsItemSelected(item);
@@ -211,6 +248,17 @@ public class MainActivity extends ActionBarActivity {
             mButtonEDH3Negative = (Button) view.findViewById(R.id.buttonEDH3Negative);
             mButtonEDH4Positive = (Button) view.findViewById(R.id.buttonEDH4Positive);
             mButtonEDH4Negative = (Button) view.findViewById(R.id.buttonEDH4Negative);
+
+            mTextViewName.setOnLongClickListener(
+                    new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            createColorPickDialog();
+                            return true;
+                        }
+                    }
+            );
+
         }
     }
 
@@ -525,6 +573,10 @@ public class MainActivity extends ActionBarActivity {
                         mPlayer2 = new Player("Player 2", 40, 0, 0, 0, 0, defaultColor, 2);
                         mPlayer3 = new Player("Player 3", 40, 0, 0, 0, 0, defaultColor, 3);
                         mPlayer4 = new Player("Player 4", 40, 0, 0, 0, 0, defaultColor, 4);
+
+                        mSectionsPagerAdapter.setCount(4);
+                        mSectionsPagerAdapter.notifyDataSetChanged();
+                        getSharedPreferences(Player.PREFNAME, MODE_PRIVATE).edit().putInt("NUM_PLAYERS", mSectionsPagerAdapter.getCount()).commit();
 
                         updateLayout(getActivePlayer());
                     }

@@ -18,9 +18,9 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
-            android:onClick="onClickP1"
             android:layout_weight="1"
             android:background="@drawable/border_overview"
+            android:onClick="onClickP1"
             android:orientation="vertical"
             android:padding="10dp"
             android:weightSum="2">
@@ -59,7 +59,7 @@
                     android:layout_margin="2dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="21" />
+                    android:text="@string/default_edh_21" />
 
                 <TextView
                     android:id="@+id/textViewOverviewP1EDH2"
@@ -68,7 +68,7 @@
                     android:layout_margin="2dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="21" />
+                    android:text="@string/default_edh_21" />
 
                 <TextView
                     android:id="@+id/textViewOverviewP1EDH3"
@@ -77,7 +77,7 @@
                     android:layout_margin="2dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="21" />
+                    android:text="@string/default_edh_21" />
 
                 <TextView
                     android:id="@+id/textViewOverviewP1EDH4"
@@ -86,7 +86,7 @@
                     android:layout_margin="2dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="21" />
+                    android:text="@string/default_edh_21" />
             </LinearLayout>
         </LinearLayout>
 
@@ -96,8 +96,8 @@
             android:layout_height="match_parent"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            android:onClick="onClickP2"
             android:background="@drawable/border_overview"
+            android:onClick="onClickP2"
             android:orientation="vertical"
             android:padding="10dp"
             android:weightSum="2">
@@ -136,7 +136,7 @@
                     android:layout_margin="2dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="21" />
+                    android:text="@string/default_edh_21" />
 
                 <TextView
                     android:id="@+id/textViewOverviewP2EDH2"
@@ -145,7 +145,7 @@
                     android:layout_margin="2dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="21" />
+                    android:text="@string/default_edh_21" />
 
                 <TextView
                     android:id="@+id/textViewOverviewP2EDH3"
@@ -154,7 +154,7 @@
                     android:layout_margin="2dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="21" />
+                    android:text="@string/default_edh_21" />
 
                 <TextView
                     android:id="@+id/textViewOverviewP2EDH4"
@@ -163,7 +163,7 @@
                     android:layout_margin="2dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="21" />
+                    android:text="@string/default_edh_21" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
@@ -180,9 +180,9 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
-            android:onClick="onClickP3"
             android:layout_weight="1"
             android:background="@drawable/border_overview"
+            android:onClick="onClickP3"
             android:orientation="vertical"
             android:padding="10dp"
             android:weightSum="2">
@@ -221,7 +221,7 @@
                     android:layout_margin="2dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="21" />
+                    android:text="@string/default_edh_21" />
 
                 <TextView
                     android:id="@+id/textViewOverviewP3EDH2"
@@ -230,7 +230,7 @@
                     android:layout_margin="2dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="21" />
+                    android:text="@string/default_edh_21" />
 
                 <TextView
                     android:id="@+id/textViewOverviewP3EDH3"
@@ -239,7 +239,7 @@
                     android:layout_margin="2dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="21" />
+                    android:text="@string/default_edh_21" />
 
                 <TextView
                     android:id="@+id/textViewOverviewP3EDH4"
@@ -248,7 +248,7 @@
                     android:layout_margin="2dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="21" />
+                    android:text="@string/default_edh_21" />
             </LinearLayout>
         </LinearLayout>
 
@@ -258,8 +258,8 @@
             android:layout_height="match_parent"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            android:onClick="onClickP4"
             android:background="@drawable/border_overview"
+            android:onClick="onClickP4"
             android:orientation="vertical"
             android:padding="10dp"
             android:weightSum="2">
@@ -298,7 +298,7 @@
                     android:layout_margin="2dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="21" />
+                    android:text="@string/default_edh_21" />
 
                 <TextView
                     android:id="@+id/textViewOverviewP4EDH2"
@@ -307,7 +307,7 @@
                     android:layout_margin="2dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="21" />
+                    android:text="@string/default_edh_21" />
 
                 <TextView
                     android:id="@+id/textViewOverviewP4EDH3"
@@ -316,7 +316,7 @@
                     android:layout_margin="2dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="21" />
+                    android:text="@string/default_edh_21" />
 
                 <TextView
                     android:id="@+id/textViewOverviewP4EDH4"
@@ -325,7 +325,7 @@
                     android:layout_margin="2dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="21" />
+                    android:text="@string/default_edh_21" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

@@ -4,9 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.util.Log;
+import android.support.v4.view.PagerAdapter;
 import android.view.View;
-import android.view.ViewGroup;
 
 import java.util.Locale;
 
@@ -15,6 +14,8 @@ import java.util.Locale;
  * one of the sections/tabs/pages.
  */
 public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
+
+    private int numPages = 4;
 
     public SectionsPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -27,6 +28,9 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
         return PlaceholderFragment.newInstance(position + 1);
     }
 
+
+
+
     @Override
     public boolean isViewFromObject(View view, Object object) {
         return object != null && ((Fragment) object).getView() == view;
@@ -34,7 +38,16 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return 4;
+        return numPages;
+    }
+
+    public void setCount(int numPages) {
+        this.numPages = numPages;
+    }
+
+    @Override
+    public int getItemPosition(Object object) {
+        return PagerAdapter.POSITION_NONE;
     }
 
     @Override
@@ -59,5 +72,10 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
                 return "";
         }
         return null;
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
     }
 }

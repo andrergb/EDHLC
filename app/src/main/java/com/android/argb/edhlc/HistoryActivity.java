@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -34,6 +35,11 @@ public class HistoryActivity extends ActionBarActivity {
     private ListView listViewP3;
     private ListView listViewP4;
 
+    private LinearLayout mLinearLayoutP3;
+    private LinearLayout mLinearLayoutP4;
+
+    private int numPlayers;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +51,9 @@ public class HistoryActivity extends ActionBarActivity {
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.setStatusBarColor(this.getResources().getColor(R.color.edh_default_dark));
         }
+
+        numPlayers = getSharedPreferences(Player.PREFNAME, MODE_PRIVATE).getInt("NUM_PLAYERS", 4);
+
         createLayout(this.findViewById(android.R.id.content));
     }
 
@@ -72,13 +81,6 @@ public class HistoryActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-//        int id = item.getItemId();
-//        if (id == R.id.action_playerview) {
-//            Intent intent = new Intent(this, MainActivity.class);
-//            startActivity(intent);
-//            this.finish();
-//        }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -100,14 +102,30 @@ public class HistoryActivity extends ActionBarActivity {
             textViewP2Name.setTypeface(null, Typeface.BOLD);
             listViewP2 = (ListView) findViewById(R.id.listViewP2);
 
+            mLinearLayoutP3 = (LinearLayout) findViewById(R.id.linearLayoutP3);
             textViewP3Name = (TextView) findViewById(R.id.textViewP3Name);
             textViewP3Name.setTypeface(null, Typeface.BOLD);
             listViewP3 = (ListView) findViewById(R.id.listViewP3);
 
+            if (!isPlayerActive(3)) {
+                mLinearLayoutP3.setVisibility(View.GONE);
+            }
+
+            mLinearLayoutP4 = (LinearLayout) findViewById(R.id.linearLayoutP4);
             textViewP4Name = (TextView) findViewById(R.id.textViewP4Name);
             textViewP4Name.setTypeface(null, Typeface.BOLD);
             listViewP4 = (ListView) findViewById(R.id.listViewP4);
+
+            if (!isPlayerActive(4)) {
+                mLinearLayoutP4.setVisibility(View.GONE);
+            }
         }
+    }
+
+    private boolean isPlayerActive(int i) {
+        if (numPlayers < i)
+            return false;
+        return true;
     }
 
     private void updateLayout() {
@@ -167,17 +185,21 @@ public class HistoryActivity extends ActionBarActivity {
     }
 
     public void onClickP3(View view) {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("TAG", "3");
-        startActivity(intent);
-        this.finish();
+        if (isPlayerActive(3)) {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("TAG", "3");
+            startActivity(intent);
+            this.finish();
+        }
     }
 
     public void onClickP4(View view) {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("TAG", "4");
-        startActivity(intent);
-        this.finish();
+        if (isPlayerActive(4)) {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("TAG", "4");
+            startActivity(intent);
+            this.finish();
+        }
     }
 
     static class customHistoryListViewAdapter extends BaseAdapter {

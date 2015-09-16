@@ -28,4 +28,7 @@
     <string name="color_swatch_description_selected">Color selected</string>
     <string name="buttonLifeNegative">down_button</string>
     <string name="buttonLifePositive">buttonLifePositive</string>
+    <string name="actions_remove">Remove Player</string>
+    <string name="actions_add">Add Player</string>
+    <string name="default_edh_21">21</string>
 </resources>
