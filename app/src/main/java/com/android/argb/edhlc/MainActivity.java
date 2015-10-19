@@ -21,6 +21,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +37,8 @@ public class MainActivity extends ActionBarActivity {
     static Player mPlayer2;
     static Player mPlayer3;
     static Player mPlayer4;
+
+    private static ImageView mImageViewThrone;
 
     private static TextView mTextViewName;
     private static TextView mTextViewLife;
@@ -226,6 +229,8 @@ public class MainActivity extends ActionBarActivity {
 
     private void createLayout(View view) {
         if (view != null) {
+            mImageViewThrone = (ImageView) view.findViewById(R.id.imageViewThrone);
+
             mTextViewName = (TextView) view.findViewById(R.id.textViewName);
             mTextViewLife = (TextView) view.findViewById(R.id.textViewLife);
             mTextViewEDH1 = (TextView) view.findViewById(R.id.textViewEDH1);
@@ -265,6 +270,20 @@ public class MainActivity extends ActionBarActivity {
     private void updateLayout(Player activePlayer) {
         if (activePlayer.getPlayerColor()[0] == 0 || activePlayer.getPlayerColor()[1] == 0)
             activePlayer.setPlayerColor(getResources().getIntArray(R.array.edh_default));
+
+
+        mImageViewThrone.setVisibility(View.INVISIBLE);
+        if (getNumOfPlayerActive() == 4) {
+            if (activePlayer.getPlayerLife() >= mPlayer1.getPlayerLife() && activePlayer.getPlayerLife() >= mPlayer2.getPlayerLife() && activePlayer.getPlayerLife() >= mPlayer3.getPlayerLife() && activePlayer.getPlayerLife() >= mPlayer4.getPlayerLife())
+                mImageViewThrone.setVisibility(View.VISIBLE);
+        } else if (getNumOfPlayerActive() == 3) {
+            if (activePlayer.getPlayerLife() >= mPlayer1.getPlayerLife() && activePlayer.getPlayerLife() >= mPlayer2.getPlayerLife() && activePlayer.getPlayerLife() >= mPlayer3.getPlayerLife())
+                mImageViewThrone.setVisibility(View.VISIBLE);
+        } else if (getNumOfPlayerActive() == 2) {
+            if (activePlayer.getPlayerLife() >= mPlayer1.getPlayerLife() && activePlayer.getPlayerLife() >= mPlayer2.getPlayerLife())
+                mImageViewThrone.setVisibility(View.VISIBLE);
+        }
+
 
         mTextViewName.setText(activePlayer.getPlayerName());
         mTextViewLife.setText(activePlayer.getPlayerLife() + "");
@@ -431,6 +450,7 @@ public class MainActivity extends ActionBarActivity {
             setPlayerLife(String.valueOf(getActivePlayer().getPlayerLife()));
 
             playerLifeHistoryHandler();
+            updateLayout(getActivePlayer());
         }
     }
 
@@ -441,6 +461,7 @@ public class MainActivity extends ActionBarActivity {
             setPlayerLife(String.valueOf(getActivePlayer().getPlayerLife()));
 
             playerLifeHistoryHandler();
+            updateLayout(getActivePlayer());
         }
     }
 
@@ -749,6 +770,10 @@ public class MainActivity extends ActionBarActivity {
             return mPlayer3;
         else
             return mPlayer4;
+    }
+
+    private int getNumOfPlayerActive() {
+        return mSectionsPagerAdapter.getCount();
     }
 
 }

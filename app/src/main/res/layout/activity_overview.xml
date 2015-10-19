@@ -25,15 +25,35 @@
             android:padding="10dp"
             android:weightSum="2">
 
-            <TextView
-                android:id="@+id/textViewOverviewP1Name"
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_margin="2dp"
-                android:layout_weight="0.3"
-                android:gravity="center"
-                android:text="PlayerName"
-                android:textSize="20sp" />
+                android:layout_weight="0.3">
+
+                <TextView
+                    android:id="@+id/textViewOverviewP1Name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="2dp"
+                    android:gravity="center"
+                    android:text="PlayerName"
+                    android:textSize="20sp" />
+
+                <ImageView
+                    android:id="@+id/imageViewThroneP1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="3dp"
+                    android:layout_toEndOf="@id/textViewOverviewP1Name"
+                    android:layout_toRightOf="@id/textViewOverviewP1Name"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/icon_crown" />
+            </RelativeLayout>
+
 
             <TextView
                 android:id="@+id/textViewOverviewP1Life"
@@ -102,15 +122,34 @@
             android:padding="10dp"
             android:weightSum="2">
 
-            <TextView
-                android:id="@+id/textViewOverviewP2Name"
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_margin="2dp"
-                android:layout_weight="0.3"
-                android:gravity="center"
-                android:text="PlayerName"
-                android:textSize="20sp" />
+                android:layout_weight="0.3">
+
+                <TextView
+                    android:id="@+id/textViewOverviewP2Name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="2dp"
+                    android:gravity="center"
+                    android:text="PlayerName"
+                    android:textSize="20sp" />
+
+                <ImageView
+                    android:id="@+id/imageViewThroneP2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="3dp"
+                    android:layout_toEndOf="@id/textViewOverviewP2Name"
+                    android:layout_toRightOf="@id/textViewOverviewP2Name"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/icon_crown" />
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/textViewOverviewP2Life"
@@ -187,15 +226,33 @@
             android:padding="10dp"
             android:weightSum="2">
 
-            <TextView
-                android:id="@+id/textViewOverviewP3Name"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_margin="2dp"
-                android:layout_weight="0.3"
-                android:gravity="center"
-                android:text="PlayerName"
-                android:textSize="20sp" />
+                android:layout_weight="0.3">
+
+                <TextView
+                    android:id="@+id/textViewOverviewP3Name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="2dp"
+                    android:gravity="center"
+                    android:text="PlayerName"
+                    android:textSize="20sp" />
+
+                <ImageView
+                    android:id="@+id/imageViewThroneP3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="3dp"
+                    android:layout_toEndOf="@id/textViewOverviewP3Name"
+                    android:layout_toRightOf="@id/textViewOverviewP3Name"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/icon_crown" />
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/textViewOverviewP3Life"
@@ -264,15 +321,33 @@
             android:padding="10dp"
             android:weightSum="2">
 
-            <TextView
-                android:id="@+id/textViewOverviewP4Name"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_margin="2dp"
-                android:layout_weight="0.3"
-                android:gravity="center"
-                android:text="PlayerName"
-                android:textSize="20sp" />
+                android:layout_weight="0.3">
+
+                <TextView
+                    android:id="@+id/textViewOverviewP4Name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="2dp"
+                    android:gravity="center"
+                    android:text="PlayerName"
+                    android:textSize="20sp" />
+
+                <ImageView
+                    android:id="@+id/imageViewThroneP4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="3dp"
+                    android:layout_toEndOf="@id/textViewOverviewP4Name"
+                    android:layout_toRightOf="@id/textViewOverviewP4Name"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/icon_crown" />
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/textViewOverviewP4Life"

@@ -11,17 +11,36 @@
     android:weightSum="10"
     tools:context=".MainActivity$PlaceholderFragment">
 
-    <TextView
-        android:id="@+id/textViewName"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:clickable="true"
-        android:gravity="center_vertical|center_horizontal"
-        android:onClick="onClickPlayerName"
-        android:text="Player Name"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="35sp" />
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/textViewName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:clickable="true"
+            android:onClick="onClickPlayerName"
+            android:text="Player Name"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="35sp" />
+
+        <ImageView
+            android:id="@+id/imageViewThrone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="10dp"
+            android:layout_toEndOf="@id/textViewName"
+            android:layout_toRightOf="@id/textViewName"
+            android:adjustViewBounds="true"
+            android:src="@drawable/icon_crown" />
+
+    </RelativeLayout>
+
 
     <LinearLayout
         android:id="@+id/linearLayoutLife"

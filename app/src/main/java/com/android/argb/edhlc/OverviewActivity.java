@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -18,6 +19,11 @@ public class OverviewActivity extends ActionBarActivity {
     static Player mPlayer2;
     static Player mPlayer3;
     static Player mPlayer4;
+
+    private static ImageView mImageViewThroneP1;
+    private static ImageView mImageViewThroneP2;
+    private static ImageView mImageViewThroneP3;
+    private static ImageView mImageViewThroneP4;
 
     private static TextView mTextViewP1Name;
     private static TextView mTextViewP1Life;
@@ -107,6 +113,11 @@ public class OverviewActivity extends ActionBarActivity {
 
     public void createLayout(View view) {
         if (view != null) {
+            mImageViewThroneP1 = (ImageView) view.findViewById(R.id.imageViewThroneP1);
+            mImageViewThroneP2 = (ImageView) view.findViewById(R.id.imageViewThroneP2);
+            mImageViewThroneP3 = (ImageView) view.findViewById(R.id.imageViewThroneP3);
+            mImageViewThroneP4 = (ImageView) view.findViewById(R.id.imageViewThroneP4);
+
             mTextViewP1Name = (TextView) view.findViewById(R.id.textViewOverviewP1Name);
             mTextViewP1Life = (TextView) view.findViewById(R.id.textViewOverviewP1Life);
             mTextViewP1EDH1 = (TextView) view.findViewById(R.id.textViewOverviewP1EDH1);
@@ -148,6 +159,40 @@ public class OverviewActivity extends ActionBarActivity {
     }
 
     private void updateLayout() {
+
+        mImageViewThroneP1.setVisibility(View.INVISIBLE);
+        mImageViewThroneP2.setVisibility(View.INVISIBLE);
+        mImageViewThroneP3.setVisibility(View.INVISIBLE);
+        mImageViewThroneP4.setVisibility(View.INVISIBLE);
+
+        if (mPlayer1.getPlayerLife() >= mPlayer2.getPlayerLife()) {
+            if (!isPlayerActive(3) && !isPlayerActive(4))
+                mImageViewThroneP1.setVisibility(View.VISIBLE);
+            else if (isPlayerActive(3) && !isPlayerActive(4) && mPlayer1.getPlayerLife() >= mPlayer3.getPlayerLife())
+                mImageViewThroneP1.setVisibility(View.VISIBLE);
+            else if (isPlayerActive(4) && mPlayer1.getPlayerLife() >= mPlayer4.getPlayerLife())
+                mImageViewThroneP1.setVisibility(View.VISIBLE);
+        }
+
+        if (mPlayer2.getPlayerLife() >= mPlayer1.getPlayerLife()) {
+            if (!isPlayerActive(3) && !isPlayerActive(4))
+                mImageViewThroneP2.setVisibility(View.VISIBLE);
+            else if (isPlayerActive(3) && !isPlayerActive(4) && mPlayer2.getPlayerLife() >= mPlayer3.getPlayerLife())
+                mImageViewThroneP2.setVisibility(View.VISIBLE);
+            else if (isPlayerActive(4) && mPlayer2.getPlayerLife() >= mPlayer4.getPlayerLife())
+                mImageViewThroneP2.setVisibility(View.VISIBLE);
+        }
+
+        if (isPlayerActive(3) && mPlayer3.getPlayerLife() >= mPlayer1.getPlayerLife() && mPlayer3.getPlayerLife() >= mPlayer2.getPlayerLife()) {
+            if (!isPlayerActive(4))
+                mImageViewThroneP3.setVisibility(View.VISIBLE);
+            else if (isPlayerActive(4) && mPlayer3.getPlayerLife() >= mPlayer4.getPlayerLife())
+                mImageViewThroneP3.setVisibility(View.VISIBLE);
+        }
+
+        if (isPlayerActive(4) && mPlayer4.getPlayerLife() >= mPlayer1.getPlayerLife() && mPlayer4.getPlayerLife() >= mPlayer2.getPlayerLife() && mPlayer4.getPlayerLife() >= mPlayer3.getPlayerLife())
+            mImageViewThroneP4.setVisibility(View.VISIBLE);
+
         mTextViewP1Name.setText(mPlayer1.getPlayerName());
         mTextViewP1Life.setText(String.valueOf(mPlayer1.getPlayerLife()));
         mTextViewP1EDH1.setText(String.valueOf(mPlayer1.getPlayerEDH1()));
