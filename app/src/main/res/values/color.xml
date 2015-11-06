@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <item name="edh_mtg_green" type="color">#0ec60e</item>
+    <item name="edh_mtg_white" type="color">#FFFFFFFF</item>
+    <item name="edh_mtg_blue" type="color">#FF0000FF</item>
+    <item name="edh_mtg_black" type="color">#FF000000</item>
+    <item name="edh_mtg_red" type="color">#e61818</item>
+    <item name="edh_mtg_incolor" type="color">#a6a6a6</item>
+
     <item name="edh_blue_main1" type="color">#FF348cac</item>
     <item name="edh_blue_dark1" type="color">#ff3580a1</item>
 

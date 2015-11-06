@@ -1,4 +1,4 @@
-package com.android.argb.edhlc;
+package com.android.argb.edhlc.activities;
 
 import android.content.Intent;
 import android.os.Build;
@@ -12,6 +12,9 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.android.argb.edhlc.R;
+import com.android.argb.edhlc.objects.Player;
 
 public class OverviewActivity extends ActionBarActivity {
 

@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".OverviewActivity">
+    tools:context=".activities.OverviewActivity">
     <!--<item-->
         <!--android:id="@+id/action_playerview"-->
         <!--android:icon="@drawable/icon_player"-->

@@ -1,4 +1,4 @@
-package com.android.argb.edhlc;
+package com.android.argb.edhlc.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -25,6 +25,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.argb.edhlc.PlaceholderFragment;
+import com.android.argb.edhlc.R;
+import com.android.argb.edhlc.SectionsPagerAdapter;
+import com.android.argb.edhlc.objects.Player;
 import com.android.argb.edhlc.colorpicker.ColorPickerDialog;
 import com.android.argb.edhlc.colorpicker.ColorPickerSwatch;
 
@@ -33,10 +37,10 @@ public class MainActivity extends ActionBarActivity {
     SectionsPagerAdapter mSectionsPagerAdapter;
     ViewPager mViewPager;
 
-    static Player mPlayer1;
-    static Player mPlayer2;
-    static Player mPlayer3;
-    static Player mPlayer4;
+    public static Player mPlayer1;
+    public static Player mPlayer2;
+    public static Player mPlayer3;
+    public static Player mPlayer4;
 
     private static ImageView mImageViewThrone;
 

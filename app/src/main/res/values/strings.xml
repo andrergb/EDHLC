@@ -18,6 +18,8 @@
     <string name="actions_overview">Overview</string>
     <string name="actions_history">History</string>
 
+    <string name="hint_deckName">Deck Name</string>
+    <string name="hint_deckTotal">0</string>
     <string name="hint_playerName">Player Name</string>
     <string name="hint_playerLife">Player Life</string>
     <string name="actions_playerColor">Player Color</string>
@@ -31,4 +33,9 @@
     <string name="actions_remove">Remove Player</string>
     <string name="actions_add">Add Player</string>
     <string name="default_edh_21">21</string>
+
+
+    <string name="player_decks">%1$d decks</string>
+    <string name="player_games">%1$d total games (%2$d/%3$d/%4$d/%5$d)</string>
+    <string name="player_deck_games">%1$d games played (%2$d/%3$d/%4$d/%5$d)</string>
 </resources>

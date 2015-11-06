@@ -7,6 +7,8 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
 
+import com.android.argb.edhlc.activities.MainActivity;
+
 import java.util.Locale;
 
 /**
