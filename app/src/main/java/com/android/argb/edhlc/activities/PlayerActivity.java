@@ -20,8 +20,8 @@ import android.widget.TextView;
 import com.android.argb.edhlc.R;
 import com.android.argb.edhlc.database.deck.DecksDataAccessObject;
 import com.android.argb.edhlc.database.record.RecordsDataAccessObject;
+import com.android.argb.edhlc.objects.ActivePlayer;
 import com.android.argb.edhlc.objects.Deck;
-import com.android.argb.edhlc.objects.Player;
 import com.android.argb.edhlc.objects.Record;
 
 import java.util.ArrayList;
@@ -48,19 +48,16 @@ public class PlayerActivity extends ActionBarActivity {
             Window window = this.getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(this.getResources().getColor(R.color.edh_default_dark));
+            window.setStatusBarColor(this.getResources().getColor(R.color.edh_default_secondary));
         }
 
         decksDB = new DecksDataAccessObject(this);
         recordsDB = new RecordsDataAccessObject(this);
 
-        //TODO
-        playerName = "trofino";
+        Intent intent = getIntent();
+        playerName = intent.getStringExtra("PLAYERNAME");
 
-//        populateDeckDB();
-//        populateRecordDB();
         createLayout(this.findViewById(android.R.id.content));
-
     }
 
 
@@ -68,7 +65,7 @@ public class PlayerActivity extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
 
-        if (getSharedPreferences(Player.PREFNAME, MODE_PRIVATE).getInt("SCREEN_ON", 0) == 1)
+        if (getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).getInt("SCREEN_ON", 0) == 1)
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         else
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -97,14 +94,6 @@ public class PlayerActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        this.finish();
-    }
-
     public void createLayout(View view) {
         if (view != null) {
             textViewPlayerName = (TextView) findViewById(R.id.textViewPlayerName);
@@ -116,7 +105,7 @@ public class PlayerActivity extends ActionBarActivity {
     }
 
     private void updateLayout() {
-        /*Player's info - for all decks*/
+        /*ActivePlayer's info - for all decks*/
         List<Record> recordsAllPositions = recordsDB.getAllRecordsByPlayerName(playerName);
         List<Record> recordsFirst = recordsDB.getAllFirstPlaceRecordsByPlayerName(playerName);
         List<Record> recordsSecond = recordsDB.getAllSecondPlaceRecordsByPlayerName(playerName);
@@ -240,105 +229,5 @@ public class PlayerActivity extends ActionBarActivity {
 
             return vi;
         }
-    }
-
-    private void populateDeckDB() {
-        decksDB.createDeck(new Deck("trofino", "Deck1"));
-        decksDB.createDeck(new Deck("trofino", "Deck2"));
-        decksDB.createDeck(new Deck("Dezao", "DeckD"));
-        decksDB.createDeck(new Deck("Dezao", "DeckDe"));
-        decksDB.createDeck(new Deck("Ant", "DeckA"));
-        decksDB.createDeck(new Deck("Marcos", "DeckM"));
-    }
-
-    // TODO REMOVE
-    private void populateRecordDB() {
-
-        /*
-        * Deck1 == 6
-        * first == 3
-        * second = 1
-        * third = 1
-        * fourth = 1
-        * */
-        long inserted = recordsDB.createRecord(new Record(
-                new Deck("trofino", "Deck1"),
-                new Deck("Dezao", "DeckD"),
-                new Deck("Marcos", "DeckM"),
-                new Deck("Ant", "DeckA")));
-        recordsDB.createRecord(new Record(
-                new Deck("trofino", "Deck1"),
-                new Deck("Dezao", "DeckD"),
-                new Deck("Marcos", "DeckM"),
-                new Deck("Ant", "DeckA")));
-        recordsDB.createRecord(new Record(
-                new Deck("trofino", "Deck1"),
-                new Deck("Dezao", "DeckD"),
-                new Deck("Marcos", "DeckM"),
-                new Deck("Ant", "DeckA")));
-        recordsDB.createRecord(new Record(
-                new Deck("Dezao", "DeckD"),
-                new Deck("trofino", "Deck1"),
-                new Deck("Marcos", "DeckM"),
-                new Deck("Ant", "DeckA")));
-        recordsDB.createRecord(new Record(
-                new Deck("Dezao", "DeckD"),
-                new Deck("Marcos", "DeckM"),
-                new Deck("trofino", "Deck1"),
-                new Deck("Ant", "DeckA")));
-        recordsDB.createRecord(new Record(
-                new Deck("Dezao", "DeckD"),
-                new Deck("Marcos", "DeckM"),
-                new Deck("Ant", "DeckA"),
-                new Deck("trofino", "Deck1")));
-
-
-        /*
-        * Deck2 == 8
-        * first == 1
-        * second = 2
-        * third = 2
-        * fourth = 3
-        * */
-        recordsDB.createRecord(new Record(
-                new Deck("trofino", "Deck2"),
-                new Deck("Dezao", "DeckD"),
-                new Deck("Marcos", "DeckM"),
-                new Deck("Ant", "DeckA")));
-        recordsDB.createRecord(new Record(
-                new Deck("Dezao", "DeckD"),
-                new Deck("trofino", "Deck2"),
-                new Deck("Marcos", "DeckM"),
-                new Deck("Ant", "DeckA")));
-        recordsDB.createRecord(new Record(
-                new Deck("Dezao", "DeckD"),
-                new Deck("trofino", "Deck2"),
-                new Deck("Marcos", "DeckM"),
-                new Deck("Ant", "DeckA")));
-        recordsDB.createRecord(new Record(
-                new Deck("Dezao", "DeckD"),
-                new Deck("Marcos", "DeckM"),
-                new Deck("trofino", "Deck2"),
-                new Deck("Ant", "DeckA")));
-        recordsDB.createRecord(new Record(
-                new Deck("Dezao", "DeckD"),
-                new Deck("Marcos", "DeckM"),
-                new Deck("trofino", "Deck2"),
-                new Deck("Ant", "DeckA")));
-        recordsDB.createRecord(new Record(
-                new Deck("Dezao", "DeckD"),
-                new Deck("Marcos", "DeckM"),
-                new Deck("Ant", "DeckA"),
-                new Deck("trofino", "Deck2")));
-        recordsDB.createRecord(new Record(
-                new Deck("Dezao", "DeckD"),
-                new Deck("Marcos", "DeckM"),
-                new Deck("Ant", "DeckA"),
-                new Deck("trofino", "Deck2")));
-        recordsDB.createRecord(new Record(
-                new Deck("Dezao", "DeckD"),
-                new Deck("Marcos", "DeckM"),
-                new Deck("Ant", "DeckA"),
-                new Deck("trofino", "Deck2")));
     }
 }

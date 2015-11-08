@@ -12,9 +12,9 @@
     <!-- ActionBar styles -->
     <style name="MyActionBar"
         parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">@color/edh_default_dark</item>
+        <item name="android:background">@color/edh_default_primary</item>
 
         <!-- Support library compatibility -->
-        <item name="background">@color/edh_default_dark</item>
+        <item name="background">@color/edh_default_primary</item>
     </style>
 </resources>

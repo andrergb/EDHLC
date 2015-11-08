@@ -2,6 +2,8 @@
     <string name="app_name">EDHLC</string>
     <string name="activity_overview_label">EDHLC: Overview</string>
     <string name="activity_history_label">EDHLC: History</string>
+    <string name="activity_player_label">EDHLC: Player</string>
+    <string name="activity_playerlist_label">EDHLC: Player List</string>
 
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
@@ -17,25 +19,55 @@
     <string name="actions_playerView">Player View</string>
     <string name="actions_overview">Overview</string>
     <string name="actions_history">History</string>
+    <string name="actions_playerColor">Player Color</string>
 
     <string name="hint_deckName">Deck Name</string>
     <string name="hint_deckTotal">0</string>
     <string name="hint_playerName">Player Name</string>
     <string name="hint_playerLife">Player Life</string>
-    <string name="actions_playerColor">Player Color</string>
 
 
     <string name="color_picker_default_title">Select a Color</string>
     <string name="color_swatch_description">Color</string>
     <string name="color_swatch_description_selected">Color selected</string>
+
     <string name="buttonLifeNegative">down_button</string>
     <string name="buttonLifePositive">buttonLifePositive</string>
+
     <string name="actions_remove">Remove Player</string>
     <string name="actions_add">Add Player</string>
-    <string name="default_edh_21">21</string>
 
+    <string name="default_edh_21">21</string>
 
     <string name="player_decks">%1$d decks</string>
     <string name="player_games">%1$d total games (%2$d/%3$d/%4$d/%5$d)</string>
     <string name="player_deck_games">%1$d games played (%2$d/%3$d/%4$d/%5$d)</string>
+    <string name="screen_on">Keep screen on</string>
+    <string name="edh_spinner_player_hint">- Select a Player -</string>
+    <string name="edh_spinner_deck_hint">- Select a Deck -</string>
+
+    <!-- Current match -->
+    <string-array name="string_menu_main_1">
+        <item>New Game</item>
+        <item>Log Game</item>
+    </string-array>
+    <!-- Static options -->
+    <string-array name="string_menu_main_2">
+        <item>Players</item>
+        <item>Settings</item>
+        <item>About</item>
+    </string-array>
+
+    <!-- Player List activity -->
+    <string-array name="string_menu_player_list_1">
+        <item>Add Player</item>
+        <item>Edit Player</item>
+        <item>Remove Player</item>
+    </string-array>
+    <!-- Player List activity -->
+    <string-array name="string_menu_player_list_2">
+        <item>Settings</item>
+        <item>About</item>
+    </string-array>
+
 </resources>

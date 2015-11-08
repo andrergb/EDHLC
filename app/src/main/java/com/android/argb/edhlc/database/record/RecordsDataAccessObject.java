@@ -38,8 +38,8 @@ public class RecordsDataAccessObject {
 
         values.put(RecordsContract.RecordsEntry.COLUMN_FIRST_PLAYER_NAME, record.getFistPlace().getPlayerName());
         values.put(RecordsContract.RecordsEntry.COLUMN_FIRST_PLAYER_DECK, record.getFistPlace().getDeckName());
-        values.put(RecordsContract.RecordsEntry.COLUMN_SECOND_PLAYER_NAME, record.getSecondtPlace().getPlayerName());
-        values.put(RecordsContract.RecordsEntry.COLUMN_SECOND_PLAYER_DECK, record.getSecondtPlace().getDeckName());
+        values.put(RecordsContract.RecordsEntry.COLUMN_SECOND_PLAYER_NAME, record.getSecondPlace().getPlayerName());
+        values.put(RecordsContract.RecordsEntry.COLUMN_SECOND_PLAYER_DECK, record.getSecondPlace().getDeckName());
         values.put(RecordsContract.RecordsEntry.COLUMN_THIRD_PLAYER_NAME, record.getThirdPlace().getPlayerName());
         values.put(RecordsContract.RecordsEntry.COLUMN_THIRD_PLAYER_DECK, record.getThirdPlace().getDeckName());
         values.put(RecordsContract.RecordsEntry.COLUMN_FOURTH_PLAYER_NAME, record.getFourthPlace().getPlayerName());
@@ -273,7 +273,7 @@ public class RecordsDataAccessObject {
                         + RecordsContract.RecordsEntry.COLUMN_FOURTH_PLAYER_DECK + " LIKE ?",
                 new String[]{
                         record.getFistPlace().getPlayerName(), record.getFistPlace().getDeckName(),
-                        record.getSecondtPlace().getPlayerName(), record.getSecondtPlace().getDeckName(),
+                        record.getSecondPlace().getPlayerName(), record.getSecondPlace().getDeckName(),
                         record.getThirdPlace().getPlayerName(), record.getThirdPlace().getDeckName(),
                         record.getFourthPlace().getPlayerName(), record.getFourthPlace().getDeckName(),
                 }
@@ -290,7 +290,7 @@ public class RecordsDataAccessObject {
                 )
         );
 
-        record.setSecondtPlace(
+        record.setSecondPlace(
                 new Deck(
                         cursor.getString(cursor.getColumnIndexOrThrow(RecordsContract.RecordsEntry.COLUMN_SECOND_PLAYER_NAME)),
                         cursor.getString(cursor.getColumnIndexOrThrow(RecordsContract.RecordsEntry.COLUMN_SECOND_PLAYER_DECK))

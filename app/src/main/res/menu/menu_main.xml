@@ -16,42 +16,4 @@
         android:orderInCategory="2"
         android:title="@string/actions_history"
         app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/action_newGame"
-        android:orderInCategory="3"
-        android:title="@string/actions_newGame"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_playerColor"
-        android:icon="@drawable/icon_palette"
-        android:orderInCategory="4"
-        android:title="@string/actions_playerColor"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_screen"
-        android:checkable="true"
-        android:orderInCategory="5"
-        android:title="@string/actions_screen"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_add_player"
-        android:orderInCategory="6"
-        android:title="@string/actions_add"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_remove_player"
-        android:orderInCategory="7"
-        android:title="@string/actions_remove"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_about"
-        android:orderInCategory="8"
-        android:title="@string/actions_about"
-        app:showAsAction="never" />
 </menu>

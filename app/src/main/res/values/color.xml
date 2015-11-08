@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <item name="edh_default_primary" type="color">#FF348cac</item>
+    <item name="edh_default_secondary" type="color">#ff3580a1</item>
+    <integer-array name="edh_default">
+        <item>@color/edh_default_primary</item>
+        <item>@color/edh_default_secondary</item>
+    </integer-array>
+
+
     <item name="edh_mtg_green" type="color">#0ec60e</item>
     <item name="edh_mtg_white" type="color">#FFFFFFFF</item>
     <item name="edh_mtg_blue" type="color">#FF0000FF</item>
@@ -8,15 +16,6 @@
     <item name="edh_mtg_red" type="color">#e61818</item>
     <item name="edh_mtg_incolor" type="color">#a6a6a6</item>
 
-    <item name="edh_blue_main1" type="color">#FF348cac</item>
-    <item name="edh_blue_dark1" type="color">#ff3580a1</item>
-
-    <item name="edh_default_main" type="color">#ff0f0f0f</item>
-    <item name="edh_default_dark" type="color">#ff000000</item>
-    <integer-array name="edh_default">
-        <item>@color/edh_default_main</item>
-        <item>@color/edh_default_dark</item>
-    </integer-array>
 
     <item name="edh_shield_turquoise_main" type="color">#FF00E5EE</item>
     <item name="edh_shield_turquoise_dark" type="color">#ff00d0d9</item>
