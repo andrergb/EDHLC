@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by agbarros on 05/11/2015.
+ * -Created by agbarros on 05/11/2015.
  */
 public class RecordsDataAccessObject {
 
@@ -36,8 +36,8 @@ public class RecordsDataAccessObject {
     public long createRecord(Record record) {
         ContentValues values = new ContentValues();
 
-        values.put(RecordsContract.RecordsEntry.COLUMN_FIRST_PLAYER_NAME, record.getFistPlace().getPlayerName());
-        values.put(RecordsContract.RecordsEntry.COLUMN_FIRST_PLAYER_DECK, record.getFistPlace().getDeckName());
+        values.put(RecordsContract.RecordsEntry.COLUMN_FIRST_PLAYER_NAME, record.getFirstPlace().getPlayerName());
+        values.put(RecordsContract.RecordsEntry.COLUMN_FIRST_PLAYER_DECK, record.getFirstPlace().getDeckName());
         values.put(RecordsContract.RecordsEntry.COLUMN_SECOND_PLAYER_NAME, record.getSecondPlace().getPlayerName());
         values.put(RecordsContract.RecordsEntry.COLUMN_SECOND_PLAYER_DECK, record.getSecondPlace().getDeckName());
         values.put(RecordsContract.RecordsEntry.COLUMN_THIRD_PLAYER_NAME, record.getThirdPlace().getPlayerName());
@@ -82,6 +82,46 @@ public class RecordsDataAccessObject {
             cursor.moveToNext();
         }
         cursor.close();
+        return recordList;
+    }
+
+    public List<Record> getAllRecordsByDeck(Deck deck) {
+        List<Record> recordList = new ArrayList<>();
+
+        if (deck.getDeckName().equalsIgnoreCase("") && deck.getPlayerName().equalsIgnoreCase("")) {
+            recordList = getAllRecords();
+        } else {
+            Cursor cursor = database.query(
+                    RecordsContract.RecordsEntry.TABLE_NAME,
+                    null,
+                    "(" + RecordsContract.RecordsEntry.COLUMN_FIRST_PLAYER_NAME + " LIKE ? OR "
+                            + RecordsContract.RecordsEntry.COLUMN_SECOND_PLAYER_NAME + " LIKE ? OR "
+                            + RecordsContract.RecordsEntry.COLUMN_THIRD_PLAYER_NAME + " LIKE ? OR "
+                            + RecordsContract.RecordsEntry.COLUMN_FOURTH_PLAYER_NAME + " LIKE ?"
+                            + ") AND ("
+                            + RecordsContract.RecordsEntry.COLUMN_FIRST_PLAYER_DECK + " LIKE ? OR "
+                            + RecordsContract.RecordsEntry.COLUMN_SECOND_PLAYER_DECK + " LIKE ? OR "
+                            + RecordsContract.RecordsEntry.COLUMN_THIRD_PLAYER_DECK + " LIKE ? OR "
+                            + RecordsContract.RecordsEntry.COLUMN_FOURTH_PLAYER_DECK + " LIKE ?)",
+                    new String[]{deck.getPlayerName(),
+                            deck.getPlayerName(),
+                            deck.getPlayerName(),
+                            deck.getPlayerName(),
+                            deck.getDeckName(),
+                            deck.getDeckName(),
+                            deck.getDeckName(),
+                            deck.getDeckName()},
+                    null,
+                    null,
+                    null
+            );
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                recordList.add(cursorToRecord(cursor));
+                cursor.moveToNext();
+            }
+            cursor.close();
+        }
         return recordList;
     }
 
@@ -272,7 +312,7 @@ public class RecordsDataAccessObject {
                         + RecordsContract.RecordsEntry.COLUMN_FOURTH_PLAYER_NAME + " LIKE ? AND"
                         + RecordsContract.RecordsEntry.COLUMN_FOURTH_PLAYER_DECK + " LIKE ?",
                 new String[]{
-                        record.getFistPlace().getPlayerName(), record.getFistPlace().getDeckName(),
+                        record.getFirstPlace().getPlayerName(), record.getFirstPlace().getDeckName(),
                         record.getSecondPlace().getPlayerName(), record.getSecondPlace().getDeckName(),
                         record.getThirdPlace().getPlayerName(), record.getThirdPlace().getDeckName(),
                         record.getFourthPlace().getPlayerName(), record.getFourthPlace().getDeckName(),

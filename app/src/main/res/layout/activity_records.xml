@@ -5,14 +5,12 @@
 
     <!-- Main content view -->
     <ListView
-        android:id="@+id/listViewPlayers"
+        android:id="@+id/listViewRecords"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingEnd="10dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingStart="10dp" />
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp"
+        android:orientation="vertical" />
 
     <!-- Navigation drawer -->
     <LinearLayout

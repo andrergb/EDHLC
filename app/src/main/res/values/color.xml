@@ -7,6 +7,7 @@
         <item>@color/edh_default_primary</item>
         <item>@color/edh_default_secondary</item>
     </integer-array>
+    <item name="edh_default_primary_aplha" type="color">#32348cac</item>
 
 
     <item name="edh_mtg_green" type="color">#0ec60e</item>

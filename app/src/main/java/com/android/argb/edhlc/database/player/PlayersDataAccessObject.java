@@ -31,10 +31,30 @@ public class PlayersDataAccessObject {
 
 
     public long createPlayer(String playerName) {
-        ContentValues values = new ContentValues();
-        values.put(PlayersContract.PlayersEntry.COLUMN_PLAYER_NAME, playerName);
+        if (!isPlayerAdded(playerName)) {
+            ContentValues values = new ContentValues();
+            values.put(PlayersContract.PlayersEntry.COLUMN_PLAYER_NAME, playerName);
+            return database.insert(PlayersContract.PlayersEntry.TABLE_NAME, null, values);
+        } else {
+            return -1;
+        }
+    }
 
-        return database.insert(PlayersContract.PlayersEntry.TABLE_NAME, null, values);
+    public boolean isPlayerAdded(String playerName) {
+        Cursor cursor = database.query(
+                PlayersContract.PlayersEntry.TABLE_NAME,
+                new String[]{PlayersContract.PlayersEntry.COLUMN_PLAYER_NAME},
+                PlayersContract.PlayersEntry.COLUMN_PLAYER_NAME + " LIKE ?",
+                new String[]{playerName}, null, null, null);
+
+        cursor.moveToFirst();
+        if (cursor.getCount() > 0) {
+            cursor.close();
+            return true;
+        } else {
+            cursor.close();
+            return false;
+        }
     }
 
     public List<String> getAllPlayers() {

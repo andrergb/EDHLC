@@ -36,7 +36,7 @@ public class PlayerListActivity extends ActionBarActivity {
     private ListView listViewPlayers;
     private PlayersDataAccessObject playersDB;
 
-    private DrawerPlayerList mDrawerPlayer;
+    private DrawerPlayerList mDrawerPlayerList;
     BroadcastReceiver mPlayerAddedOrRemovedBroadcastReceiver;
 
     @Override
@@ -57,7 +57,7 @@ public class PlayerListActivity extends ActionBarActivity {
         drawerLists.add(getResources().getStringArray(R.array.string_menu_player_list_2));
 
         assert getSupportActionBar() != null;
-        mDrawerPlayer = new DrawerPlayerList(this, drawerLists);
+        mDrawerPlayerList = new DrawerPlayerList(this, drawerLists);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
@@ -107,7 +107,7 @@ public class PlayerListActivity extends ActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         //DrawerMain menu
-        if (mDrawerPlayer.getDrawerToggle().onOptionsItemSelected(item))
+        if (mDrawerPlayerList.getDrawerToggle().onOptionsItemSelected(item))
             return true;
 
         return super.onOptionsItemSelected(item);
@@ -116,13 +116,21 @@ public class PlayerListActivity extends ActionBarActivity {
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        mDrawerPlayer.getDrawerToggle().syncState();
+        mDrawerPlayerList.getDrawerToggle().syncState();
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        mDrawerPlayer.getDrawerToggle().onConfigurationChanged(newConfig);
+        mDrawerPlayerList.getDrawerToggle().onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mDrawerPlayerList.isDrawerOpen())
+            mDrawerPlayerList.dismiss();
+        else
+            super.onBackPressed();
     }
 
     public void createLayout(View view) {

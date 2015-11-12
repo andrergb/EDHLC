@@ -16,26 +16,33 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.argb.edhlc.PlaceholderFragment;
 import com.android.argb.edhlc.R;
 import com.android.argb.edhlc.SectionsPagerAdapter;
 import com.android.argb.edhlc.colorpicker.ColorPickerDialog;
 import com.android.argb.edhlc.colorpicker.ColorPickerSwatch;
+import com.android.argb.edhlc.database.deck.DecksDataAccessObject;
+import com.android.argb.edhlc.database.player.PlayersDataAccessObject;
 import com.android.argb.edhlc.objects.ActivePlayer;
+import com.android.argb.edhlc.objects.Deck;
 import com.android.argb.edhlc.objects.DrawerMain;
+import com.android.argb.edhlc.objects.Record;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +59,7 @@ public class MainActivity extends ActionBarActivity {
 
     private static ImageView mImageViewThrone;
     private static TextView mTextViewName;
+    private static TextView mTextViewDeck;
     private static TextView mTextViewLife;
     private static TextView mTextViewEDH1;
     private static TextView mTextViewEDH2;
@@ -82,6 +90,10 @@ public class MainActivity extends ActionBarActivity {
 
     private DrawerMain drawerMain;
     BroadcastReceiver mNewGameBroadcastReceiver;
+    private ArrayList<Deck> mActiveDeckList;
+
+    private PlayersDataAccessObject playersDB;
+    private DecksDataAccessObject decksDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,7 +134,7 @@ public class MainActivity extends ActionBarActivity {
         mNewGameBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                newGame(intent.getStringExtra(DrawerMain.BROADCAST_MESSAGE_NEWGAME_OPTION));
+                newGame(intent.getStringExtra(DrawerMain.BROADCAST_MESSAGE_NEWGAME_OPTION), intent);
             }
         };
     }
@@ -130,6 +142,11 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        playersDB = new PlayersDataAccessObject(this);
+        decksDB = new DecksDataAccessObject(this);
+        playersDB.open();
+        decksDB.open();
+
         currentFragment = getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).getInt("CURRENT_PAGE", 0);
         if (currentFragment + 1 > mSectionsPagerAdapter.getCount())
             currentFragment = 0;
@@ -148,6 +165,9 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        playersDB.close();
+        decksDB.close();
+
         getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).edit().putInt("CURRENT_PAGE", currentFragment).commit();
         ActivePlayer.savePlayerSharedPreferences(this, mActivePlayer1);
         ActivePlayer.savePlayerSharedPreferences(this, mActivePlayer2);
@@ -177,8 +197,6 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        //menu.findItem(R.id.action_overview).setVisible(!drawerMain.isDrawerOpen());
-        //menu.findItem(R.id.action_history).setVisible(!drawerMain.isDrawerOpen());
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -194,94 +212,10 @@ public class MainActivity extends ActionBarActivity {
         if (id == R.id.action_overview) {
             startActivity(new Intent(this, OverviewActivity.class));
             this.finish();
-
-//            PlayersDataAccessObject playerDB = new PlayersDataAccessObject(this);
-//            playerDB.open();
-//            playerDB.createPlayer("Dezao");
-//            playerDB.createPlayer("Macaco");
-//            playerDB.createPlayer("Anthony");
-//            playerDB.createPlayer("Marcos");
-//            playerDB.close();
-//
-//            DecksDataAccessObject decksDb = new DecksDataAccessObject(this);
-//            decksDb.open();
-//            Deck deck1 = new Deck("Dezao", "Animar");
-//            Deck deck2 = new Deck("Dezao", "Marchesa");
-//            Deck deck3 = new Deck("Dezao", "Rato");
-//            Deck deck4 = new Deck("Dezao", "Zur");
-//            decksDb.createDeck(deck1);
-//            decksDb.createDeck(deck2);
-//            decksDb.createDeck(deck3);
-//            decksDb.createDeck(deck4);
-//
-//            Deck deck5 = new Deck("Macaco", "Sidisi");
-//            Deck deck6 = new Deck("Macaco", "Kaceto");
-//            Deck deck7 = new Deck("Macaco", "Ezuri");
-//            Deck deck8 = new Deck("Macaco", "Sidry");
-//            decksDb.createDeck(deck5);
-//            decksDb.createDeck(deck6);
-//            decksDb.createDeck(deck7);
-//            decksDb.createDeck(deck8);
-//
-//            Deck deck9 = new Deck("Anthony", "Good Stuff 1");
-//            Deck deck10 = new Deck("Anthony", "Good Stuff 2");
-//            Deck deck11 = new Deck("Anthony", "Good Stuff 3");
-//            Deck deck12 = new Deck("Anthony", "Good Stuff 4");
-//            decksDb.createDeck(deck9);
-//            decksDb.createDeck(deck10);
-//            decksDb.createDeck(deck11);
-//            decksDb.createDeck(deck12);
-//
-//            Deck deck13 = new Deck("Marcos", "Milhoes1");
-//            Deck deck14 = new Deck("Marcos", "Milhoes2");
-//            Deck deck15 = new Deck("Marcos", "Milhoes4");
-//            Deck deck16 = new Deck("Marcos", "Milhoes5");
-//            decksDb.createDeck(deck13);
-//            decksDb.createDeck(deck14);
-//            decksDb.createDeck(deck15);
-//            decksDb.createDeck(deck16);
-//            decksDb.close();
         } else if (id == R.id.action_history) {
             startActivity(new Intent(this, HistoryActivity.class));
             this.finish();
-//            RecordsDataAccessObject r = new RecordsDataAccessObject(this);
-//            r.open();
-//            List<Record> a = r.getAllRecords();
-//            for (int i = 0; i < a.size(); i++) {
-//                Log.d("dezao", "1: " + a.get(i).getFistPlace().getPlayerName() + " - " + a.get(i).getFistPlace().getDeckName());
-//                Log.d("dezao", "2: " + a.get(i).getSecondPlace().getPlayerName() + " - " + a.get(i).getSecondPlace().getDeckName());
-//                Log.d("dezao", "3: " + a.get(i).getThirdPlace().getPlayerName() + " - " + a.get(i).getThirdPlace().getDeckName());
-//                Log.d("dezao", "4: " + a.get(i).getFourthPlace().getPlayerName() + " - " + a.get(i).getFourthPlace().getDeckName());
-//                Log.d("dezao", "---------------------------------");
-//
-//            }
-//            r.close();
-        }/*else  if (id == R.id.action_add_player) {
-            if (mSectionsPagerAdapter.getCount() < 4) {
-                mSectionsPagerAdapter.setCount(mSectionsPagerAdapter.getCount() + 1);
-                mSectionsPagerAdapter.notifyDataSetChanged();
-
-                mViewPager.setCurrentItem(mSectionsPagerAdapter.getCount());
-
-                getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).edit().putInt("NUM_PLAYERS", mSectionsPagerAdapter.getCount()).commit();
-                Toast.makeText(this, "ActivePlayer " + mSectionsPagerAdapter.getCount() + " added!", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "Max == 4 Players", Toast.LENGTH_SHORT).show();
-            }
-        } else if (id == R.id.action_remove_player) {
-            if (mSectionsPagerAdapter.getCount() > 2) {
-                mSectionsPagerAdapter.setCount(mSectionsPagerAdapter.getCount() - 1);
-                mSectionsPagerAdapter.notifyDataSetChanged();
-
-                if (currentFragment + 1 > mSectionsPagerAdapter.getCount())
-                    mViewPager.setCurrentItem(mSectionsPagerAdapter.getCount() - 1);
-
-                getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).edit().putInt("NUM_PLAYERS", mSectionsPagerAdapter.getCount()).commit();
-                Toast.makeText(this, "ActivePlayer " + (mSectionsPagerAdapter.getCount() + 1) + " removed!", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "Min == 2 Players", Toast.LENGTH_SHORT).show();
-            }
-        }*/
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -298,12 +232,23 @@ public class MainActivity extends ActionBarActivity {
         drawerMain.getDrawerToggle().onConfigurationChanged(newConfig);
     }
 
+    @Override
+    public void onBackPressed() {
+        if (drawerMain.isDrawerOpen())
+            drawerMain.dismiss();
+        else
+            super.onBackPressed();
+    }
+
     private void createLayout(View view) {
         if (view != null) {
+            mActiveDeckList = new ArrayList<>();
+
             checkBox = (CheckBox) findViewById(R.id.checkBoxKeepScreenOn);
             mImageViewThrone = (ImageView) view.findViewById(R.id.imageViewThrone);
 
             mTextViewName = (TextView) view.findViewById(R.id.textViewName);
+            mTextViewDeck = (TextView) view.findViewById(R.id.textViewDeck);
             mTextViewLife = (TextView) view.findViewById(R.id.textViewLife);
             mTextViewEDH1 = (TextView) view.findViewById(R.id.textViewEDH1);
             mTextViewEDH2 = (TextView) view.findViewById(R.id.textViewEDH2);
@@ -340,6 +285,11 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void updateLayout(ActivePlayer currentActivePlayer) {
+        mActiveDeckList.add(new Deck(mActivePlayer1.getPlayerName(), mActivePlayer1.getPlayerDeck()));
+        mActiveDeckList.add(new Deck(mActivePlayer2.getPlayerName(), mActivePlayer2.getPlayerDeck()));
+        mActiveDeckList.add(new Deck(mActivePlayer3.getPlayerName(), mActivePlayer3.getPlayerDeck()));
+        mActiveDeckList.add(new Deck(mActivePlayer4.getPlayerName(), mActivePlayer4.getPlayerDeck()));
+
         if (getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).getInt("SCREEN_ON", 0) == 1) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             checkBox.setChecked(true);
@@ -364,6 +314,7 @@ public class MainActivity extends ActionBarActivity {
         }
 
         mTextViewName.setText(currentActivePlayer.getPlayerName());
+        mTextViewDeck.setText(currentActivePlayer.getPlayerDeck());
         mTextViewLife.setText(currentActivePlayer.getPlayerLife() + "");
         mTextViewEDH1.setText(currentActivePlayer.getPlayerEDH1() + "");
         mTextViewEDH2.setText(currentActivePlayer.getPlayerEDH2() + "");
@@ -445,7 +396,6 @@ public class MainActivity extends ActionBarActivity {
                                 lifeToBeSaved = lifeToBeSaved + "_" + currentLife;
                                 getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).edit().putString("PHL" + playerTag, lifeToBeSaved).commit();
 
-
                                 // SAVE EDH DAMAGE
                                 String latestSavedEDH;
                                 String latestSavedEDHPreferences = getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).getString("PHEDH" + playerTag, "0@0@0@0");
@@ -462,13 +412,10 @@ public class MainActivity extends ActionBarActivity {
                                 if (!currentEdh.equalsIgnoreCase(latestSavedEDH)) {
                                     String edhToBeSaved = latestSavedEDHPreferences + "_" + currentEdh;
                                     getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).edit().putString("PHEDH" + playerTag, edhToBeSaved).commit();
-                                    Log.d("dezao", "saved: " + edhToBeSaved);
                                 } else {
                                     String edhToBeSaved = latestSavedEDHPreferences + "_" + currentEdh;
                                     getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).edit().putString("PHEDH" + playerTag, edhToBeSaved).commit();
-                                    Log.d("dezao", "saved: " + edhToBeSaved);
                                 }
-
                             }
                         } catch (InterruptedException e) {
                             e.printStackTrace();
@@ -639,31 +586,57 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
-    private void newGame(String option) {
+    private void newGame(String option, Intent intent) {
         if (option.equalsIgnoreCase(DrawerMain.BROADCAST_MESSAGE_NEWGAME_OPTION_YES)) {
             resetHistoryLife();
 
-            mActivePlayer1 = new ActivePlayer(mActivePlayer1.getPlayerName(), 40, 0, 0, 0, 0, mActivePlayer1.getPlayerColor(), 1);
-            mActivePlayer2 = new ActivePlayer(mActivePlayer2.getPlayerName(), 40, 0, 0, 0, 0, mActivePlayer2.getPlayerColor(), 2);
-            mActivePlayer3 = new ActivePlayer(mActivePlayer3.getPlayerName(), 40, 0, 0, 0, 0, mActivePlayer3.getPlayerColor(), 3);
-            mActivePlayer4 = new ActivePlayer(mActivePlayer4.getPlayerName(), 40, 0, 0, 0, 0, mActivePlayer4.getPlayerColor(), 4);
+            mActivePlayer1 = new ActivePlayer(mActivePlayer1.getPlayerName(), mActivePlayer1.getPlayerDeck(), 40, 0, 0, 0, 0, mActivePlayer1.getPlayerColor(), 1);
+            mActivePlayer2 = new ActivePlayer(mActivePlayer2.getPlayerName(), mActivePlayer2.getPlayerDeck(), 40, 0, 0, 0, 0, mActivePlayer2.getPlayerColor(), 2);
+            mActivePlayer3 = new ActivePlayer(mActivePlayer3.getPlayerName(), mActivePlayer3.getPlayerDeck(), 40, 0, 0, 0, 0, mActivePlayer3.getPlayerColor(), 3);
+            mActivePlayer4 = new ActivePlayer(mActivePlayer4.getPlayerName(), mActivePlayer4.getPlayerDeck(), 40, 0, 0, 0, 0, mActivePlayer4.getPlayerColor(), 4);
 
             updateLayout(getCurrentActivePlayer());
         } else if (option.equalsIgnoreCase(DrawerMain.BROADCAST_MESSAGE_NEWGAME_OPTION_NO)) {
             resetHistoryLife();
 
-            int[] defaultColor = getResources().getIntArray(R.array.edh_default);
-            mActivePlayer1 = new ActivePlayer("ActivePlayer 1", 40, 0, 0, 0, 0, defaultColor, 1);
-            mActivePlayer2 = new ActivePlayer("ActivePlayer 2", 40, 0, 0, 0, 0, defaultColor, 2);
-            mActivePlayer3 = new ActivePlayer("ActivePlayer 3", 40, 0, 0, 0, 0, defaultColor, 3);
-            mActivePlayer4 = new ActivePlayer("ActivePlayer 4", 40, 0, 0, 0, 0, defaultColor, 4);
+            ArrayList<String> players = intent.getStringArrayListExtra(DrawerMain.BROADCAST_MESSAGE_NEWGAME_PLAYERS);
+            ArrayList<String> decks = intent.getStringArrayListExtra(DrawerMain.BROADCAST_MESSAGE_NEWGAME_DECKS);
 
-            mSectionsPagerAdapter.setCount(4);
+            int[] defaultColor = getResources().getIntArray(R.array.edh_default);
+            mActivePlayer1 = new ActivePlayer("ActivePlayer 1", "Deck1", 40, 0, 0, 0, 0, defaultColor, 1);
+            mActivePlayer2 = new ActivePlayer("ActivePlayer 2", "Deck2", 40, 0, 0, 0, 0, defaultColor, 2);
+            mActivePlayer3 = new ActivePlayer("ActivePlayer 3", "Deck3", 40, 0, 0, 0, 0, defaultColor, 3);
+            mActivePlayer4 = new ActivePlayer("ActivePlayer 4", "Deck4", 40, 0, 0, 0, 0, defaultColor, 4);
+
+            if (players.size() >= 1) {
+                mActivePlayer1.setPlayerName(players.get(0));
+                mActivePlayer1.setPlayerDeck(decks.get(0));
+            }
+            if (players.size() >= 2) {
+                mActivePlayer2.setPlayerName(players.get(1));
+                mActivePlayer2.setPlayerDeck(decks.get(1));
+            }
+            if (players.size() >= 3) {
+                mActivePlayer3.setPlayerName(players.get(2));
+                mActivePlayer3.setPlayerDeck(decks.get(2));
+            }
+            if (players.size() >= 4) {
+                mActivePlayer4.setPlayerName(players.get(3));
+                mActivePlayer4.setPlayerDeck(decks.get(3));
+            }
+
+            mSectionsPagerAdapter.setCount(players.size());
             mSectionsPagerAdapter.notifyDataSetChanged();
+            mViewPager.setCurrentItem(0);
             getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).edit().putInt("NUM_PLAYERS", mSectionsPagerAdapter.getCount()).commit();
 
             updateLayout(getCurrentActivePlayer());
         }
+
+        mActiveDeckList.add(new Deck(mActivePlayer1.getPlayerName(), mActivePlayer1.getPlayerDeck()));
+        mActiveDeckList.add(new Deck(mActivePlayer2.getPlayerName(), mActivePlayer2.getPlayerDeck()));
+        mActiveDeckList.add(new Deck(mActivePlayer3.getPlayerName(), mActivePlayer3.getPlayerDeck()));
+        mActiveDeckList.add(new Deck(mActivePlayer4.getPlayerName(), mActivePlayer4.getPlayerDeck()));
     }
 
     public void onClickKeepScreenOn(View view) {
@@ -719,20 +692,21 @@ public class MainActivity extends ActionBarActivity {
         alertDialog.show();
     }
 
-    public void createPlayerNameDialog(View view) {
-        View playerNameView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_player_name, null);
-        final EditText userInput = (EditText) playerNameView.findViewById(R.id.editTextPlayerName);
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
-        alertDialogBuilder.setView(playerNameView);
-        alertDialogBuilder.setTitle(mTextViewName.getText() + "");
+    public void createPlayerNameDialog(final View view) {
+        View NewGamePlayersChoiceView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_two_spinners, null);
+
+        final Spinner spinnerPlayerName = (Spinner) NewGamePlayersChoiceView.findViewById(R.id.spinner1);
+        final Spinner spinnerPlayerDeck = (Spinner) NewGamePlayersChoiceView.findViewById(R.id.spinner2);
+        handleSpinners(spinnerPlayerName, spinnerPlayerDeck);
+
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
+        alertDialogBuilder.setView(NewGamePlayersChoiceView);
+        alertDialogBuilder.setTitle("Change Player");
+        alertDialogBuilder.setMessage("Choose a Player and a Deck:");
         alertDialogBuilder.setPositiveButton("Ok",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        String tempName = userInput.getText().toString();
-                        if (!tempName.equalsIgnoreCase("")) {
-                            getCurrentActivePlayer().setPlayerName(tempName);
-                            setActivePlayerName(getCurrentActivePlayer().getPlayerName());
-                        }
+                        //Overridden at 'alertDialog.getButton' to avoid dismiss every time
                     }
                 });
         alertDialogBuilder.setNegativeButton("Cancel",
@@ -741,9 +715,35 @@ public class MainActivity extends ActionBarActivity {
                         dialog.cancel();
                     }
                 });
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        final AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
+
+        //Override POSITIVE button
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String tempPlayerName = spinnerPlayerName.getSelectedItem().toString();
+                String tempPlayerDeck = spinnerPlayerDeck.getSelectedItem().toString();
+
+                if (!tempPlayerName.equalsIgnoreCase(getResources().getString(R.string.edh_spinner_player_hint))
+                        && !tempPlayerDeck.equalsIgnoreCase(getResources().getString(R.string.edh_spinner_deck_hint))) {
+
+
+                    mActiveDeckList.remove(new Deck(getCurrentActivePlayer().getPlayerName(), getCurrentActivePlayer().getPlayerDeck()));
+                    mActiveDeckList.add(new Deck(tempPlayerName, tempPlayerDeck));
+                    if (Record.isValidRecord(mActiveDeckList)) {
+                        getCurrentActivePlayer().setPlayerName(tempPlayerName);
+                        getCurrentActivePlayer().setPlayerDeck(tempPlayerDeck);
+                        alertDialog.dismiss();
+                    } else {
+                        mActiveDeckList.remove(mActiveDeckList.size() - 1);
+                        Toast.makeText(view.getContext(), "ERROR: Player/Deck already added!", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(view.getContext(), "ERROR: invalid Player/Deck!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     public void createColorPickDialog() {
@@ -817,6 +817,42 @@ public class MainActivity extends ActionBarActivity {
             return mActivePlayer3;
         else
             return mActivePlayer4;
+    }
+
+    private void handleSpinners(Spinner spinnerName, Spinner spinnerDeck) {
+        final ArrayList<String> players = (ArrayList<String>) playersDB.getAllPlayers();
+        players.add(0, this.getString(R.string.edh_spinner_player_hint));
+
+        final ArrayList<String> decks;
+        decks = new ArrayList<>();
+
+        final ArrayAdapter<String> playersNameAdapter;
+        playersNameAdapter = new ArrayAdapter<>(this, R.layout.row_spinner_selected, players);
+        playersNameAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        final ArrayAdapter<String> playersDeckAdapter;
+        playersDeckAdapter = new ArrayAdapter<>(this, R.layout.row_spinner_selected, decks);
+        playersDeckAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinnerName.setAdapter(playersNameAdapter);
+        spinnerName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                List<Deck> aux = decksDB.getAllDeckByPlayerName(players.get(position));
+                decks.clear();
+                decks.add(0, getResources().getString(R.string.edh_spinner_deck_hint));
+                for (int i = 0; i < aux.size(); i++) {
+                    decks.add(aux.get(i).getDeckName());
+                }
+                playersDeckAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        spinnerDeck.setAdapter(playersDeckAdapter);
     }
 
     private int getNumOfActivePlayers() {

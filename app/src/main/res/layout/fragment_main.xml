@@ -11,42 +11,51 @@
     android:weightSum="10"
     tools:context=".activities.MainActivity$PlaceholderFragment">
 
-    <RelativeLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1.5">
 
-        <TextView
-            android:id="@+id/textViewName"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:clickable="true"
-            android:onClick="onClickActivePlayerName"
-            android:text="Player Name"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="35sp" />
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textViewName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="onClickActivePlayerName"
+                android:text="Player Name"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="32sp" />
+
+            <TextView
+                android:id="@+id/textViewDeck"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:gravity="center"
+                android:text="Deck Name"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textSize="22sp" />
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/imageViewThrone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_margin="10dp"
-            android:layout_toEndOf="@id/textViewName"
-            android:layout_toRightOf="@id/textViewName"
-            android:adjustViewBounds="true"
+            android:layout_width="28sp"
+            android:layout_height="28sp"
+            android:layout_gravity="center_vertical|start"
             android:src="@drawable/icon_crown" />
-
-    </RelativeLayout>
-
+    </FrameLayout>
 
     <LinearLayout
         android:id="@+id/linearLayoutLife"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="5"
+        android:layout_weight="4.5"
         android:orientation="horizontal"
         android:weightSum="10">
 
@@ -92,9 +101,7 @@
                 android:onClick="onClickActivePlayerLifeMinusButton"
                 android:rotation="180"
                 android:scaleType="centerInside" />
-
         </LinearLayout>
-
     </LinearLayout>
 
     <LinearLayout
@@ -150,7 +157,6 @@
                 android:maxLength="10"
                 android:text="PlayerName"
                 android:textSize="10sp" />
-
         </LinearLayout>
 
         <LinearLayout
@@ -294,8 +300,5 @@
                 android:text="PlayerName"
                 android:textSize="10sp" />
         </LinearLayout>
-
     </LinearLayout>
-
-
 </LinearLayout>

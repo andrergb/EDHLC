@@ -3,7 +3,8 @@
     <string name="activity_overview_label">EDHLC: Overview</string>
     <string name="activity_history_label">EDHLC: History</string>
     <string name="activity_player_label">EDHLC: Player</string>
-    <string name="activity_playerlist_label">EDHLC: Player List</string>
+    <string name="activity_player_list_label">EDHLC: Player List</string>
+    <string name="activity_records_label">EDHLC: Records</string>
 
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
@@ -26,12 +27,11 @@
     <string name="hint_playerName">Player Name</string>
     <string name="hint_playerLife">Player Life</string>
 
-
     <string name="color_picker_default_title">Select a Color</string>
     <string name="color_swatch_description">Color</string>
     <string name="color_swatch_description_selected">Color selected</string>
 
-    <string name="buttonLifeNegative">down_button</string>
+    <string name="buttonLifeNegative">buttonLifeNegative</string>
     <string name="buttonLifePositive">buttonLifePositive</string>
 
     <string name="actions_remove">Remove Player</string>
@@ -54,6 +54,7 @@
     <!-- Static options -->
     <string-array name="string_menu_main_2">
         <item>Players</item>
+        <item>All Records</item>
         <item>Settings</item>
         <item>About</item>
     </string-array>
@@ -66,6 +67,33 @@
     </string-array>
     <!-- Player List activity -->
     <string-array name="string_menu_player_list_2">
+        <item>Players</item>
+        <item>All Records</item>
+        <item>Settings</item>
+        <item>About</item>
+    </string-array>
+
+    <!-- Player activity -->
+    <string-array name="string_menu_player_1">
+        <item>Add Deck</item>
+        <item>Edit Deck</item>
+        <item>Remove Deck</item>
+    </string-array>
+    <!-- Player List activity -->
+    <string-array name="string_menu_player_2">
+        <item>Players</item>
+        <item>All Records</item>
+        <item>Settings</item>
+        <item>About</item>
+    </string-array>
+
+    <!-- Records activity -->
+    <string-array name="string_menu_records_1">
+    </string-array>
+    <!-- Records activity -->
+    <string-array name="string_menu_records_2">
+        <item>Players</item>
+        <item>All Records</item>
         <item>Settings</item>
         <item>About</item>
     </string-array>
