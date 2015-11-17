@@ -110,6 +110,12 @@ public class DrawerMain {
                     mDrawerLayout.closeDrawers();
                     createDiceRangeDialog(view);
                     break;
+                case 3: //Random a player
+                    mDrawerLayout.closeDrawers();
+                    Intent intent = new Intent(Constants.BROADCAST_INTENT);
+                    intent.putExtra(Constants.BROADCAST_MESSAGE_RANDOM_PLAYER_OPTION, Constants.BROADCAST_MESSAGE_RANDOM_PLAYER_OPTION);
+                    LocalBroadcastManager.getInstance(parentActivity).sendBroadcast(intent);
+                    break;
             }
         }
     }
@@ -142,7 +148,7 @@ public class DrawerMain {
     }
 
     public void createNewGameDialog(final View view) {
-        final Intent intent = new Intent(Constants.BROADCAST_INTENT_FILTER_NEW_GAME);
+        final Intent intent = new Intent(Constants.BROADCAST_INTENT);
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
         alertDialogBuilder.setTitle("New Game");
@@ -272,7 +278,7 @@ public class DrawerMain {
     }
 
     private void createNewGameConfirmationDialog(final View view) {
-        final Intent intent = new Intent(Constants.BROADCAST_INTENT_FILTER_NEW_GAME);
+        final Intent intent = new Intent(Constants.BROADCAST_INTENT);
 
         View logView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_log_confirmation, null);
 

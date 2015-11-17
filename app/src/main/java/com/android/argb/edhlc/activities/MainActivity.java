@@ -49,6 +49,7 @@ import com.android.argb.edhlc.objects.Record;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -98,7 +99,7 @@ public class MainActivity extends ActionBarActivity {
     private int currentFragment = 0;
 
     private DrawerMain drawerMain;
-    BroadcastReceiver mNewGameBroadcastReceiver;
+    BroadcastReceiver mBroadcastReceiver;
     private ArrayList<Deck> mActiveDeckList;
 
     private PlayersDataAccessObject playersDB;
@@ -140,10 +141,14 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
-        mNewGameBroadcastReceiver = new BroadcastReceiver() {
+        mBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                newGame(intent.getStringExtra(Constants.BROADCAST_MESSAGE_NEW_GAME_OPTION), intent);
+                if (!intent.getStringExtra(Constants.BROADCAST_MESSAGE_RANDOM_PLAYER_OPTION).isEmpty()) {
+                    createRandomPlayerDialog(placeholderFragment.getView());
+                } else if (!intent.getStringExtra(Constants.BROADCAST_MESSAGE_NEW_GAME_OPTION).isEmpty()) {
+                    newGame(intent.getStringExtra(Constants.BROADCAST_MESSAGE_NEW_GAME_OPTION), intent);
+                }
             }
         };
     }
@@ -169,7 +174,7 @@ public class MainActivity extends ActionBarActivity {
         mActivePlayer3 = ActivePlayer.loadPlayerSharedPreferences(this, 3);
         mActivePlayer4 = ActivePlayer.loadPlayerSharedPreferences(this, 4);
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(mNewGameBroadcastReceiver, new IntentFilter(Constants.BROADCAST_INTENT_FILTER_NEW_GAME));
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, new IntentFilter(Constants.BROADCAST_INTENT));
     }
 
     @Override
@@ -184,7 +189,7 @@ public class MainActivity extends ActionBarActivity {
         ActivePlayer.savePlayerSharedPreferences(this, mActivePlayer3);
         ActivePlayer.savePlayerSharedPreferences(this, mActivePlayer4);
 
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mNewGameBroadcastReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
     }
 
     @Override
@@ -381,6 +386,29 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
+    private void createRandomPlayerDialog(View view) {
+        int minValue = 0;
+        int maxValue = getNumOfActivePlayers() - 1;
+        Random r = new Random();
+        int randomResult = r.nextInt(maxValue - minValue + 1) + minValue;
+
+        View logView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_roll_a_dice_result, null);
+        final TextView textViewResult = (TextView) logView.findViewById(R.id.textViewDiceResult);
+        textViewResult.setTextSize(42);
+        textViewResult.setText(MessageFormat.format("{0}", getActivePlayerByTag(randomResult).getPlayerName()));
+
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
+        alertDialogBuilder.setView(logView);
+        alertDialogBuilder.setTitle("Random Player:");
+        alertDialogBuilder.setPositiveButton("Ok",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
 
     private void activePlayerLifeHistoryHandler() {
         Thread threadLife;
