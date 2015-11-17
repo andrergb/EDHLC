@@ -5,6 +5,7 @@
     <string name="activity_player_label">EDHLC: Player</string>
     <string name="activity_player_list_label">EDHLC: Player List</string>
     <string name="activity_records_label">EDHLC: Records</string>
+    <string name="activity_settings_label">EDHLC: Settings</string>
 
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
