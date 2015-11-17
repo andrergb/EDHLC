@@ -53,7 +53,7 @@ public class HistoryActivity extends ActionBarActivity {
             window.setStatusBarColor(this.getResources().getColor(R.color.edh_default_secondary));
         }
 
-        numPlayers = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt("NUM_PLAYERS", 4);
+        numPlayers = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt(Constants.TOTAL_PLAYERS, 4);
 
         createLayout(this.findViewById(android.R.id.content));
     }
@@ -66,7 +66,7 @@ public class HistoryActivity extends ActionBarActivity {
         mActivePlayer3 = ActivePlayer.loadPlayerSharedPreferences(this, 3);
         mActivePlayer4 = ActivePlayer.loadPlayerSharedPreferences(this, 4);
 
-        if (getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt("SCREEN_ON", 0) == 1)
+        if (getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt(Constants.SCREEN_ON, 0) == 1)
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         else
             getWindow().clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -132,8 +132,8 @@ public class HistoryActivity extends ActionBarActivity {
     private void updateLayout() {
         textViewP1Name.setText(mActivePlayer1.getPlayerName());
         textViewP1Name.setTextColor(mActivePlayer1.getPlayerColor()[0]);
-        String latestSavedLifePreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString("PHL" + mActivePlayer1.getPlayerTag(), "40");
-        String latestSavedEDHPreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString("PHEDH" + mActivePlayer1.getPlayerTag(), "0@0@0@0");
+        String latestSavedLifePreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString(Constants.PLAYER_HISTORY_LIFE + mActivePlayer1.getPlayerTag(), "40");
+        String latestSavedEDHPreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString(Constants.PLAYER_EDH_PREFIX + mActivePlayer1.getPlayerTag(), "0@0@0@0");
         if (!latestSavedLifePreferences.isEmpty() && !latestSavedEDHPreferences.isEmpty()) {
             String[] latestSavedLifeArray = latestSavedLifePreferences.split("_");
             String[] latestSavedEDHArray = latestSavedEDHPreferences.split("_");
@@ -142,8 +142,8 @@ public class HistoryActivity extends ActionBarActivity {
 
         textViewP2Name.setText(mActivePlayer2.getPlayerName());
         textViewP2Name.setTextColor(mActivePlayer2.getPlayerColor()[0]);
-        latestSavedLifePreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString("PHL" + mActivePlayer2.getPlayerTag(), "0");
-        latestSavedEDHPreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString("PHEDH" + mActivePlayer2.getPlayerTag(), "0@0@0@0");
+        latestSavedLifePreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString(Constants.PLAYER_HISTORY_LIFE + mActivePlayer2.getPlayerTag(), "0");
+        latestSavedEDHPreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString(Constants.PLAYER_EDH_PREFIX + mActivePlayer2.getPlayerTag(), "0@0@0@0");
         if (!latestSavedLifePreferences.isEmpty() && !latestSavedEDHPreferences.isEmpty()) {
             String[] latestSavedLifeArray = latestSavedLifePreferences.split("_");
             String[] latestSavedEDHArray = latestSavedEDHPreferences.split("_");
@@ -152,8 +152,8 @@ public class HistoryActivity extends ActionBarActivity {
 
         textViewP3Name.setText(mActivePlayer3.getPlayerName());
         textViewP3Name.setTextColor(mActivePlayer3.getPlayerColor()[0]);
-        latestSavedLifePreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString("PHL" + mActivePlayer3.getPlayerTag(), "0");
-        latestSavedEDHPreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString("PHEDH" + mActivePlayer3.getPlayerTag(), "0@0@0@0");
+        latestSavedLifePreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString(Constants.PLAYER_HISTORY_LIFE + mActivePlayer3.getPlayerTag(), "0");
+        latestSavedEDHPreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString(Constants.PLAYER_EDH_PREFIX + mActivePlayer3.getPlayerTag(), "0@0@0@0");
         if (!latestSavedLifePreferences.isEmpty() && !latestSavedEDHPreferences.isEmpty()) {
             String[] latestSavedLifeArray = latestSavedLifePreferences.split("_");
             String[] latestSavedEDHArray = latestSavedEDHPreferences.split("_");
@@ -162,8 +162,8 @@ public class HistoryActivity extends ActionBarActivity {
 
         textViewP4Name.setText(mActivePlayer4.getPlayerName());
         textViewP4Name.setTextColor(mActivePlayer4.getPlayerColor()[0]);
-        latestSavedLifePreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString("PHL" + mActivePlayer4.getPlayerTag(), "0");
-        latestSavedEDHPreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString("PHEDH" + mActivePlayer4.getPlayerTag(), "0@0@0@0");
+        latestSavedLifePreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString(Constants.PLAYER_HISTORY_LIFE + mActivePlayer4.getPlayerTag(), "0");
+        latestSavedEDHPreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString(Constants.PLAYER_EDH_PREFIX + mActivePlayer4.getPlayerTag(), "0@0@0@0");
         if (!latestSavedLifePreferences.isEmpty() && !latestSavedEDHPreferences.isEmpty()) {
             String[] latestSavedLifeArray = latestSavedLifePreferences.split("_");
             String[] latestSavedEDHArray = latestSavedEDHPreferences.split("_");

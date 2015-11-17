@@ -122,7 +122,7 @@ public class MainActivity extends ActionBarActivity {
 
         //Fragments
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        mSectionsPagerAdapter.setCount(getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt("NUM_PLAYERS", 4));
+        mSectionsPagerAdapter.setCount(getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt(Constants.TOTAL_PLAYERS, 4));
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setOffscreenPageLimit(4);
@@ -131,7 +131,7 @@ public class MainActivity extends ActionBarActivity {
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
                 currentFragment = position;
-                getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt("CURRENT_PAGE", currentFragment).commit();
+                getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.CURRENT_PAGE, currentFragment).commit();
                 placeholderFragment = (PlaceholderFragment) mSectionsPagerAdapter.instantiateItem(mViewPager, position);
                 createLayout(placeholderFragment.getView());
                 updateLayout(getCurrentActivePlayer());
@@ -156,7 +156,7 @@ public class MainActivity extends ActionBarActivity {
         playersDB.open();
         decksDB.open();
 
-        currentFragment = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt("CURRENT_PAGE", 0);
+        currentFragment = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt(Constants.CURRENT_PAGE, 0);
         if (currentFragment + 1 > mSectionsPagerAdapter.getCount())
             currentFragment = 0;
         Bundle extras = getIntent().getExtras();
@@ -178,7 +178,7 @@ public class MainActivity extends ActionBarActivity {
         playersDB.close();
         decksDB.close();
 
-        getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt("CURRENT_PAGE", currentFragment).commit();
+        getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.CURRENT_PAGE, currentFragment).commit();
         ActivePlayer.savePlayerSharedPreferences(this, mActivePlayer1);
         ActivePlayer.savePlayerSharedPreferences(this, mActivePlayer2);
         ActivePlayer.savePlayerSharedPreferences(this, mActivePlayer3);
@@ -306,7 +306,7 @@ public class MainActivity extends ActionBarActivity {
         mActiveDeckList.add(new Deck(mActivePlayer3.getPlayerName(), mActivePlayer3.getPlayerDeck()));
         mActiveDeckList.add(new Deck(mActivePlayer4.getPlayerName(), mActivePlayer4.getPlayerDeck()));
 
-        if (getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt("SCREEN_ON", 0) == 1) {
+        if (getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt(Constants.SCREEN_ON, 0) == 1) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             checkBox.setChecked(true);
         } else {
@@ -408,7 +408,7 @@ public class MainActivity extends ActionBarActivity {
                     public void run() {
                         try {
                             int latestSavedLife;
-                            String latestSavedLifePreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString("PHL" + playerTag, "40");
+                            String latestSavedLifePreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString(Constants.PLAYER_HISTORY_LIFE + playerTag, Constants.INITIAL_PLAYER_LIFE_STRING);
                             if (!latestSavedLifePreferences.isEmpty()) {
                                 String[] latestSavedLifeArray = latestSavedLifePreferences.split("_");
                                 latestSavedLife = Integer.valueOf(latestSavedLifeArray[latestSavedLifeArray.length - 1]);
@@ -420,13 +420,13 @@ public class MainActivity extends ActionBarActivity {
                             int currentLife = getActivePlayerByTag(playerTag).getPlayerLife();
 
                             if ((currentLife - latestSavedLife) != 0) {
-                                String lifeToBeSaved = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString("PHL" + playerTag, "40");
+                                String lifeToBeSaved = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString(Constants.PLAYER_HISTORY_LIFE + playerTag, Constants.INITIAL_PLAYER_LIFE_STRING);
                                 lifeToBeSaved = lifeToBeSaved + "_" + currentLife;
-                                getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString("PHL" + playerTag, lifeToBeSaved).commit();
+                                getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString(Constants.PLAYER_HISTORY_LIFE + playerTag, lifeToBeSaved).commit();
 
                                 // SAVE EDH DAMAGE
                                 String latestSavedEDH;
-                                String latestSavedEDHPreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString("PHEDH" + playerTag, "0@0@0@0");
+                                String latestSavedEDHPreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString(Constants.PLAYER_EDH_PREFIX + playerTag, "0@0@0@0");
                                 if (!latestSavedEDHPreferences.isEmpty()) {
                                     String[] latestSavedLifeArray = latestSavedEDHPreferences.split("_");
                                     latestSavedEDH = latestSavedLifeArray[latestSavedLifeArray.length - 1];
@@ -439,10 +439,10 @@ public class MainActivity extends ActionBarActivity {
 
                                 if (!currentEdh.equalsIgnoreCase(latestSavedEDH)) {
                                     String edhToBeSaved = latestSavedEDHPreferences + "_" + currentEdh;
-                                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString("PHEDH" + playerTag, edhToBeSaved).commit();
+                                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString(Constants.PLAYER_EDH_PREFIX + playerTag, edhToBeSaved).commit();
                                 } else {
                                     String edhToBeSaved = latestSavedEDHPreferences + "_" + currentEdh;
-                                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString("PHEDH" + playerTag, edhToBeSaved).commit();
+                                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString(Constants.PLAYER_EDH_PREFIX + playerTag, edhToBeSaved).commit();
                                 }
                             }
                         } catch (InterruptedException e) {
@@ -464,15 +464,15 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void resetHistoryLife() {
-        getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString("PHL" + 1, "40").commit();
-        getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString("PHL" + 2, "40").commit();
-        getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString("PHL" + 3, "40").commit();
-        getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString("PHL" + 4, "40").commit();
+        getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString(Constants.PLAYER_HISTORY_LIFE + 1, Constants.INITIAL_PLAYER_LIFE_STRING).commit();
+        getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString(Constants.PLAYER_HISTORY_LIFE + 2, Constants.INITIAL_PLAYER_LIFE_STRING).commit();
+        getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString(Constants.PLAYER_HISTORY_LIFE + 3, Constants.INITIAL_PLAYER_LIFE_STRING).commit();
+        getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString(Constants.PLAYER_HISTORY_LIFE + 4, Constants.INITIAL_PLAYER_LIFE_STRING).commit();
 
-        getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString("PHEDH" + 1, "0@0@0@0").commit();
-        getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString("PHEDH" + 2, "0@0@0@0").commit();
-        getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString("PHEDH" + 3, "0@0@0@0").commit();
-        getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString("PHEDH" + 4, "0@0@0@0").commit();
+        getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString(Constants.PLAYER_EDH_PREFIX + 1, "0@0@0@0").commit();
+        getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString(Constants.PLAYER_EDH_PREFIX + 2, "0@0@0@0").commit();
+        getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString(Constants.PLAYER_EDH_PREFIX + 3, "0@0@0@0").commit();
+        getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString(Constants.PLAYER_EDH_PREFIX + 4, "0@0@0@0").commit();
     }
 
     public ActivePlayer getCurrentActivePlayer() {
@@ -499,7 +499,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void onClickActivePlayerLifePlusButton(View view) {
-        if (getCurrentActivePlayer().getPlayerLife() < 99) {
+        if (getCurrentActivePlayer().getPlayerLife() < Constants.MAX_PLAYER_LIFE_INT) {
             getCurrentActivePlayer().setPlayerLife(getCurrentActivePlayer().getPlayerLife() + 1);
             setActivePlayerLife(String.valueOf(getCurrentActivePlayer().getPlayerLife()));
 
@@ -509,7 +509,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void onClickActivePlayerLifeMinusButton(View view) {
-        if (getCurrentActivePlayer().getPlayerLife() > -99) {
+        if (getCurrentActivePlayer().getPlayerLife() > Constants.MIN_PLAYER_LIFE_INT) {
             getCurrentActivePlayer().setPlayerLife(getCurrentActivePlayer().getPlayerLife() - 1);
             setActivePlayerLife(String.valueOf(getCurrentActivePlayer().getPlayerLife()));
 
@@ -519,7 +519,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void onClickActivePlayerEDH1PlusButton(View view) {
-        if (getCurrentActivePlayer().getPlayerEDH1() < 21) {
+        if (getCurrentActivePlayer().getPlayerEDH1() < Constants.MAX_EDH_DAMAGE_INT) {
             getCurrentActivePlayer().setPlayerEDH1(getCurrentActivePlayer().getPlayerEDH1() + 1);
             setActivePlayerEDH1(String.valueOf(getCurrentActivePlayer().getPlayerEDH1()));
 
@@ -531,7 +531,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void onClickActivePlayerEDH1MinusButton(View view) {
-        if (getCurrentActivePlayer().getPlayerEDH1() > 0) {
+        if (getCurrentActivePlayer().getPlayerEDH1() > Constants.MIN_EDH_DAMAGE_INT) {
             getCurrentActivePlayer().setPlayerEDH1(getCurrentActivePlayer().getPlayerEDH1() - 1);
             setActivePlayerEDH1(String.valueOf(getCurrentActivePlayer().getPlayerEDH1()));
 
@@ -543,7 +543,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void onClickActivePlayerEDH2PlusButton(View view) {
-        if (getCurrentActivePlayer().getPlayerEDH2() < 21) {
+        if (getCurrentActivePlayer().getPlayerEDH2() < Constants.MAX_EDH_DAMAGE_INT) {
             getCurrentActivePlayer().setPlayerEDH2(getCurrentActivePlayer().getPlayerEDH2() + 1);
             setActivePlayerEDH2(String.valueOf(getCurrentActivePlayer().getPlayerEDH2()));
 
@@ -555,7 +555,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void onClickActivePlayerEDH2MinusButton(View view) {
-        if (getCurrentActivePlayer().getPlayerEDH2() > 0) {
+        if (getCurrentActivePlayer().getPlayerEDH2() > Constants.MIN_EDH_DAMAGE_INT) {
             getCurrentActivePlayer().setPlayerEDH2(getCurrentActivePlayer().getPlayerEDH2() - 1);
             setActivePlayerEDH2(String.valueOf(getCurrentActivePlayer().getPlayerEDH2()));
 
@@ -567,7 +567,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void onClickActivePlayerEDH3PlusButton(View view) {
-        if (getCurrentActivePlayer().getPlayerEDH3() < 21) {
+        if (getCurrentActivePlayer().getPlayerEDH3() < Constants.MAX_EDH_DAMAGE_INT) {
             getCurrentActivePlayer().setPlayerEDH3(getCurrentActivePlayer().getPlayerEDH3() + 1);
             setActivePlayerEDH3(String.valueOf(getCurrentActivePlayer().getPlayerEDH3()));
 
@@ -579,7 +579,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void onClickActivePlayerEDH3MinusButton(View view) {
-        if (getCurrentActivePlayer().getPlayerEDH3() > 0) {
+        if (getCurrentActivePlayer().getPlayerEDH3() > Constants.MIN_EDH_DAMAGE_INT) {
             getCurrentActivePlayer().setPlayerEDH3(getCurrentActivePlayer().getPlayerEDH3() - 1);
             setActivePlayerEDH3(String.valueOf(getCurrentActivePlayer().getPlayerEDH3()));
 
@@ -591,7 +591,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void onClickActivePlayerEDH4PlusButton(View view) {
-        if (getCurrentActivePlayer().getPlayerEDH4() < 21) {
+        if (getCurrentActivePlayer().getPlayerEDH4() < Constants.MAX_EDH_DAMAGE_INT) {
             getCurrentActivePlayer().setPlayerEDH4(getCurrentActivePlayer().getPlayerEDH4() + 1);
             setActivePlayerEDH4(String.valueOf(getCurrentActivePlayer().getPlayerEDH4()));
 
@@ -603,7 +603,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void onClickActivePlayerEDH4MinusButton(View view) {
-        if (getCurrentActivePlayer().getPlayerEDH4() > 0) {
+        if (getCurrentActivePlayer().getPlayerEDH4() > Constants.MIN_EDH_DAMAGE_INT) {
             getCurrentActivePlayer().setPlayerEDH4(getCurrentActivePlayer().getPlayerEDH4() - 1);
             setActivePlayerEDH4(String.valueOf(getCurrentActivePlayer().getPlayerEDH4()));
 
@@ -618,10 +618,10 @@ public class MainActivity extends ActionBarActivity {
         if (option.equalsIgnoreCase(Constants.BROADCAST_MESSAGE_NEW_GAME_OPTION_YES)) {
             resetHistoryLife();
 
-            mActivePlayer1 = new ActivePlayer(mActivePlayer1.getPlayerName(), mActivePlayer1.getPlayerDeck(), 40, 0, 0, 0, 0, mActivePlayer1.getPlayerColor(), 1);
-            mActivePlayer2 = new ActivePlayer(mActivePlayer2.getPlayerName(), mActivePlayer2.getPlayerDeck(), 40, 0, 0, 0, 0, mActivePlayer2.getPlayerColor(), 2);
-            mActivePlayer3 = new ActivePlayer(mActivePlayer3.getPlayerName(), mActivePlayer3.getPlayerDeck(), 40, 0, 0, 0, 0, mActivePlayer3.getPlayerColor(), 3);
-            mActivePlayer4 = new ActivePlayer(mActivePlayer4.getPlayerName(), mActivePlayer4.getPlayerDeck(), 40, 0, 0, 0, 0, mActivePlayer4.getPlayerColor(), 4);
+            mActivePlayer1 = new ActivePlayer(mActivePlayer1.getPlayerName(), mActivePlayer1.getPlayerDeck(), Constants.INITIAL_PLAYER_LIFE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, mActivePlayer1.getPlayerColor(), 1);
+            mActivePlayer2 = new ActivePlayer(mActivePlayer2.getPlayerName(), mActivePlayer2.getPlayerDeck(), Constants.INITIAL_PLAYER_LIFE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, mActivePlayer2.getPlayerColor(), 2);
+            mActivePlayer3 = new ActivePlayer(mActivePlayer3.getPlayerName(), mActivePlayer3.getPlayerDeck(), Constants.INITIAL_PLAYER_LIFE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, mActivePlayer3.getPlayerColor(), 3);
+            mActivePlayer4 = new ActivePlayer(mActivePlayer4.getPlayerName(), mActivePlayer4.getPlayerDeck(), Constants.INITIAL_PLAYER_LIFE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, mActivePlayer4.getPlayerColor(), 4);
 
             updateLayout(getCurrentActivePlayer());
         } else if (option.equalsIgnoreCase(Constants.BROADCAST_MESSAGE_NEW_GAME_OPTION_NO)) {
@@ -631,10 +631,10 @@ public class MainActivity extends ActionBarActivity {
             ArrayList<String> decks = intent.getStringArrayListExtra(Constants.BROADCAST_MESSAGE_NEW_GAME_DECKS);
 
             int[] defaultColor = getResources().getIntArray(R.array.edh_default);
-            mActivePlayer1 = new ActivePlayer("ActivePlayer 1", "Deck1", 40, 0, 0, 0, 0, defaultColor, 1);
-            mActivePlayer2 = new ActivePlayer("ActivePlayer 2", "Deck2", 40, 0, 0, 0, 0, defaultColor, 2);
-            mActivePlayer3 = new ActivePlayer("ActivePlayer 3", "Deck3", 40, 0, 0, 0, 0, defaultColor, 3);
-            mActivePlayer4 = new ActivePlayer("ActivePlayer 4", "Deck4", 40, 0, 0, 0, 0, defaultColor, 4);
+            mActivePlayer1 = new ActivePlayer("ActivePlayer 1", "Deck1", Constants.INITIAL_PLAYER_LIFE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, defaultColor, 1);
+            mActivePlayer2 = new ActivePlayer("ActivePlayer 2", "Deck2", Constants.INITIAL_PLAYER_LIFE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, defaultColor, 2);
+            mActivePlayer3 = new ActivePlayer("ActivePlayer 3", "Deck3", Constants.INITIAL_PLAYER_LIFE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, defaultColor, 3);
+            mActivePlayer4 = new ActivePlayer("ActivePlayer 4", "Deck4", Constants.INITIAL_PLAYER_LIFE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, defaultColor, 4);
 
             if (players.size() >= 1) {
                 mActivePlayer1.setPlayerName(players.get(0));
@@ -656,7 +656,7 @@ public class MainActivity extends ActionBarActivity {
             mSectionsPagerAdapter.setCount(players.size());
             mSectionsPagerAdapter.notifyDataSetChanged();
             mViewPager.setCurrentItem(0);
-            getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt("NUM_PLAYERS", mSectionsPagerAdapter.getCount()).commit();
+            getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.TOTAL_PLAYERS, mSectionsPagerAdapter.getCount()).commit();
 
             updateLayout(getCurrentActivePlayer());
         }
@@ -671,10 +671,10 @@ public class MainActivity extends ActionBarActivity {
 
         if (!checkBox.isChecked()) {
             getWindow().clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-            getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt("SCREEN_ON", 0).commit();
+            getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 0).commit();
         } else {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-            getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt("SCREEN_ON", 1).commit();
+            getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 1).commit();
         }
     }
 
@@ -690,10 +690,10 @@ public class MainActivity extends ActionBarActivity {
                         String tempLife = userInput.getText().toString();
                         try {
                             if (!tempLife.equalsIgnoreCase("")) {
-                                if (Integer.valueOf(tempLife) < -99)
-                                    tempLife = "-99";
-                                if (Integer.valueOf(tempLife) > 99)
-                                    tempLife = "99";
+                                if (Integer.valueOf(tempLife) < Constants.MIN_PLAYER_LIFE_INT)
+                                    tempLife = Constants.MIN_PLAYER_LIFE_STRING;
+                                if (Integer.valueOf(tempLife) > Constants.MAX_PLAYER_LIFE_INT)
+                                    tempLife = Constants.MAX_PLAYER_LIFE_STRING;
                                 getCurrentActivePlayer().setPlayerLife(Integer.valueOf(tempLife));
                                 setActivePlayerLife(String.valueOf(getCurrentActivePlayer().getPlayerLife()));
 

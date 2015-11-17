@@ -5,18 +5,27 @@ package com.android.argb.edhlc;
  */
 public class Constants {
 
-    public static int initialPlayerLife = 40;
-    public static int minPlayerLife = -99;
-    public static int maxPlayerLife = 99;
+    public static String INITIAL_PLAYER_LIFE_STRING = "40";
+    public static String MIN_PLAYER_LIFE_STRING = "-99";
+    public static String MAX_PLAYER_LIFE_STRING = "99";
+    public static int INITIAL_PLAYER_LIFE_INT = 40;
+    public static int MIN_PLAYER_LIFE_INT = -99;
+    public static int MAX_PLAYER_LIFE_INT = 99;
 
-    public static int initiPlayerEDHDamage = 0;
-    public static int minEDHDamage = 0;
-    public static int maxEDHDamage = 21;
+    public static int INITIAL_EDH_DAMAGE_INT = 0;
+    public static int MIN_EDH_DAMAGE_INT = 0;
+    public static int MAX_EDH_DAMAGE_INT = 21;
+
+    public static String TOTAL_PLAYERS = "4";
+    public static String SCREEN_ON = "SCREEN_ON";
+    public static String CURRENT_PAGE = "CURRENT_PAGE";
 
     public static String PREFERENCE_NAME = "PREF_EDH_LC";
     public static String PLAYER_NAME = "PLAYER_NAME";
     public static String PLAYER_DECK = "PLAYER_DECK";
     public static String PLAYER_LIFE = "PLAYER_LIFE";
+    public static String PLAYER_HISTORY_LIFE = "PLAYER_HISTORY_LIFE";
+    public static String PLAYER_EDH_PREFIX = "PLAYER_EDH";
     public static String PLAYER_EDH1 = "PLAYER_EDH1";
     public static String PLAYER_EDH2 = "PLAYER_EDH2";
     public static String PLAYER_EDH3 = "PLAYER_EDH3";

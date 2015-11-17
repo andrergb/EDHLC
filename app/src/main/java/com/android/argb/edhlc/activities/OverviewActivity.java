@@ -73,7 +73,7 @@ public class OverviewActivity extends ActionBarActivity {
             window.setStatusBarColor(this.getResources().getColor(R.color.edh_default_secondary));
         }
 
-        numPlayers = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt("NUM_PLAYERS", 4);
+        numPlayers = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt(Constants.TOTAL_PLAYERS, 4);
 
         createLayout(this.findViewById(android.R.id.content));
     }
@@ -86,12 +86,12 @@ public class OverviewActivity extends ActionBarActivity {
         mActivePlayer3 = ActivePlayer.loadPlayerSharedPreferences(this, 3);
         mActivePlayer4 = ActivePlayer.loadPlayerSharedPreferences(this, 4);
 
-        if (getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt("SCREEN_ON", 0) == 1)
+        if (getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt(Constants.SCREEN_ON, 0) == 1)
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         else
             getWindow().clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        numPlayers = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt("NUM_PLAYERS", 4);
+        numPlayers = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt(Constants.TOTAL_PLAYERS, 4);
 
         updateLayout();
     }

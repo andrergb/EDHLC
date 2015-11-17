@@ -82,7 +82,7 @@ public class PlayerListActivity extends ActionBarActivity {
                 new IntentFilter(Constants.BROADCAST_INTENT_FILTER_PLAYER_ADDED_OR_REMOVED)
         );
 
-        if (getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt("SCREEN_ON", 0) == 1)
+        if (getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt(Constants.SCREEN_ON, 0) == 1)
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         else
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -141,7 +141,7 @@ public class PlayerListActivity extends ActionBarActivity {
     }
 
     private void updateLayout() {
-        if (getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt("SCREEN_ON", 0) == 1) {
+        if (getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt(Constants.SCREEN_ON, 0) == 1) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             checkBox.setChecked(true);
         } else {
@@ -163,10 +163,10 @@ public class PlayerListActivity extends ActionBarActivity {
     public void onClickKeepScreenOn(View view) {
         if (!checkBox.isChecked()) {
             getWindow().clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-            getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt("SCREEN_ON", 0).commit();
+            getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 0).commit();
         } else {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-            getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt("SCREEN_ON", 1).commit();
+            getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 1).commit();
         }
     }
 
