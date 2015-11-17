@@ -15,6 +15,7 @@ import android.widget.ListView;
 
 import com.android.argb.edhlc.R;
 import com.android.argb.edhlc.activities.PlayerListActivity;
+import com.android.argb.edhlc.activities.SettingsActivity;
 import com.android.argb.edhlc.database.player.PlayersDataAccessObject;
 
 import java.util.List;
@@ -23,8 +24,6 @@ import java.util.List;
  * -Created by agbarros on 05/11/2015.
  */
 public class DrawerRecords {
-
-    public static String BROADCAST_INTENT_FILTER_PLAYER_ADDED_OR_REMOVED = "broadcast_intentfilter_added_or_removed_player";
 
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
@@ -97,7 +96,8 @@ public class DrawerRecords {
                     mDrawerLayout.closeDrawers();
                     break;
                 case 2: //Settings
-                    // parentActivity.startActivity(new Intent(parentActivity, SettingsActivity.class));
+                    mDrawerLayout.closeDrawers();
+                    parentActivity.startActivity(new Intent(parentActivity, SettingsActivity.class));
                     break;
                 case 3: //About
                     mDrawerLayout.closeDrawers();

@@ -23,10 +23,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.argb.edhlc.Constants;
 import com.android.argb.edhlc.R;
 import com.android.argb.edhlc.database.deck.DecksDataAccessObject;
 import com.android.argb.edhlc.database.record.RecordsDataAccessObject;
-import com.android.argb.edhlc.objects.ActivePlayer;
 import com.android.argb.edhlc.objects.Deck;
 import com.android.argb.edhlc.objects.DrawerPlayer;
 import com.android.argb.edhlc.objects.Record;
@@ -95,10 +95,10 @@ public class PlayerActivity extends ActionBarActivity {
 
         LocalBroadcastManager.getInstance(this).registerReceiver(
                 mBroadcastReceiver,
-                new IntentFilter(DrawerPlayer.BROADCAST_INTENT_FILTER_DECK_ADDED_OR_REMOVED)
+                new IntentFilter(Constants.BROADCAST_INTENT_FILTER_DECK_ADDED_OR_REMOVED)
         );
 
-        if (getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).getInt("SCREEN_ON", 0) == 1)
+        if (getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt("SCREEN_ON", 0) == 1)
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         else
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -155,10 +155,10 @@ public class PlayerActivity extends ActionBarActivity {
     public void onClickKeepScreenOn(View view) {
         if (!checkBox.isChecked()) {
             getWindow().clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-            getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).edit().putInt("SCREEN_ON", 0).commit();
+            getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt("SCREEN_ON", 0).commit();
         } else {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-            getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).edit().putInt("SCREEN_ON", 1).commit();
+            getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt("SCREEN_ON", 1).commit();
         }
     }
 
@@ -188,7 +188,7 @@ public class PlayerActivity extends ActionBarActivity {
     }
 
     private void updateLayout() {
-        if (getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).getInt("SCREEN_ON", 0) == 1) {
+        if (getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt("SCREEN_ON", 0) == 1) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             checkBox.setChecked(true);
         } else {

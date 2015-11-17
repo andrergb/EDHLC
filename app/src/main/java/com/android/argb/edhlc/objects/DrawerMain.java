@@ -20,9 +20,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.argb.edhlc.Constants;
 import com.android.argb.edhlc.R;
 import com.android.argb.edhlc.activities.PlayerListActivity;
 import com.android.argb.edhlc.activities.RecordsActivity;
+import com.android.argb.edhlc.activities.SettingsActivity;
 import com.android.argb.edhlc.database.deck.DecksDataAccessObject;
 import com.android.argb.edhlc.database.player.PlayersDataAccessObject;
 import com.android.argb.edhlc.database.record.RecordsDataAccessObject;
@@ -37,13 +39,6 @@ import java.util.Random;
  * -Created by agbarros on 05/11/2015.
  */
 public class DrawerMain {
-
-    public static String BROADCAST_INTENTFILTER_NEWGAME = "broadcast_intentfilter_newgame";
-    public static String BROADCAST_MESSAGE_NEWGAME_OPTION = "brodcast_message_newgame_option";
-    public static String BROADCAST_MESSAGE_NEWGAME_OPTION_YES = "yes";
-    public static String BROADCAST_MESSAGE_NEWGAME_OPTION_NO = "no";
-    public static String BROADCAST_MESSAGE_NEWGAME_PLAYERS = "brodcast_message_newgame_players";
-    public static String BROADCAST_MESSAGE_NEWGAME_DECKS = "brodcast_message_newgame_decks";
 
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
@@ -135,7 +130,8 @@ public class DrawerMain {
                     parentActivity.startActivity(intent);
                     break;
                 case 2: //Settings
-                    // parentActivity.startActivity(new Intent(parentActivity, SettingsActivity.class));
+                    mDrawerLayout.closeDrawers();
+                    parentActivity.startActivity(new Intent(parentActivity, SettingsActivity.class));
                     break;
                 case 3: //About
                     mDrawerLayout.closeDrawers();
@@ -146,7 +142,7 @@ public class DrawerMain {
     }
 
     public void createNewGameDialog(final View view) {
-        final Intent intent = new Intent(DrawerMain.BROADCAST_INTENTFILTER_NEWGAME);
+        final Intent intent = new Intent(Constants.BROADCAST_INTENT_FILTER_NEW_GAME);
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
         alertDialogBuilder.setTitle("New Game");
@@ -154,7 +150,7 @@ public class DrawerMain {
         alertDialogBuilder.setPositiveButton("Yes",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        intent.putExtra(DrawerMain.BROADCAST_MESSAGE_NEWGAME_OPTION, DrawerMain.BROADCAST_MESSAGE_NEWGAME_OPTION_YES);
+                        intent.putExtra(Constants.BROADCAST_MESSAGE_NEW_GAME_OPTION, Constants.BROADCAST_MESSAGE_NEW_GAME_OPTION_YES);
                         LocalBroadcastManager.getInstance(parentActivity).sendBroadcast(intent);
                     }
                 });
@@ -276,7 +272,7 @@ public class DrawerMain {
     }
 
     private void createNewGameConfirmationDialog(final View view) {
-        final Intent intent = new Intent(DrawerMain.BROADCAST_INTENTFILTER_NEWGAME);
+        final Intent intent = new Intent(Constants.BROADCAST_INTENT_FILTER_NEW_GAME);
 
         View logView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_log_confirmation, null);
 
@@ -291,7 +287,7 @@ public class DrawerMain {
         final ListView listViewConfirmation = (ListView) logView.findViewById(R.id.listViewConfirmation);
         SimpleAdapter adapter = new SimpleAdapter(parentActivity,
                 listMapDecks,
-                R.layout.row_two_item_list,
+                R.layout.row_two_item_list_border,
                 new String[]{"playerName", "deck"},
                 new int[]{R.id.text1, R.id.text2});
         listViewConfirmation.setAdapter(adapter);
@@ -309,9 +305,9 @@ public class DrawerMain {
                             players.add(listDeck.get(i).getPlayerName());
                             decks.add(listDeck.get(i).getDeckName());
                         }
-                        intent.putExtra(DrawerMain.BROADCAST_MESSAGE_NEWGAME_OPTION, DrawerMain.BROADCAST_MESSAGE_NEWGAME_OPTION_NO);
-                        intent.putStringArrayListExtra(DrawerMain.BROADCAST_MESSAGE_NEWGAME_PLAYERS, players);
-                        intent.putStringArrayListExtra(DrawerMain.BROADCAST_MESSAGE_NEWGAME_DECKS, decks);
+                        intent.putExtra(Constants.BROADCAST_MESSAGE_NEW_GAME_OPTION, Constants.BROADCAST_MESSAGE_NEW_GAME_OPTION_NO);
+                        intent.putStringArrayListExtra(Constants.BROADCAST_MESSAGE_NEW_GAME_PLAYERS, players);
+                        intent.putStringArrayListExtra(Constants.BROADCAST_MESSAGE_NEW_GAME_DECKS, decks);
                         LocalBroadcastManager.getInstance(parentActivity).sendBroadcast(intent);
                     }
                 });
@@ -536,7 +532,7 @@ public class DrawerMain {
         final ListView listViewConfirmation = (ListView) logView.findViewById(R.id.listViewConfirmation);
         SimpleAdapter adapter = new SimpleAdapter(parentActivity,
                 listMapDecks,
-                R.layout.row_two_item_list,
+                R.layout.row_two_item_list_border,
                 new String[]{"playerName", "deck"},
                 new int[]{R.id.text1, R.id.text2});
         listViewConfirmation.setAdapter(adapter);

@@ -19,9 +19,11 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.android.argb.edhlc.Constants;
 import com.android.argb.edhlc.R;
 import com.android.argb.edhlc.activities.PlayerListActivity;
 import com.android.argb.edhlc.activities.RecordsActivity;
+import com.android.argb.edhlc.activities.SettingsActivity;
 import com.android.argb.edhlc.database.deck.DecksDataAccessObject;
 
 import java.util.ArrayList;
@@ -31,8 +33,6 @@ import java.util.List;
  * -Created by agbarros on 05/11/2015.
  */
 public class DrawerPlayer {
-
-    public static String BROADCAST_INTENT_FILTER_DECK_ADDED_OR_REMOVED = "broadcast_intent_filter_deck_added_or_removed";
 
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
@@ -129,7 +129,8 @@ public class DrawerPlayer {
                     parentActivity.finish();
                     break;
                 case 2: //Settings
-                    // parentActivity.startActivity(new Intent(parentActivity, SettingsActivity.class));
+                    mDrawerLayout.closeDrawers();
+                    parentActivity.startActivity(new Intent(parentActivity, SettingsActivity.class));
                     break;
                 case 3: //About
                     mDrawerLayout.closeDrawers();
@@ -157,7 +158,7 @@ public class DrawerPlayer {
                             decksDB.close();
                             if (result != -1) {
                                 Toast.makeText(view.getContext(), tempName + " added!", Toast.LENGTH_SHORT).show();
-                                LocalBroadcastManager.getInstance(parentActivity).sendBroadcast(new Intent(DrawerPlayer.BROADCAST_INTENT_FILTER_DECK_ADDED_OR_REMOVED));
+                                LocalBroadcastManager.getInstance(parentActivity).sendBroadcast(new Intent(Constants.BROADCAST_INTENT_FILTER_DECK_ADDED_OR_REMOVED));
                             } else {
                                 Toast.makeText(view.getContext(), "ERROR: deck already added!", Toast.LENGTH_SHORT).show();
                             }
@@ -212,7 +213,7 @@ public class DrawerPlayer {
                                 decksDb.close();
 
                                 if (result != 0) {
-                                    LocalBroadcastManager.getInstance(parentActivity).sendBroadcast(new Intent(DrawerPlayer.BROADCAST_INTENT_FILTER_DECK_ADDED_OR_REMOVED));
+                                    LocalBroadcastManager.getInstance(parentActivity).sendBroadcast(new Intent(Constants.BROADCAST_INTENT_FILTER_DECK_ADDED_OR_REMOVED));
                                     Toast.makeText(view.getContext(), tempName + " removed!", Toast.LENGTH_SHORT).show();
                                 } else {
                                     Toast.makeText(view.getContext(), "ERROR", Toast.LENGTH_SHORT).show();

@@ -1,20 +1,25 @@
 package com.android.argb.edhlc.activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
+import com.android.argb.edhlc.Constants;
 import com.android.argb.edhlc.R;
-import com.android.argb.edhlc.objects.ActivePlayer;
 import com.android.argb.edhlc.objects.DrawerSettings;
 
 import java.util.ArrayList;
@@ -58,7 +63,7 @@ public class SettingsActivity extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).getInt("SCREEN_ON", 0) == 1)
+        if (getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt("SCREEN_ON", 0) == 1)
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         else
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -109,12 +114,12 @@ public class SettingsActivity extends ActionBarActivity {
     public void createLayout(View view) {
         if (view != null) {
             mCheckBoxKeepScreenOn = (CheckBox) findViewById(R.id.checkBoxKeepScreenOn);
-            mListViewSettings = (ListView) findViewById(R.id.listViewRecords);
+            mListViewSettings = (ListView) findViewById(R.id.listViewSettings);
         }
     }
 
     private void updateLayout() {
-        if (getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).getInt("SCREEN_ON", 0) == 1) {
+        if (getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt("SCREEN_ON", 0) == 1) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             mCheckBoxKeepScreenOn.setChecked(true);
         } else {
@@ -134,16 +139,65 @@ public class SettingsActivity extends ActionBarActivity {
                 new String[]{"title", "subtitle"},
                 new int[]{R.id.text1, R.id.text2});
         mListViewSettings.setAdapter(adapter);
+        mListViewSettings.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0:
+                        createInitialLifeDialog(view);
+                        break;
+                }
+            }
+        });
         //TODO onClickListener
+    }
+
+    public void createInitialLifeDialog(View view) {
+        View mView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_player_life, null);
+        final EditText userInput = (EditText) mView.findViewById(R.id.editTextPlayerLife);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
+        alertDialogBuilder.setView(mView);
+        alertDialogBuilder.setTitle("Initial life");
+        alertDialogBuilder.setMessage("Set the initial life of the players:");
+        alertDialogBuilder.setPositiveButton("Ok",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        String tempLife = userInput.getText().toString();
+                        try {
+                            if (!tempLife.equalsIgnoreCase("")) {
+                                if (Integer.valueOf(tempLife) < -99)
+                                    tempLife = "-99";
+                                if (Integer.valueOf(tempLife) > 99)
+                                    tempLife = "99";
+                            }
+                        } catch (NumberFormatException ignored) {
+                        }
+                    }
+                }
+        );
+        alertDialogBuilder.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener()
+
+                {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                }
+
+        );
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
+        alertDialog.show();
     }
 
     public void onClickKeepScreenOn(View view) {
         if (!mCheckBoxKeepScreenOn.isChecked()) {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-            getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).edit().putInt("SCREEN_ON", 0).commit();
+            getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt("SCREEN_ON", 0).commit();
         } else {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-            getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).edit().putInt("SCREEN_ON", 1).commit();
+            getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt("SCREEN_ON", 1).commit();
         }
     }
 }

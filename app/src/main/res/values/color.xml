@@ -18,8 +18,8 @@
     <item name="edh_mtg_incolor" type="color">#a6a6a6</item>
 
 
-    <item name="edh_shield_turquoise_main" type="color">#FF00E5EE</item>
-    <item name="edh_shield_turquoise_dark" type="color">#ff00d0d9</item>
+    <item name="edh_shield_turquoise_main" type="color">#ff00c5ce</item>
+    <item name="edh_shield_turquoise_dark" type="color">#ff00b6bf</item>
 
     <item name="edh_shield_purple_main" type="color">#ffb542c3</item>
     <item name="edh_shield_purple_dark" type="color">#ff983aa6</item>

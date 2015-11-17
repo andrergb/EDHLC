@@ -33,6 +33,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.argb.edhlc.Constants;
 import com.android.argb.edhlc.PlaceholderFragment;
 import com.android.argb.edhlc.R;
 import com.android.argb.edhlc.SectionsPagerAdapter;
@@ -121,7 +122,7 @@ public class MainActivity extends ActionBarActivity {
 
         //Fragments
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        mSectionsPagerAdapter.setCount(getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).getInt("NUM_PLAYERS", 4));
+        mSectionsPagerAdapter.setCount(getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt("NUM_PLAYERS", 4));
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setOffscreenPageLimit(4);
@@ -130,7 +131,7 @@ public class MainActivity extends ActionBarActivity {
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
                 currentFragment = position;
-                getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).edit().putInt("CURRENT_PAGE", currentFragment).commit();
+                getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt("CURRENT_PAGE", currentFragment).commit();
                 placeholderFragment = (PlaceholderFragment) mSectionsPagerAdapter.instantiateItem(mViewPager, position);
                 createLayout(placeholderFragment.getView());
                 updateLayout(getCurrentActivePlayer());
@@ -142,7 +143,7 @@ public class MainActivity extends ActionBarActivity {
         mNewGameBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                newGame(intent.getStringExtra(DrawerMain.BROADCAST_MESSAGE_NEWGAME_OPTION), intent);
+                newGame(intent.getStringExtra(Constants.BROADCAST_MESSAGE_NEW_GAME_OPTION), intent);
             }
         };
     }
@@ -155,7 +156,7 @@ public class MainActivity extends ActionBarActivity {
         playersDB.open();
         decksDB.open();
 
-        currentFragment = getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).getInt("CURRENT_PAGE", 0);
+        currentFragment = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt("CURRENT_PAGE", 0);
         if (currentFragment + 1 > mSectionsPagerAdapter.getCount())
             currentFragment = 0;
         Bundle extras = getIntent().getExtras();
@@ -168,7 +169,7 @@ public class MainActivity extends ActionBarActivity {
         mActivePlayer3 = ActivePlayer.loadPlayerSharedPreferences(this, 3);
         mActivePlayer4 = ActivePlayer.loadPlayerSharedPreferences(this, 4);
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(mNewGameBroadcastReceiver, new IntentFilter(DrawerMain.BROADCAST_INTENTFILTER_NEWGAME));
+        LocalBroadcastManager.getInstance(this).registerReceiver(mNewGameBroadcastReceiver, new IntentFilter(Constants.BROADCAST_INTENT_FILTER_NEW_GAME));
     }
 
     @Override
@@ -177,7 +178,7 @@ public class MainActivity extends ActionBarActivity {
         playersDB.close();
         decksDB.close();
 
-        getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).edit().putInt("CURRENT_PAGE", currentFragment).commit();
+        getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt("CURRENT_PAGE", currentFragment).commit();
         ActivePlayer.savePlayerSharedPreferences(this, mActivePlayer1);
         ActivePlayer.savePlayerSharedPreferences(this, mActivePlayer2);
         ActivePlayer.savePlayerSharedPreferences(this, mActivePlayer3);
@@ -305,7 +306,7 @@ public class MainActivity extends ActionBarActivity {
         mActiveDeckList.add(new Deck(mActivePlayer3.getPlayerName(), mActivePlayer3.getPlayerDeck()));
         mActiveDeckList.add(new Deck(mActivePlayer4.getPlayerName(), mActivePlayer4.getPlayerDeck()));
 
-        if (getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).getInt("SCREEN_ON", 0) == 1) {
+        if (getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt("SCREEN_ON", 0) == 1) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             checkBox.setChecked(true);
         } else {
@@ -407,7 +408,7 @@ public class MainActivity extends ActionBarActivity {
                     public void run() {
                         try {
                             int latestSavedLife;
-                            String latestSavedLifePreferences = getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).getString("PHL" + playerTag, "40");
+                            String latestSavedLifePreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString("PHL" + playerTag, "40");
                             if (!latestSavedLifePreferences.isEmpty()) {
                                 String[] latestSavedLifeArray = latestSavedLifePreferences.split("_");
                                 latestSavedLife = Integer.valueOf(latestSavedLifeArray[latestSavedLifeArray.length - 1]);
@@ -419,13 +420,13 @@ public class MainActivity extends ActionBarActivity {
                             int currentLife = getActivePlayerByTag(playerTag).getPlayerLife();
 
                             if ((currentLife - latestSavedLife) != 0) {
-                                String lifeToBeSaved = getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).getString("PHL" + playerTag, "40");
+                                String lifeToBeSaved = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString("PHL" + playerTag, "40");
                                 lifeToBeSaved = lifeToBeSaved + "_" + currentLife;
-                                getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).edit().putString("PHL" + playerTag, lifeToBeSaved).commit();
+                                getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString("PHL" + playerTag, lifeToBeSaved).commit();
 
                                 // SAVE EDH DAMAGE
                                 String latestSavedEDH;
-                                String latestSavedEDHPreferences = getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).getString("PHEDH" + playerTag, "0@0@0@0");
+                                String latestSavedEDHPreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString("PHEDH" + playerTag, "0@0@0@0");
                                 if (!latestSavedEDHPreferences.isEmpty()) {
                                     String[] latestSavedLifeArray = latestSavedEDHPreferences.split("_");
                                     latestSavedEDH = latestSavedLifeArray[latestSavedLifeArray.length - 1];
@@ -438,10 +439,10 @@ public class MainActivity extends ActionBarActivity {
 
                                 if (!currentEdh.equalsIgnoreCase(latestSavedEDH)) {
                                     String edhToBeSaved = latestSavedEDHPreferences + "_" + currentEdh;
-                                    getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).edit().putString("PHEDH" + playerTag, edhToBeSaved).commit();
+                                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString("PHEDH" + playerTag, edhToBeSaved).commit();
                                 } else {
                                     String edhToBeSaved = latestSavedEDHPreferences + "_" + currentEdh;
-                                    getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).edit().putString("PHEDH" + playerTag, edhToBeSaved).commit();
+                                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString("PHEDH" + playerTag, edhToBeSaved).commit();
                                 }
                             }
                         } catch (InterruptedException e) {
@@ -463,15 +464,15 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void resetHistoryLife() {
-        getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).edit().putString("PHL" + 1, "40").commit();
-        getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).edit().putString("PHL" + 2, "40").commit();
-        getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).edit().putString("PHL" + 3, "40").commit();
-        getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).edit().putString("PHL" + 4, "40").commit();
+        getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString("PHL" + 1, "40").commit();
+        getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString("PHL" + 2, "40").commit();
+        getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString("PHL" + 3, "40").commit();
+        getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString("PHL" + 4, "40").commit();
 
-        getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).edit().putString("PHEDH" + 1, "0@0@0@0").commit();
-        getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).edit().putString("PHEDH" + 2, "0@0@0@0").commit();
-        getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).edit().putString("PHEDH" + 3, "0@0@0@0").commit();
-        getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).edit().putString("PHEDH" + 4, "0@0@0@0").commit();
+        getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString("PHEDH" + 1, "0@0@0@0").commit();
+        getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString("PHEDH" + 2, "0@0@0@0").commit();
+        getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString("PHEDH" + 3, "0@0@0@0").commit();
+        getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString("PHEDH" + 4, "0@0@0@0").commit();
     }
 
     public ActivePlayer getCurrentActivePlayer() {
@@ -614,7 +615,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void newGame(String option, Intent intent) {
-        if (option.equalsIgnoreCase(DrawerMain.BROADCAST_MESSAGE_NEWGAME_OPTION_YES)) {
+        if (option.equalsIgnoreCase(Constants.BROADCAST_MESSAGE_NEW_GAME_OPTION_YES)) {
             resetHistoryLife();
 
             mActivePlayer1 = new ActivePlayer(mActivePlayer1.getPlayerName(), mActivePlayer1.getPlayerDeck(), 40, 0, 0, 0, 0, mActivePlayer1.getPlayerColor(), 1);
@@ -623,11 +624,11 @@ public class MainActivity extends ActionBarActivity {
             mActivePlayer4 = new ActivePlayer(mActivePlayer4.getPlayerName(), mActivePlayer4.getPlayerDeck(), 40, 0, 0, 0, 0, mActivePlayer4.getPlayerColor(), 4);
 
             updateLayout(getCurrentActivePlayer());
-        } else if (option.equalsIgnoreCase(DrawerMain.BROADCAST_MESSAGE_NEWGAME_OPTION_NO)) {
+        } else if (option.equalsIgnoreCase(Constants.BROADCAST_MESSAGE_NEW_GAME_OPTION_NO)) {
             resetHistoryLife();
 
-            ArrayList<String> players = intent.getStringArrayListExtra(DrawerMain.BROADCAST_MESSAGE_NEWGAME_PLAYERS);
-            ArrayList<String> decks = intent.getStringArrayListExtra(DrawerMain.BROADCAST_MESSAGE_NEWGAME_DECKS);
+            ArrayList<String> players = intent.getStringArrayListExtra(Constants.BROADCAST_MESSAGE_NEW_GAME_PLAYERS);
+            ArrayList<String> decks = intent.getStringArrayListExtra(Constants.BROADCAST_MESSAGE_NEW_GAME_DECKS);
 
             int[] defaultColor = getResources().getIntArray(R.array.edh_default);
             mActivePlayer1 = new ActivePlayer("ActivePlayer 1", "Deck1", 40, 0, 0, 0, 0, defaultColor, 1);
@@ -655,7 +656,7 @@ public class MainActivity extends ActionBarActivity {
             mSectionsPagerAdapter.setCount(players.size());
             mSectionsPagerAdapter.notifyDataSetChanged();
             mViewPager.setCurrentItem(0);
-            getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).edit().putInt("NUM_PLAYERS", mSectionsPagerAdapter.getCount()).commit();
+            getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt("NUM_PLAYERS", mSectionsPagerAdapter.getCount()).commit();
 
             updateLayout(getCurrentActivePlayer());
         }
@@ -670,10 +671,10 @@ public class MainActivity extends ActionBarActivity {
 
         if (!checkBox.isChecked()) {
             getWindow().clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-            getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).edit().putInt("SCREEN_ON", 0).commit();
+            getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt("SCREEN_ON", 0).commit();
         } else {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-            getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).edit().putInt("SCREEN_ON", 1).commit();
+            getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt("SCREEN_ON", 1).commit();
         }
     }
 
