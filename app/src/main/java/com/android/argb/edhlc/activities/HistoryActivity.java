@@ -38,9 +38,6 @@ public class HistoryActivity extends ActionBarActivity {
     private ListView listViewP3;
     private ListView listViewP4;
 
-    private LinearLayout mLinearLayoutP3;
-    private LinearLayout mLinearLayoutP4;
-
     private int numPlayers;
 
     @Override
@@ -105,7 +102,7 @@ public class HistoryActivity extends ActionBarActivity {
             textViewP2Name.setTypeface(null, Typeface.BOLD);
             listViewP2 = (ListView) findViewById(R.id.listViewP2);
 
-            mLinearLayoutP3 = (LinearLayout) findViewById(R.id.linearLayoutP3);
+            LinearLayout mLinearLayoutP3 = (LinearLayout) findViewById(R.id.linearLayoutP3);
             textViewP3Name = (TextView) findViewById(R.id.textViewP3Name);
             textViewP3Name.setTypeface(null, Typeface.BOLD);
             listViewP3 = (ListView) findViewById(R.id.listViewP3);
@@ -114,7 +111,7 @@ public class HistoryActivity extends ActionBarActivity {
                 mLinearLayoutP3.setVisibility(View.GONE);
             }
 
-            mLinearLayoutP4 = (LinearLayout) findViewById(R.id.linearLayoutP4);
+            LinearLayout mLinearLayoutP4 = (LinearLayout) findViewById(R.id.linearLayoutP4);
             textViewP4Name = (TextView) findViewById(R.id.textViewP4Name);
             textViewP4Name.setTypeface(null, Typeface.BOLD);
             listViewP4 = (ListView) findViewById(R.id.listViewP4);
@@ -136,7 +133,7 @@ public class HistoryActivity extends ActionBarActivity {
         textViewP1Name.setTextColor(mActivePlayer1.getPlayerColor()[0]);
         String latestSavedLifePreferences = getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).getString("PHL" + mActivePlayer1.getPlayerTag(), "40");
         String latestSavedEDHPreferences = getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).getString("PHEDH" + mActivePlayer1.getPlayerTag(), "0@0@0@0");
-        if (latestSavedLifePreferences != null && latestSavedEDHPreferences != null) {
+        if (!latestSavedLifePreferences.isEmpty() && !latestSavedEDHPreferences.isEmpty()) {
             String[] latestSavedLifeArray = latestSavedLifePreferences.split("_");
             String[] latestSavedEDHArray = latestSavedEDHPreferences.split("_");
             listViewP1.setAdapter(new customHistoryListViewAdapter(this.getBaseContext(), latestSavedLifeArray, latestSavedEDHArray, mActivePlayer1.getPlayerColor()[1]));
@@ -146,7 +143,7 @@ public class HistoryActivity extends ActionBarActivity {
         textViewP2Name.setTextColor(mActivePlayer2.getPlayerColor()[0]);
         latestSavedLifePreferences = getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).getString("PHL" + mActivePlayer2.getPlayerTag(), "0");
         latestSavedEDHPreferences = getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).getString("PHEDH" + mActivePlayer2.getPlayerTag(), "0@0@0@0");
-        if (latestSavedLifePreferences != null && latestSavedEDHPreferences != null) {
+        if (!latestSavedLifePreferences.isEmpty() && !latestSavedEDHPreferences.isEmpty()) {
             String[] latestSavedLifeArray = latestSavedLifePreferences.split("_");
             String[] latestSavedEDHArray = latestSavedEDHPreferences.split("_");
             listViewP2.setAdapter(new customHistoryListViewAdapter(this.getBaseContext(), latestSavedLifeArray, latestSavedEDHArray, mActivePlayer2.getPlayerColor()[1]));
@@ -156,7 +153,7 @@ public class HistoryActivity extends ActionBarActivity {
         textViewP3Name.setTextColor(mActivePlayer3.getPlayerColor()[0]);
         latestSavedLifePreferences = getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).getString("PHL" + mActivePlayer3.getPlayerTag(), "0");
         latestSavedEDHPreferences = getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).getString("PHEDH" + mActivePlayer3.getPlayerTag(), "0@0@0@0");
-        if (latestSavedLifePreferences != null && latestSavedEDHPreferences != null) {
+        if (!latestSavedLifePreferences.isEmpty() && !latestSavedEDHPreferences.isEmpty()) {
             String[] latestSavedLifeArray = latestSavedLifePreferences.split("_");
             String[] latestSavedEDHArray = latestSavedEDHPreferences.split("_");
             listViewP3.setAdapter(new customHistoryListViewAdapter(this.getBaseContext(), latestSavedLifeArray, latestSavedEDHArray, mActivePlayer3.getPlayerColor()[1]));
@@ -166,7 +163,7 @@ public class HistoryActivity extends ActionBarActivity {
         textViewP4Name.setTextColor(mActivePlayer4.getPlayerColor()[0]);
         latestSavedLifePreferences = getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).getString("PHL" + mActivePlayer4.getPlayerTag(), "0");
         latestSavedEDHPreferences = getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).getString("PHEDH" + mActivePlayer4.getPlayerTag(), "0@0@0@0");
-        if (latestSavedLifePreferences != null && latestSavedEDHPreferences != null) {
+        if (!latestSavedLifePreferences.isEmpty() && !latestSavedEDHPreferences.isEmpty()) {
             String[] latestSavedLifeArray = latestSavedLifePreferences.split("_");
             String[] latestSavedEDHArray = latestSavedEDHPreferences.split("_");
             listViewP4.setAdapter(new customHistoryListViewAdapter(this.getBaseContext(), latestSavedLifeArray, latestSavedEDHArray, mActivePlayer4.getPlayerColor()[1]));

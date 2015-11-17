@@ -200,7 +200,6 @@ public class PlayerListActivity extends ActionBarActivity {
         public View getView(int position, View convertView, ViewGroup parent) {
             View vi = convertView;
             if (vi == null)
-                //TODO BETTER ROW
                 vi = inflater.inflate(R.layout.row_playerlist, null);
 
             TextView textViewPlayerListName = (TextView) vi.findViewById(R.id.textViewPlayerListName);

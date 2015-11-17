@@ -28,6 +28,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,6 +45,7 @@ import com.android.argb.edhlc.objects.Deck;
 import com.android.argb.edhlc.objects.DrawerMain;
 import com.android.argb.edhlc.objects.Record;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,6 +71,12 @@ public class MainActivity extends ActionBarActivity {
     private static TextView mTextViewP2Name;
     private static TextView mTextViewP3Name;
     private static TextView mTextViewP4Name;
+
+    private static LinearLayout mRelativeEDH1;
+    private static LinearLayout mRelativeEDH2;
+    private static LinearLayout mRelativeEDH3;
+    private static LinearLayout mRelativeEDH4;
+
     private static Button mButtonLifePositive;
     private static Button mButtonLifeNegative;
     private static Button mButtonEDH1Positive;
@@ -151,8 +159,9 @@ public class MainActivity extends ActionBarActivity {
         if (currentFragment + 1 > mSectionsPagerAdapter.getCount())
             currentFragment = 0;
         Bundle extras = getIntent().getExtras();
-        if (extras != null && extras.containsKey("TAG"))
+        if (extras != null && extras.containsKey("TAG")) {
             currentFragment = Integer.valueOf(extras.getString("TAG")) - 1;
+        }
 
         mActivePlayer1 = ActivePlayer.loadPlayerSharedPreferences(this, 1);
         mActivePlayer2 = ActivePlayer.loadPlayerSharedPreferences(this, 2);
@@ -247,6 +256,12 @@ public class MainActivity extends ActionBarActivity {
             checkBox = (CheckBox) findViewById(R.id.checkBoxKeepScreenOn);
             mImageViewThrone = (ImageView) view.findViewById(R.id.imageViewThrone);
 
+
+            mRelativeEDH1 = (LinearLayout) view.findViewById(R.id.relativeEDH1);
+            mRelativeEDH2 = (LinearLayout) view.findViewById(R.id.relativeEDH2);
+            mRelativeEDH3 = (LinearLayout) view.findViewById(R.id.relativeEDH3);
+            mRelativeEDH4 = (LinearLayout) view.findViewById(R.id.relativeEDH4);
+
             mTextViewName = (TextView) view.findViewById(R.id.textViewName);
             mTextViewDeck = (TextView) view.findViewById(R.id.textViewDeck);
             mTextViewLife = (TextView) view.findViewById(R.id.textViewLife);
@@ -305,21 +320,33 @@ public class MainActivity extends ActionBarActivity {
         if (getNumOfActivePlayers() == 4) {
             if (currentActivePlayer.getPlayerLife() >= mActivePlayer1.getPlayerLife() && currentActivePlayer.getPlayerLife() >= mActivePlayer2.getPlayerLife() && currentActivePlayer.getPlayerLife() >= mActivePlayer3.getPlayerLife() && currentActivePlayer.getPlayerLife() >= mActivePlayer4.getPlayerLife())
                 mImageViewThrone.setVisibility(View.VISIBLE);
+            mRelativeEDH1.setVisibility(View.VISIBLE);
+            mRelativeEDH2.setVisibility(View.VISIBLE);
+            mRelativeEDH3.setVisibility(View.VISIBLE);
+            mRelativeEDH4.setVisibility(View.VISIBLE);
         } else if (getNumOfActivePlayers() == 3) {
             if (currentActivePlayer.getPlayerLife() >= mActivePlayer1.getPlayerLife() && currentActivePlayer.getPlayerLife() >= mActivePlayer2.getPlayerLife() && currentActivePlayer.getPlayerLife() >= mActivePlayer3.getPlayerLife())
                 mImageViewThrone.setVisibility(View.VISIBLE);
+            mRelativeEDH1.setVisibility(View.VISIBLE);
+            mRelativeEDH2.setVisibility(View.VISIBLE);
+            mRelativeEDH3.setVisibility(View.VISIBLE);
+            mRelativeEDH4.setVisibility(View.INVISIBLE);
         } else if (getNumOfActivePlayers() == 2) {
             if (currentActivePlayer.getPlayerLife() >= mActivePlayer1.getPlayerLife() && currentActivePlayer.getPlayerLife() >= mActivePlayer2.getPlayerLife())
                 mImageViewThrone.setVisibility(View.VISIBLE);
+            mRelativeEDH1.setVisibility(View.VISIBLE);
+            mRelativeEDH2.setVisibility(View.VISIBLE);
+            mRelativeEDH3.setVisibility(View.INVISIBLE);
+            mRelativeEDH4.setVisibility(View.INVISIBLE);
         }
 
         mTextViewName.setText(currentActivePlayer.getPlayerName());
         mTextViewDeck.setText(currentActivePlayer.getPlayerDeck());
-        mTextViewLife.setText(currentActivePlayer.getPlayerLife() + "");
-        mTextViewEDH1.setText(currentActivePlayer.getPlayerEDH1() + "");
-        mTextViewEDH2.setText(currentActivePlayer.getPlayerEDH2() + "");
-        mTextViewEDH3.setText(currentActivePlayer.getPlayerEDH3() + "");
-        mTextViewEDH4.setText(currentActivePlayer.getPlayerEDH4() + "");
+        mTextViewLife.setText(MessageFormat.format("{0}", String.valueOf(currentActivePlayer.getPlayerLife())));
+        mTextViewEDH1.setText(MessageFormat.format("{0}", currentActivePlayer.getPlayerEDH1()));
+        mTextViewEDH2.setText(MessageFormat.format("{0}", currentActivePlayer.getPlayerEDH2()));
+        mTextViewEDH3.setText(MessageFormat.format("{0}", currentActivePlayer.getPlayerEDH3()));
+        mTextViewEDH4.setText(MessageFormat.format("{0}", currentActivePlayer.getPlayerEDH4()));
         mTextViewP1Name.setText(mActivePlayer1.getPlayerName());
         mTextViewP2Name.setText(mActivePlayer2.getPlayerName());
         mTextViewP3Name.setText(mActivePlayer3.getPlayerName());
@@ -381,7 +408,7 @@ public class MainActivity extends ActionBarActivity {
                         try {
                             int latestSavedLife;
                             String latestSavedLifePreferences = getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).getString("PHL" + playerTag, "40");
-                            if (latestSavedLifePreferences != null) {
+                            if (!latestSavedLifePreferences.isEmpty()) {
                                 String[] latestSavedLifeArray = latestSavedLifePreferences.split("_");
                                 latestSavedLife = Integer.valueOf(latestSavedLifeArray[latestSavedLifeArray.length - 1]);
                             } else
@@ -399,7 +426,7 @@ public class MainActivity extends ActionBarActivity {
                                 // SAVE EDH DAMAGE
                                 String latestSavedEDH;
                                 String latestSavedEDHPreferences = getSharedPreferences(ActivePlayer.PREFNAME, MODE_PRIVATE).getString("PHEDH" + playerTag, "0@0@0@0");
-                                if (latestSavedEDHPreferences != null) {
+                                if (!latestSavedEDHPreferences.isEmpty()) {
                                     String[] latestSavedLifeArray = latestSavedEDHPreferences.split("_");
                                     latestSavedEDH = latestSavedLifeArray[latestSavedLifeArray.length - 1];
                                 } else
@@ -763,14 +790,14 @@ public class MainActivity extends ActionBarActivity {
         colorCalendar.show(getFragmentManager(), "cal");
     }
 
-    public void setActivePlayerName(String playerName) {
-        mTextViewName.setText(playerName);
-
-        mTextViewP1Name.setText(mActivePlayer1.getPlayerName());
-        mTextViewP2Name.setText(mActivePlayer2.getPlayerName());
-        mTextViewP3Name.setText(mActivePlayer3.getPlayerName());
-        mTextViewP4Name.setText(mActivePlayer4.getPlayerName());
-    }
+//    public void setActivePlayerName(String playerName) {
+//        mTextViewName.setText(playerName);
+//
+//        mTextViewP1Name.setText(mActivePlayer1.getPlayerName());
+//        mTextViewP2Name.setText(mActivePlayer2.getPlayerName());
+//        mTextViewP3Name.setText(mActivePlayer3.getPlayerName());
+//        mTextViewP4Name.setText(mActivePlayer4.getPlayerName());
+//    }
 
     public void setActivePlayerLife(String playerLife) {
         mTextViewLife.setText(playerLife);
