@@ -1,4 +1,4 @@
-package com.android.argb.edhlc.objects;
+package com.android.argb.edhlc.objects.Drawer;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -21,18 +21,16 @@ import android.widget.Toast;
 
 import com.android.argb.edhlc.Constants;
 import com.android.argb.edhlc.R;
-import com.android.argb.edhlc.activities.PlayerListActivity;
 import com.android.argb.edhlc.activities.RecordsActivity;
 import com.android.argb.edhlc.activities.SettingsActivity;
-import com.android.argb.edhlc.database.deck.DecksDataAccessObject;
+import com.android.argb.edhlc.database.player.PlayersDataAccessObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * -Created by agbarros on 05/11/2015.
  */
-public class DrawerPlayer {
+public class DrawerPlayerList {
 
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
@@ -40,14 +38,11 @@ public class DrawerPlayer {
 
     private Activity parentActivity;
 
-    private String currentPlayer;
+    private PlayersDataAccessObject playersDB;
 
-//    private PlayersDataAccessObject playersDB;
-//    private DecksDataAccessObject decksDB;
-
-    public DrawerPlayer(final Activity parentActivity, List<String[]> options, String currentPlayer) {
+    public DrawerPlayerList(final Activity parentActivity, List<String[]> options) {
         this.parentActivity = parentActivity;
-        this.currentPlayer = currentPlayer;
+        playersDB = new PlayersDataAccessObject(parentActivity);
 
         linearLayoutDrawer = (LinearLayout) parentActivity.findViewById(R.id.linearLayoutDrawer);
         mDrawerLayout = (DrawerLayout) parentActivity.findViewById(R.id.drawer_layout);
@@ -74,10 +69,7 @@ public class DrawerPlayer {
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-//        playersDB = new PlayersDataAccessObject(parentActivity);
-//        decksDB = new DecksDataAccessObject(parentActivity);
     }
-
 
     public ActionBarDrawerToggle getDrawerToggle() {
         return mDrawerToggle;
@@ -96,16 +88,15 @@ public class DrawerPlayer {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             switch (position) {
-                case 0: //AddDeck
-                    createAddDeckDialog(view);
+                case 0: //AddPlayer
                     mDrawerLayout.closeDrawers();
+                    createAddPlayerDialog(view);
                     break;
-                case 1: //EditDeck
-                    mDrawerLayout.closeDrawers();
+                case 1: //EditPlayer
                     break;
-                case 2: //RemoveDeck
-                    createRemoveDeckDialog(view);
+                case 2: //RemovePlayer
                     mDrawerLayout.closeDrawers();
+                    createRemovePlayerDialog(view);
                     break;
             }
         }
@@ -117,8 +108,7 @@ public class DrawerPlayer {
             switch (position) {
                 case 0: //Players
                     mDrawerLayout.closeDrawers();
-                    parentActivity.startActivity(new Intent(parentActivity, PlayerListActivity.class));
-                    parentActivity.finish();
+                    // parentActivity.startActivity(new Intent(parentActivity, PlayerListActivity.class));
                     break;
                 case 1: //All Records
                     mDrawerLayout.closeDrawers();
@@ -140,27 +130,26 @@ public class DrawerPlayer {
         }
     }
 
-    private void createAddDeckDialog(final View view) {
-        View playerNameView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_deck_name, null);
-        final EditText userInput = (EditText) playerNameView.findViewById(R.id.editTextDeckName);
+    private void createAddPlayerDialog(final View view) {
+        View playerNameView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_player_name, null);
+        final EditText userInput = (EditText) playerNameView.findViewById(R.id.editTextPlayerName);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
         alertDialogBuilder.setView(playerNameView);
-        alertDialogBuilder.setTitle("Add new Deck");
-        alertDialogBuilder.setMessage("Deck name:");
+        alertDialogBuilder.setTitle("Add new Player");
+        alertDialogBuilder.setMessage("Player name:");
         alertDialogBuilder.setPositiveButton("Add",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         String tempName = userInput.getText().toString();
                         if (!tempName.equalsIgnoreCase("")) {
-                            DecksDataAccessObject decksDB = new DecksDataAccessObject(parentActivity);
-                            decksDB.open();
-                            long result = decksDB.createDeck(new Deck(currentPlayer, tempName));
-                            decksDB.close();
+                            playersDB.open();
+                            long result = playersDB.createPlayer(tempName);
+                            playersDB.close();
                             if (result != -1) {
                                 Toast.makeText(view.getContext(), tempName + " added!", Toast.LENGTH_SHORT).show();
-                                LocalBroadcastManager.getInstance(parentActivity).sendBroadcast(new Intent(Constants.BROADCAST_INTENT_FILTER_DECK_ADDED_OR_REMOVED));
+                                LocalBroadcastManager.getInstance(parentActivity).sendBroadcast(new Intent(Constants.BROADCAST_INTENT_FILTER_PLAYER_ADDED_OR_REMOVED));
                             } else {
-                                Toast.makeText(view.getContext(), "ERROR: deck already added!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(view.getContext(), "ERROR: Player already added!", Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -176,69 +165,62 @@ public class DrawerPlayer {
         alertDialog.show();
     }
 
-    private void createRemoveDeckDialog(final View view) {
-        DecksDataAccessObject decksDb = new DecksDataAccessObject(parentActivity);
-        decksDb.open();
-        List<Deck> deckList = decksDb.getAllDeckByPlayerName(currentPlayer);
-        decksDb.close();
+    private void createRemovePlayerDialog(final View view) {
+        playersDB.open();
+        List<String> allPlayers = playersDB.getAllPlayers();
+        allPlayers.add(0, parentActivity.getString(R.string.edh_spinner_player_hint));
+        playersDB.close();
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
-        alertDialogBuilder.setTitle("Remove a deck");
+        alertDialogBuilder.setTitle("Remove a Player");
 
-        if (deckList.size() > 1) {
-            ArrayList<String> aux = new ArrayList<>();
-            aux.add(0, parentActivity.getResources().getString(R.string.edh_spinner_deck_hint));
-            for (int i = 0; i < deckList.size(); i++)
-                aux.add(deckList.get(i).getDeckName());
+        if (allPlayers.size() > 1) {
+            View removePlayerView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_single_spinner, null);
+            final Spinner spinnerTotalPlayers = (Spinner) removePlayerView.findViewById(R.id.spinner1);
 
-            View spinnerView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_single_spinner, null);
-            final Spinner spinnerDecks = (Spinner) spinnerView.findViewById(R.id.spinner1);
+            final ArrayAdapter<String> playersNameAdapter = new ArrayAdapter<>(parentActivity, R.layout.row_spinner_selected, allPlayers);
+            playersNameAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinnerTotalPlayers.setAdapter(playersNameAdapter);
 
-            final ArrayAdapter<String> decksNameAdapter = new ArrayAdapter<>(parentActivity, R.layout.row_spinner_selected, aux);
-            decksNameAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinnerDecks.setAdapter(decksNameAdapter);
-
-            alertDialogBuilder.setView(spinnerView);
-            alertDialogBuilder.setMessage("Choose a deck to remove: ");
+            alertDialogBuilder.setView(removePlayerView);
+            alertDialogBuilder.setMessage("Choose a player to remove:");
             alertDialogBuilder.setPositiveButton("Remove",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-
-                            String tempName = spinnerDecks.getSelectedItem().toString();
+                            String tempName = spinnerTotalPlayers.getSelectedItem().toString();
                             if (!tempName.equalsIgnoreCase("")) {
-
-                                DecksDataAccessObject decksDb = new DecksDataAccessObject(parentActivity);
-                                decksDb.open();
-                                long result = decksDb.deleteDeck(new Deck(currentPlayer, tempName));
-                                decksDb.close();
-
+                                playersDB.open();
+                                int result = playersDB.deletePlayer(tempName);
+                                playersDB.close();
                                 if (result != 0) {
-                                    LocalBroadcastManager.getInstance(parentActivity).sendBroadcast(new Intent(Constants.BROADCAST_INTENT_FILTER_DECK_ADDED_OR_REMOVED));
+                                    LocalBroadcastManager.getInstance(parentActivity).sendBroadcast(new Intent(Constants.BROADCAST_INTENT_FILTER_PLAYER_ADDED_OR_REMOVED));
                                     Toast.makeText(view.getContext(), tempName + " removed!", Toast.LENGTH_SHORT).show();
                                 } else {
                                     Toast.makeText(view.getContext(), "ERROR", Toast.LENGTH_SHORT).show();
                                 }
                             }
-                            dialog.cancel();
                         }
                     });
-            alertDialogBuilder.setNeutralButton("Cancel",
+            alertDialogBuilder.setNegativeButton("Cancel",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();
                         }
                     });
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+            alertDialog.show();
         } else {
-            alertDialogBuilder.setMessage("There is no deck to remove");
+            alertDialogBuilder.setMessage("There is no player to remove");
             alertDialogBuilder.setPositiveButton("Ok",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();
                         }
                     });
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
         }
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
     }
 
     private void createAboutDialog(View view) {

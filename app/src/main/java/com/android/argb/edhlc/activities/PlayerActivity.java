@@ -28,7 +28,7 @@ import com.android.argb.edhlc.R;
 import com.android.argb.edhlc.database.deck.DecksDataAccessObject;
 import com.android.argb.edhlc.database.record.RecordsDataAccessObject;
 import com.android.argb.edhlc.objects.Deck;
-import com.android.argb.edhlc.objects.DrawerPlayer;
+import com.android.argb.edhlc.objects.Drawer.DrawerPlayer;
 import com.android.argb.edhlc.objects.Record;
 
 import java.util.ArrayList;

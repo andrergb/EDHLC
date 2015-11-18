@@ -24,7 +24,7 @@ import com.android.argb.edhlc.Constants;
 import com.android.argb.edhlc.R;
 import com.android.argb.edhlc.database.record.RecordsDataAccessObject;
 import com.android.argb.edhlc.objects.Deck;
-import com.android.argb.edhlc.objects.DrawerRecords;
+import com.android.argb.edhlc.objects.Drawer.DrawerRecords;
 import com.android.argb.edhlc.objects.Record;
 
 import java.util.ArrayList;

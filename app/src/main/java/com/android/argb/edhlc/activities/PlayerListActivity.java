@@ -25,7 +25,7 @@ import android.widget.TextView;
 import com.android.argb.edhlc.Constants;
 import com.android.argb.edhlc.R;
 import com.android.argb.edhlc.database.player.PlayersDataAccessObject;
-import com.android.argb.edhlc.objects.DrawerPlayerList;
+import com.android.argb.edhlc.objects.Drawer.DrawerPlayerList;
 
 import java.util.ArrayList;
 import java.util.List;

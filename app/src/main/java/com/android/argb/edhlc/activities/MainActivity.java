@@ -43,7 +43,7 @@ import com.android.argb.edhlc.database.deck.DecksDataAccessObject;
 import com.android.argb.edhlc.database.player.PlayersDataAccessObject;
 import com.android.argb.edhlc.objects.ActivePlayer;
 import com.android.argb.edhlc.objects.Deck;
-import com.android.argb.edhlc.objects.DrawerMain;
+import com.android.argb.edhlc.objects.Drawer.DrawerMain;
 import com.android.argb.edhlc.objects.Record;
 
 import java.text.MessageFormat;

@@ -20,7 +20,7 @@ import android.widget.SimpleAdapter;
 
 import com.android.argb.edhlc.Constants;
 import com.android.argb.edhlc.R;
-import com.android.argb.edhlc.objects.DrawerSettings;
+import com.android.argb.edhlc.objects.Drawer.DrawerSettings;
 
 import java.util.ArrayList;
 import java.util.HashMap;

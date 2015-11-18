@@ -1,4 +1,4 @@
-package com.android.argb.edhlc.objects;
+package com.android.argb.edhlc.objects.Drawer;
 
 import android.app.Activity;
 import android.app.AlertDialog;
