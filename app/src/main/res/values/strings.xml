@@ -52,7 +52,7 @@
         <item>New Game</item>
         <item>Log Game</item>
         <item>Roll a dice</item>
-        <item>Random a Player</item>
+        <item>Random Player</item>
     </string-array>
     <!-- Static options -->
     <string-array name="string_menu_main_2">

@@ -386,16 +386,16 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
-    private void createRandomPlayerDialog(View view) {
-        int minValue = 0;
-        int maxValue = getNumOfActivePlayers() - 1;
-        Random r = new Random();
-        int randomResult = r.nextInt(maxValue - minValue + 1) + minValue;
+    private void createRandomPlayerDialog(final View view) {
+        final int minValue = 0;
+        final int maxValue = getNumOfActivePlayers() - 1;
+        final Random r = new Random();
+        final int[] randomResult = {r.nextInt(maxValue - minValue + 1) + minValue};
 
         View logView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_roll_a_dice_result, null);
         final TextView textViewResult = (TextView) logView.findViewById(R.id.textViewDiceResult);
         textViewResult.setTextSize(42);
-        textViewResult.setText(MessageFormat.format("{0}", getActivePlayerByTag(randomResult).getPlayerName()));
+        textViewResult.setText(MessageFormat.format("{0}", getActivePlayerByTag(randomResult[0]).getPlayerName()));
 
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
         alertDialogBuilder.setView(logView);
@@ -406,8 +406,22 @@ public class MainActivity extends ActionBarActivity {
                         dialog.cancel();
                     }
                 });
-        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialogBuilder.setNeutralButton("Random",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //Overridden at 'alertDialog.getButton' to avoid dismiss every time
+                    }
+                });
+        final AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
+
+        alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                randomResult[0] = r.nextInt(maxValue - minValue + 1) + minValue;
+                textViewResult.setText(MessageFormat.format("{0}", getActivePlayerByTag(randomResult[0]).getPlayerName()));
+            }
+        });
     }
 
     private void activePlayerLifeHistoryHandler() {
