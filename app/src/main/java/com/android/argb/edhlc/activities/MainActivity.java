@@ -144,9 +144,9 @@ public class MainActivity extends ActionBarActivity {
         mBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if (!intent.getStringExtra(Constants.BROADCAST_MESSAGE_RANDOM_PLAYER_OPTION).isEmpty()) {
+                if (intent.getStringExtra(Constants.BROADCAST_MESSAGE_RANDOM_PLAYER_OPTION) != null) {
                     createRandomPlayerDialog(placeholderFragment.getView());
-                } else if (!intent.getStringExtra(Constants.BROADCAST_MESSAGE_NEW_GAME_OPTION).isEmpty()) {
+                } else if (intent.getStringExtra(Constants.BROADCAST_MESSAGE_NEW_GAME_OPTION) != null) {
                     newGame(intent.getStringExtra(Constants.BROADCAST_MESSAGE_NEW_GAME_OPTION), intent);
                 }
             }
