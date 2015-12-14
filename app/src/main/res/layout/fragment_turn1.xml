@@ -1,0 +1,47 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:weightSum="1"
+    tools:context=".activities.MainActivity$PlaceholderFragment">
+
+    <TextView
+        android:id="@+id/TextiViewPhase"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.4"
+        android:gravity="center"
+        android:text="@string/turn_beginning_phase"
+        android:textSize="40sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/TextiViewStep1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.2"
+        android:gravity="center"
+        android:text="@string/turn_untap_step"
+        android:textSize="25sp" />
+
+    <TextView
+        android:id="@+id/TextiViewStep2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.2"
+        android:gravity="center"
+        android:text="@string/turn_upkeep_step"
+        android:textSize="25sp" />
+
+    <TextView
+        android:id="@+id/TextiViewStep3"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.2"
+        android:gravity="center"
+        android:text="@string/turn_draw_step"
+        android:textSize="25sp" />
+</LinearLayout>

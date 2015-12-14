@@ -1,0 +1,65 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:weightSum="1"
+    tools:context=".activities.MainActivity$PlaceholderFragment">
+
+    <TextView
+        android:id="@+id/TextiViewPhase"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.25"
+        android:gravity="center"
+        android:text="@string/turn_combat_phase"
+        android:textSize="40sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/TextiViewStep1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.15"
+        android:gravity="center"
+        android:text="@string/turn_beginning_combat_step"
+        android:textSize="25sp" />
+
+    <TextView
+        android:id="@+id/TextiViewStep2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.15"
+        android:gravity="center"
+        android:text="@string/turn_attackers_step"
+        android:textSize="25sp" />
+
+    <TextView
+        android:id="@+id/TextiViewStep3"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.15"
+        android:gravity="center"
+        android:text="@string/turn_blockers_step"
+        android:textSize="25sp" />
+
+    <TextView
+        android:id="@+id/TextiViewStep4"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.15"
+        android:gravity="center"
+        android:text="@string/turn_combat_damage_step"
+        android:textSize="25sp" />
+
+    <TextView
+        android:id="@+id/TextiViewStep5"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.15"
+        android:gravity="center"
+        android:text="@string/turn_end_combat_step"
+        android:textSize="25sp" />
+</LinearLayout>

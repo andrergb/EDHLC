@@ -13,19 +13,19 @@ import com.android.argb.edhlc.activities.MainActivity;
  * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
  * one of the sections/tabs/pages.
  */
-public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
+public class MainSectionsPagerAdapter extends FragmentStatePagerAdapter {
 
     private int numPages = 4;
 
-    public SectionsPagerAdapter(FragmentManager fm) {
+    public MainSectionsPagerAdapter(FragmentManager fm) {
         super(fm);
     }
 
     @Override
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
-        // Return a PlaceholderFragment (defined as a static inner class below).
-        return PlaceholderFragment.newInstance(position + 1);
+        // Return a MainPlaceholderFragment (defined as a static inner class below).
+        return MainPlaceholderFragment.newInstance(position + 1);
     }
 
     @Override

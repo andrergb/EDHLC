@@ -34,9 +34,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.argb.edhlc.Constants;
-import com.android.argb.edhlc.PlaceholderFragment;
+import com.android.argb.edhlc.MainPlaceholderFragment;
 import com.android.argb.edhlc.R;
-import com.android.argb.edhlc.SectionsPagerAdapter;
+import com.android.argb.edhlc.MainSectionsPagerAdapter;
 import com.android.argb.edhlc.colorpicker.ColorPickerDialog;
 import com.android.argb.edhlc.colorpicker.ColorPickerSwatch;
 import com.android.argb.edhlc.database.deck.DecksDataAccessObject;
@@ -53,7 +53,7 @@ import java.util.Random;
 
 public class MainActivity extends ActionBarActivity {
 
-    SectionsPagerAdapter mSectionsPagerAdapter;
+    MainSectionsPagerAdapter mMainSectionsPagerAdapter;
     ViewPager mViewPager;
 
     public static ActivePlayer mActivePlayer1;
@@ -95,7 +95,7 @@ public class MainActivity extends ActionBarActivity {
     private static Thread threadLife3;
     private static Thread threadLife4;
 
-    private PlaceholderFragment placeholderFragment;
+    private MainPlaceholderFragment mainPlaceholderFragment;
     private int currentFragment = 0;
 
     private DrawerMain drawerMain;
@@ -122,10 +122,10 @@ public class MainActivity extends ActionBarActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
 
         //Fragments
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        mSectionsPagerAdapter.setCount(getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt(Constants.TOTAL_PLAYERS, 4));
+        mMainSectionsPagerAdapter = new MainSectionsPagerAdapter(getSupportFragmentManager());
+        mMainSectionsPagerAdapter.setCount(getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt(Constants.TOTAL_PLAYERS, 4));
         mViewPager = (ViewPager) findViewById(R.id.pager);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setAdapter(mMainSectionsPagerAdapter);
         mViewPager.setOffscreenPageLimit(4);
         mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
@@ -133,8 +133,8 @@ public class MainActivity extends ActionBarActivity {
                 super.onPageSelected(position);
                 currentFragment = position;
                 getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.CURRENT_PAGE, currentFragment).commit();
-                placeholderFragment = (PlaceholderFragment) mSectionsPagerAdapter.instantiateItem(mViewPager, position);
-                createLayout(placeholderFragment.getView());
+                mainPlaceholderFragment = (MainPlaceholderFragment) mMainSectionsPagerAdapter.instantiateItem(mViewPager, position);
+                createLayout(mainPlaceholderFragment.getView());
                 updateLayout(getCurrentActivePlayer());
                 highlightActivePlayer(getCurrentActivePlayer());
                 setActivePlayerBarColor(getCurrentActivePlayer().getPlayerColor());
@@ -145,7 +145,7 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (intent.getStringExtra(Constants.BROADCAST_MESSAGE_RANDOM_PLAYER_OPTION) != null) {
-                    createRandomPlayerDialog(placeholderFragment.getView());
+                    createRandomPlayerDialog(mainPlaceholderFragment.getView());
                 } else if (intent.getStringExtra(Constants.BROADCAST_MESSAGE_NEW_GAME_OPTION) != null) {
                     newGame(intent.getStringExtra(Constants.BROADCAST_MESSAGE_NEW_GAME_OPTION), intent);
                 }
@@ -162,7 +162,7 @@ public class MainActivity extends ActionBarActivity {
         decksDB.open();
 
         currentFragment = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt(Constants.CURRENT_PAGE, 0);
-        if (currentFragment + 1 > mSectionsPagerAdapter.getCount())
+        if (currentFragment + 1 > mMainSectionsPagerAdapter.getCount())
             currentFragment = 0;
         Bundle extras = getIntent().getExtras();
         if (extras != null && extras.containsKey("TAG")) {
@@ -195,8 +195,8 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         if (hasFocus) {
-            placeholderFragment = (PlaceholderFragment) mSectionsPagerAdapter.instantiateItem(mViewPager, currentFragment);
-            createLayout(placeholderFragment.getView());
+            mainPlaceholderFragment = (MainPlaceholderFragment) mMainSectionsPagerAdapter.instantiateItem(mViewPager, currentFragment);
+            createLayout(mainPlaceholderFragment.getView());
             updateLayout(getCurrentActivePlayer());
             highlightActivePlayer(getCurrentActivePlayer());
             setActivePlayerBarColor(getCurrentActivePlayer().getPlayerColor());
@@ -387,8 +387,8 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void createRandomPlayerDialog(final View view) {
-        final int minValue = 0;
-        final int maxValue = getNumOfActivePlayers() - 1;
+        final int minValue = 1;
+        final int maxValue = getNumOfActivePlayers();
         final Random r = new Random();
         final int[] randomResult = {r.nextInt(maxValue - minValue + 1) + minValue};
 
@@ -569,6 +569,7 @@ public class MainActivity extends ActionBarActivity {
             setActivePlayerLife(String.valueOf(getCurrentActivePlayer().getPlayerLife()));
 
             activePlayerLifeHistoryHandler();
+            updateLayout(getCurrentActivePlayer());
         }
     }
 
@@ -581,6 +582,7 @@ public class MainActivity extends ActionBarActivity {
             setActivePlayerLife(String.valueOf(getCurrentActivePlayer().getPlayerLife()));
 
             activePlayerLifeHistoryHandler();
+            updateLayout(getCurrentActivePlayer());
         }
     }
 
@@ -593,6 +595,7 @@ public class MainActivity extends ActionBarActivity {
             setActivePlayerLife(String.valueOf(getCurrentActivePlayer().getPlayerLife()));
 
             activePlayerLifeHistoryHandler();
+            updateLayout(getCurrentActivePlayer());
         }
     }
 
@@ -605,6 +608,7 @@ public class MainActivity extends ActionBarActivity {
             setActivePlayerLife(String.valueOf(getCurrentActivePlayer().getPlayerLife()));
 
             activePlayerLifeHistoryHandler();
+            updateLayout(getCurrentActivePlayer());
         }
     }
 
@@ -617,6 +621,7 @@ public class MainActivity extends ActionBarActivity {
             setActivePlayerLife(String.valueOf(getCurrentActivePlayer().getPlayerLife()));
 
             activePlayerLifeHistoryHandler();
+            updateLayout(getCurrentActivePlayer());
         }
     }
 
@@ -629,6 +634,7 @@ public class MainActivity extends ActionBarActivity {
             setActivePlayerLife(String.valueOf(getCurrentActivePlayer().getPlayerLife()));
 
             activePlayerLifeHistoryHandler();
+            updateLayout(getCurrentActivePlayer());
         }
     }
 
@@ -641,6 +647,7 @@ public class MainActivity extends ActionBarActivity {
             setActivePlayerLife(String.valueOf(getCurrentActivePlayer().getPlayerLife()));
 
             activePlayerLifeHistoryHandler();
+            updateLayout(getCurrentActivePlayer());
         }
     }
 
@@ -653,6 +660,7 @@ public class MainActivity extends ActionBarActivity {
             setActivePlayerLife(String.valueOf(getCurrentActivePlayer().getPlayerLife()));
 
             activePlayerLifeHistoryHandler();
+            updateLayout(getCurrentActivePlayer());
         }
     }
 
@@ -695,10 +703,10 @@ public class MainActivity extends ActionBarActivity {
                 mActivePlayer4.setPlayerDeck(decks.get(3));
             }
 
-            mSectionsPagerAdapter.setCount(players.size());
-            mSectionsPagerAdapter.notifyDataSetChanged();
+            mMainSectionsPagerAdapter.setCount(players.size());
+            mMainSectionsPagerAdapter.notifyDataSetChanged();
             mViewPager.setCurrentItem(0);
-            getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.TOTAL_PLAYERS, mSectionsPagerAdapter.getCount()).commit();
+            getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.TOTAL_PLAYERS, mMainSectionsPagerAdapter.getCount()).commit();
 
             updateLayout(getCurrentActivePlayer());
         }
@@ -885,8 +893,9 @@ public class MainActivity extends ActionBarActivity {
             return mActivePlayer2;
         else if (mActivePlayer3.getPlayerTag() == playerTag)
             return mActivePlayer3;
-        else
+        else if (mActivePlayer4.getPlayerTag() == playerTag)
             return mActivePlayer4;
+        return new ActivePlayer();
     }
 
     private void handleSpinners(Spinner spinnerName, Spinner spinnerDeck) {
@@ -926,6 +935,6 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private int getNumOfActivePlayers() {
-        return mSectionsPagerAdapter.getCount();
+        return mMainSectionsPagerAdapter.getCount();
     }
 }

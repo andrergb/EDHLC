@@ -25,12 +25,14 @@ import com.android.argb.edhlc.R;
 import com.android.argb.edhlc.activities.PlayerListActivity;
 import com.android.argb.edhlc.activities.RecordsActivity;
 import com.android.argb.edhlc.activities.SettingsActivity;
+import com.android.argb.edhlc.activities.TurnActivity;
 import com.android.argb.edhlc.database.deck.DecksDataAccessObject;
 import com.android.argb.edhlc.database.player.PlayersDataAccessObject;
 import com.android.argb.edhlc.database.record.RecordsDataAccessObject;
 import com.android.argb.edhlc.objects.Deck;
 import com.android.argb.edhlc.objects.Record;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -117,6 +119,9 @@ public class DrawerMain {
                     Intent intent = new Intent(Constants.BROADCAST_INTENT);
                     intent.putExtra(Constants.BROADCAST_MESSAGE_RANDOM_PLAYER_OPTION, Constants.BROADCAST_MESSAGE_RANDOM_PLAYER_OPTION);
                     LocalBroadcastManager.getInstance(parentActivity).sendBroadcast(intent);
+                    break;
+                case 4: //Turns
+                    parentActivity.startActivity(new Intent(parentActivity, TurnActivity.class));
                     break;
             }
         }
@@ -403,13 +408,13 @@ public class DrawerMain {
         alertDialog.show();
     }
 
-    private void createDiceResultDialog(final View view, int minValue, int maxValue) {
-        Random r = new Random();
-        int dice = r.nextInt(maxValue - minValue + 1) + minValue;
+    private void createDiceResultDialog(final View view, final int minValue, final int maxValue) {
+        final Random r = new Random();
+        final int[] dice = {r.nextInt(maxValue - minValue + 1) + minValue};
 
         View logView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_roll_a_dice_result, null);
         final TextView textViewDiceResult = (TextView) logView.findViewById(R.id.textViewDiceResult);
-        textViewDiceResult.setText("" + dice);
+        textViewDiceResult.setText(MessageFormat.format("{0}", dice[0]));
 
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
         alertDialogBuilder.setView(logView);
@@ -421,8 +426,23 @@ public class DrawerMain {
                         dialog.cancel();
                     }
                 });
-        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        alertDialogBuilder.setNeutralButton("Random",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //Overridden at 'alertDialog.getButton' to avoid dismiss every time
+                    }
+                });
+        final AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
+
+        alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dice[0] = r.nextInt((maxValue - minValue) + 1) + minValue;
+                textViewDiceResult.setText(MessageFormat.format("{0}", dice[0]));
+            }
+        });
     }
 
     private void createLogGameTotalDialog(final View view) {

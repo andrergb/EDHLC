@@ -18,6 +18,13 @@ public class Constants {
     public static String TOTAL_PLAYERS = "4";
     public static String SCREEN_ON = "SCREEN_ON";
     public static String CURRENT_PAGE = "CURRENT_PAGE";
+    public static String CURRENT_PAGE_TURN = "CURRENT_PAGE_TURN";
+
+    public static final String PHASE1_TIMER = "PHASE1_TIMER";
+    public static final String PHASE2_TIMER = "PHASE2_TIMER";
+    public static final String PHASE3_TIMER = "PHASE3_TIMER";
+    public static final String PHASE4_TIMER = "PHASE4_TIMER";
+    public static final String PHASE5_TIMER = "PHASE5_TIMER";
 
     public static String PREFERENCE_NAME = "PREF_EDH_LC";
     public static String PLAYER_NAME = "PLAYER_NAME";

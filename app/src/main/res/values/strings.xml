@@ -6,6 +6,7 @@
     <string name="activity_player_list_label">EDHLC: Player List</string>
     <string name="activity_records_label">EDHLC: Records</string>
     <string name="activity_settings_label">EDHLC: Settings</string>
+    <string name="activity_turn_label">EDHLC: Turn Phases</string>
 
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
@@ -47,12 +48,40 @@
     <string name="edh_spinner_player_hint">- Select a Player -</string>
     <string name="edh_spinner_deck_hint">- Select a Deck -</string>
 
+
+    <string name="turn_beginning_phase">Beginning\nPhase</string>
+    <string name="turn_beginning_phase2">Beginning Phase</string>
+
+    <string name="turn_first_main_phase">First Main\nPhase</string>
+    <string name="turn_first_main_phase2">First Main\nPhase</string>
+
+    <string name="turn_combat_phase">Combat\nPhase</string>
+    <string name="turn_combat_phase2">Combat\nPhase</string>
+
+    <string name="turn_second_main_phase">Second Main\nPhase</string>
+    <string name="turn_second_main_phase2">Second Main\nPhase</string>
+
+    <string name="turn_end_phase">End\nPhase</string>
+    <string name="turn_end_phase2">End\nPhase</string>
+
+    <string name="turn_untap_step">Untap Step</string>
+    <string name="turn_upkeep_step">Upkeep Step</string>
+    <string name="turn_draw_step">Draw Step</string>
+    <string name="turn_beginning_combat_step">Beginning of Combat Step</string>
+    <string name="turn_attackers_step">Declare Attackers Step</string>
+    <string name="turn_blockers_step">Declare Blockers Step</string>
+    <string name="turn_combat_damage_step">Combat Damage Step</string>
+    <string name="turn_end_combat_step">End of Combat Step</string>
+    <string name="turn_end_step">End of turn Step</string>
+    <string name="turn_cleanup_step">Cleanup Step</string>
+
     <!-- Current match -->
     <string-array name="string_menu_main_1">
         <item>New Game</item>
         <item>Log Game</item>
         <item>Roll a dice</item>
         <item>Random Player</item>
+        <item>Turns</item>
     </string-array>
     <!-- Static options -->
     <string-array name="string_menu_main_2">
@@ -91,8 +120,7 @@
     </string-array>
 
     <!-- Records activity -->
-    <string-array name="string_menu_records_1">
-    </string-array>
+    <string-array name="string_menu_records_1"></string-array>
     <!-- Records activity -->
     <string-array name="string_menu_records_2">
         <item>Players</item>
