@@ -7,8 +7,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
 
-import com.android.argb.edhlc.activities.MainActivity;
-
 /**
  * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
  * one of the sections/tabs/pages.
@@ -49,24 +47,24 @@ public class MainSectionsPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        switch (position) {
-            case 0:
-                if (MainActivity.mActivePlayer1 != null)
-                    return MainActivity.mActivePlayer1.getPlayerName();
-                return "";
-            case 1:
-                if (MainActivity.mActivePlayer2 != null)
-                    return MainActivity.mActivePlayer2.getPlayerName();
-                return "";
-            case 2:
-                if (MainActivity.mActivePlayer3 != null)
-                    return MainActivity.mActivePlayer3.getPlayerName();
-                return "";
-            case 3:
-                if (MainActivity.mActivePlayer4 != null)
-                    return MainActivity.mActivePlayer4.getPlayerName();
-                return "";
-        }
+//        switch (position) {
+//            case 0:
+//                if (MainActivity.mActivePlayer1 != null)
+//                    return MainActivity.mActivePlayer1.getPlayerName();
+//                return "";
+//            case 1:
+//                if (MainActivity.mActivePlayer2 != null)
+//                    return MainActivity.mActivePlayer2.getPlayerName();
+//                return "";
+//            case 2:
+//                if (MainActivity.mActivePlayer3 != null)
+//                    return MainActivity.mActivePlayer3.getPlayerName();
+//                return "";
+//            case 3:
+//                if (MainActivity.mActivePlayer4 != null)
+//                    return MainActivity.mActivePlayer4.getPlayerName();
+//                return "";
+//        }
         return null;
     }
 

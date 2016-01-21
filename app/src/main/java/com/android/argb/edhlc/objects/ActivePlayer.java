@@ -10,6 +10,7 @@ public class ActivePlayer {
 
     protected String playerName;
     protected String playerDeck;
+    protected boolean playerIsAlive;
     protected int playerLife;
     protected int playerEDH1;
     protected int playerEDH2;
@@ -21,9 +22,10 @@ public class ActivePlayer {
     public ActivePlayer() {
     }
 
-    public ActivePlayer(String Name, String playerDeck, int life, int edh1, int edh2, int edh3, int edh4, int[] pColor, int tag) {
+    public ActivePlayer(String Name, String playerDeck, boolean playerIsAlive, int life, int edh1, int edh2, int edh3, int edh4, int[] pColor, int tag) {
         this.playerName = Name;
         this.playerDeck = playerDeck;
+        this.playerIsAlive = playerIsAlive;
         this.playerLife = life;
         this.playerEDH1 = edh1;
         this.playerEDH2 = edh2;
@@ -37,6 +39,7 @@ public class ActivePlayer {
         SharedPreferences.Editor editor = activity.getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit();
         editor.putString(activePlayer.getPlayerTag() + Constants.PLAYER_NAME, activePlayer.getPlayerName());
         editor.putString(activePlayer.getPlayerTag() + Constants.PLAYER_DECK, activePlayer.getPlayerDeck());
+        editor.putBoolean(activePlayer.getPlayerTag() + Constants.PLAYER_IS_ALIVE, activePlayer.getPlayerIsAlive());
         editor.putInt(activePlayer.getPlayerTag() + Constants.PLAYER_LIFE, activePlayer.getPlayerLife());
         editor.putInt(activePlayer.getPlayerTag() + Constants.PLAYER_EDH1, activePlayer.getPlayerEDH1());
         editor.putInt(activePlayer.getPlayerTag() + Constants.PLAYER_EDH2, activePlayer.getPlayerEDH2());
@@ -51,6 +54,7 @@ public class ActivePlayer {
         SharedPreferences prefs = activity.getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE);
         String pName = prefs.getString(tag + Constants.PLAYER_NAME, "ActivePlayer " + tag);
         String pPlayerDeck = prefs.getString(tag + Constants.PLAYER_DECK, "Deck" + tag);
+        boolean pIsAlive = prefs.getBoolean(tag + Constants.PLAYER_IS_ALIVE, true);
         int pLife = prefs.getInt(tag + Constants.PLAYER_LIFE, 40);
         int pEDH1 = prefs.getInt(tag + Constants.PLAYER_EDH1, 0);
         int pEDH2 = prefs.getInt(tag + Constants.PLAYER_EDH2, 0);
@@ -58,7 +62,7 @@ public class ActivePlayer {
         int pEDH4 = prefs.getInt(tag + Constants.PLAYER_EDH4, 0);
         int[] pColor = {prefs.getInt(tag + Constants.PLAYER_COLOR1, 0), prefs.getInt(tag + Constants.PLAYER_COLOR2, 0)};
 
-        return new ActivePlayer(pName, pPlayerDeck, pLife, pEDH1, pEDH2, pEDH3, pEDH4, pColor, tag);
+        return new ActivePlayer(pName, pPlayerDeck, pIsAlive, pLife, pEDH1, pEDH2, pEDH3, pEDH4, pColor, tag);
     }
 
     public String getPlayerName() {
@@ -67,6 +71,10 @@ public class ActivePlayer {
 
     public String getPlayerDeck() {
         return playerDeck;
+    }
+
+    public boolean getPlayerIsAlive() {
+        return playerIsAlive;
     }
 
     public int getPlayerLife() {
@@ -95,6 +103,10 @@ public class ActivePlayer {
 
     public void setPlayerDeck(String playerDeck) {
         this.playerDeck = playerDeck;
+    }
+
+    public void setPlayerIsAlive(boolean playerIsAlive) {
+        this.playerIsAlive = playerIsAlive;
     }
 
     public void setPlayerLife(int playerLife) {

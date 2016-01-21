@@ -1,5 +1,6 @@
 package com.android.argb.edhlc.objects;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -7,7 +8,7 @@ import java.util.List;
  */
 public class Record {
 
-    protected Deck emptyDeck= new Deck("", "");
+    protected Deck emptyDeck = new Deck("", "");
 
     protected Deck fistPlace;
     protected Deck secondPlace;
@@ -52,36 +53,51 @@ public class Record {
         return true;
     }
 
-    public void setFistPlace(Deck fistPlace) {
-        this.fistPlace = fistPlace;
-    }
-
-    public void setSecondPlace(Deck secondPlace) {
-        this.secondPlace = secondPlace;
-    }
-
-    public void setThirdPlace(Deck thirdPlace) {
-        this.thirdPlace = thirdPlace;
-    }
-
-    public void setFourthPlace(Deck fourthPlace) {
-        this.fourthPlace = fourthPlace;
+    public static boolean isValidRecord(List<Deck> deckList, Deck analyzed) {
+        List<Deck> aux = new ArrayList<>(deckList);
+        aux.add(analyzed);
+        for (int j = 0; j <= aux.size() - 2; j++) {
+            for (int i = j + 1; i <= aux.size() - 1; i++) {
+                if (aux.get(j).isEqualDeck(aux.get(i))) {
+                    aux.clear();
+                    return false;
+                }
+            }
+        }
+        aux.clear();
+        return true;
     }
 
     public Deck getFirstPlace() {
         return fistPlace;
     }
 
+    public Deck getFourthPlace() {
+        return fourthPlace;
+    }
+
+    public void setFourthPlace(Deck fourthPlace) {
+        this.fourthPlace = fourthPlace;
+    }
+
     public Deck getSecondPlace() {
         return secondPlace;
+    }
+
+    public void setSecondPlace(Deck secondPlace) {
+        this.secondPlace = secondPlace;
     }
 
     public Deck getThirdPlace() {
         return thirdPlace;
     }
 
-    public Deck getFourthPlace() {
-        return fourthPlace;
+    public void setThirdPlace(Deck thirdPlace) {
+        this.thirdPlace = thirdPlace;
+    }
+
+    public void setFistPlace(Deck fistPlace) {
+        this.fistPlace = fistPlace;
     }
 
     public int size() {

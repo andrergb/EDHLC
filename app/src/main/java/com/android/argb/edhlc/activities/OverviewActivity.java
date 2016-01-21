@@ -1,6 +1,7 @@
 package com.android.argb.edhlc.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -143,10 +144,8 @@ public class OverviewActivity extends ActionBarActivity {
             mTextViewP3EDH2 = (TextView) view.findViewById(R.id.textViewOverviewP3EDH2);
             mTextViewP3EDH3 = (TextView) view.findViewById(R.id.textViewOverviewP3EDH3);
             mTextViewP3EDH4 = (TextView) view.findViewById(R.id.textViewOverviewP3EDH4);
-
-            if (!isPlayerActive(3)) {
+            if (numPlayers < 3)
                 mLinearLayoutP3.setVisibility(View.GONE);
-            }
 
             mLinearLayoutP4 = (LinearLayout) view.findViewById(R.id.linearLayoutP4);
             mTextViewP4Name = (TextView) view.findViewById(R.id.textViewOverviewP4Name);
@@ -155,47 +154,14 @@ public class OverviewActivity extends ActionBarActivity {
             mTextViewP4EDH2 = (TextView) view.findViewById(R.id.textViewOverviewP4EDH2);
             mTextViewP4EDH3 = (TextView) view.findViewById(R.id.textViewOverviewP4EDH3);
             mTextViewP4EDH4 = (TextView) view.findViewById(R.id.textViewOverviewP4EDH4);
-
-            if (!isPlayerActive(4)) {
+            if (numPlayers < 4)
                 mLinearLayoutP4.setVisibility(View.GONE);
-            }
+
         }
     }
 
     private void updateLayout() {
-
-        mImageViewThroneP1.setVisibility(View.INVISIBLE);
-        mImageViewThroneP2.setVisibility(View.INVISIBLE);
-        mImageViewThroneP3.setVisibility(View.INVISIBLE);
-        mImageViewThroneP4.setVisibility(View.INVISIBLE);
-
-        if (mActivePlayer1.getPlayerLife() >= mActivePlayer2.getPlayerLife()) {
-            if (!isPlayerActive(3) && !isPlayerActive(4))
-                mImageViewThroneP1.setVisibility(View.VISIBLE);
-            else if (isPlayerActive(3) && !isPlayerActive(4) && mActivePlayer1.getPlayerLife() >= mActivePlayer3.getPlayerLife())
-                mImageViewThroneP1.setVisibility(View.VISIBLE);
-            else if (isPlayerActive(4) && mActivePlayer1.getPlayerLife() >= mActivePlayer4.getPlayerLife())
-                mImageViewThroneP1.setVisibility(View.VISIBLE);
-        }
-
-        if (mActivePlayer2.getPlayerLife() >= mActivePlayer1.getPlayerLife()) {
-            if (!isPlayerActive(3) && !isPlayerActive(4))
-                mImageViewThroneP2.setVisibility(View.VISIBLE);
-            else if (isPlayerActive(3) && !isPlayerActive(4) && mActivePlayer2.getPlayerLife() >= mActivePlayer3.getPlayerLife())
-                mImageViewThroneP2.setVisibility(View.VISIBLE);
-            else if (isPlayerActive(4) && mActivePlayer2.getPlayerLife() >= mActivePlayer4.getPlayerLife())
-                mImageViewThroneP2.setVisibility(View.VISIBLE);
-        }
-
-        if (isPlayerActive(3) && mActivePlayer3.getPlayerLife() >= mActivePlayer1.getPlayerLife() && mActivePlayer3.getPlayerLife() >= mActivePlayer2.getPlayerLife()) {
-            if (!isPlayerActive(4))
-                mImageViewThroneP3.setVisibility(View.VISIBLE);
-            else if (isPlayerActive(4) && mActivePlayer3.getPlayerLife() >= mActivePlayer4.getPlayerLife())
-                mImageViewThroneP3.setVisibility(View.VISIBLE);
-        }
-
-        if (isPlayerActive(4) && mActivePlayer4.getPlayerLife() >= mActivePlayer1.getPlayerLife() && mActivePlayer4.getPlayerLife() >= mActivePlayer2.getPlayerLife() && mActivePlayer4.getPlayerLife() >= mActivePlayer3.getPlayerLife())
-            mImageViewThroneP4.setVisibility(View.VISIBLE);
+        updateDethroneIcon();
 
         mTextViewP1Name.setText(mActivePlayer1.getPlayerName());
         mTextViewP1Life.setText(String.valueOf(mActivePlayer1.getPlayerLife()));
@@ -203,12 +169,18 @@ public class OverviewActivity extends ActionBarActivity {
         mTextViewP1EDH2.setText(String.valueOf(mActivePlayer1.getPlayerEDH2()));
         mTextViewP1EDH3.setText(String.valueOf(mActivePlayer1.getPlayerEDH3()));
         mTextViewP1EDH4.setText(String.valueOf(mActivePlayer1.getPlayerEDH4()));
-        mTextViewP1Name.setTextColor(mActivePlayer1.getPlayerColor()[1]);
-        mTextViewP1Life.setTextColor(mActivePlayer1.getPlayerColor()[1]);
-        mTextViewP1EDH1.setTextColor(mActivePlayer1.getPlayerColor()[0]);
-        mTextViewP1EDH2.setTextColor(mActivePlayer1.getPlayerColor()[0]);
-        mTextViewP1EDH3.setTextColor(mActivePlayer1.getPlayerColor()[0]);
-        mTextViewP1EDH4.setTextColor(mActivePlayer1.getPlayerColor()[0]);
+        mTextViewP1Name.setEnabled(mActivePlayer1.getPlayerIsAlive());
+        mTextViewP1Life.setEnabled(mActivePlayer1.getPlayerIsAlive());
+        mTextViewP1EDH1.setEnabled(mActivePlayer1.getPlayerIsAlive());
+        mTextViewP1EDH2.setEnabled(mActivePlayer1.getPlayerIsAlive());
+        mTextViewP1EDH3.setEnabled(mActivePlayer1.getPlayerIsAlive());
+        mTextViewP1EDH4.setEnabled(mActivePlayer1.getPlayerIsAlive());
+        mTextViewP1Name.setTextColor(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer1.getPlayerColor()[1] : Color.LTGRAY);
+        mTextViewP1Life.setTextColor(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer1.getPlayerColor()[1] : Color.LTGRAY);
+        mTextViewP1EDH1.setTextColor(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer1.getPlayerColor()[0] : Color.LTGRAY);
+        mTextViewP1EDH2.setTextColor(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer1.getPlayerColor()[0] : Color.LTGRAY);
+        mTextViewP1EDH3.setTextColor(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer1.getPlayerColor()[0] : Color.LTGRAY);
+        mTextViewP1EDH4.setTextColor(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer1.getPlayerColor()[0] : Color.LTGRAY);
 
         mTextViewP2Name.setText(mActivePlayer2.getPlayerName());
         mTextViewP2Life.setText(String.valueOf(mActivePlayer2.getPlayerLife()));
@@ -216,12 +188,18 @@ public class OverviewActivity extends ActionBarActivity {
         mTextViewP2EDH2.setText(String.valueOf(mActivePlayer2.getPlayerEDH2()));
         mTextViewP2EDH3.setText(String.valueOf(mActivePlayer2.getPlayerEDH3()));
         mTextViewP2EDH4.setText(String.valueOf(mActivePlayer2.getPlayerEDH4()));
-        mTextViewP2Name.setTextColor(mActivePlayer2.getPlayerColor()[1]);
-        mTextViewP2Life.setTextColor(mActivePlayer2.getPlayerColor()[1]);
-        mTextViewP2EDH1.setTextColor(mActivePlayer2.getPlayerColor()[0]);
-        mTextViewP2EDH2.setTextColor(mActivePlayer2.getPlayerColor()[0]);
-        mTextViewP2EDH3.setTextColor(mActivePlayer2.getPlayerColor()[0]);
-        mTextViewP2EDH4.setTextColor(mActivePlayer2.getPlayerColor()[0]);
+        mTextViewP2Name.setEnabled(mActivePlayer2.getPlayerIsAlive());
+        mTextViewP2Life.setEnabled(mActivePlayer2.getPlayerIsAlive());
+        mTextViewP2EDH1.setEnabled(mActivePlayer2.getPlayerIsAlive());
+        mTextViewP2EDH2.setEnabled(mActivePlayer2.getPlayerIsAlive());
+        mTextViewP2EDH3.setEnabled(mActivePlayer2.getPlayerIsAlive());
+        mTextViewP2EDH4.setEnabled(mActivePlayer2.getPlayerIsAlive());
+        mTextViewP2Name.setTextColor(mActivePlayer2.getPlayerIsAlive() ? mActivePlayer2.getPlayerColor()[1] : Color.LTGRAY);
+        mTextViewP2Life.setTextColor(mActivePlayer2.getPlayerIsAlive() ? mActivePlayer2.getPlayerColor()[1] : Color.LTGRAY);
+        mTextViewP2EDH1.setTextColor(mActivePlayer2.getPlayerIsAlive() ? mActivePlayer2.getPlayerColor()[0] : Color.LTGRAY);
+        mTextViewP2EDH2.setTextColor(mActivePlayer2.getPlayerIsAlive() ? mActivePlayer2.getPlayerColor()[0] : Color.LTGRAY);
+        mTextViewP2EDH3.setTextColor(mActivePlayer2.getPlayerIsAlive() ? mActivePlayer2.getPlayerColor()[0] : Color.LTGRAY);
+        mTextViewP2EDH4.setTextColor(mActivePlayer2.getPlayerIsAlive() ? mActivePlayer2.getPlayerColor()[0] : Color.LTGRAY);
 
         mTextViewP3Name.setText(mActivePlayer3.getPlayerName());
         mTextViewP3Life.setText(String.valueOf(mActivePlayer3.getPlayerLife()));
@@ -229,12 +207,18 @@ public class OverviewActivity extends ActionBarActivity {
         mTextViewP3EDH2.setText(String.valueOf(mActivePlayer3.getPlayerEDH2()));
         mTextViewP3EDH3.setText(String.valueOf(mActivePlayer3.getPlayerEDH3()));
         mTextViewP3EDH4.setText(String.valueOf(mActivePlayer3.getPlayerEDH4()));
-        mTextViewP3Name.setTextColor(mActivePlayer3.getPlayerColor()[1]);
-        mTextViewP3Life.setTextColor(mActivePlayer3.getPlayerColor()[1]);
-        mTextViewP3EDH1.setTextColor(mActivePlayer3.getPlayerColor()[0]);
-        mTextViewP3EDH2.setTextColor(mActivePlayer3.getPlayerColor()[0]);
-        mTextViewP3EDH3.setTextColor(mActivePlayer3.getPlayerColor()[0]);
-        mTextViewP3EDH4.setTextColor(mActivePlayer3.getPlayerColor()[0]);
+        mTextViewP3Name.setEnabled(mActivePlayer3.getPlayerIsAlive());
+        mTextViewP3Life.setEnabled(mActivePlayer3.getPlayerIsAlive());
+        mTextViewP3EDH1.setEnabled(mActivePlayer3.getPlayerIsAlive());
+        mTextViewP3EDH2.setEnabled(mActivePlayer3.getPlayerIsAlive());
+        mTextViewP3EDH3.setEnabled(mActivePlayer3.getPlayerIsAlive());
+        mTextViewP3EDH4.setEnabled(mActivePlayer3.getPlayerIsAlive());
+        mTextViewP3Name.setTextColor(mActivePlayer3.getPlayerIsAlive() ? mActivePlayer3.getPlayerColor()[1] : Color.LTGRAY);
+        mTextViewP3Life.setTextColor(mActivePlayer3.getPlayerIsAlive() ? mActivePlayer3.getPlayerColor()[1] : Color.LTGRAY);
+        mTextViewP3EDH1.setTextColor(mActivePlayer3.getPlayerIsAlive() ? mActivePlayer3.getPlayerColor()[0] : Color.LTGRAY);
+        mTextViewP3EDH2.setTextColor(mActivePlayer3.getPlayerIsAlive() ? mActivePlayer3.getPlayerColor()[0] : Color.LTGRAY);
+        mTextViewP3EDH3.setTextColor(mActivePlayer3.getPlayerIsAlive() ? mActivePlayer3.getPlayerColor()[0] : Color.LTGRAY);
+        mTextViewP3EDH4.setTextColor(mActivePlayer3.getPlayerIsAlive() ? mActivePlayer3.getPlayerColor()[0] : Color.LTGRAY);
 
         mTextViewP4Name.setText(mActivePlayer4.getPlayerName());
         mTextViewP4Life.setText(String.valueOf(mActivePlayer4.getPlayerLife()));
@@ -242,30 +226,163 @@ public class OverviewActivity extends ActionBarActivity {
         mTextViewP4EDH2.setText(String.valueOf(mActivePlayer4.getPlayerEDH2()));
         mTextViewP4EDH3.setText(String.valueOf(mActivePlayer4.getPlayerEDH3()));
         mTextViewP4EDH4.setText(String.valueOf(mActivePlayer4.getPlayerEDH4()));
-        mTextViewP4Name.setTextColor(mActivePlayer4.getPlayerColor()[1]);
-        mTextViewP4Life.setTextColor(mActivePlayer4.getPlayerColor()[1]);
-        mTextViewP4EDH1.setTextColor(mActivePlayer4.getPlayerColor()[0]);
-        mTextViewP4EDH2.setTextColor(mActivePlayer4.getPlayerColor()[0]);
-        mTextViewP4EDH3.setTextColor(mActivePlayer4.getPlayerColor()[0]);
-        mTextViewP4EDH4.setTextColor(mActivePlayer4.getPlayerColor()[0]);
+        mTextViewP4Name.setEnabled(mActivePlayer4.getPlayerIsAlive());
+        mTextViewP4Life.setEnabled(mActivePlayer4.getPlayerIsAlive());
+        mTextViewP4EDH1.setEnabled(mActivePlayer4.getPlayerIsAlive());
+        mTextViewP4EDH2.setEnabled(mActivePlayer4.getPlayerIsAlive());
+        mTextViewP4EDH3.setEnabled(mActivePlayer4.getPlayerIsAlive());
+        mTextViewP4EDH4.setEnabled(mActivePlayer4.getPlayerIsAlive());
+        mTextViewP4Name.setTextColor(mActivePlayer4.getPlayerIsAlive() ? mActivePlayer4.getPlayerColor()[1] : Color.LTGRAY);
+        mTextViewP4Life.setTextColor(mActivePlayer4.getPlayerIsAlive() ? mActivePlayer4.getPlayerColor()[1] : Color.LTGRAY);
+        mTextViewP4EDH1.setTextColor(mActivePlayer4.getPlayerIsAlive() ? mActivePlayer4.getPlayerColor()[0] : Color.LTGRAY);
+        mTextViewP4EDH2.setTextColor(mActivePlayer4.getPlayerIsAlive() ? mActivePlayer4.getPlayerColor()[0] : Color.LTGRAY);
+        mTextViewP4EDH3.setTextColor(mActivePlayer4.getPlayerIsAlive() ? mActivePlayer4.getPlayerColor()[0] : Color.LTGRAY);
+        mTextViewP4EDH4.setTextColor(mActivePlayer4.getPlayerIsAlive() ? mActivePlayer4.getPlayerColor()[0] : Color.LTGRAY);
+    }
+
+    private void updateDethroneIcon() {
+        mImageViewThroneP1.setVisibility(View.INVISIBLE);
+        mImageViewThroneP2.setVisibility(View.INVISIBLE);
+        mImageViewThroneP3.setVisibility(View.INVISIBLE);
+        mImageViewThroneP4.setVisibility(View.INVISIBLE);
+
+        //P1
+        if (isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3) && !isPlayerActiveAndAlive(4))
+            mImageViewThroneP1.setVisibility(View.VISIBLE);
+
+        //P2
+        if (!isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3) && !isPlayerActiveAndAlive(4))
+            mImageViewThroneP2.setVisibility(View.VISIBLE);
+
+        //P3
+        if (!isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3) && !isPlayerActiveAndAlive(4))
+            mImageViewThroneP3.setVisibility(View.VISIBLE);
+
+        //P4
+        if (!isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3) && isPlayerActiveAndAlive(4))
+            mImageViewThroneP4.setVisibility(View.VISIBLE);
+
+        //P1 and P2
+        if (isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3) && !isPlayerActiveAndAlive(4)) {
+            if (mActivePlayer1.getPlayerLife() >= mActivePlayer2.getPlayerLife())
+                mImageViewThroneP1.setVisibility(View.VISIBLE);
+            if (mActivePlayer2.getPlayerLife() >= mActivePlayer1.getPlayerLife())
+                mImageViewThroneP2.setVisibility(View.VISIBLE);
+        }
+
+        //P1 and P3
+        if (isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3) && !isPlayerActiveAndAlive(4)) {
+            if (mActivePlayer1.getPlayerLife() >= mActivePlayer3.getPlayerLife())
+                mImageViewThroneP1.setVisibility(View.VISIBLE);
+            if (mActivePlayer3.getPlayerLife() >= mActivePlayer1.getPlayerLife())
+                mImageViewThroneP3.setVisibility(View.VISIBLE);
+        }
+
+        //P1 and P4
+        if (isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3) && isPlayerActiveAndAlive(4)) {
+            if (mActivePlayer1.getPlayerLife() >= mActivePlayer4.getPlayerLife())
+                mImageViewThroneP1.setVisibility(View.VISIBLE);
+            if (mActivePlayer4.getPlayerLife() >= mActivePlayer1.getPlayerLife())
+                mImageViewThroneP4.setVisibility(View.VISIBLE);
+        }
+
+        //P2 and P3
+        if (!isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3) && !isPlayerActiveAndAlive(4)) {
+            if (mActivePlayer2.getPlayerLife() >= mActivePlayer3.getPlayerLife())
+                mImageViewThroneP2.setVisibility(View.VISIBLE);
+            if (mActivePlayer3.getPlayerLife() >= mActivePlayer2.getPlayerLife())
+                mImageViewThroneP3.setVisibility(View.VISIBLE);
+        }
+
+        //P2 and P4
+        if (!isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3) && isPlayerActiveAndAlive(4)) {
+            if (mActivePlayer2.getPlayerLife() >= mActivePlayer4.getPlayerLife())
+                mImageViewThroneP2.setVisibility(View.VISIBLE);
+            if (mActivePlayer4.getPlayerLife() >= mActivePlayer2.getPlayerLife())
+                mImageViewThroneP4.setVisibility(View.VISIBLE);
+        }
+
+        //P3 and P4
+        if (!isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3) && isPlayerActiveAndAlive(4)) {
+            if (mActivePlayer3.getPlayerLife() >= mActivePlayer4.getPlayerLife())
+                mImageViewThroneP3.setVisibility(View.VISIBLE);
+            if (mActivePlayer4.getPlayerLife() >= mActivePlayer3.getPlayerLife())
+                mImageViewThroneP4.setVisibility(View.VISIBLE);
+        }
+
+        //P1, P2 and P3
+        if (isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3) && !isPlayerActiveAndAlive(4)) {
+            if (mActivePlayer1.getPlayerLife() >= mActivePlayer2.getPlayerLife() && mActivePlayer1.getPlayerLife() >= mActivePlayer3.getPlayerLife())
+                mImageViewThroneP1.setVisibility(View.VISIBLE);
+            if (mActivePlayer2.getPlayerLife() >= mActivePlayer1.getPlayerLife() && mActivePlayer2.getPlayerLife() >= mActivePlayer3.getPlayerLife())
+                mImageViewThroneP2.setVisibility(View.VISIBLE);
+            if (mActivePlayer3.getPlayerLife() >= mActivePlayer1.getPlayerLife() && mActivePlayer3.getPlayerLife() >= mActivePlayer2.getPlayerLife())
+                mImageViewThroneP3.setVisibility(View.VISIBLE);
+        }
+
+        //P1, P2 and P4
+        if (isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3) && isPlayerActiveAndAlive(4)) {
+            if (mActivePlayer1.getPlayerLife() >= mActivePlayer2.getPlayerLife() && mActivePlayer1.getPlayerLife() >= mActivePlayer4.getPlayerLife())
+                mImageViewThroneP1.setVisibility(View.VISIBLE);
+            if (mActivePlayer2.getPlayerLife() >= mActivePlayer1.getPlayerLife() && mActivePlayer2.getPlayerLife() >= mActivePlayer4.getPlayerLife())
+                mImageViewThroneP2.setVisibility(View.VISIBLE);
+            if (mActivePlayer4.getPlayerLife() >= mActivePlayer1.getPlayerLife() && mActivePlayer4.getPlayerLife() >= mActivePlayer2.getPlayerLife())
+                mImageViewThroneP4.setVisibility(View.VISIBLE);
+        }
+
+        //P1, P3 and P4
+        if (isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3) && isPlayerActiveAndAlive(4)) {
+            if (mActivePlayer1.getPlayerLife() >= mActivePlayer3.getPlayerLife() && mActivePlayer1.getPlayerLife() >= mActivePlayer4.getPlayerLife())
+                mImageViewThroneP1.setVisibility(View.VISIBLE);
+            if (mActivePlayer3.getPlayerLife() >= mActivePlayer1.getPlayerLife() && mActivePlayer3.getPlayerLife() >= mActivePlayer4.getPlayerLife())
+                mImageViewThroneP3.setVisibility(View.VISIBLE);
+            if (mActivePlayer4.getPlayerLife() >= mActivePlayer1.getPlayerLife() && mActivePlayer4.getPlayerLife() >= mActivePlayer3.getPlayerLife())
+                mImageViewThroneP4.setVisibility(View.VISIBLE);
+        }
+
+        //P2, P3 and P4
+        if (!isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3) && isPlayerActiveAndAlive(4)) {
+            if (mActivePlayer2.getPlayerLife() >= mActivePlayer3.getPlayerLife() && mActivePlayer2.getPlayerLife() >= mActivePlayer4.getPlayerLife())
+                mImageViewThroneP2.setVisibility(View.VISIBLE);
+            if (mActivePlayer3.getPlayerLife() >= mActivePlayer2.getPlayerLife() && mActivePlayer3.getPlayerLife() >= mActivePlayer4.getPlayerLife())
+                mImageViewThroneP3.setVisibility(View.VISIBLE);
+            if (mActivePlayer4.getPlayerLife() >= mActivePlayer3.getPlayerLife() && mActivePlayer4.getPlayerLife() >= mActivePlayer2.getPlayerLife())
+                mImageViewThroneP4.setVisibility(View.VISIBLE);
+        }
+
+        //P1, P2, P3 and P4
+        if (isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3) && isPlayerActiveAndAlive(4)) {
+            if (mActivePlayer1.getPlayerLife() >= mActivePlayer2.getPlayerLife() && mActivePlayer1.getPlayerLife() >= mActivePlayer3.getPlayerLife() && mActivePlayer1.getPlayerLife() >= mActivePlayer4.getPlayerLife())
+                mImageViewThroneP1.setVisibility(View.VISIBLE);
+            if (mActivePlayer2.getPlayerLife() >= mActivePlayer1.getPlayerLife() && mActivePlayer2.getPlayerLife() >= mActivePlayer3.getPlayerLife() && mActivePlayer2.getPlayerLife() >= mActivePlayer4.getPlayerLife())
+                mImageViewThroneP2.setVisibility(View.VISIBLE);
+            if (mActivePlayer3.getPlayerLife() >= mActivePlayer1.getPlayerLife() && mActivePlayer3.getPlayerLife() >= mActivePlayer2.getPlayerLife() && mActivePlayer3.getPlayerLife() >= mActivePlayer4.getPlayerLife())
+                mImageViewThroneP3.setVisibility(View.VISIBLE);
+            if (mActivePlayer4.getPlayerLife() >= mActivePlayer1.getPlayerLife() && mActivePlayer4.getPlayerLife() >= mActivePlayer2.getPlayerLife() && mActivePlayer4.getPlayerLife() >= mActivePlayer3.getPlayerLife())
+                mImageViewThroneP4.setVisibility(View.VISIBLE);
+        }
     }
 
     public void onClickP1(View view) {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("TAG", "1");
-        startActivity(intent);
-        this.finish();
+        if (numPlayers >= 1) {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("TAG", "1");
+            startActivity(intent);
+            this.finish();
+        }
     }
 
     public void onClickP2(View view) {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("TAG", "2");
-        startActivity(intent);
-        this.finish();
+        if (numPlayers >= 2) {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("TAG", "2");
+            startActivity(intent);
+            this.finish();
+        }
     }
 
     public void onClickP3(View view) {
-        if (isPlayerActive(3)) {
+        if (numPlayers >= 3) {
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra("TAG", "3");
             startActivity(intent);
@@ -274,7 +391,7 @@ public class OverviewActivity extends ActionBarActivity {
     }
 
     public void onClickP4(View view) {
-        if (isPlayerActive(4)) {
+        if (numPlayers >= 4) {
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra("TAG", "4");
             startActivity(intent);
@@ -282,10 +399,22 @@ public class OverviewActivity extends ActionBarActivity {
         }
     }
 
-
-    private boolean isPlayerActive(int i) {
+    private boolean isPlayerActiveAndAlive(int i) {
         if (numPlayers < i)
             return false;
-        return true;
+        else {
+            switch (i) {
+                case 1:
+                    return mActivePlayer1.getPlayerIsAlive();
+                case 2:
+                    return mActivePlayer2.getPlayerIsAlive();
+                case 3:
+                    return mActivePlayer3.getPlayerIsAlive();
+                case 4:
+                    return mActivePlayer4.getPlayerIsAlive();
+                default:
+                    return true;
+            }
+        }
     }
 }

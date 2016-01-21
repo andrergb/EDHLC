@@ -39,6 +39,52 @@ public class RecordsActivity extends ActionBarActivity {
     private String mPlayerName;
     private String mDeckName;
 
+    public void createLayout(View view) {
+        if (view != null) {
+            mCheckBoxKeepScreenOn = (CheckBox) findViewById(R.id.checkBoxKeepScreenOn);
+            mListViewRecords = (ListView) findViewById(R.id.listViewRecords);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mDrawerRecords.isDrawerOpen())
+            mDrawerRecords.dismiss();
+        else
+            super.onBackPressed();
+    }
+
+    public void onClickKeepScreenOn(View view) {
+        if (!mCheckBoxKeepScreenOn.isChecked()) {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 0).commit();
+        } else {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 1).commit();
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerRecords.getDrawerToggle().onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_overview, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //DrawerMain menu
+        if (mDrawerRecords.getDrawerToggle().onOptionsItemSelected(item))
+            return true;
+
+        return super.onOptionsItemSelected(item);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +114,16 @@ public class RecordsActivity extends ActionBarActivity {
         createLayout(this.findViewById(android.R.id.content));
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        mDrawerRecords.getDrawerToggle().syncState();
+    }
 
     @Override
     protected void onResume() {
@@ -78,53 +134,6 @@ public class RecordsActivity extends ActionBarActivity {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         updateLayout();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_overview, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        //DrawerMain menu
-        if (mDrawerRecords.getDrawerToggle().onOptionsItemSelected(item))
-            return true;
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        mDrawerRecords.getDrawerToggle().syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        mDrawerRecords.getDrawerToggle().onConfigurationChanged(newConfig);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (mDrawerRecords.isDrawerOpen())
-            mDrawerRecords.dismiss();
-        else
-            super.onBackPressed();
-    }
-
-    public void createLayout(View view) {
-        if (view != null) {
-            mCheckBoxKeepScreenOn = (CheckBox) findViewById(R.id.checkBoxKeepScreenOn);
-            mListViewRecords = (ListView) findViewById(R.id.listViewRecords);
-        }
     }
 
     private void updateLayout() {
@@ -146,16 +155,6 @@ public class RecordsActivity extends ActionBarActivity {
         recordsDb.close();
 
         mListViewRecords.setAdapter(new CustomDeckListViewAdapter(this.getBaseContext(), records));
-    }
-
-    public void onClickKeepScreenOn(View view) {
-        if (!mCheckBoxKeepScreenOn.isChecked()) {
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-            getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 0).commit();
-        } else {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-            getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 1).commit();
-        }
     }
 
     class CustomDeckListViewAdapter extends BaseAdapter {
@@ -194,14 +193,28 @@ public class RecordsActivity extends ActionBarActivity {
             LinearLayout linearLayoutSecondPlace = (LinearLayout) vi.findViewById(R.id.linearLayoutSecondPlace);
             LinearLayout linearLayoutThirdPlace = (LinearLayout) vi.findViewById(R.id.linearLayoutThirdPlace);
             LinearLayout linearLayoutFourthPlace = (LinearLayout) vi.findViewById(R.id.linearLayoutFourthPlace);
-            linearLayoutFirstPlace.setVisibility(View.VISIBLE);
-            linearLayoutSecondPlace.setVisibility(View.VISIBLE);
             switch (dataRecords.get(position).size()) {
+                case 1:
+                    linearLayoutFirstPlace.setVisibility(View.VISIBLE);
+                    linearLayoutSecondPlace.setVisibility(View.VISIBLE);
+                    linearLayoutThirdPlace.setVisibility(View.GONE);
+                    linearLayoutFourthPlace.setVisibility(View.GONE);
+                    break;
+                case 2:
+                    linearLayoutFirstPlace.setVisibility(View.VISIBLE);
+                    linearLayoutSecondPlace.setVisibility(View.VISIBLE);
+                    linearLayoutThirdPlace.setVisibility(View.GONE);
+                    linearLayoutFourthPlace.setVisibility(View.GONE);
+                    break;
                 case 3:
+                    linearLayoutFirstPlace.setVisibility(View.VISIBLE);
+                    linearLayoutSecondPlace.setVisibility(View.VISIBLE);
                     linearLayoutThirdPlace.setVisibility(View.VISIBLE);
                     linearLayoutFourthPlace.setVisibility(View.GONE);
                     break;
                 case 4:
+                    linearLayoutFirstPlace.setVisibility(View.VISIBLE);
+                    linearLayoutSecondPlace.setVisibility(View.VISIBLE);
                     linearLayoutThirdPlace.setVisibility(View.VISIBLE);
                     linearLayoutFourthPlace.setVisibility(View.VISIBLE);
                     break;

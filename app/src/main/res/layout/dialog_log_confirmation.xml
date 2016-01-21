@@ -3,7 +3,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <ListView xmlns:android="http://schemas.android.com/apk/res/android"
+    <com.android.argb.edhlc.listviewdragginganimation.DynamicListView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/listViewConfirmation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

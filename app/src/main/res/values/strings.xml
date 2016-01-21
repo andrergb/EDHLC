@@ -75,6 +75,17 @@
     <string name="turn_end_step">End of turn Step</string>
     <string name="turn_cleanup_step">Cleanup Step</string>
 
+
+    <string name="default_player_1">Player 1</string>
+    <string name="default_player_2">Player 2</string>
+    <string name="default_player_3">Player 3</string>
+    <string name="default_player_4">Player 4</string>
+
+    <string name="default_deck_1">Deck 1</string>
+    <string name="default_deck_2">Deck 2</string>
+    <string name="default_deck_3">Deck 3</string>
+    <string name="default_deck_4">Deck 4</string>
+
     <!-- Current match -->
     <string-array name="string_menu_main_1">
         <item>New Game</item>

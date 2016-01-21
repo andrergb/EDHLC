@@ -15,13 +15,13 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.NumberPicker;
-import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.argb.edhlc.Constants;
 import com.android.argb.edhlc.R;
+import com.android.argb.edhlc.activities.MainActivity;
 import com.android.argb.edhlc.activities.PlayerListActivity;
 import com.android.argb.edhlc.activities.RecordsActivity;
 import com.android.argb.edhlc.activities.SettingsActivity;
@@ -29,20 +29,29 @@ import com.android.argb.edhlc.activities.TurnActivity;
 import com.android.argb.edhlc.database.deck.DecksDataAccessObject;
 import com.android.argb.edhlc.database.player.PlayersDataAccessObject;
 import com.android.argb.edhlc.database.record.RecordsDataAccessObject;
+import com.android.argb.edhlc.listviewdragginganimation.DynamicListView;
+import com.android.argb.edhlc.listviewdragginganimation.StableArrayAdapter;
 import com.android.argb.edhlc.objects.Deck;
 import com.android.argb.edhlc.objects.Record;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 /**
  * -Created by agbarros on 05/11/2015.
  */
 public class DrawerMain {
+
+    private AlertDialog newGameConfirmationDialog;
+    private AlertDialog newGameSelectPlayersDialog;
+    private AlertDialog logGameConfirmationDialog;
+    private AlertDialog logGameSelectPlayersDialog;
+
+    private ArrayList<String> mNewGameDecks;
+    private ArrayList<String> mLogGameDecks;
 
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
@@ -85,6 +94,9 @@ public class DrawerMain {
         decksDB = new DecksDataAccessObject(parentActivity);
     }
 
+    public void dismiss() {
+        mDrawerLayout.closeDrawers();
+    }
 
     public ActionBarDrawerToggle getDrawerToggle() {
         return mDrawerToggle;
@@ -92,255 +104,6 @@ public class DrawerMain {
 
     public boolean isDrawerOpen() {
         return (mDrawerLayout.isDrawerOpen(linearLayoutDrawer));
-    }
-
-    public void dismiss() {
-        mDrawerLayout.closeDrawers();
-    }
-
-    private class DrawerItemClickListener1 implements AdapterView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            switch (position) {
-                case 0: //NewGame
-                    mDrawerLayout.closeDrawers();
-                    createNewGameDialog(view);
-                    break;
-                case 1: //Log Game
-                    mDrawerLayout.closeDrawers();
-                    createLogGameTotalDialog(view);
-                    break;
-                case 2: //Roll a dice
-                    mDrawerLayout.closeDrawers();
-                    createDiceRangeDialog(view);
-                    break;
-                case 3: //Random a player
-                    mDrawerLayout.closeDrawers();
-                    Intent intent = new Intent(Constants.BROADCAST_INTENT);
-                    intent.putExtra(Constants.BROADCAST_MESSAGE_RANDOM_PLAYER_OPTION, Constants.BROADCAST_MESSAGE_RANDOM_PLAYER_OPTION);
-                    LocalBroadcastManager.getInstance(parentActivity).sendBroadcast(intent);
-                    break;
-                case 4: //Turns
-                    parentActivity.startActivity(new Intent(parentActivity, TurnActivity.class));
-                    break;
-            }
-        }
-    }
-
-    private class DrawerItemClickListener2 implements AdapterView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            switch (position) {
-                case 0: //Players
-                    mDrawerLayout.closeDrawers();
-                    parentActivity.startActivity(new Intent(parentActivity, PlayerListActivity.class));
-                    break;
-                case 1: //All Records
-                    mDrawerLayout.closeDrawers();
-                    Intent intent = new Intent(parentActivity, RecordsActivity.class);
-                    intent.putExtra("RECORDS_PLAYER_NAME", "");
-                    intent.putExtra("RECORDS_DECK_NAME", "");
-                    parentActivity.startActivity(intent);
-                    break;
-                case 2: //Settings
-                    mDrawerLayout.closeDrawers();
-                    parentActivity.startActivity(new Intent(parentActivity, SettingsActivity.class));
-                    break;
-                case 3: //About
-                    mDrawerLayout.closeDrawers();
-                    createAboutDialog(view);
-                    break;
-            }
-        }
-    }
-
-    public void createNewGameDialog(final View view) {
-        final Intent intent = new Intent(Constants.BROADCAST_INTENT);
-
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
-        alertDialogBuilder.setTitle("New Game");
-        alertDialogBuilder.setMessage("Do you want to keep the current names?");
-        alertDialogBuilder.setPositiveButton("Yes",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        intent.putExtra(Constants.BROADCAST_MESSAGE_NEW_GAME_OPTION, Constants.BROADCAST_MESSAGE_NEW_GAME_OPTION_YES);
-                        LocalBroadcastManager.getInstance(parentActivity).sendBroadcast(intent);
-                    }
-                });
-        alertDialogBuilder.setNeutralButton("Cancel",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-        alertDialogBuilder.setNegativeButton("No",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        createNewGameTotalDialog(view);
-                    }
-                });
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
-    }
-
-    private void createNewGameTotalDialog(final View view) {
-        listDeck = new ArrayList<>();
-        View newGameNewPlayersView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_single_spinner, null);
-        final Spinner spinnerTotalPlayers = (Spinner) newGameNewPlayersView.findViewById(R.id.spinner1);
-
-        final ArrayAdapter<String> newGameNewPlayersAdapter = new ArrayAdapter<>(parentActivity, R.layout.row_spinner_selected, new String[]{"2", "3", "4"});
-        newGameNewPlayersAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerTotalPlayers.setAdapter(newGameNewPlayersAdapter);
-
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
-        alertDialogBuilder.setView(newGameNewPlayersView);
-        alertDialogBuilder.setTitle("New Game");
-        alertDialogBuilder.setMessage("Choose the total players: ");
-        alertDialogBuilder.setPositiveButton("Next",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                        createNewGamePlayersDialog(view, Integer.parseInt(spinnerTotalPlayers.getSelectedItem().toString()), 1);
-                    }
-                });
-        alertDialogBuilder.setNeutralButton("Cancel",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
-    }
-
-    private void createNewGamePlayersDialog(final View view, final int totalPlayers, final int steps) {
-        View NewGamePlayersChoiceView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_two_spinners, null);
-
-        final Spinner spinnerPlayerName = (Spinner) NewGamePlayersChoiceView.findViewById(R.id.spinner1);
-        final Spinner spinnerPlayerDeck = (Spinner) NewGamePlayersChoiceView.findViewById(R.id.spinner2);
-        handleSpinners(spinnerPlayerName, spinnerPlayerDeck);
-
-        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
-        alertDialogBuilder.setView(NewGamePlayersChoiceView);
-        alertDialogBuilder.setTitle("New Game - Player " + steps + "/" + totalPlayers);
-        final String[] positions = new String[]{"1st", "2nd", "3rd", "4th"};
-        alertDialogBuilder.setMessage("Choose the " + positions[steps - 1] + " Player and Deck:");
-        alertDialogBuilder.setPositiveButton("Next",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        //Overridden at 'alertDialog.getButton' to avoid dismiss every time
-                    }
-                });
-        alertDialogBuilder.setNeutralButton("Cancel",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                        playersDB.close();
-                        decksDB.close();
-                    }
-                });
-        alertDialogBuilder.setNegativeButton("Back",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        if (steps == 1) {
-                            createNewGameTotalDialog(view);
-                        } else {
-                            listDeck.remove(listDeck.size() - 1);
-                            createNewGamePlayersDialog(view, totalPlayers, steps - 1);
-                        }
-                    }
-                });
-        final AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
-
-        //Override POSITIVE button
-        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String auxPlayerName = spinnerPlayerName.getSelectedItem().toString();
-                String tempPlayerDeck = spinnerPlayerDeck.getSelectedItem().toString();
-
-                if (!auxPlayerName.equalsIgnoreCase(parentActivity.getString(R.string.edh_spinner_player_hint))
-                        && !tempPlayerDeck.equalsIgnoreCase(parentActivity.getString(R.string.edh_spinner_deck_hint))) {
-
-                    listDeck.add(new Deck(auxPlayerName, tempPlayerDeck));
-                    if (Record.isValidRecord(listDeck)) {
-                        alertDialog.dismiss();
-                        if (steps != totalPlayers) {
-                            createNewGamePlayersDialog(view, totalPlayers, steps + 1);
-                        } else {
-                            createNewGameConfirmationDialog(view);
-                            playersDB.close();
-                            decksDB.close();
-                        }
-                    } else {
-                        listDeck.remove(listDeck.size() - 1);
-                        Toast.makeText(view.getContext(), "ERROR: Player/Deck already added!", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(view.getContext(), "ERROR: invalid Player/Deck!", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
-
-    private void createNewGameConfirmationDialog(final View view) {
-        final Intent intent = new Intent(Constants.BROADCAST_INTENT);
-
-        View logView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_log_confirmation, null);
-
-        final List<Map<String, String>> listMapDecks = new ArrayList<>();
-        for (int i = 0; i < listDeck.size(); i++) {
-            Map<String, String> auxMap = new HashMap<>(2);
-            auxMap.put("playerName", listDeck.get(i).getPlayerName());
-            auxMap.put("deck", listDeck.get(i).getDeckName());
-            listMapDecks.add(auxMap);
-        }
-
-        final ListView listViewConfirmation = (ListView) logView.findViewById(R.id.listViewConfirmation);
-        SimpleAdapter adapter = new SimpleAdapter(parentActivity,
-                listMapDecks,
-                R.layout.row_two_item_list_border,
-                new String[]{"playerName", "deck"},
-                new int[]{R.id.text1, R.id.text2});
-        listViewConfirmation.setAdapter(adapter);
-
-        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
-        alertDialogBuilder.setView(logView);
-        alertDialogBuilder.setTitle("New Game - Overview");
-        alertDialogBuilder.setMessage("Check the Player and Decks: ");
-        alertDialogBuilder.setPositiveButton("Ok",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        ArrayList<String> players = new ArrayList<>();
-                        ArrayList<String> decks = new ArrayList<>();
-                        for (int i = 0; i < listDeck.size(); i++) {
-                            players.add(listDeck.get(i).getPlayerName());
-                            decks.add(listDeck.get(i).getDeckName());
-                        }
-                        intent.putExtra(Constants.BROADCAST_MESSAGE_NEW_GAME_OPTION, Constants.BROADCAST_MESSAGE_NEW_GAME_OPTION_NO);
-                        intent.putStringArrayListExtra(Constants.BROADCAST_MESSAGE_NEW_GAME_PLAYERS, players);
-                        intent.putStringArrayListExtra(Constants.BROADCAST_MESSAGE_NEW_GAME_DECKS, decks);
-                        LocalBroadcastManager.getInstance(parentActivity).sendBroadcast(intent);
-                    }
-                });
-        alertDialogBuilder.setNeutralButton("Cancel",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                        playersDB.close();
-                        decksDB.close();
-                    }
-                });
-        alertDialogBuilder.setNegativeButton("Back",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        listDeck.remove(listDeck.size() - 1);
-                        createNewGamePlayersDialog(view, listDeck.size() + 1, listDeck.size() + 1);
-                    }
-                });
-        final AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
     }
 
     private void createAboutDialog(View view) {
@@ -362,8 +125,6 @@ public class DrawerMain {
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
-
-    private List<Deck> listDeck;
 
     private void createDiceRangeDialog(final View view) {
         View logView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_roll_a_dice, null);
@@ -445,55 +206,25 @@ public class DrawerMain {
         });
     }
 
-    private void createLogGameTotalDialog(final View view) {
-        listDeck = new ArrayList<>();
-        View logView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_single_spinner, null);
-        final Spinner spinnerTotalPlayers = (Spinner) logView.findViewById(R.id.spinner1);
-
-        final ArrayAdapter<String> playersNameAdapter = new ArrayAdapter<>(parentActivity, R.layout.row_spinner_selected, new String[]{"2", "3", "4"});
-        playersNameAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerTotalPlayers.setAdapter(playersNameAdapter);
-
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
-        alertDialogBuilder.setView(logView);
-        alertDialogBuilder.setTitle("Log Game");
-        alertDialogBuilder.setMessage("Choose the total players: ");
-        alertDialogBuilder.setPositiveButton("Next",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                        createLogGamePlayersDialog(view, Integer.parseInt(spinnerTotalPlayers.getSelectedItem().toString()), 1);
-                    }
-                });
-        alertDialogBuilder.setNeutralButton("Cancel",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
-    }
-
-    private void createLogGamePlayersDialog(final View view, final int totalPlayers, final int steps) {
-        View logView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_two_spinners, null);
-
-        final Spinner spinnerFirstPlaceName = (Spinner) logView.findViewById(R.id.spinner1);
-        final Spinner spinnerFirstPlaceDeck = (Spinner) logView.findViewById(R.id.spinner2);
-        handleSpinners(spinnerFirstPlaceName, spinnerFirstPlaceDeck);
+    private void createLogGameConfirmationDialog(final View view) {
+        View logView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_log_confirmation, null);
+        StableArrayAdapter adapter = new StableArrayAdapter(parentActivity, R.layout.row_two_item_list_border, R.id.text1, mLogGameDecks);
+        final DynamicListView listView = (DynamicListView) logView.findViewById(R.id.listViewConfirmation);
+        listView.setDynamicArrayListContent(mLogGameDecks);
+        listView.setAdapter(adapter);
+        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
         alertDialogBuilder.setView(logView);
-        alertDialogBuilder.setTitle("Log Game - Player " + steps + "/" + totalPlayers);
-        final String[] positions = new String[]{"1st", "2nd", "3rd", "4th"};
-        alertDialogBuilder.setMessage("Choose the " + positions[steps - 1] + " Player and Deck:");
-        alertDialogBuilder.setPositiveButton("Next",
+        alertDialogBuilder.setTitle("Log Game - Overview");
+        alertDialogBuilder.setMessage("Check the Player and Decks: ");
+        alertDialogBuilder.setPositiveButton("SAVE",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         //Overridden at 'alertDialog.getButton' to avoid dismiss every time
                     }
                 });
-        alertDialogBuilder.setNeutralButton("Cancel",
+        alertDialogBuilder.setNeutralButton("CANCEL",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
@@ -501,108 +232,297 @@ public class DrawerMain {
                         decksDB.close();
                     }
                 });
-        alertDialogBuilder.setNegativeButton("Back",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        if (steps == 1) {
-                            createLogGameTotalDialog(view);
-                        } else {
-                            listDeck.remove(listDeck.size() - 1);
-                            createLogGamePlayersDialog(view, totalPlayers, steps - 1);
-                        }
-                    }
-                });
-        final AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
+
+        logGameConfirmationDialog = alertDialogBuilder.create();
+        logGameConfirmationDialog.show();
 
         //Override POSITIVE button
-        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+        logGameConfirmationDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String auxPlayerName = spinnerFirstPlaceName.getSelectedItem().toString();
-                String tempPlayerDeck = spinnerFirstPlaceDeck.getSelectedItem().toString();
+                ArrayList<String> mDynamicArrayListContent = listView.getDynamicArrayListContent();
+                ArrayList<Deck> mDecksListToBeRecorded = new ArrayList<>();
+                for (int i = 0; i < mDynamicArrayListContent.size(); i++) {
+                    String auxPlayerName = mDynamicArrayListContent.get(i).split(System.getProperty("line.separator"))[0];
+                    String auxPlayerDeck = mDynamicArrayListContent.get(i).split(System.getProperty("line.separator"))[1];
+                    Deck currentDeck = new Deck(auxPlayerName, auxPlayerDeck);
 
-                if (!auxPlayerName.equalsIgnoreCase(parentActivity.getString(R.string.edh_spinner_player_hint))
-                        && !tempPlayerDeck.equalsIgnoreCase(parentActivity.getString(R.string.edh_spinner_deck_hint))) {
+                    if (!currentDeck.isEqualDeck(new Deck(parentActivity.getResources().getString(R.string.default_player_1), parentActivity.getResources().getString(R.string.default_deck_1)))
+                            && !currentDeck.isEqualDeck(new Deck(parentActivity.getResources().getString(R.string.default_player_2), parentActivity.getResources().getString(R.string.default_deck_2)))
+                            && !currentDeck.isEqualDeck(new Deck(parentActivity.getResources().getString(R.string.default_player_3), parentActivity.getResources().getString(R.string.default_deck_3)))
+                            && !currentDeck.isEqualDeck(new Deck(parentActivity.getResources().getString(R.string.default_player_4), parentActivity.getResources().getString(R.string.default_deck_4)))) {
+                        mDecksListToBeRecorded.add(currentDeck);
+                    }
+                }
+                if (mDecksListToBeRecorded.size() >= 2) {
+                    RecordsDataAccessObject recordDB = new RecordsDataAccessObject(parentActivity);
+                    recordDB.open();
+                    long result = recordDB.createRecord(new Record(mDecksListToBeRecorded));
+                    recordDB.close();
+                    if (result != -1)
+                        Toast.makeText(view.getContext(), "Game saved", Toast.LENGTH_SHORT).show();
+                    else
+                        Toast.makeText(view.getContext(), "Error inserting this record", Toast.LENGTH_SHORT).show();
+                    logGameConfirmationDialog.dismiss();
+                } else {
+                    Toast.makeText(view.getContext(), "At least 2 players are required", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
-                    listDeck.add(new Deck(auxPlayerName, tempPlayerDeck));
-                    if (Record.isValidRecord(listDeck)) {
-                        alertDialog.dismiss();
-                        if (steps != totalPlayers) {
-                            createLogGamePlayersDialog(view, totalPlayers, steps + 1);
-                        } else {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Deck aux = null;
+                if (!(mLogGameDecks.get(position).equalsIgnoreCase(parentActivity.getResources().getString(R.string.default_player_1) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_1)))
+                        && !(mLogGameDecks.get(position).equalsIgnoreCase(parentActivity.getResources().getString(R.string.default_player_2) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_2)))
+                        && !(mLogGameDecks.get(position).equalsIgnoreCase(parentActivity.getResources().getString(R.string.default_player_3) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_3)))
+                        && !(mLogGameDecks.get(position).equalsIgnoreCase(parentActivity.getResources().getString(R.string.default_player_4) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_4)))) {
+                    aux = new Deck(mLogGameDecks.get(position).split(System.getProperty("line.separator"))[0], mLogGameDecks.get(position).split(System.getProperty("line.separator"))[1]);
+                }
+
+                createLogGameSelectPlayersDialog(view, position, aux);
+                logGameConfirmationDialog.dismiss();
+            }
+        });
+    }
+
+    private void createLogGameSelectPlayersDialog(final View view, final int position, final Deck selectedPlayer) {
+        View NewGamePlayersChoiceView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_two_spinners, null);
+
+        final Spinner spinnerPlayerName = (Spinner) NewGamePlayersChoiceView.findViewById(R.id.spinner1);
+        final Spinner spinnerPlayerDeck = (Spinner) NewGamePlayersChoiceView.findViewById(R.id.spinner2);
+        handleSpinners(spinnerPlayerName, spinnerPlayerDeck, selectedPlayer);
+
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
+        alertDialogBuilder.setView(NewGamePlayersChoiceView);
+        alertDialogBuilder.setTitle("New Game");
+        alertDialogBuilder.setMessage("Choose a Player and a Deck:");
+        alertDialogBuilder.setPositiveButton(selectedPlayer == null ? "ADD" : "UPDATE",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //Overridden at 'alertDialog.getButton' to avoid dismiss every time
+                    }
+                });
+        alertDialogBuilder.setNeutralButton("BACK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        createLogGameConfirmationDialog(view);
+                        dialog.cancel();
+                    }
+                });
+        if (selectedPlayer != null) {
+            alertDialogBuilder.setNegativeButton("REMOVE",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            mLogGameDecks.remove(position);
+                            if (!mLogGameDecks.contains(parentActivity.getResources().getString(R.string.default_player_1) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_1)))
+                                mLogGameDecks.add(position, parentActivity.getResources().getString(R.string.default_player_1) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_1));
+                            else if (!mLogGameDecks.contains(parentActivity.getResources().getString(R.string.default_player_2) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_2)))
+                                mLogGameDecks.add(position, parentActivity.getResources().getString(R.string.default_player_2) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_2));
+                            else if (!mLogGameDecks.contains(parentActivity.getResources().getString(R.string.default_player_3) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_3)))
+                                mLogGameDecks.add(position, parentActivity.getResources().getString(R.string.default_player_3) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_3));
+                            else if (!mLogGameDecks.contains(parentActivity.getResources().getString(R.string.default_player_4) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_4)))
+                                mLogGameDecks.add(position, parentActivity.getResources().getString(R.string.default_player_4) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_4));
+
                             createLogGameConfirmationDialog(view);
-                            playersDB.close();
-                            decksDB.close();
+                            dialog.cancel();
+                        }
+                    });
+        }
+        logGameSelectPlayersDialog = alertDialogBuilder.create();
+        logGameSelectPlayersDialog.show();
+
+        //Override POSITIVE button - ADD
+        logGameSelectPlayersDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String auxPlayerName = spinnerPlayerName.getSelectedItem().toString();
+                String tempPlayerDeck = spinnerPlayerDeck.getSelectedItem().toString();
+
+                if (selectedPlayer != null && selectedPlayer.isEqualDeck(new Deck(auxPlayerName, tempPlayerDeck))) {
+                    createLogGameConfirmationDialog(v);
+                    logGameSelectPlayersDialog.dismiss();
+                } else {
+                    List<Deck> mDeckListAux = new ArrayList<>();
+                    mDeckListAux.add(new Deck(mLogGameDecks.get(0).split(System.getProperty("line.separator"))[0], mLogGameDecks.get(0).split(System.getProperty("line.separator"))[1]));
+                    mDeckListAux.add(new Deck(mLogGameDecks.get(1).split(System.getProperty("line.separator"))[0], mLogGameDecks.get(1).split(System.getProperty("line.separator"))[1]));
+                    mDeckListAux.add(new Deck(mLogGameDecks.get(2).split(System.getProperty("line.separator"))[0], mLogGameDecks.get(2).split(System.getProperty("line.separator"))[1]));
+                    mDeckListAux.add(new Deck(mLogGameDecks.get(3).split(System.getProperty("line.separator"))[0], mLogGameDecks.get(3).split(System.getProperty("line.separator"))[1]));
+
+                    if (!auxPlayerName.equalsIgnoreCase(parentActivity.getString(R.string.edh_spinner_player_hint)) && !tempPlayerDeck.equalsIgnoreCase(parentActivity.getString(R.string.edh_spinner_deck_hint))) {
+                        if (Record.isValidRecord(mDeckListAux, new Deck(auxPlayerName, tempPlayerDeck))) {
+                            mLogGameDecks.remove(position);
+                            mLogGameDecks.add(position, auxPlayerName + System.getProperty("line.separator") + tempPlayerDeck);
+                            logGameSelectPlayersDialog.dismiss();
+                            createLogGameConfirmationDialog(v);
+                        } else {
+                            Toast.makeText(view.getContext(), "ERROR: Player/Deck already added!", Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        listDeck.remove(listDeck.size() - 1);
-                        Toast.makeText(view.getContext(), "ERROR: Player/Deck already added!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(view.getContext(), "ERROR: invalid Player/Deck!", Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    Toast.makeText(view.getContext(), "ERROR: invalid Player/Deck!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
-    private void createLogGameConfirmationDialog(final View view) {
+    private void createNewGameConfirmationDialog(final View view) {
         View logView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_log_confirmation, null);
-
-        final List<Map<String, String>> listMapDecks = new ArrayList<>();
-        for (int i = 0; i < listDeck.size(); i++) {
-            Map<String, String> auxMap = new HashMap<>(2);
-            auxMap.put("playerName", listDeck.get(i).getPlayerName());
-            auxMap.put("deck", listDeck.get(i).getDeckName());
-            listMapDecks.add(auxMap);
-        }
-
-        final ListView listViewConfirmation = (ListView) logView.findViewById(R.id.listViewConfirmation);
-        SimpleAdapter adapter = new SimpleAdapter(parentActivity,
-                listMapDecks,
-                R.layout.row_two_item_list_border,
-                new String[]{"playerName", "deck"},
-                new int[]{R.id.text1, R.id.text2});
-        listViewConfirmation.setAdapter(adapter);
-
+        StableArrayAdapter adapter = new StableArrayAdapter(parentActivity, R.layout.row_two_item_list_border, R.id.text1, mNewGameDecks);
+        final DynamicListView listView = (DynamicListView) logView.findViewById(R.id.listViewConfirmation);
+        listView.setDynamicArrayListContent(mNewGameDecks);
+        listView.setAdapter(adapter);
+        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
         alertDialogBuilder.setView(logView);
-        alertDialogBuilder.setTitle("Log Game - Overview");
-        alertDialogBuilder.setMessage("Check the Player and Decks positions: ");
-        alertDialogBuilder.setPositiveButton("Save",
+        alertDialogBuilder.setTitle("New Game - Overview");
+        alertDialogBuilder.setMessage("Check the Player and Decks: ");
+        alertDialogBuilder.setPositiveButton("START",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        RecordsDataAccessObject recordDB = new RecordsDataAccessObject(parentActivity);
-                        recordDB.open();
-                        long result = recordDB.createRecord(new Record(listDeck));
-                        recordDB.close();
-                        if (result != -1)
-                            Toast.makeText(view.getContext(), "Game SAVED!!!", Toast.LENGTH_SHORT).show();
-                        else
-                            Toast.makeText(view.getContext(), "ERROR inserting this record", Toast.LENGTH_SHORT).show();
+                        //Overridden at 'alertDialog.getButton' to avoid dismiss every time
                     }
                 });
-        alertDialogBuilder.setNeutralButton("Cancel",
+        alertDialogBuilder.setNeutralButton("CANCEL",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
-                        playersDB.close();
-                        decksDB.close();
                     }
                 });
-        alertDialogBuilder.setNegativeButton("Back",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        listDeck.remove(listDeck.size() - 1);
-                        createLogGamePlayersDialog(view, listDeck.size() + 1, listDeck.size() + 1);
+
+        newGameConfirmationDialog = alertDialogBuilder.create();
+        newGameConfirmationDialog.show();
+
+        //Override POSITIVE button
+        newGameConfirmationDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ArrayList<String> players = new ArrayList<>();
+                ArrayList<String> decks = new ArrayList<>();
+
+                for (int i = 0; i < mNewGameDecks.size(); i++) {
+                    if (!(mNewGameDecks.get(i).equalsIgnoreCase(parentActivity.getResources().getString(R.string.default_player_1) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_1)))
+                            && !(mNewGameDecks.get(i).equalsIgnoreCase(parentActivity.getResources().getString(R.string.default_player_2) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_2)))
+                            && !(mNewGameDecks.get(i).equalsIgnoreCase(parentActivity.getResources().getString(R.string.default_player_3) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_3)))
+                            && !(mNewGameDecks.get(i).equalsIgnoreCase(parentActivity.getResources().getString(R.string.default_player_4) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_4)))) {
+                        players.add(mNewGameDecks.get(i).split(System.getProperty("line.separator"))[0]);
+                        decks.add(mNewGameDecks.get(i).split(System.getProperty("line.separator"))[1]);
                     }
-                });
-        final AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
+                }
+
+                if (players.size() >= 2) {
+                    final Intent intent = new Intent(Constants.BROADCAST_INTENT);
+                    intent.putExtra(Constants.BROADCAST_MESSAGE_NEW_GAME_OPTION, Constants.BROADCAST_MESSAGE_NEW_GAME_OPTION_NO);
+                    intent.putStringArrayListExtra(Constants.BROADCAST_MESSAGE_NEW_GAME_PLAYERS, players);
+                    intent.putStringArrayListExtra(Constants.BROADCAST_MESSAGE_NEW_GAME_DECKS, decks);
+                    LocalBroadcastManager.getInstance(parentActivity).sendBroadcast(intent);
+                    newGameConfirmationDialog.dismiss();
+                } else {
+                    Toast.makeText(view.getContext(), "At least 2 players are required", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Deck aux = null;
+                if (!(mNewGameDecks.get(position).equalsIgnoreCase(parentActivity.getResources().getString(R.string.default_player_1) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_1)))
+                        && !(mNewGameDecks.get(position).equalsIgnoreCase(parentActivity.getResources().getString(R.string.default_player_2) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_2)))
+                        && !(mNewGameDecks.get(position).equalsIgnoreCase(parentActivity.getResources().getString(R.string.default_player_3) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_3)))
+                        && !(mNewGameDecks.get(position).equalsIgnoreCase(parentActivity.getResources().getString(R.string.default_player_4) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_4)))) {
+                    aux = new Deck(mNewGameDecks.get(position).split(System.getProperty("line.separator"))[0], mNewGameDecks.get(position).split(System.getProperty("line.separator"))[1]);
+                }
+
+                createNewGameSelectPlayersDialog(view, position, aux);
+                newGameConfirmationDialog.dismiss();
+            }
+        });
     }
 
-    private void handleSpinners(Spinner spinnerName, Spinner spinnerDeck) {
+    private void createNewGameSelectPlayersDialog(final View view, final int position, final Deck selectedPlayer) {
+        View NewGamePlayersChoiceView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_two_spinners, null);
+
+        final Spinner spinnerPlayerName = (Spinner) NewGamePlayersChoiceView.findViewById(R.id.spinner1);
+        final Spinner spinnerPlayerDeck = (Spinner) NewGamePlayersChoiceView.findViewById(R.id.spinner2);
+        handleSpinners(spinnerPlayerName, spinnerPlayerDeck, selectedPlayer);
+
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
+        alertDialogBuilder.setView(NewGamePlayersChoiceView);
+        alertDialogBuilder.setTitle("New Game");
+        alertDialogBuilder.setMessage("Choose a Player and a Deck:");
+        alertDialogBuilder.setPositiveButton(selectedPlayer == null ? "ADD" : "UPDATE",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //Overridden at 'alertDialog.getButton' to avoid dismiss every time
+                    }
+                });
+        alertDialogBuilder.setNeutralButton("BACK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        createNewGameConfirmationDialog(view);
+                        dialog.cancel();
+                    }
+                });
+        if (selectedPlayer != null) {
+            alertDialogBuilder.setNegativeButton("REMOVE",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            mNewGameDecks.remove(position);
+                            if (!mNewGameDecks.contains(parentActivity.getResources().getString(R.string.default_player_1) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_1)))
+                                mNewGameDecks.add(position, parentActivity.getResources().getString(R.string.default_player_1) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_1));
+                            else if (!mNewGameDecks.contains(parentActivity.getResources().getString(R.string.default_player_2) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_2)))
+                                mNewGameDecks.add(position, parentActivity.getResources().getString(R.string.default_player_2) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_2));
+                            else if (!mNewGameDecks.contains(parentActivity.getResources().getString(R.string.default_player_3) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_3)))
+                                mNewGameDecks.add(position, parentActivity.getResources().getString(R.string.default_player_3) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_3));
+                            else if (!mNewGameDecks.contains(parentActivity.getResources().getString(R.string.default_player_4) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_4)))
+                                mNewGameDecks.add(position, parentActivity.getResources().getString(R.string.default_player_4) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_4));
+
+                            createNewGameConfirmationDialog(view);
+                            dialog.cancel();
+                        }
+                    });
+        }
+        newGameSelectPlayersDialog = alertDialogBuilder.create();
+        newGameSelectPlayersDialog.show();
+
+        //Override POSITIVE button - ADD
+        newGameSelectPlayersDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String auxPlayerName = spinnerPlayerName.getSelectedItem().toString();
+                String tempPlayerDeck = spinnerPlayerDeck.getSelectedItem().toString();
+
+                if (selectedPlayer != null && selectedPlayer.isEqualDeck(new Deck(auxPlayerName, tempPlayerDeck))) {
+                    createNewGameConfirmationDialog(v);
+                    newGameSelectPlayersDialog.dismiss();
+                } else {
+                    List<Deck> mDeckListAux = new ArrayList<>();
+                    mDeckListAux.add(new Deck(mNewGameDecks.get(0).split(System.getProperty("line.separator"))[0], mNewGameDecks.get(0).split(System.getProperty("line.separator"))[1]));
+                    mDeckListAux.add(new Deck(mNewGameDecks.get(1).split(System.getProperty("line.separator"))[0], mNewGameDecks.get(1).split(System.getProperty("line.separator"))[1]));
+                    mDeckListAux.add(new Deck(mNewGameDecks.get(2).split(System.getProperty("line.separator"))[0], mNewGameDecks.get(2).split(System.getProperty("line.separator"))[1]));
+                    mDeckListAux.add(new Deck(mNewGameDecks.get(3).split(System.getProperty("line.separator"))[0], mNewGameDecks.get(3).split(System.getProperty("line.separator"))[1]));
+
+                    if (!auxPlayerName.equalsIgnoreCase(parentActivity.getString(R.string.edh_spinner_player_hint)) && !tempPlayerDeck.equalsIgnoreCase(parentActivity.getString(R.string.edh_spinner_deck_hint))) {
+                        if (Record.isValidRecord(mDeckListAux, new Deck(auxPlayerName, tempPlayerDeck))) {
+                            mNewGameDecks.remove(position);
+                            mNewGameDecks.add(position, auxPlayerName + System.getProperty("line.separator") + tempPlayerDeck);
+                            newGameSelectPlayersDialog.dismiss();
+                            createNewGameConfirmationDialog(v);
+                        } else {
+                            Toast.makeText(view.getContext(), "ERROR: Player/Deck already added!", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(view.getContext(), "ERROR: invalid Player/Deck!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+    }
+
+    private void handleSpinners(final Spinner spinnerName, final Spinner spinnerDeck, final Deck selectedPlayerPreviously) {
         playersDB.open();
         decksDB.open();
 
@@ -615,12 +535,13 @@ public class DrawerMain {
         final ArrayAdapter<String> playersNameAdapter;
         playersNameAdapter = new ArrayAdapter<>(parentActivity, R.layout.row_spinner_selected, players);
         playersNameAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerName.setAdapter(playersNameAdapter);
 
         final ArrayAdapter<String> playersDeckAdapter;
         playersDeckAdapter = new ArrayAdapter<>(parentActivity, R.layout.row_spinner_selected, decks);
         playersDeckAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerDeck.setAdapter(playersDeckAdapter);
 
-        spinnerName.setAdapter(playersNameAdapter);
         spinnerName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -630,7 +551,34 @@ public class DrawerMain {
                 for (int i = 0; i < aux.size(); i++) {
                     decks.add(aux.get(i).getDeckName());
                 }
+
+                if (selectedPlayerPreviously != null) {
+                    //Set previously selection
+                    String comparePlayerDeck = selectedPlayerPreviously.getDeckName();
+                    if (!comparePlayerDeck.equals(null)) {
+                        int spinnerPosition = playersDeckAdapter.getPosition(comparePlayerDeck);
+                        spinnerDeck.setSelection(spinnerPosition);
+                    }
+                }
+
                 playersDeckAdapter.notifyDataSetChanged();
+
+                if (selectedPlayerPreviously != null) {
+                    //Set REMOVE button enabled or not
+                    if (spinnerName.getSelectedItem() != null && spinnerDeck.getSelectedItem() != null) {
+                        if (selectedPlayerPreviously.isEqualDeck(new Deck(spinnerName.getSelectedItem().toString(), spinnerDeck.getSelectedItem().toString()))) {
+                            if (newGameSelectPlayersDialog != null && newGameSelectPlayersDialog.isShowing())
+                                newGameSelectPlayersDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setEnabled(true);
+                            else if (logGameSelectPlayersDialog != null && logGameSelectPlayersDialog.isShowing())
+                                logGameSelectPlayersDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setEnabled(true);
+                        } else {
+                            if (newGameSelectPlayersDialog != null && newGameSelectPlayersDialog.isShowing())
+                                newGameSelectPlayersDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setEnabled(false);
+                            else if (logGameSelectPlayersDialog != null && logGameSelectPlayersDialog.isShowing())
+                                logGameSelectPlayersDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setEnabled(false);
+                        }
+                    }
+                }
             }
 
             @Override
@@ -638,7 +586,144 @@ public class DrawerMain {
             }
         });
 
-        spinnerDeck.setAdapter(playersDeckAdapter);
+        spinnerDeck.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (selectedPlayerPreviously != null) {
+                    //Set REMOVE button enabled or not
+                    if (spinnerName.getSelectedItem() != null && spinnerDeck.getSelectedItem() != null) {
+                        if (selectedPlayerPreviously.isEqualDeck(new Deck(spinnerName.getSelectedItem().toString(), spinnerDeck.getSelectedItem().toString()))) {
+                            if (newGameSelectPlayersDialog != null && newGameSelectPlayersDialog.isShowing())
+                                newGameSelectPlayersDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setEnabled(true);
+                            else if (logGameSelectPlayersDialog != null && logGameSelectPlayersDialog.isShowing())
+                                logGameSelectPlayersDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setEnabled(true);
+                        } else {
+                            if (newGameSelectPlayersDialog != null && newGameSelectPlayersDialog.isShowing())
+                                newGameSelectPlayersDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setEnabled(false);
+                            else if (logGameSelectPlayersDialog != null && logGameSelectPlayersDialog.isShowing())
+                                logGameSelectPlayersDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setEnabled(false);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        if (selectedPlayerPreviously != null) {
+            String comparePlayerName = selectedPlayerPreviously.getPlayerName();
+            if (!comparePlayerName.equals(null)) {
+                int spinnerPosition = playersNameAdapter.getPosition(comparePlayerName);
+                spinnerName.setSelection(spinnerPosition);
+            }
+        }
+    }
+
+    private class DrawerItemClickListener1 implements AdapterView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            switch (position) {
+                case 0: //NewGame
+                    mDrawerLayout.closeDrawers();
+
+                    mNewGameDecks = new ArrayList<>();
+                    mNewGameDecks.add(parentActivity.getResources().getString(R.string.default_player_1) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_1));
+                    mNewGameDecks.add(parentActivity.getResources().getString(R.string.default_player_2) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_2));
+                    mNewGameDecks.add(parentActivity.getResources().getString(R.string.default_player_3) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_3));
+                    mNewGameDecks.add(parentActivity.getResources().getString(R.string.default_player_4) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_4));
+
+                    List<Deck> mNewGameDecksActive = MainActivity.getActiveDecksList();
+                    for (int i = 0; i < mNewGameDecksActive.size(); i++) {
+                        mNewGameDecks.remove(i);
+                        mNewGameDecks.add(i, mNewGameDecksActive.get(i).getPlayerName() + System.getProperty("line.separator") + mNewGameDecksActive.get(i).getDeckName());
+                    }
+
+                    createNewGameConfirmationDialog(view);
+                    break;
+
+                case 1: //Log Game
+                    mDrawerLayout.closeDrawers();
+
+                    mLogGameDecks = new ArrayList<>();
+
+                    ArrayList<Deck> mDeadDecksList = MainActivity.getDeadDecksList();
+                    if (mDeadDecksList != null)
+                        for (int i = 0; i < mDeadDecksList.size(); i++)
+                            mLogGameDecks.add(mDeadDecksList.get(i).getPlayerName() + System.getProperty("line.separator") + mDeadDecksList.get(i).getDeckName());
+
+                    ArrayList<Deck> mAliveDecksList = MainActivity.getAliveDecksList();
+                    if (mAliveDecksList != null)
+                        for (int i = 0; i < mAliveDecksList.size(); i++)
+                            mLogGameDecks.add(mAliveDecksList.get(i).getPlayerName() + System.getProperty("line.separator") + mAliveDecksList.get(i).getDeckName());
+
+                    switch (mLogGameDecks.size()) {
+                        case 0:
+                            mLogGameDecks.add(parentActivity.getResources().getString(R.string.default_player_1) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_1));
+                            mLogGameDecks.add(parentActivity.getResources().getString(R.string.default_player_2) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_2));
+                            mLogGameDecks.add(parentActivity.getResources().getString(R.string.default_player_3) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_3));
+                            mLogGameDecks.add(parentActivity.getResources().getString(R.string.default_player_4) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_4));
+                            break;
+                        case 1:
+                            mLogGameDecks.add(parentActivity.getResources().getString(R.string.default_player_2) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_2));
+                            mLogGameDecks.add(parentActivity.getResources().getString(R.string.default_player_3) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_3));
+                            mLogGameDecks.add(parentActivity.getResources().getString(R.string.default_player_4) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_4));
+                            break;
+                        case 2:
+                            mLogGameDecks.add(parentActivity.getResources().getString(R.string.default_player_3) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_3));
+                            mLogGameDecks.add(parentActivity.getResources().getString(R.string.default_player_4) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_4));
+                            break;
+                        case 3:
+                            mLogGameDecks.add(parentActivity.getResources().getString(R.string.default_player_4) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_4));
+                            break;
+                    }
+                    Collections.reverse(mLogGameDecks);
+
+                    createLogGameConfirmationDialog(view);
+                    break;
+                case 2: //Roll a dice
+                    mDrawerLayout.closeDrawers();
+                    createDiceRangeDialog(view);
+                    break;
+                case 3: //Random a player
+                    mDrawerLayout.closeDrawers();
+                    Intent intent = new Intent(Constants.BROADCAST_INTENT);
+                    intent.putExtra(Constants.BROADCAST_MESSAGE_RANDOM_PLAYER_OPTION, Constants.BROADCAST_MESSAGE_RANDOM_PLAYER_OPTION);
+                    LocalBroadcastManager.getInstance(parentActivity).sendBroadcast(intent);
+                    break;
+                case 4: //Turns
+                    parentActivity.startActivity(new Intent(parentActivity, TurnActivity.class));
+                    break;
+            }
+        }
+    }
+
+    private class DrawerItemClickListener2 implements AdapterView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            switch (position) {
+                case 0: //Players
+                    mDrawerLayout.closeDrawers();
+                    parentActivity.startActivity(new Intent(parentActivity, PlayerListActivity.class));
+                    break;
+                case 1: //All Records
+                    mDrawerLayout.closeDrawers();
+                    Intent intent = new Intent(parentActivity, RecordsActivity.class);
+                    intent.putExtra("RECORDS_PLAYER_NAME", "");
+                    intent.putExtra("RECORDS_DECK_NAME", "");
+                    parentActivity.startActivity(intent);
+                    break;
+                case 2: //Settings
+                    mDrawerLayout.closeDrawers();
+                    parentActivity.startActivity(new Intent(parentActivity, SettingsActivity.class));
+                    break;
+                case 3: //About
+                    mDrawerLayout.closeDrawers();
+                    createAboutDialog(view);
+                    break;
+            }
+        }
     }
 
 }

@@ -29,6 +29,7 @@ public class Constants {
     public static String PREFERENCE_NAME = "PREF_EDH_LC";
     public static String PLAYER_NAME = "PLAYER_NAME";
     public static String PLAYER_DECK = "PLAYER_DECK";
+    public static String PLAYER_IS_ALIVE = "PLAYER_IS_ALIVE";
     public static String PLAYER_LIFE = "PLAYER_LIFE";
     public static String PLAYER_HISTORY_LIFE = "PLAYER_HISTORY_LIFE";
     public static String PLAYER_EDH_PREFIX = "PLAYER_EDH";

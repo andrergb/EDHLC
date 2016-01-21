@@ -66,9 +66,9 @@
             android:layout_weight="8"
             android:clickable="true"
             android:gravity="center_vertical|center_horizontal"
-            android:onClick="onClickActivePlayerLife"
             android:text="40"
             android:textSize="180sp" />
+        <!--android:onClick="onLongClickActivePlayerLife"-->
 
         <LinearLayout
             android:id="@+id/relativeLifeButtonRelative"
