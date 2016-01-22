@@ -425,7 +425,7 @@ public class DrawerMain {
 
                 if (players.size() >= 2) {
                     final Intent intent = new Intent(Constants.BROADCAST_INTENT);
-                    intent.putExtra(Constants.BROADCAST_MESSAGE_NEW_GAME_OPTION, Constants.BROADCAST_MESSAGE_NEW_GAME_OPTION_NO);
+                    intent.putExtra(Constants.BROADCAST_MESSAGE_NEW_GAME_OPTION, Constants.BROADCAST_MESSAGE_NEW_GAME_OPTION);
                     intent.putStringArrayListExtra(Constants.BROADCAST_MESSAGE_NEW_GAME_PLAYERS, players);
                     intent.putStringArrayListExtra(Constants.BROADCAST_MESSAGE_NEW_GAME_DECKS, decks);
                     intent.putStringArrayListExtra(Constants.BROADCAST_MESSAGE_NEW_GAME_COLOR, color);

@@ -815,15 +815,6 @@ public class MainActivity extends AppCompatActivity {
             mThreadLife4 = threadLife;
     }
 
-//    public void setActivePlayerName(String playerName) {
-//        mTextViewName.setText(playerName);
-//
-//        mTextViewP1Name.setText(mActivePlayer1.getPlayerName());
-//        mTextViewP2Name.setText(mActivePlayer2.getPlayerName());
-//        mTextViewP3Name.setText(mActivePlayer3.getPlayerName());
-//        mTextViewP4Name.setText(mActivePlayer4.getPlayerName());
-//    }
-
     private void createLayout(View view) {
         if (view != null) {
             mCheckBoxKeepScreenOn = (CheckBox) findViewById(R.id.checkBoxKeepScreenOn);
@@ -989,17 +980,11 @@ public class MainActivity extends AppCompatActivity {
     private void newGame(String option, Intent intent) {
         resetHistoryLife();
 
-//        if (option.equalsIgnoreCase(Constants.BROADCAST_MESSAGE_NEW_GAME_OPTION_YES)) {
-//            mActivePlayer1 = new ActivePlayer(mActivePlayer1.getPlayerName(), mActivePlayer1.getPlayerDeck(), true, Constants.INITIAL_PLAYER_LIFE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, mActivePlayer1.getPlayerColor(), 1);
-//            mActivePlayer2 = new ActivePlayer(mActivePlayer2.getPlayerName(), mActivePlayer2.getPlayerDeck(), true, Constants.INITIAL_PLAYER_LIFE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, mActivePlayer2.getPlayerColor(), 2);
-//            mActivePlayer3 = new ActivePlayer(mActivePlayer3.getPlayerName(), mActivePlayer3.getPlayerDeck(), true, Constants.INITIAL_PLAYER_LIFE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, mActivePlayer3.getPlayerColor(), 3);
-//            mActivePlayer4 = new ActivePlayer(mActivePlayer4.getPlayerName(), mActivePlayer4.getPlayerDeck(), true, Constants.INITIAL_PLAYER_LIFE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, mActivePlayer4.getPlayerColor(), 4);
-//        } else
-        if (option.equalsIgnoreCase(Constants.BROADCAST_MESSAGE_NEW_GAME_OPTION_NO)) {
+        if (option.equalsIgnoreCase(Constants.BROADCAST_MESSAGE_NEW_GAME_OPTION)) {
             ArrayList<String> players = intent.getStringArrayListExtra(Constants.BROADCAST_MESSAGE_NEW_GAME_PLAYERS);
             ArrayList<String> decks = intent.getStringArrayListExtra(Constants.BROADCAST_MESSAGE_NEW_GAME_DECKS);
             ArrayList<String> color = intent.getStringArrayListExtra(Constants.BROADCAST_MESSAGE_NEW_GAME_COLOR);
-            //TODO DB
+
             int[] defaultColor = getResources().getIntArray(R.array.edh_default);
             mActivePlayer1 = new ActivePlayer(this.getResources().getString(R.string.default_player_1), this.getResources().getString(R.string.default_deck_1), true, Constants.INITIAL_PLAYER_LIFE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, defaultColor, 1);
             mActivePlayer2 = new ActivePlayer(this.getResources().getString(R.string.default_player_2), this.getResources().getString(R.string.default_deck_2), true, Constants.INITIAL_PLAYER_LIFE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, defaultColor, 2);

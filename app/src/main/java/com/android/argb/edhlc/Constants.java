@@ -46,8 +46,6 @@ public class Constants {
 
     public static String BROADCAST_MESSAGE_RANDOM_PLAYER_OPTION = "broadcast_message_random_player_option";
     public static String BROADCAST_MESSAGE_NEW_GAME_OPTION = "broadcast_message_new_game_option";
-//    public static String BROADCAST_MESSAGE_NEW_GAME_OPTION_YES = "broadcast_message_new_game_option_yes";
-    public static String BROADCAST_MESSAGE_NEW_GAME_OPTION_NO = "broadcast_message_new_game_option_no";
     public static String BROADCAST_MESSAGE_NEW_GAME_PLAYERS = "broadcast_message_new_game_players";
     public static String BROADCAST_MESSAGE_NEW_GAME_DECKS = "broadcast_message_new_game_decks";
     public static String BROADCAST_MESSAGE_NEW_GAME_COLOR = "broadcast_message_new_game_color";
