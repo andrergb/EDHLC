@@ -16,7 +16,8 @@ public class DecksDbHelper extends SQLiteOpenHelper {
             + DecksContract.DecksEntry.TABLE_NAME + "("
             + DecksContract.DecksEntry.COLUMN_ID + " integer primary key autoincrement, "
             + DecksContract.DecksEntry.COLUMN_PLAYER_NAME + " text not null, "
-            + DecksContract.DecksEntry.COLUMN_DECK_NAME + " text not null);";
+            + DecksContract.DecksEntry.COLUMN_DECK_NAME + " text not null, "
+            + DecksContract.DecksEntry.COLUMN_DECK_COLOR + " text not null);";
 
     public DecksDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

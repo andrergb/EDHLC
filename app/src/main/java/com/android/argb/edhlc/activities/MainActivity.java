@@ -104,10 +104,10 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<Deck> getAliveDecksList() {
         mAliveDecksList = new ArrayList<>();
 
-        Deck auxDeckPlayer1 = new Deck(mActivePlayer1.getPlayerName(), mActivePlayer1.getPlayerDeck());
-        Deck auxDeckPlayer2 = new Deck(mActivePlayer2.getPlayerName(), mActivePlayer2.getPlayerDeck());
-        Deck auxDeckPlayer3 = new Deck(mActivePlayer3.getPlayerName(), mActivePlayer3.getPlayerDeck());
-        Deck auxDeckPlayer4 = new Deck(mActivePlayer4.getPlayerName(), mActivePlayer4.getPlayerDeck());
+        Deck auxDeckPlayer1 = new Deck(mActivePlayer1.getPlayerName(), mActivePlayer1.getPlayerDeck(), mActivePlayer1.getPlayerColor());
+        Deck auxDeckPlayer2 = new Deck(mActivePlayer2.getPlayerName(), mActivePlayer2.getPlayerDeck(), mActivePlayer2.getPlayerColor());
+        Deck auxDeckPlayer3 = new Deck(mActivePlayer3.getPlayerName(), mActivePlayer3.getPlayerDeck(), mActivePlayer3.getPlayerColor());
+        Deck auxDeckPlayer4 = new Deck(mActivePlayer4.getPlayerName(), mActivePlayer4.getPlayerDeck(), mActivePlayer4.getPlayerColor());
 
         for (int i = 0; i < mAliveDecksList.size(); i++)
             if (!mAliveDecksList.get(i).isEqualDeck(auxDeckPlayer1) && !mAliveDecksList.get(i).isEqualDeck(auxDeckPlayer2) && !mAliveDecksList.get(i).isEqualDeck(auxDeckPlayer3) && !mAliveDecksList.get(i).isEqualDeck(auxDeckPlayer4))
@@ -154,10 +154,10 @@ public class MainActivity extends AppCompatActivity {
 
     public static ArrayList<Deck> getDeadDecksList() {
         if (mDeadDecksList != null) {
-            Deck auxDeckPlayer1 = new Deck(mActivePlayer1.getPlayerName(), mActivePlayer1.getPlayerDeck());
-            Deck auxDeckPlayer2 = new Deck(mActivePlayer2.getPlayerName(), mActivePlayer2.getPlayerDeck());
-            Deck auxDeckPlayer3 = new Deck(mActivePlayer3.getPlayerName(), mActivePlayer3.getPlayerDeck());
-            Deck auxDeckPlayer4 = new Deck(mActivePlayer4.getPlayerName(), mActivePlayer4.getPlayerDeck());
+            Deck auxDeckPlayer1 = new Deck(mActivePlayer1.getPlayerName(), mActivePlayer1.getPlayerDeck(), mActivePlayer1.getPlayerColor());
+            Deck auxDeckPlayer2 = new Deck(mActivePlayer2.getPlayerName(), mActivePlayer2.getPlayerDeck(), mActivePlayer2.getPlayerColor());
+            Deck auxDeckPlayer3 = new Deck(mActivePlayer3.getPlayerName(), mActivePlayer3.getPlayerDeck(), mActivePlayer3.getPlayerColor());
+            Deck auxDeckPlayer4 = new Deck(mActivePlayer4.getPlayerName(), mActivePlayer4.getPlayerDeck(), mActivePlayer4.getPlayerColor());
 
             for (int i = 0; i < mDeadDecksList.size(); i++)
                 if (!mDeadDecksList.get(i).isEqualDeck(auxDeckPlayer1) && !mDeadDecksList.get(i).isEqualDeck(auxDeckPlayer2) && !mDeadDecksList.get(i).isEqualDeck(auxDeckPlayer3) && !mDeadDecksList.get(i).isEqualDeck(auxDeckPlayer4))
@@ -169,13 +169,13 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<Deck> getActiveDecksList() {
         ArrayList<Deck> auxDeckList = new ArrayList<>();
         if (getNumOfActivePlayers() >= 1)
-            auxDeckList.add(new Deck(mActivePlayer1.getPlayerName(), mActivePlayer1.getPlayerDeck()));
+            auxDeckList.add(new Deck(mActivePlayer1.getPlayerName(), mActivePlayer1.getPlayerDeck(), mActivePlayer1.getPlayerColor()));
         if (getNumOfActivePlayers() >= 2)
-            auxDeckList.add(new Deck(mActivePlayer2.getPlayerName(), mActivePlayer2.getPlayerDeck()));
+            auxDeckList.add(new Deck(mActivePlayer2.getPlayerName(), mActivePlayer2.getPlayerDeck(), mActivePlayer2.getPlayerColor()));
         if (getNumOfActivePlayers() >= 3)
-            auxDeckList.add(new Deck(mActivePlayer3.getPlayerName(), mActivePlayer3.getPlayerDeck()));
+            auxDeckList.add(new Deck(mActivePlayer3.getPlayerName(), mActivePlayer3.getPlayerDeck(), mActivePlayer3.getPlayerColor()));
         if (getNumOfActivePlayers() >= 4)
-            auxDeckList.add(new Deck(mActivePlayer4.getPlayerName(), mActivePlayer4.getPlayerDeck()));
+            auxDeckList.add(new Deck(mActivePlayer4.getPlayerName(), mActivePlayer4.getPlayerDeck(), mActivePlayer4.getPlayerColor()));
 
         return auxDeckList;
     }
@@ -214,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
                             mDeadDecksList = new ArrayList<>();
 
                         for (int i = 0; i < MainActivity.mDeadDecksList.size(); i++) {
-                            if (mDeadDecksList.get(i).isEqualDeck(new Deck(getCurrentActivePlayer().getPlayerName(), getCurrentActivePlayer().getPlayerDeck()))) {
+                            if (mDeadDecksList.get(i).isEqualDeck(new Deck(getCurrentActivePlayer().getPlayerName(), getCurrentActivePlayer().getPlayerDeck(), getCurrentActivePlayer().getPlayerColor()))) {
                                 mDeadDecksList.remove(i);
                                 break;
                             }
@@ -275,7 +275,7 @@ public class MainActivity extends AppCompatActivity {
                         getCurrentActivePlayer().setPlayerIsAlive(false);
                         if (mDeadDecksList == null)
                             mDeadDecksList = new ArrayList<>();
-                        mDeadDecksList.add(new Deck(getCurrentActivePlayer().getPlayerName(), getCurrentActivePlayer().getPlayerDeck()));
+                        mDeadDecksList.add(new Deck(getCurrentActivePlayer().getPlayerName(), getCurrentActivePlayer().getPlayerDeck(), getCurrentActivePlayer().getPlayerColor()));
                         Toast.makeText(view.getContext(), getCurrentActivePlayer().getPlayerName() + " has been defeated!", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -298,6 +298,7 @@ public class MainActivity extends AppCompatActivity {
                     if (mColor[i] == color)
                         color_dark = mColor_dark[i];
                 getCurrentActivePlayer().setPlayerColor(new int[]{color, color_dark});
+                mDecksDB.updateDeckColor(new Deck(getCurrentActivePlayer().getPlayerName(), getCurrentActivePlayer().getPlayerDeck(), getCurrentActivePlayer().getPlayerColor()));
             }
         });
         colorCalendar.show(getFragmentManager(), "cal");
@@ -306,10 +307,10 @@ public class MainActivity extends AppCompatActivity {
     public void createPlayerNameDialog(final View view) {
         if (mActiveDecksList == null) {
             mActiveDecksList = new ArrayList<>();
-            mActiveDecksList.add(new Deck(mActivePlayer1.getPlayerName(), mActivePlayer1.getPlayerDeck()));
-            mActiveDecksList.add(new Deck(mActivePlayer2.getPlayerName(), mActivePlayer2.getPlayerDeck()));
-            mActiveDecksList.add(new Deck(mActivePlayer3.getPlayerName(), mActivePlayer3.getPlayerDeck()));
-            mActiveDecksList.add(new Deck(mActivePlayer4.getPlayerName(), mActivePlayer4.getPlayerDeck()));
+            mActiveDecksList.add(new Deck(mActivePlayer1.getPlayerName(), mActivePlayer1.getPlayerDeck(), mActivePlayer1.getPlayerColor()));
+            mActiveDecksList.add(new Deck(mActivePlayer2.getPlayerName(), mActivePlayer2.getPlayerDeck(), mActivePlayer2.getPlayerColor()));
+            mActiveDecksList.add(new Deck(mActivePlayer3.getPlayerName(), mActivePlayer3.getPlayerDeck(), mActivePlayer3.getPlayerColor()));
+            mActiveDecksList.add(new Deck(mActivePlayer4.getPlayerName(), mActivePlayer4.getPlayerDeck(), mActivePlayer4.getPlayerColor()));
         }
 
         View NewGamePlayersChoiceView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_two_spinners, null);
@@ -343,17 +344,26 @@ public class MainActivity extends AppCompatActivity {
                 String tempPlayerName = spinnerPlayerName.getSelectedItem().toString();
                 String tempPlayerDeck = spinnerPlayerDeck.getSelectedItem().toString();
 
+                Deck aux = mDecksDB.getDeck(tempPlayerName, tempPlayerDeck);
+                int[] tempPlayerColor = aux.getDeckColor();
+
                 if (!tempPlayerName.equalsIgnoreCase(getResources().getString(R.string.edh_spinner_player_hint))
                         && !tempPlayerDeck.equalsIgnoreCase(getResources().getString(R.string.edh_spinner_deck_hint))) {
-
-                    mActiveDecksList.remove(new Deck(getCurrentActivePlayer().getPlayerName(), getCurrentActivePlayer().getPlayerDeck()));
-                    mActiveDecksList.add(new Deck(tempPlayerName, tempPlayerDeck));
-                    if (Record.isValidRecord(mActiveDecksList)) {
+                    List<Deck> mDeckListAux = new ArrayList<>(mActiveDecksList);
+                    if (Record.isValidRecord(mDeckListAux, new Deck(tempPlayerName, tempPlayerDeck))) {
+                        for (int i = 0; i < mActiveDecksList.size(); i++) {
+                            if (mActiveDecksList.get(i).getPlayerName().equalsIgnoreCase(getCurrentActivePlayer().getPlayerName())
+                                    && mActiveDecksList.get(i).getDeckName().equalsIgnoreCase(getCurrentActivePlayer().getPlayerDeck())) {
+                                mActiveDecksList.remove(i);
+                                mActiveDecksList.add(i, new Deck(tempPlayerName, tempPlayerDeck, tempPlayerColor));
+                                break;
+                            }
+                        }
                         getCurrentActivePlayer().setPlayerName(tempPlayerName);
                         getCurrentActivePlayer().setPlayerDeck(tempPlayerDeck);
+                        getCurrentActivePlayer().setPlayerColor(tempPlayerColor);
                         alertDialog.dismiss();
                     } else {
-                        mActiveDecksList.remove(mActiveDecksList.size() - 1);
                         Toast.makeText(view.getContext(), "ERROR: Player/Deck already added!", Toast.LENGTH_SHORT).show();
                     }
                 } else {
@@ -712,13 +722,13 @@ public class MainActivity extends AppCompatActivity {
         if (mDeadDecksList == null) {
             mDeadDecksList = new ArrayList<>();
             if (!mActivePlayer1.getPlayerIsAlive())
-                mDeadDecksList.add(new Deck(mActivePlayer1.getPlayerName(), mActivePlayer1.getPlayerDeck()));
+                mDeadDecksList.add(new Deck(mActivePlayer1.getPlayerName(), mActivePlayer1.getPlayerDeck(), mActivePlayer1.getPlayerColor()));
             if (!mActivePlayer2.getPlayerIsAlive())
-                mDeadDecksList.add(new Deck(mActivePlayer2.getPlayerName(), mActivePlayer2.getPlayerDeck()));
+                mDeadDecksList.add(new Deck(mActivePlayer2.getPlayerName(), mActivePlayer2.getPlayerDeck(), mActivePlayer2.getPlayerColor()));
             if (!mActivePlayer3.getPlayerIsAlive())
-                mDeadDecksList.add(new Deck(mActivePlayer3.getPlayerName(), mActivePlayer3.getPlayerDeck()));
+                mDeadDecksList.add(new Deck(mActivePlayer3.getPlayerName(), mActivePlayer3.getPlayerDeck(), mActivePlayer3.getPlayerColor()));
             if (!mActivePlayer4.getPlayerIsAlive())
-                mDeadDecksList.add(new Deck(mActivePlayer4.getPlayerName(), mActivePlayer4.getPlayerDeck()));
+                mDeadDecksList.add(new Deck(mActivePlayer4.getPlayerName(), mActivePlayer4.getPlayerDeck(), mActivePlayer4.getPlayerColor()));
         }
 
         LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, new IntentFilter(Constants.BROADCAST_INTENT));
@@ -979,36 +989,42 @@ public class MainActivity extends AppCompatActivity {
     private void newGame(String option, Intent intent) {
         resetHistoryLife();
 
-        if (option.equalsIgnoreCase(Constants.BROADCAST_MESSAGE_NEW_GAME_OPTION_YES)) {
-            mActivePlayer1 = new ActivePlayer(mActivePlayer1.getPlayerName(), mActivePlayer1.getPlayerDeck(), true, Constants.INITIAL_PLAYER_LIFE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, mActivePlayer1.getPlayerColor(), 1);
-            mActivePlayer2 = new ActivePlayer(mActivePlayer2.getPlayerName(), mActivePlayer2.getPlayerDeck(), true, Constants.INITIAL_PLAYER_LIFE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, mActivePlayer2.getPlayerColor(), 2);
-            mActivePlayer3 = new ActivePlayer(mActivePlayer3.getPlayerName(), mActivePlayer3.getPlayerDeck(), true, Constants.INITIAL_PLAYER_LIFE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, mActivePlayer3.getPlayerColor(), 3);
-            mActivePlayer4 = new ActivePlayer(mActivePlayer4.getPlayerName(), mActivePlayer4.getPlayerDeck(), true, Constants.INITIAL_PLAYER_LIFE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, mActivePlayer4.getPlayerColor(), 4);
-        } else if (option.equalsIgnoreCase(Constants.BROADCAST_MESSAGE_NEW_GAME_OPTION_NO)) {
+//        if (option.equalsIgnoreCase(Constants.BROADCAST_MESSAGE_NEW_GAME_OPTION_YES)) {
+//            mActivePlayer1 = new ActivePlayer(mActivePlayer1.getPlayerName(), mActivePlayer1.getPlayerDeck(), true, Constants.INITIAL_PLAYER_LIFE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, mActivePlayer1.getPlayerColor(), 1);
+//            mActivePlayer2 = new ActivePlayer(mActivePlayer2.getPlayerName(), mActivePlayer2.getPlayerDeck(), true, Constants.INITIAL_PLAYER_LIFE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, mActivePlayer2.getPlayerColor(), 2);
+//            mActivePlayer3 = new ActivePlayer(mActivePlayer3.getPlayerName(), mActivePlayer3.getPlayerDeck(), true, Constants.INITIAL_PLAYER_LIFE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, mActivePlayer3.getPlayerColor(), 3);
+//            mActivePlayer4 = new ActivePlayer(mActivePlayer4.getPlayerName(), mActivePlayer4.getPlayerDeck(), true, Constants.INITIAL_PLAYER_LIFE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, mActivePlayer4.getPlayerColor(), 4);
+//        } else
+        if (option.equalsIgnoreCase(Constants.BROADCAST_MESSAGE_NEW_GAME_OPTION_NO)) {
             ArrayList<String> players = intent.getStringArrayListExtra(Constants.BROADCAST_MESSAGE_NEW_GAME_PLAYERS);
             ArrayList<String> decks = intent.getStringArrayListExtra(Constants.BROADCAST_MESSAGE_NEW_GAME_DECKS);
-
+            ArrayList<String> color = intent.getStringArrayListExtra(Constants.BROADCAST_MESSAGE_NEW_GAME_COLOR);
+            //TODO DB
             int[] defaultColor = getResources().getIntArray(R.array.edh_default);
-            mActivePlayer1 = new ActivePlayer("ActivePlayer 1", "Deck1", true, Constants.INITIAL_PLAYER_LIFE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, defaultColor, 1);
-            mActivePlayer2 = new ActivePlayer("ActivePlayer 2", "Deck2", true, Constants.INITIAL_PLAYER_LIFE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, defaultColor, 2);
-            mActivePlayer3 = new ActivePlayer("ActivePlayer 3", "Deck3", true, Constants.INITIAL_PLAYER_LIFE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, defaultColor, 3);
-            mActivePlayer4 = new ActivePlayer("ActivePlayer 4", "Deck4", true, Constants.INITIAL_PLAYER_LIFE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, defaultColor, 4);
+            mActivePlayer1 = new ActivePlayer(this.getResources().getString(R.string.default_player_1), this.getResources().getString(R.string.default_deck_1), true, Constants.INITIAL_PLAYER_LIFE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, defaultColor, 1);
+            mActivePlayer2 = new ActivePlayer(this.getResources().getString(R.string.default_player_2), this.getResources().getString(R.string.default_deck_2), true, Constants.INITIAL_PLAYER_LIFE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, defaultColor, 2);
+            mActivePlayer3 = new ActivePlayer(this.getResources().getString(R.string.default_player_3), this.getResources().getString(R.string.default_deck_3), true, Constants.INITIAL_PLAYER_LIFE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, defaultColor, 3);
+            mActivePlayer4 = new ActivePlayer(this.getResources().getString(R.string.default_player_4), this.getResources().getString(R.string.default_deck_4), true, Constants.INITIAL_PLAYER_LIFE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, Constants.INITIAL_EDH_DAMAGE_INT, defaultColor, 4);
 
             if (players.size() >= 1) {
                 mActivePlayer1.setPlayerName(players.get(0));
                 mActivePlayer1.setPlayerDeck(decks.get(0));
+                mActivePlayer1.setPlayerColor(new int[]{Integer.valueOf(color.get(0).split(System.getProperty("path.separator"))[0]), Integer.valueOf(color.get(0).split(System.getProperty("path.separator"))[1])});
             }
             if (players.size() >= 2) {
                 mActivePlayer2.setPlayerName(players.get(1));
                 mActivePlayer2.setPlayerDeck(decks.get(1));
+                mActivePlayer2.setPlayerColor(new int[]{Integer.valueOf(color.get(1).split(System.getProperty("path.separator"))[0]), Integer.valueOf(color.get(1).split(System.getProperty("path.separator"))[1])});
             }
             if (players.size() >= 3) {
                 mActivePlayer3.setPlayerName(players.get(2));
                 mActivePlayer3.setPlayerDeck(decks.get(2));
+                mActivePlayer3.setPlayerColor(new int[]{Integer.valueOf(color.get(2).split(System.getProperty("path.separator"))[0]), Integer.valueOf(color.get(2).split(System.getProperty("path.separator"))[1])});
             }
             if (players.size() >= 4) {
                 mActivePlayer4.setPlayerName(players.get(3));
                 mActivePlayer4.setPlayerDeck(decks.get(3));
+                mActivePlayer4.setPlayerColor(new int[]{Integer.valueOf(color.get(3).split(System.getProperty("path.separator"))[0]), Integer.valueOf(color.get(3).split(System.getProperty("path.separator"))[1])});
             }
 
             mMainSectionsPagerAdapter.setCount(players.size());
@@ -1018,10 +1034,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         mActiveDecksList = new ArrayList<>();
-        mActiveDecksList.add(new Deck(mActivePlayer1.getPlayerName(), mActivePlayer1.getPlayerDeck()));
-        mActiveDecksList.add(new Deck(mActivePlayer2.getPlayerName(), mActivePlayer2.getPlayerDeck()));
-        mActiveDecksList.add(new Deck(mActivePlayer3.getPlayerName(), mActivePlayer3.getPlayerDeck()));
-        mActiveDecksList.add(new Deck(mActivePlayer4.getPlayerName(), mActivePlayer4.getPlayerDeck()));
+        mActiveDecksList.add(new Deck(mActivePlayer1.getPlayerName(), mActivePlayer1.getPlayerDeck(), mActivePlayer1.getPlayerColor()));
+        mActiveDecksList.add(new Deck(mActivePlayer2.getPlayerName(), mActivePlayer2.getPlayerDeck(), mActivePlayer2.getPlayerColor()));
+        mActiveDecksList.add(new Deck(mActivePlayer3.getPlayerName(), mActivePlayer3.getPlayerDeck(), mActivePlayer3.getPlayerColor()));
+        mActiveDecksList.add(new Deck(mActivePlayer4.getPlayerName(), mActivePlayer4.getPlayerDeck(), mActivePlayer4.getPlayerColor()));
 
         mDeadDecksList = new ArrayList<>();
 

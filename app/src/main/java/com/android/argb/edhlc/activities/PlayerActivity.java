@@ -37,18 +37,83 @@ import java.util.List;
 public class PlayerActivity extends ActionBarActivity {
 
     private static CheckBox checkBox;
+    BroadcastReceiver mBroadcastReceiver;
     private TextView textViewPlayerName;
     private TextView textViewPlayerTotalDecks;
     private TextView textViewPlayerGames;
     private ListView listViewPlayerDecks;
-
     private String mPlayerName;
-
     private DecksDataAccessObject decksDB;
     private RecordsDataAccessObject recordsDB;
-
     private DrawerPlayer mDrawerPlayer;
-    BroadcastReceiver mBroadcastReceiver;
+
+    public void createLayout(View view) {
+        if (view != null) {
+            checkBox = (CheckBox) findViewById(R.id.checkBoxKeepScreenOn);
+            textViewPlayerName = (TextView) findViewById(R.id.textViewPlayerName);
+            textViewPlayerTotalDecks = (TextView) findViewById(R.id.textViewPlayerTotalDecks);
+            textViewPlayerGames = (TextView) findViewById(R.id.textViewPlayerGames);
+
+            listViewPlayerDecks = (ListView) findViewById(R.id.listViewPlayerDecks);
+            listViewPlayerDecks.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    String playerDeck = decksDB.getAllDeckByPlayerName(mPlayerName).get(position).getDeckName();
+                    if (recordsDB.getAllRecordsByDeck(new Deck(mPlayerName, playerDeck)).size() > 0) {
+                        Intent intent = new Intent(PlayerActivity.this, RecordsActivity.class);
+                        intent.putExtra("RECORDS_PLAYER_NAME", mPlayerName);
+                        intent.putExtra("RECORDS_DECK_NAME", playerDeck);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(PlayerActivity.this, "No records to show", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mDrawerPlayer.isDrawerOpen()) {
+            mDrawerPlayer.dismiss();
+        } else {
+            Intent intent = new Intent(PlayerActivity.this, PlayerListActivity.class);
+            startActivity(intent);
+            this.finish();
+            super.onBackPressed();
+        }
+    }
+
+    public void onClickKeepScreenOn(View view) {
+        if (!checkBox.isChecked()) {
+            getWindow().clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 0).commit();
+        } else {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 1).commit();
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerPlayer.getDrawerToggle().onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_overview, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //DrawerMain menu
+        if (mDrawerPlayer.getDrawerToggle().onOptionsItemSelected(item))
+            return true;
+
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +153,19 @@ public class PlayerActivity extends ActionBarActivity {
         createLayout(this.findViewById(android.R.id.content));
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        decksDB.close();
+        recordsDB.close();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        mDrawerPlayer.getDrawerToggle().syncState();
+    }
 
     @Override
     protected void onResume() {
@@ -107,84 +185,6 @@ public class PlayerActivity extends ActionBarActivity {
         recordsDB.open();
 
         updateLayout();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        decksDB.close();
-        recordsDB.close();
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_overview, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        //DrawerMain menu
-        if (mDrawerPlayer.getDrawerToggle().onOptionsItemSelected(item))
-            return true;
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        mDrawerPlayer.getDrawerToggle().syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        mDrawerPlayer.getDrawerToggle().onConfigurationChanged(newConfig);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (mDrawerPlayer.isDrawerOpen())
-            mDrawerPlayer.dismiss();
-        else
-            super.onBackPressed();
-    }
-
-    public void onClickKeepScreenOn(View view) {
-        if (!checkBox.isChecked()) {
-            getWindow().clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-            getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 0).commit();
-        } else {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-            getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 1).commit();
-        }
-    }
-
-    public void createLayout(View view) {
-        if (view != null) {
-            checkBox = (CheckBox) findViewById(R.id.checkBoxKeepScreenOn);
-            textViewPlayerName = (TextView) findViewById(R.id.textViewPlayerName);
-            textViewPlayerTotalDecks = (TextView) findViewById(R.id.textViewPlayerTotalDecks);
-            textViewPlayerGames = (TextView) findViewById(R.id.textViewPlayerGames);
-
-            listViewPlayerDecks = (ListView) findViewById(R.id.listViewPlayerDecks);
-            listViewPlayerDecks.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    String playerDeck = decksDB.getAllDeckByPlayerName(mPlayerName).get(position).getDeckName();
-                    if (recordsDB.getAllRecordsByDeck(new Deck(mPlayerName, playerDeck)).size() > 0) {
-                        Intent intent = new Intent(PlayerActivity.this, RecordsActivity.class);
-                        intent.putExtra("RECORDS_PLAYER_NAME", mPlayerName);
-                        intent.putExtra("RECORDS_DECK_NAME", playerDeck);
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(PlayerActivity.this, "No records to show", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-        }
     }
 
     private void updateLayout() {

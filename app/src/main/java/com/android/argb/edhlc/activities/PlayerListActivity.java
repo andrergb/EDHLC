@@ -1,5 +1,6 @@
 package com.android.argb.edhlc.activities;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -32,6 +33,7 @@ import java.util.List;
 
 public class PlayerListActivity extends ActionBarActivity {
 
+    private Activity activity;
     private static CheckBox checkBox;
     private ListView listViewPlayers;
     private PlayersDataAccessObject playersDB;
@@ -42,6 +44,7 @@ public class PlayerListActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        activity = this;
         setContentView(R.layout.activity_playerlist);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -156,6 +159,7 @@ public class PlayerListActivity extends ActionBarActivity {
                 Intent intent = new Intent(PlayerListActivity.this, PlayerActivity.class);
                 intent.putExtra("PLAYERNAME", listViewPlayers.getItemAtPosition(position).toString());
                 startActivity(intent);
+                activity.finish();
             }
         });
     }

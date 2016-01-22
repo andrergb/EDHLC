@@ -79,6 +79,9 @@ public class DrawerPlayer {
 //        decksDB = new DecksDataAccessObject(parentActivity);
     }
 
+    public void dismiss() {
+        mDrawerLayout.closeDrawers();
+    }
 
     public ActionBarDrawerToggle getDrawerToggle() {
         return mDrawerToggle;
@@ -88,57 +91,24 @@ public class DrawerPlayer {
         return (mDrawerLayout.isDrawerOpen(linearLayoutDrawer));
     }
 
-
-    public void dismiss() {
-        mDrawerLayout.closeDrawers();
-    }
-
-    private class DrawerItemClickListener1 implements AdapterView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            switch (position) {
-                case 0: //AddDeck
-                    createAddDeckDialog(view);
-                    mDrawerLayout.closeDrawers();
-                    break;
-                case 1: //EditDeck
-                    mDrawerLayout.closeDrawers();
-                    break;
-                case 2: //RemoveDeck
-                    createRemoveDeckDialog(view);
-                    mDrawerLayout.closeDrawers();
-                    break;
-            }
+    private void createAboutDialog(View view) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
+        alertDialogBuilder.setTitle("About " + parentActivity.getResources().getString(R.string.app_name));
+        String message;
+        try {
+            message = "\nVersion: " + parentActivity.getPackageManager().getPackageInfo(parentActivity.getPackageName(), 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            message = "";
         }
-    }
-
-    private class DrawerItemClickListener2 implements AdapterView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            switch (position) {
-                case 0: //Players
-                    mDrawerLayout.closeDrawers();
-                    parentActivity.startActivity(new Intent(parentActivity, PlayerListActivity.class));
-                    parentActivity.finish();
-                    break;
-                case 1: //All Records
-                    mDrawerLayout.closeDrawers();
-                    Intent intent = new Intent(parentActivity, RecordsActivity.class);
-                    intent.putExtra("RECORDS_PLAYER_NAME", "");
-                    intent.putExtra("RECORDS_DECK_NAME", "");
-                    parentActivity.startActivity(intent);
-                    parentActivity.finish();
-                    break;
-                case 2: //Settings
-                    mDrawerLayout.closeDrawers();
-                    parentActivity.startActivity(new Intent(parentActivity, SettingsActivity.class));
-                    break;
-                case 3: //About
-                    mDrawerLayout.closeDrawers();
-                    createAboutDialog(view);
-                    break;
-            }
-        }
+        alertDialogBuilder.setMessage("Created by ARGB" + message);
+        alertDialogBuilder.setPositiveButton("Ok",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
     private void createAddDeckDialog(final View view) {
@@ -152,10 +122,11 @@ public class DrawerPlayer {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         String tempName = userInput.getText().toString();
+
                         if (!tempName.equalsIgnoreCase("")) {
                             DecksDataAccessObject decksDB = new DecksDataAccessObject(parentActivity);
                             decksDB.open();
-                            long result = decksDB.createDeck(new Deck(currentPlayer, tempName));
+                            long result = decksDB.createDeck(new Deck(currentPlayer, tempName, new int[]{parentActivity.getResources().getColor(R.color.edh_default_primary), parentActivity.getResources().getColor(R.color.edh_default_secondary)}));
                             decksDB.close();
                             if (result != -1) {
                                 Toast.makeText(view.getContext(), tempName + " added!", Toast.LENGTH_SHORT).show();
@@ -204,8 +175,8 @@ public class DrawerPlayer {
             alertDialogBuilder.setPositiveButton("Remove",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-
                             String tempName = spinnerDecks.getSelectedItem().toString();
+
                             if (!tempName.equalsIgnoreCase("")) {
 
                                 DecksDataAccessObject decksDb = new DecksDataAccessObject(parentActivity);
@@ -242,24 +213,56 @@ public class DrawerPlayer {
         alertDialog.show();
     }
 
-    private void createAboutDialog(View view) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
-        alertDialogBuilder.setTitle("About " + parentActivity.getResources().getString(R.string.app_name));
-        String message;
-        try {
-            message = "\nVersion: " + parentActivity.getPackageManager().getPackageInfo(parentActivity.getPackageName(), 0).versionName;
-        } catch (PackageManager.NameNotFoundException e) {
-            message = "";
+    private class DrawerItemClickListener1 implements AdapterView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            switch (position) {
+                case 0: //AddDeck
+                    createAddDeckDialog(view);
+                    mDrawerLayout.closeDrawers();
+                    break;
+                case 1: //EditDeck
+                    mDrawerLayout.closeDrawers();
+                    break;
+                case 2: //RemoveDeck
+                    createRemoveDeckDialog(view);
+                    mDrawerLayout.closeDrawers();
+                    break;
+            }
         }
-        alertDialogBuilder.setMessage("Created by ARGB" + message);
-        alertDialogBuilder.setPositiveButton("Ok",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
+    }
+
+    private class DrawerItemClickListener2 implements AdapterView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            switch (position) {
+                case 0: //Home
+                    mDrawerLayout.closeDrawers();
+                    parentActivity.finish();
+                    break;
+                case 1: //Players
+                    mDrawerLayout.closeDrawers();
+                    parentActivity.startActivity(new Intent(parentActivity, PlayerListActivity.class));
+                    parentActivity.finish();
+                    break;
+                case 2: //All Records
+                    mDrawerLayout.closeDrawers();
+                    Intent intent = new Intent(parentActivity, RecordsActivity.class);
+                    intent.putExtra("RECORDS_PLAYER_NAME", "");
+                    intent.putExtra("RECORDS_DECK_NAME", "");
+                    parentActivity.startActivity(intent);
+                    parentActivity.finish();
+                    break;
+                case 3: //Settings
+                    mDrawerLayout.closeDrawers();
+                    parentActivity.startActivity(new Intent(parentActivity, SettingsActivity.class));
+                    break;
+                case 4: //About
+                    mDrawerLayout.closeDrawers();
+                    createAboutDialog(view);
+                    break;
+            }
+        }
     }
 
 }

@@ -64,10 +64,10 @@ public class StableArrayAdapter extends ArrayAdapter<String> {
         LinearLayout linearLayoutRowTwoItemListBorder = (LinearLayout) view.findViewById(R.id.LinearLayoutRowTwoItemListBorder);
         LinearLayout linearLayoutRowTwoItemListBorderEmpty = (LinearLayout) view.findViewById(R.id.LinearLayoutRowTwoItemListBorderEmpty);
 
-        if (!getItem(position).equalsIgnoreCase(parent.getResources().getString(R.string.default_player_1) + System.getProperty("line.separator") + parent.getResources().getString(R.string.default_deck_1))
-                && !getItem(position).equalsIgnoreCase(parent.getResources().getString(R.string.default_player_2) + System.getProperty("line.separator") + parent.getResources().getString(R.string.default_deck_2))
-                && !getItem(position).equalsIgnoreCase(parent.getResources().getString(R.string.default_player_3) + System.getProperty("line.separator") + parent.getResources().getString(R.string.default_deck_3))
-                && !getItem(position).equalsIgnoreCase(parent.getResources().getString(R.string.default_player_4) + System.getProperty("line.separator") + parent.getResources().getString(R.string.default_deck_4))) {
+        if (!getItem(position).contains(parent.getResources().getString(R.string.default_player_1) + System.getProperty("line.separator") + parent.getResources().getString(R.string.default_deck_1))
+                && !getItem(position).contains(parent.getResources().getString(R.string.default_player_2) + System.getProperty("line.separator") + parent.getResources().getString(R.string.default_deck_2))
+                && !getItem(position).contains(parent.getResources().getString(R.string.default_player_3) + System.getProperty("line.separator") + parent.getResources().getString(R.string.default_deck_3))
+                && !getItem(position).contains(parent.getResources().getString(R.string.default_player_4) + System.getProperty("line.separator") + parent.getResources().getString(R.string.default_deck_4))) {
 
             linearLayoutRowTwoItemListBorder.setVisibility(View.VISIBLE);
             linearLayoutRowTwoItemListBorderEmpty.setVisibility(View.GONE);

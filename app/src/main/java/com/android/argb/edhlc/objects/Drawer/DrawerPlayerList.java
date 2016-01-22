@@ -106,11 +106,15 @@ public class DrawerPlayerList {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             switch (position) {
-                case 0: //Players
+                case 0: //Home
+                    mDrawerLayout.closeDrawers();
+                    parentActivity.finish();
+                    break;
+                case 1: //Players
                     mDrawerLayout.closeDrawers();
                     // parentActivity.startActivity(new Intent(parentActivity, PlayerListActivity.class));
                     break;
-                case 1: //All Records
+                case 2: //All Records
                     mDrawerLayout.closeDrawers();
                     Intent intent = new Intent(parentActivity, RecordsActivity.class);
                     intent.putExtra("RECORDS_PLAYER_NAME", "");
@@ -118,11 +122,11 @@ public class DrawerPlayerList {
                     parentActivity.startActivity(intent);
                     parentActivity.finish();
                     break;
-                case 2: //Settings
+                case 3: //Settings
                     mDrawerLayout.closeDrawers();
                     parentActivity.startActivity(new Intent(parentActivity, SettingsActivity.class));
                     break;
-                case 3: //About
+                case 4: //About
                     mDrawerLayout.closeDrawers();
                     createAboutDialog(view);
                     break;

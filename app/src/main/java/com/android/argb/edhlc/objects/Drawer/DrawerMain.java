@@ -129,14 +129,21 @@ public class DrawerMain {
     private void createDiceRangeDialog(final View view) {
         View logView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_roll_a_dice, null);
 
+        TextView dummyView = (TextView) logView.findViewById(R.id.dummyView);
+        dummyView.requestFocus();
+
         final NumberPicker mNumberPicker1 = (NumberPicker) logView.findViewById(R.id.numberPicker1);
         mNumberPicker1.setMinValue(0);
         mNumberPicker1.setMaxValue(99);
+        mNumberPicker1.clearFocus();
 
         final NumberPicker mNumberPicker2 = (NumberPicker) logView.findViewById(R.id.numberPicker2);
         mNumberPicker2.setMinValue(0);
         mNumberPicker2.setMaxValue(99);
         mNumberPicker2.setValue(99);
+        mNumberPicker2.clearFocus();
+
+        dummyView.requestFocus();
 
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
         alertDialogBuilder.setView(logView);
@@ -245,8 +252,8 @@ public class DrawerMain {
                 for (int i = 0; i < mDynamicArrayListContent.size(); i++) {
                     String auxPlayerName = mDynamicArrayListContent.get(i).split(System.getProperty("line.separator"))[0];
                     String auxPlayerDeck = mDynamicArrayListContent.get(i).split(System.getProperty("line.separator"))[1];
-                    Deck currentDeck = new Deck(auxPlayerName, auxPlayerDeck);
 
+                    Deck currentDeck = new Deck(auxPlayerName, auxPlayerDeck);
                     if (!currentDeck.isEqualDeck(new Deck(parentActivity.getResources().getString(R.string.default_player_1), parentActivity.getResources().getString(R.string.default_deck_1)))
                             && !currentDeck.isEqualDeck(new Deck(parentActivity.getResources().getString(R.string.default_player_2), parentActivity.getResources().getString(R.string.default_deck_2)))
                             && !currentDeck.isEqualDeck(new Deck(parentActivity.getResources().getString(R.string.default_player_3), parentActivity.getResources().getString(R.string.default_deck_3)))
@@ -274,10 +281,10 @@ public class DrawerMain {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Deck aux = null;
-                if (!(mLogGameDecks.get(position).equalsIgnoreCase(parentActivity.getResources().getString(R.string.default_player_1) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_1)))
-                        && !(mLogGameDecks.get(position).equalsIgnoreCase(parentActivity.getResources().getString(R.string.default_player_2) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_2)))
-                        && !(mLogGameDecks.get(position).equalsIgnoreCase(parentActivity.getResources().getString(R.string.default_player_3) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_3)))
-                        && !(mLogGameDecks.get(position).equalsIgnoreCase(parentActivity.getResources().getString(R.string.default_player_4) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_4)))) {
+                if (!(mLogGameDecks.get(position).contains(parentActivity.getResources().getString(R.string.default_player_1) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_1)))
+                        && !(mLogGameDecks.get(position).contains(parentActivity.getResources().getString(R.string.default_player_2) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_2)))
+                        && !(mLogGameDecks.get(position).contains(parentActivity.getResources().getString(R.string.default_player_3) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_3)))
+                        && !(mLogGameDecks.get(position).contains(parentActivity.getResources().getString(R.string.default_player_4) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_4)))) {
                     aux = new Deck(mLogGameDecks.get(position).split(System.getProperty("line.separator"))[0], mLogGameDecks.get(position).split(System.getProperty("line.separator"))[1]);
                 }
 
@@ -401,14 +408,18 @@ public class DrawerMain {
             public void onClick(View v) {
                 ArrayList<String> players = new ArrayList<>();
                 ArrayList<String> decks = new ArrayList<>();
+                ArrayList<String> color = new ArrayList<>();
 
                 for (int i = 0; i < mNewGameDecks.size(); i++) {
-                    if (!(mNewGameDecks.get(i).equalsIgnoreCase(parentActivity.getResources().getString(R.string.default_player_1) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_1)))
-                            && !(mNewGameDecks.get(i).equalsIgnoreCase(parentActivity.getResources().getString(R.string.default_player_2) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_2)))
-                            && !(mNewGameDecks.get(i).equalsIgnoreCase(parentActivity.getResources().getString(R.string.default_player_3) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_3)))
-                            && !(mNewGameDecks.get(i).equalsIgnoreCase(parentActivity.getResources().getString(R.string.default_player_4) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_4)))) {
-                        players.add(mNewGameDecks.get(i).split(System.getProperty("line.separator"))[0]);
-                        decks.add(mNewGameDecks.get(i).split(System.getProperty("line.separator"))[1]);
+                    if (!(mNewGameDecks.get(i).contains(parentActivity.getResources().getString(R.string.default_player_1) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_1)))
+                            && !(mNewGameDecks.get(i).contains(parentActivity.getResources().getString(R.string.default_player_2) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_2)))
+                            && !(mNewGameDecks.get(i).contains(parentActivity.getResources().getString(R.string.default_player_3) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_3)))
+                            && !(mNewGameDecks.get(i).contains(parentActivity.getResources().getString(R.string.default_player_4) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_4)))) {
+
+                        String[] auxNewGameDecks = mNewGameDecks.get(i).split(System.getProperty("line.separator"));
+                        players.add(auxNewGameDecks[0]);
+                        decks.add(auxNewGameDecks[1]);
+                        color.add(auxNewGameDecks[2]);
                     }
                 }
 
@@ -417,6 +428,7 @@ public class DrawerMain {
                     intent.putExtra(Constants.BROADCAST_MESSAGE_NEW_GAME_OPTION, Constants.BROADCAST_MESSAGE_NEW_GAME_OPTION_NO);
                     intent.putStringArrayListExtra(Constants.BROADCAST_MESSAGE_NEW_GAME_PLAYERS, players);
                     intent.putStringArrayListExtra(Constants.BROADCAST_MESSAGE_NEW_GAME_DECKS, decks);
+                    intent.putStringArrayListExtra(Constants.BROADCAST_MESSAGE_NEW_GAME_COLOR, color);
                     LocalBroadcastManager.getInstance(parentActivity).sendBroadcast(intent);
                     newGameConfirmationDialog.dismiss();
                 } else {
@@ -429,10 +441,10 @@ public class DrawerMain {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Deck aux = null;
-                if (!(mNewGameDecks.get(position).equalsIgnoreCase(parentActivity.getResources().getString(R.string.default_player_1) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_1)))
-                        && !(mNewGameDecks.get(position).equalsIgnoreCase(parentActivity.getResources().getString(R.string.default_player_2) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_2)))
-                        && !(mNewGameDecks.get(position).equalsIgnoreCase(parentActivity.getResources().getString(R.string.default_player_3) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_3)))
-                        && !(mNewGameDecks.get(position).equalsIgnoreCase(parentActivity.getResources().getString(R.string.default_player_4) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_4)))) {
+                if (!(mNewGameDecks.get(position).contains(parentActivity.getResources().getString(R.string.default_player_1) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_1)))
+                        && !(mNewGameDecks.get(position).contains(parentActivity.getResources().getString(R.string.default_player_2) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_2)))
+                        && !(mNewGameDecks.get(position).contains(parentActivity.getResources().getString(R.string.default_player_3) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_3)))
+                        && !(mNewGameDecks.get(position).contains(parentActivity.getResources().getString(R.string.default_player_4) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_4)))) {
                     aux = new Deck(mNewGameDecks.get(position).split(System.getProperty("line.separator"))[0], mNewGameDecks.get(position).split(System.getProperty("line.separator"))[1]);
                 }
 
@@ -471,14 +483,15 @@ public class DrawerMain {
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             mNewGameDecks.remove(position);
+                            String defaultColor = parentActivity.getResources().getColor(R.color.edh_default_primary) + System.getProperty("path.separator") + parentActivity.getResources().getColor(R.color.edh_default_secondary);
                             if (!mNewGameDecks.contains(parentActivity.getResources().getString(R.string.default_player_1) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_1)))
-                                mNewGameDecks.add(position, parentActivity.getResources().getString(R.string.default_player_1) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_1));
+                                mNewGameDecks.add(position, parentActivity.getResources().getString(R.string.default_player_1) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_1) + System.getProperty("line.separator") + defaultColor);
                             else if (!mNewGameDecks.contains(parentActivity.getResources().getString(R.string.default_player_2) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_2)))
-                                mNewGameDecks.add(position, parentActivity.getResources().getString(R.string.default_player_2) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_2));
+                                mNewGameDecks.add(position, parentActivity.getResources().getString(R.string.default_player_2) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_2) + System.getProperty("line.separator") + defaultColor);
                             else if (!mNewGameDecks.contains(parentActivity.getResources().getString(R.string.default_player_3) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_3)))
-                                mNewGameDecks.add(position, parentActivity.getResources().getString(R.string.default_player_3) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_3));
+                                mNewGameDecks.add(position, parentActivity.getResources().getString(R.string.default_player_3) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_3) + System.getProperty("line.separator") + defaultColor);
                             else if (!mNewGameDecks.contains(parentActivity.getResources().getString(R.string.default_player_4) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_4)))
-                                mNewGameDecks.add(position, parentActivity.getResources().getString(R.string.default_player_4) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_4));
+                                mNewGameDecks.add(position, parentActivity.getResources().getString(R.string.default_player_4) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_4) + System.getProperty("line.separator") + defaultColor);
 
                             createNewGameConfirmationDialog(view);
                             dialog.cancel();
@@ -508,7 +521,7 @@ public class DrawerMain {
                     if (!auxPlayerName.equalsIgnoreCase(parentActivity.getString(R.string.edh_spinner_player_hint)) && !tempPlayerDeck.equalsIgnoreCase(parentActivity.getString(R.string.edh_spinner_deck_hint))) {
                         if (Record.isValidRecord(mDeckListAux, new Deck(auxPlayerName, tempPlayerDeck))) {
                             mNewGameDecks.remove(position);
-                            mNewGameDecks.add(position, auxPlayerName + System.getProperty("line.separator") + tempPlayerDeck);
+                            mNewGameDecks.add(position, auxPlayerName + System.getProperty("line.separator") + tempPlayerDeck + System.getProperty("line.separator") + decksDB.getDeck(auxPlayerName, tempPlayerDeck).getDeckColor()[0] + System.getProperty("path.separator") + decksDB.getDeck(auxPlayerName, tempPlayerDeck).getDeckColor()[1]);
                             newGameSelectPlayersDialog.dismiss();
                             createNewGameConfirmationDialog(v);
                         } else {
@@ -629,15 +642,21 @@ public class DrawerMain {
                     mDrawerLayout.closeDrawers();
 
                     mNewGameDecks = new ArrayList<>();
-                    mNewGameDecks.add(parentActivity.getResources().getString(R.string.default_player_1) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_1));
-                    mNewGameDecks.add(parentActivity.getResources().getString(R.string.default_player_2) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_2));
-                    mNewGameDecks.add(parentActivity.getResources().getString(R.string.default_player_3) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_3));
-                    mNewGameDecks.add(parentActivity.getResources().getString(R.string.default_player_4) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_4));
+                    String defaultColor = parentActivity.getResources().getColor(R.color.edh_default_primary) + System.getProperty("path.separator") + parentActivity.getResources().getColor(R.color.edh_default_secondary);
+                    mNewGameDecks.add(parentActivity.getResources().getString(R.string.default_player_1) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_1) + System.getProperty("line.separator") + defaultColor);
+                    mNewGameDecks.add(parentActivity.getResources().getString(R.string.default_player_2) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_2) + System.getProperty("line.separator") + defaultColor);
+                    mNewGameDecks.add(parentActivity.getResources().getString(R.string.default_player_3) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_3) + System.getProperty("line.separator") + defaultColor);
+                    mNewGameDecks.add(parentActivity.getResources().getString(R.string.default_player_4) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_4) + System.getProperty("line.separator") + defaultColor);
 
                     List<Deck> mNewGameDecksActive = MainActivity.getActiveDecksList();
                     for (int i = 0; i < mNewGameDecksActive.size(); i++) {
                         mNewGameDecks.remove(i);
-                        mNewGameDecks.add(i, mNewGameDecksActive.get(i).getPlayerName() + System.getProperty("line.separator") + mNewGameDecksActive.get(i).getDeckName());
+                        mNewGameDecks.add(i,
+                                mNewGameDecksActive.get(i).getPlayerName()
+                                        + System.getProperty("line.separator")
+                                        + mNewGameDecksActive.get(i).getDeckName()
+                                        + System.getProperty("line.separator")
+                                        + String.valueOf(mNewGameDecksActive.get(i).getDeckColor()[0] + System.getProperty("path.separator") + mNewGameDecksActive.get(i).getDeckColor()[1]));
                     }
 
                     createNewGameConfirmationDialog(view);
@@ -703,22 +722,25 @@ public class DrawerMain {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             switch (position) {
-                case 0: //Players
+                case 0: //Home
+                    mDrawerLayout.closeDrawers();
+                    break;
+                case 1: //Players
                     mDrawerLayout.closeDrawers();
                     parentActivity.startActivity(new Intent(parentActivity, PlayerListActivity.class));
                     break;
-                case 1: //All Records
+                case 2: //All Records
                     mDrawerLayout.closeDrawers();
                     Intent intent = new Intent(parentActivity, RecordsActivity.class);
                     intent.putExtra("RECORDS_PLAYER_NAME", "");
                     intent.putExtra("RECORDS_DECK_NAME", "");
                     parentActivity.startActivity(intent);
                     break;
-                case 2: //Settings
+                case 3: //Settings
                     mDrawerLayout.closeDrawers();
                     parentActivity.startActivity(new Intent(parentActivity, SettingsActivity.class));
                     break;
-                case 3: //About
+                case 4: //About
                     mDrawerLayout.closeDrawers();
                     createAboutDialog(view);
                     break;

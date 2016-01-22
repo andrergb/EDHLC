@@ -47,23 +47,17 @@
     <string name="screen_on">Keep screen on</string>
     <string name="edh_spinner_player_hint">- Select a Player -</string>
     <string name="edh_spinner_deck_hint">- Select a Deck -</string>
-
-
+    
     <string name="turn_beginning_phase">Beginning\nPhase</string>
     <string name="turn_beginning_phase2">Beginning Phase</string>
-
     <string name="turn_first_main_phase">First Main\nPhase</string>
     <string name="turn_first_main_phase2">First Main\nPhase</string>
-
     <string name="turn_combat_phase">Combat\nPhase</string>
     <string name="turn_combat_phase2">Combat\nPhase</string>
-
     <string name="turn_second_main_phase">Second Main\nPhase</string>
     <string name="turn_second_main_phase2">Second Main\nPhase</string>
-
     <string name="turn_end_phase">End\nPhase</string>
     <string name="turn_end_phase2">End\nPhase</string>
-
     <string name="turn_untap_step">Untap Step</string>
     <string name="turn_upkeep_step">Upkeep Step</string>
     <string name="turn_draw_step">Draw Step</string>
@@ -74,7 +68,6 @@
     <string name="turn_end_combat_step">End of Combat Step</string>
     <string name="turn_end_step">End of turn Step</string>
     <string name="turn_cleanup_step">Cleanup Step</string>
-
 
     <string name="default_player_1">Player 1</string>
     <string name="default_player_2">Player 2</string>
@@ -92,10 +85,11 @@
         <item>Log Game</item>
         <item>Roll a dice</item>
         <item>Random Player</item>
-        <item>Turns</item>
+        <!-- <item>Turns</item> -->
     </string-array>
-    <!-- Static options -->
+    <!-- Current match -->
     <string-array name="string_menu_main_2">
+        <item>Home</item>
         <item>Players</item>
         <item>All Records</item>
         <item>Settings</item>
@@ -110,6 +104,7 @@
     </string-array>
     <!-- Player List activity -->
     <string-array name="string_menu_player_list_2">
+        <item>Home</item>
         <item>Players</item>
         <item>All Records</item>
         <item>Settings</item>
@@ -124,6 +119,7 @@
     </string-array>
     <!-- Player List activity -->
     <string-array name="string_menu_player_2">
+        <item>Home</item>
         <item>Players</item>
         <item>All Records</item>
         <item>Settings</item>
@@ -131,9 +127,14 @@
     </string-array>
 
     <!-- Records activity -->
-    <string-array name="string_menu_records_1"></string-array>
+    <string-array name="string_menu_records_1">
+        <item>Add Record</item>
+        <item>Edit Record</item>
+        <item>Remove Record</item>
+    </string-array>
     <!-- Records activity -->
     <string-array name="string_menu_records_2">
+        <item>Home</item>
         <item>Players</item>
         <item>All Records</item>
         <item>Settings</item>
