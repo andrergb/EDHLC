@@ -26,6 +26,7 @@ import com.android.argb.edhlc.activities.PlayerListActivity;
 import com.android.argb.edhlc.activities.RecordsActivity;
 import com.android.argb.edhlc.activities.SettingsActivity;
 import com.android.argb.edhlc.database.deck.DecksDataAccessObject;
+import com.android.argb.edhlc.database.record.RecordsDataAccessObject;
 import com.android.argb.edhlc.objects.Deck;
 
 import java.util.ArrayList;
@@ -265,6 +266,12 @@ public class DrawerPlayer {
                     long result = decksDB.updateDeck(oldDeck, new Deck(currentPlayer, tempDeckName));
                     decksDB.close();
                     if (result != -1) {
+
+                        RecordsDataAccessObject recordsDB = new RecordsDataAccessObject(parentActivity);
+                        recordsDB.open();
+                        recordsDB.updateRecord(oldDeck, new Deck(currentPlayer, tempDeckName));
+                        recordsDB.close();
+
                         Toast.makeText(view.getContext(), tempDeckName + " edited", Toast.LENGTH_SHORT).show();
                         LocalBroadcastManager.getInstance(parentActivity).sendBroadcast(new Intent(Constants.BROADCAST_INTENT_FILTER_DECK_CRUD));
                         alertDialog.dismiss();

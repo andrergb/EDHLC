@@ -24,11 +24,7 @@ public class RecordsDataAccessObject {
         recordsDBHelper = new RecordsDbHelper(context);
     }
 
-    public void close() {
-        recordsDBHelper.close();
-    }
-
-    public long createRecord(Record record) {
+    public long addRecord(Record record) {
         ContentValues values = new ContentValues();
 
         values.put(RecordsContract.RecordsEntry.COLUMN_FIRST_PLAYER_NAME, record.getFirstPlace().getPlayerName());
@@ -41,6 +37,10 @@ public class RecordsDataAccessObject {
         values.put(RecordsContract.RecordsEntry.COLUMN_FOURTH_PLAYER_DECK, record.getFourthPlace().getDeckName());
 
         return database.insert(RecordsContract.RecordsEntry.TABLE_NAME, null, values);
+    }
+
+    public void close() {
+        recordsDBHelper.close();
     }
 
     public void deleteRecord(Record record) {
@@ -317,6 +317,74 @@ public class RecordsDataAccessObject {
 
     public void open() {
         database = recordsDBHelper.getWritableDatabase();
+    }
+
+    public long updateRecord(String oldPlayerName, String newPlayerName) {
+        long totalUpdate = 0;
+
+        ContentValues values1 = new ContentValues();
+        values1.put(RecordsContract.RecordsEntry.COLUMN_FIRST_PLAYER_NAME, newPlayerName);
+        totalUpdate += database.update(RecordsContract.RecordsEntry.TABLE_NAME, values1, RecordsContract.RecordsEntry.COLUMN_FIRST_PLAYER_NAME + "=?", new String[]{oldPlayerName});
+
+        ContentValues values2 = new ContentValues();
+        values2.put(RecordsContract.RecordsEntry.COLUMN_SECOND_PLAYER_NAME, newPlayerName);
+        totalUpdate += database.update(RecordsContract.RecordsEntry.TABLE_NAME, values2, RecordsContract.RecordsEntry.COLUMN_SECOND_PLAYER_NAME + "=?", new String[]{oldPlayerName});
+
+        ContentValues values3 = new ContentValues();
+        values3.put(RecordsContract.RecordsEntry.COLUMN_THIRD_PLAYER_NAME, newPlayerName);
+        totalUpdate += database.update(RecordsContract.RecordsEntry.TABLE_NAME, values3, RecordsContract.RecordsEntry.COLUMN_THIRD_PLAYER_NAME + "=?", new String[]{oldPlayerName});
+
+        ContentValues values4 = new ContentValues();
+        values4.put(RecordsContract.RecordsEntry.COLUMN_FOURTH_PLAYER_NAME, newPlayerName);
+        totalUpdate += database.update(RecordsContract.RecordsEntry.TABLE_NAME, values4, RecordsContract.RecordsEntry.COLUMN_FOURTH_PLAYER_NAME + "=?", new String[]{oldPlayerName});
+
+        return totalUpdate;
+    }
+
+    public long updateRecord(Deck oldDeck, Deck newDeck) {
+        long totalUpdate = 0;
+
+        ContentValues values1 = new ContentValues();
+        values1.put(RecordsContract.RecordsEntry.COLUMN_FIRST_PLAYER_NAME, newDeck.getPlayerName());
+        values1.put(RecordsContract.RecordsEntry.COLUMN_FIRST_PLAYER_DECK, newDeck.getDeckName());
+        totalUpdate += database.update(
+                RecordsContract.RecordsEntry.TABLE_NAME,
+                values1,
+                RecordsContract.RecordsEntry.COLUMN_FIRST_PLAYER_NAME + "=? AND " + RecordsContract.RecordsEntry.COLUMN_FIRST_PLAYER_DECK + "=?",
+                new String[]{oldDeck.getPlayerName(), oldDeck.getDeckName()}
+        );
+
+        ContentValues values2 = new ContentValues();
+        values2.put(RecordsContract.RecordsEntry.COLUMN_SECOND_PLAYER_NAME, newDeck.getPlayerName());
+        values2.put(RecordsContract.RecordsEntry.COLUMN_SECOND_PLAYER_DECK, newDeck.getDeckName());
+        totalUpdate += database.update(
+                RecordsContract.RecordsEntry.TABLE_NAME,
+                values2,
+                RecordsContract.RecordsEntry.COLUMN_SECOND_PLAYER_NAME + "=? AND " + RecordsContract.RecordsEntry.COLUMN_SECOND_PLAYER_DECK + "=?",
+                new String[]{oldDeck.getPlayerName(), oldDeck.getDeckName()}
+        );
+
+        ContentValues values3 = new ContentValues();
+        values3.put(RecordsContract.RecordsEntry.COLUMN_THIRD_PLAYER_NAME, newDeck.getPlayerName());
+        values3.put(RecordsContract.RecordsEntry.COLUMN_THIRD_PLAYER_DECK, newDeck.getDeckName());
+        totalUpdate += database.update(
+                RecordsContract.RecordsEntry.TABLE_NAME,
+                values3,
+                RecordsContract.RecordsEntry.COLUMN_THIRD_PLAYER_NAME + "=? AND " + RecordsContract.RecordsEntry.COLUMN_THIRD_PLAYER_DECK + "=?",
+                new String[]{oldDeck.getPlayerName(), oldDeck.getDeckName()}
+        );
+
+        ContentValues values4 = new ContentValues();
+        values4.put(RecordsContract.RecordsEntry.COLUMN_FOURTH_PLAYER_NAME, newDeck.getPlayerName());
+        values4.put(RecordsContract.RecordsEntry.COLUMN_FOURTH_PLAYER_DECK, newDeck.getDeckName());
+        totalUpdate += database.update(
+                RecordsContract.RecordsEntry.TABLE_NAME,
+                values4,
+                RecordsContract.RecordsEntry.COLUMN_FOURTH_PLAYER_NAME + "=? AND " + RecordsContract.RecordsEntry.COLUMN_FOURTH_PLAYER_DECK + "=?",
+                new String[]{oldDeck.getPlayerName(), oldDeck.getDeckName()}
+        );
+
+        return totalUpdate;
     }
 
     private Record cursorToRecord(Cursor cursor) {

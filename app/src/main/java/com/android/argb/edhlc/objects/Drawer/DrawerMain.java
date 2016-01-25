@@ -264,7 +264,7 @@ public class DrawerMain {
                 if (mDecksListToBeRecorded.size() >= 2) {
                     RecordsDataAccessObject recordDB = new RecordsDataAccessObject(parentActivity);
                     recordDB.open();
-                    long result = recordDB.createRecord(new Record(mDecksListToBeRecorded));
+                    long result = recordDB.addRecord(new Record(mDecksListToBeRecorded));
                     recordDB.close();
                     if (result != -1)
                         Toast.makeText(view.getContext(), "Game saved", Toast.LENGTH_SHORT).show();
