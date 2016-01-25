@@ -47,7 +47,7 @@
     <string name="screen_on">Keep screen on</string>
     <string name="edh_spinner_player_hint">- Select a Player -</string>
     <string name="edh_spinner_deck_hint">- Select a Deck -</string>
-    
+
     <string name="turn_beginning_phase">Beginning\nPhase</string>
     <string name="turn_beginning_phase2">Beginning Phase</string>
     <string name="turn_first_main_phase">First Main\nPhase</string>
@@ -128,9 +128,6 @@
 
     <!-- Records activity -->
     <string-array name="string_menu_records_1">
-        <item>Add Record</item>
-        <item>Edit Record</item>
-        <item>Remove Record</item>
     </string-array>
     <!-- Records activity -->
     <string-array name="string_menu_records_2">
@@ -141,4 +138,27 @@
         <item>About</item>
     </string-array>
 
+    <!-- Overview activity -->
+    <string-array name="string_menu_overview_1">
+    </string-array>
+    <!-- Overview activity -->
+    <string-array name="string_menu_overview_2">
+        <item>Home</item>
+        <item>Players</item>
+        <item>All Records</item>
+        <item>Settings</item>
+        <item>About</item>
+    </string-array>
+
+    <!-- History activity -->
+    <string-array name="string_menu_history_1">
+    </string-array>
+    <!-- History activity -->
+    <string-array name="string_menu_history_2">
+        <item>Home</item>
+        <item>Players</item>
+        <item>All Records</item>
+        <item>Settings</item>
+        <item>About</item>
+    </string-array>
 </resources>

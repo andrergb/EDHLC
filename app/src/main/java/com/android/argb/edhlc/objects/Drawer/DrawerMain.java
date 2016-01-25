@@ -223,8 +223,8 @@ public class DrawerMain {
 
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
         alertDialogBuilder.setView(logView);
-        alertDialogBuilder.setTitle("Log Game - Overview");
-        alertDialogBuilder.setMessage("Check the Player and Decks: ");
+        alertDialogBuilder.setTitle("Log Game");
+        alertDialogBuilder.setMessage("Check the players and its decks: ");
         alertDialogBuilder.setPositiveButton("SAVE",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -303,8 +303,8 @@ public class DrawerMain {
 
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
         alertDialogBuilder.setView(NewGamePlayersChoiceView);
-        alertDialogBuilder.setTitle("New Game");
-        alertDialogBuilder.setMessage("Choose a Player and a Deck:");
+        alertDialogBuilder.setTitle("Log Game");
+        alertDialogBuilder.setMessage("Choose a player and its deck: ");
         alertDialogBuilder.setPositiveButton(selectedPlayer == null ? "ADD" : "UPDATE",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -384,8 +384,8 @@ public class DrawerMain {
 
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
         alertDialogBuilder.setView(logView);
-        alertDialogBuilder.setTitle("New Game - Overview");
-        alertDialogBuilder.setMessage("Check the Player and Decks: ");
+        alertDialogBuilder.setTitle("New Game");
+        alertDialogBuilder.setMessage("Check the players and its decks: ");
         alertDialogBuilder.setPositiveButton("START",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -464,7 +464,7 @@ public class DrawerMain {
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
         alertDialogBuilder.setView(NewGamePlayersChoiceView);
         alertDialogBuilder.setTitle("New Game");
-        alertDialogBuilder.setMessage("Choose a Player and a Deck:");
+        alertDialogBuilder.setMessage("Choose a player and its deck: ");
         alertDialogBuilder.setPositiveButton(selectedPlayer == null ? "ADD" : "UPDATE",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {

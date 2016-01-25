@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -70,6 +71,14 @@ public class DrawerPlayer {
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 parentActivity.invalidateOptionsMenu();
+
+                DecksDataAccessObject decksDB = new DecksDataAccessObject(parentActivity);
+                decksDB.open();
+                List<Deck> a = decksDB.getAllDecks();
+                decksDB.close();
+                for (int i = 0; i < a.size(); i++) {
+                    Log.d("dezao", a.get(i).getPlayerName() + " - " + a.get(i).getDeckName());
+                }
             }
         };
 
@@ -118,34 +127,155 @@ public class DrawerPlayer {
         alertDialogBuilder.setView(playerNameView);
         alertDialogBuilder.setTitle("Add new Deck");
         alertDialogBuilder.setMessage("Deck name:");
-        alertDialogBuilder.setPositiveButton("Add",
+        alertDialogBuilder.setPositiveButton("ADD",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        String tempName = userInput.getText().toString();
-
-                        if (!tempName.equalsIgnoreCase("")) {
-                            DecksDataAccessObject decksDB = new DecksDataAccessObject(parentActivity);
-                            decksDB.open();
-                            long result = decksDB.createDeck(new Deck(currentPlayer, tempName, new int[]{parentActivity.getResources().getColor(R.color.edh_default_primary), parentActivity.getResources().getColor(R.color.edh_default_secondary)}));
-                            decksDB.close();
-                            if (result != -1) {
-                                Toast.makeText(view.getContext(), tempName + " added!", Toast.LENGTH_SHORT).show();
-                                LocalBroadcastManager.getInstance(parentActivity).sendBroadcast(new Intent(Constants.BROADCAST_INTENT_FILTER_DECK_ADDED_OR_REMOVED));
-                            } else {
-                                Toast.makeText(view.getContext(), "ERROR: deck already added!", Toast.LENGTH_SHORT).show();
-                            }
-                        }
                     }
                 });
-        alertDialogBuilder.setNegativeButton("Cancel",
+        alertDialogBuilder.setNegativeButton("CANCEL",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                     }
                 });
-        AlertDialog alertDialog = alertDialogBuilder.create();
+        final AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         alertDialog.show();
+
+        //Override POSITIVE button
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String tempName = userInput.getText().toString();
+                if (!tempName.equalsIgnoreCase("")) {
+                    DecksDataAccessObject decksDB = new DecksDataAccessObject(parentActivity);
+                    decksDB.open();
+                    long result = decksDB.addDeck(new Deck(currentPlayer, tempName, new int[]{parentActivity.getResources().getColor(R.color.edh_default_primary), parentActivity.getResources().getColor(R.color.edh_default_secondary)}));
+                    decksDB.close();
+                    if (result != -1) {
+                        Toast.makeText(view.getContext(), tempName + " added", Toast.LENGTH_SHORT).show();
+                        LocalBroadcastManager.getInstance(parentActivity).sendBroadcast(new Intent(Constants.BROADCAST_INTENT_FILTER_DECK_CRUD));
+                        alertDialog.dismiss();
+                    } else {
+                        Toast.makeText(view.getContext(), "Fail: Deck " + tempName + " already exists", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(view.getContext(), "Inset a name", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void createEditDeckDialog(final View view) {
+        DecksDataAccessObject decksDb = new DecksDataAccessObject(parentActivity);
+        decksDb.open();
+        List<Deck> deckList = decksDb.getAllDeckByPlayerName(currentPlayer);
+        decksDb.close();
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
+        alertDialogBuilder.setTitle("Edit deck");
+
+        if (deckList.size() > 0) {
+            ArrayList<String> aux = new ArrayList<>();
+            aux.add(0, parentActivity.getResources().getString(R.string.edh_spinner_deck_hint));
+            for (int i = 0; i < deckList.size(); i++)
+                aux.add(deckList.get(i).getDeckName());
+
+            View spinnerView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_single_spinner, null);
+            final Spinner spinnerDecks = (Spinner) spinnerView.findViewById(R.id.spinner1);
+
+            final ArrayAdapter<String> decksNameAdapter = new ArrayAdapter<>(parentActivity, R.layout.row_spinner_selected, aux);
+            decksNameAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinnerDecks.setAdapter(decksNameAdapter);
+
+            alertDialogBuilder.setView(spinnerView);
+            alertDialogBuilder.setMessage("Choose a deck to edit: ");
+            alertDialogBuilder.setPositiveButton("EDIT",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                        }
+                    });
+            alertDialogBuilder.setNeutralButton("CANCEL",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+
+
+            final AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+
+            //Override POSITIVE button
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String tempName = spinnerDecks.getSelectedItem().toString();
+                    if (!tempName.equalsIgnoreCase(parentActivity.getResources().getString(R.string.edh_spinner_deck_hint))) {
+                        createEditDeckDialog(view, new Deck(currentPlayer, tempName));
+                        alertDialog.cancel();
+                    } else {
+                        Toast.makeText(view.getContext(), "Choose a deck", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        } else {
+            alertDialogBuilder.setMessage("There is no deck to edit");
+            alertDialogBuilder.setPositiveButton("OK",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+        }
+    }
+
+    private void createEditDeckDialog(final View view, final Deck oldDeck) {
+        View playerNameView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_deck_name, null);
+        final EditText userInput = (EditText) playerNameView.findViewById(R.id.editTextDeckName);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
+        alertDialogBuilder.setView(playerNameView);
+        alertDialogBuilder.setTitle("Edit Deck");
+        alertDialogBuilder.setMessage("Choose a new name for " + oldDeck.getDeckName() + ": ");
+        alertDialogBuilder.setPositiveButton("EDIT",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                });
+        alertDialogBuilder.setNegativeButton("CANCEL",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        alertDialog.show();
+
+        //Override POSITIVE button
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String tempDeckName = userInput.getText().toString();
+                if (!tempDeckName.equalsIgnoreCase("")) {
+                    DecksDataAccessObject decksDB = new DecksDataAccessObject(parentActivity);
+                    decksDB.open();
+                    long result = decksDB.updateDeck(oldDeck, new Deck(currentPlayer, tempDeckName));
+                    decksDB.close();
+                    if (result != -1) {
+                        Toast.makeText(view.getContext(), tempDeckName + " edited", Toast.LENGTH_SHORT).show();
+                        LocalBroadcastManager.getInstance(parentActivity).sendBroadcast(new Intent(Constants.BROADCAST_INTENT_FILTER_DECK_CRUD));
+                        alertDialog.dismiss();
+                    } else {
+                        Toast.makeText(view.getContext(), "Fail: Deck " + tempDeckName + " already exists", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(view.getContext(), "Insert a name", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private void createRemoveDeckDialog(final View view) {
@@ -155,9 +285,9 @@ public class DrawerPlayer {
         decksDb.close();
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
-        alertDialogBuilder.setTitle("Remove a deck");
+        alertDialogBuilder.setTitle("Remove deck");
 
-        if (deckList.size() > 1) {
+        if (deckList.size() > 0) {
             ArrayList<String> aux = new ArrayList<>();
             aux.add(0, parentActivity.getResources().getString(R.string.edh_spinner_deck_hint));
             for (int i = 0; i < deckList.size(); i++)
@@ -175,23 +305,6 @@ public class DrawerPlayer {
             alertDialogBuilder.setPositiveButton("Remove",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            String tempName = spinnerDecks.getSelectedItem().toString();
-
-                            if (!tempName.equalsIgnoreCase("")) {
-
-                                DecksDataAccessObject decksDb = new DecksDataAccessObject(parentActivity);
-                                decksDb.open();
-                                long result = decksDb.deleteDeck(new Deck(currentPlayer, tempName));
-                                decksDb.close();
-
-                                if (result != 0) {
-                                    LocalBroadcastManager.getInstance(parentActivity).sendBroadcast(new Intent(Constants.BROADCAST_INTENT_FILTER_DECK_ADDED_OR_REMOVED));
-                                    Toast.makeText(view.getContext(), tempName + " removed!", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(view.getContext(), "ERROR", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                            dialog.cancel();
                         }
                     });
             alertDialogBuilder.setNeutralButton("Cancel",
@@ -200,6 +313,31 @@ public class DrawerPlayer {
                             dialog.cancel();
                         }
                     });
+            final AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+
+            //Override POSITIVE button
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String tempName = spinnerDecks.getSelectedItem().toString();
+                    if (!tempName.equalsIgnoreCase(parentActivity.getResources().getString(R.string.edh_spinner_deck_hint))) {
+                        DecksDataAccessObject decksDb = new DecksDataAccessObject(parentActivity);
+                        decksDb.open();
+                        long result = decksDb.removeDeck(new Deck(currentPlayer, tempName));
+                        decksDb.close();
+                        if (result != 0) {
+                            LocalBroadcastManager.getInstance(parentActivity).sendBroadcast(new Intent(Constants.BROADCAST_INTENT_FILTER_DECK_CRUD));
+                            Toast.makeText(view.getContext(), tempName + " removed", Toast.LENGTH_SHORT).show();
+                            alertDialog.dismiss();
+                        } else {
+                            Toast.makeText(view.getContext(), "Fail", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(view.getContext(), "Choose a Deck", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
         } else {
             alertDialogBuilder.setMessage("There is no deck to remove");
             alertDialogBuilder.setPositiveButton("Ok",
@@ -208,9 +346,9 @@ public class DrawerPlayer {
                             dialog.cancel();
                         }
                     });
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
         }
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
     }
 
     private class DrawerItemClickListener1 implements AdapterView.OnItemClickListener {
@@ -222,6 +360,7 @@ public class DrawerPlayer {
                     mDrawerLayout.closeDrawers();
                     break;
                 case 1: //EditDeck
+                    createEditDeckDialog(view);
                     mDrawerLayout.closeDrawers();
                     break;
                 case 2: //RemoveDeck

@@ -41,8 +41,8 @@ public class Constants {
     public static String PLAYER_COLOR2 = "PLAYER_COLOR2";
 
     public static String BROADCAST_INTENT = "broadcast_intent_filter_new_game";
-    public static String BROADCAST_INTENT_FILTER_DECK_ADDED_OR_REMOVED = "broadcast_intent_filter_deck_added_or_removed";
-    public static String BROADCAST_INTENT_FILTER_PLAYER_ADDED_OR_REMOVED = "broadcast_intent_filter_player_added_or_removed";
+    public static String BROADCAST_INTENT_FILTER_DECK_CRUD = "broadcast_intent_filter_deck_crud";
+    public static String BROADCAST_INTENT_FILTER_PLAYER_CRUD = "broadcast_intent_filter_player_crud";
 
     public static String BROADCAST_MESSAGE_RANDOM_PLAYER_OPTION = "broadcast_message_random_player_option";
     public static String BROADCAST_MESSAGE_NEW_GAME_OPTION = "broadcast_message_new_game_option";

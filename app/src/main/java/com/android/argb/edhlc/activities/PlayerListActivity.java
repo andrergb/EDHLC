@@ -82,7 +82,7 @@ public class PlayerListActivity extends ActionBarActivity {
         super.onResume();
         LocalBroadcastManager.getInstance(this).registerReceiver(
                 mPlayerAddedOrRemovedBroadcastReceiver,
-                new IntentFilter(Constants.BROADCAST_INTENT_FILTER_PLAYER_ADDED_OR_REMOVED)
+                new IntentFilter(Constants.BROADCAST_INTENT_FILTER_PLAYER_CRUD)
         );
 
         if (getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt(Constants.SCREEN_ON, 0) == 1)
@@ -103,7 +103,7 @@ public class PlayerListActivity extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_overview, menu);
+        getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
 

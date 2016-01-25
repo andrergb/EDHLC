@@ -566,10 +566,8 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.action_overview) {
             startActivity(new Intent(this, OverviewActivity.class));
-            this.finish();
         } else if (id == R.id.action_history) {
             startActivity(new Intent(this, HistoryActivity.class));
-            this.finish();
         }
 
         return super.onOptionsItemSelected(item);

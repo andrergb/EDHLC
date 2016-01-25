@@ -1,6 +1,7 @@
 package com.android.argb.edhlc.activities;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,6 +18,10 @@ import android.widget.TextView;
 import com.android.argb.edhlc.Constants;
 import com.android.argb.edhlc.R;
 import com.android.argb.edhlc.objects.ActivePlayer;
+import com.android.argb.edhlc.objects.Drawer.DrawerOverview;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class OverviewActivity extends ActionBarActivity {
 
@@ -62,59 +67,7 @@ public class OverviewActivity extends ActionBarActivity {
 
     private int numPlayers;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_overview);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = this.getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(this.getResources().getColor(R.color.edh_default_secondary));
-        }
-
-        numPlayers = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt(Constants.TOTAL_PLAYERS, 4);
-
-        createLayout(this.findViewById(android.R.id.content));
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mActivePlayer1 = ActivePlayer.loadPlayerSharedPreferences(this, 1);
-        mActivePlayer2 = ActivePlayer.loadPlayerSharedPreferences(this, 2);
-        mActivePlayer3 = ActivePlayer.loadPlayerSharedPreferences(this, 3);
-        mActivePlayer4 = ActivePlayer.loadPlayerSharedPreferences(this, 4);
-
-        if (getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt(Constants.SCREEN_ON, 0) == 1)
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        else
-            getWindow().clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
-        numPlayers = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt(Constants.TOTAL_PLAYERS, 4);
-
-        updateLayout();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_overview, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        this.finish();
-    }
+    private DrawerOverview drawerOverview;
 
     public void createLayout(View view) {
         if (view != null) {
@@ -160,84 +113,149 @@ public class OverviewActivity extends ActionBarActivity {
         }
     }
 
-    private void updateLayout() {
-        updateDethroneIcon();
+    @Override
+    public void onBackPressed() {
+        if (drawerOverview.isDrawerOpen()) {
+            drawerOverview.dismiss();
+        } else {
+            super.onBackPressed();
+            this.finish();
+        }
+    }
 
-        mTextViewP1Name.setText(mActivePlayer1.getPlayerName());
-        mTextViewP1Life.setText(String.valueOf(mActivePlayer1.getPlayerLife()));
-        mTextViewP1EDH1.setText(String.valueOf(mActivePlayer1.getPlayerEDH1()));
-        mTextViewP1EDH2.setText(String.valueOf(mActivePlayer1.getPlayerEDH2()));
-        mTextViewP1EDH3.setText(String.valueOf(mActivePlayer1.getPlayerEDH3()));
-        mTextViewP1EDH4.setText(String.valueOf(mActivePlayer1.getPlayerEDH4()));
-        mTextViewP1Name.setEnabled(mActivePlayer1.getPlayerIsAlive());
-        mTextViewP1Life.setEnabled(mActivePlayer1.getPlayerIsAlive());
-        mTextViewP1EDH1.setEnabled(mActivePlayer1.getPlayerIsAlive());
-        mTextViewP1EDH2.setEnabled(mActivePlayer1.getPlayerIsAlive());
-        mTextViewP1EDH3.setEnabled(mActivePlayer1.getPlayerIsAlive());
-        mTextViewP1EDH4.setEnabled(mActivePlayer1.getPlayerIsAlive());
-        mTextViewP1Name.setTextColor(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer1.getPlayerColor()[1] : Color.LTGRAY);
-        mTextViewP1Life.setTextColor(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer1.getPlayerColor()[1] : Color.LTGRAY);
-        mTextViewP1EDH1.setTextColor(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer1.getPlayerColor()[0] : Color.LTGRAY);
-        mTextViewP1EDH2.setTextColor(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer1.getPlayerColor()[0] : Color.LTGRAY);
-        mTextViewP1EDH3.setTextColor(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer1.getPlayerColor()[0] : Color.LTGRAY);
-        mTextViewP1EDH4.setTextColor(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer1.getPlayerColor()[0] : Color.LTGRAY);
+    public void onClickP1(View view) {
+        if (numPlayers >= 1) {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("TAG", "1");
+            startActivity(intent);
+            this.finish();
+        }
+    }
 
-        mTextViewP2Name.setText(mActivePlayer2.getPlayerName());
-        mTextViewP2Life.setText(String.valueOf(mActivePlayer2.getPlayerLife()));
-        mTextViewP2EDH1.setText(String.valueOf(mActivePlayer2.getPlayerEDH1()));
-        mTextViewP2EDH2.setText(String.valueOf(mActivePlayer2.getPlayerEDH2()));
-        mTextViewP2EDH3.setText(String.valueOf(mActivePlayer2.getPlayerEDH3()));
-        mTextViewP2EDH4.setText(String.valueOf(mActivePlayer2.getPlayerEDH4()));
-        mTextViewP2Name.setEnabled(mActivePlayer2.getPlayerIsAlive());
-        mTextViewP2Life.setEnabled(mActivePlayer2.getPlayerIsAlive());
-        mTextViewP2EDH1.setEnabled(mActivePlayer2.getPlayerIsAlive());
-        mTextViewP2EDH2.setEnabled(mActivePlayer2.getPlayerIsAlive());
-        mTextViewP2EDH3.setEnabled(mActivePlayer2.getPlayerIsAlive());
-        mTextViewP2EDH4.setEnabled(mActivePlayer2.getPlayerIsAlive());
-        mTextViewP2Name.setTextColor(mActivePlayer2.getPlayerIsAlive() ? mActivePlayer2.getPlayerColor()[1] : Color.LTGRAY);
-        mTextViewP2Life.setTextColor(mActivePlayer2.getPlayerIsAlive() ? mActivePlayer2.getPlayerColor()[1] : Color.LTGRAY);
-        mTextViewP2EDH1.setTextColor(mActivePlayer2.getPlayerIsAlive() ? mActivePlayer2.getPlayerColor()[0] : Color.LTGRAY);
-        mTextViewP2EDH2.setTextColor(mActivePlayer2.getPlayerIsAlive() ? mActivePlayer2.getPlayerColor()[0] : Color.LTGRAY);
-        mTextViewP2EDH3.setTextColor(mActivePlayer2.getPlayerIsAlive() ? mActivePlayer2.getPlayerColor()[0] : Color.LTGRAY);
-        mTextViewP2EDH4.setTextColor(mActivePlayer2.getPlayerIsAlive() ? mActivePlayer2.getPlayerColor()[0] : Color.LTGRAY);
+    public void onClickP2(View view) {
+        if (numPlayers >= 2) {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("TAG", "2");
+            startActivity(intent);
+            this.finish();
+        }
+    }
 
-        mTextViewP3Name.setText(mActivePlayer3.getPlayerName());
-        mTextViewP3Life.setText(String.valueOf(mActivePlayer3.getPlayerLife()));
-        mTextViewP3EDH1.setText(String.valueOf(mActivePlayer3.getPlayerEDH1()));
-        mTextViewP3EDH2.setText(String.valueOf(mActivePlayer3.getPlayerEDH2()));
-        mTextViewP3EDH3.setText(String.valueOf(mActivePlayer3.getPlayerEDH3()));
-        mTextViewP3EDH4.setText(String.valueOf(mActivePlayer3.getPlayerEDH4()));
-        mTextViewP3Name.setEnabled(mActivePlayer3.getPlayerIsAlive());
-        mTextViewP3Life.setEnabled(mActivePlayer3.getPlayerIsAlive());
-        mTextViewP3EDH1.setEnabled(mActivePlayer3.getPlayerIsAlive());
-        mTextViewP3EDH2.setEnabled(mActivePlayer3.getPlayerIsAlive());
-        mTextViewP3EDH3.setEnabled(mActivePlayer3.getPlayerIsAlive());
-        mTextViewP3EDH4.setEnabled(mActivePlayer3.getPlayerIsAlive());
-        mTextViewP3Name.setTextColor(mActivePlayer3.getPlayerIsAlive() ? mActivePlayer3.getPlayerColor()[1] : Color.LTGRAY);
-        mTextViewP3Life.setTextColor(mActivePlayer3.getPlayerIsAlive() ? mActivePlayer3.getPlayerColor()[1] : Color.LTGRAY);
-        mTextViewP3EDH1.setTextColor(mActivePlayer3.getPlayerIsAlive() ? mActivePlayer3.getPlayerColor()[0] : Color.LTGRAY);
-        mTextViewP3EDH2.setTextColor(mActivePlayer3.getPlayerIsAlive() ? mActivePlayer3.getPlayerColor()[0] : Color.LTGRAY);
-        mTextViewP3EDH3.setTextColor(mActivePlayer3.getPlayerIsAlive() ? mActivePlayer3.getPlayerColor()[0] : Color.LTGRAY);
-        mTextViewP3EDH4.setTextColor(mActivePlayer3.getPlayerIsAlive() ? mActivePlayer3.getPlayerColor()[0] : Color.LTGRAY);
+    public void onClickP3(View view) {
+        if (numPlayers >= 3) {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("TAG", "3");
+            startActivity(intent);
+            this.finish();
+        }
+    }
 
-        mTextViewP4Name.setText(mActivePlayer4.getPlayerName());
-        mTextViewP4Life.setText(String.valueOf(mActivePlayer4.getPlayerLife()));
-        mTextViewP4EDH1.setText(String.valueOf(mActivePlayer4.getPlayerEDH1()));
-        mTextViewP4EDH2.setText(String.valueOf(mActivePlayer4.getPlayerEDH2()));
-        mTextViewP4EDH3.setText(String.valueOf(mActivePlayer4.getPlayerEDH3()));
-        mTextViewP4EDH4.setText(String.valueOf(mActivePlayer4.getPlayerEDH4()));
-        mTextViewP4Name.setEnabled(mActivePlayer4.getPlayerIsAlive());
-        mTextViewP4Life.setEnabled(mActivePlayer4.getPlayerIsAlive());
-        mTextViewP4EDH1.setEnabled(mActivePlayer4.getPlayerIsAlive());
-        mTextViewP4EDH2.setEnabled(mActivePlayer4.getPlayerIsAlive());
-        mTextViewP4EDH3.setEnabled(mActivePlayer4.getPlayerIsAlive());
-        mTextViewP4EDH4.setEnabled(mActivePlayer4.getPlayerIsAlive());
-        mTextViewP4Name.setTextColor(mActivePlayer4.getPlayerIsAlive() ? mActivePlayer4.getPlayerColor()[1] : Color.LTGRAY);
-        mTextViewP4Life.setTextColor(mActivePlayer4.getPlayerIsAlive() ? mActivePlayer4.getPlayerColor()[1] : Color.LTGRAY);
-        mTextViewP4EDH1.setTextColor(mActivePlayer4.getPlayerIsAlive() ? mActivePlayer4.getPlayerColor()[0] : Color.LTGRAY);
-        mTextViewP4EDH2.setTextColor(mActivePlayer4.getPlayerIsAlive() ? mActivePlayer4.getPlayerColor()[0] : Color.LTGRAY);
-        mTextViewP4EDH3.setTextColor(mActivePlayer4.getPlayerIsAlive() ? mActivePlayer4.getPlayerColor()[0] : Color.LTGRAY);
-        mTextViewP4EDH4.setTextColor(mActivePlayer4.getPlayerIsAlive() ? mActivePlayer4.getPlayerColor()[0] : Color.LTGRAY);
+    public void onClickP4(View view) {
+        if (numPlayers >= 4) {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("TAG", "4");
+            startActivity(intent);
+            this.finish();
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        drawerOverview.getDrawerToggle().onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_overview, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //DrawerMain menu
+        if (drawerOverview.getDrawerToggle().onOptionsItemSelected(item)) {
+            return true;
+        }
+
+        //Option menu
+        int id = item.getItemId();
+        if (id == R.id.action_history) {
+            startActivity(new Intent(this, HistoryActivity.class));
+            this.finish();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_overview);
+
+        //DrawerMain menu
+        List<String[]> drawerLists = new ArrayList<>();
+        drawerLists.add(getResources().getStringArray(R.array.string_menu_overview_1));
+        drawerLists.add(getResources().getStringArray(R.array.string_menu_overview_2));
+
+        assert getSupportActionBar() != null;
+        drawerOverview = new DrawerOverview(this, drawerLists);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = this.getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(this.getResources().getColor(R.color.edh_default_secondary));
+        }
+
+        numPlayers = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt(Constants.TOTAL_PLAYERS, 4);
+
+        createLayout(this.findViewById(android.R.id.content));
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        drawerOverview.getDrawerToggle().syncState();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mActivePlayer1 = ActivePlayer.loadPlayerSharedPreferences(this, 1);
+        mActivePlayer2 = ActivePlayer.loadPlayerSharedPreferences(this, 2);
+        mActivePlayer3 = ActivePlayer.loadPlayerSharedPreferences(this, 3);
+        mActivePlayer4 = ActivePlayer.loadPlayerSharedPreferences(this, 4);
+
+        if (getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt(Constants.SCREEN_ON, 0) == 1)
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        else
+            getWindow().clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        numPlayers = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt(Constants.TOTAL_PLAYERS, 4);
+
+        updateLayout();
+    }
+
+    private boolean isPlayerActiveAndAlive(int i) {
+        if (numPlayers < i)
+            return false;
+        else {
+            switch (i) {
+                case 1:
+                    return mActivePlayer1.getPlayerIsAlive();
+                case 2:
+                    return mActivePlayer2.getPlayerIsAlive();
+                case 3:
+                    return mActivePlayer3.getPlayerIsAlive();
+                case 4:
+                    return mActivePlayer4.getPlayerIsAlive();
+                default:
+                    return true;
+            }
+        }
     }
 
     private void updateDethroneIcon() {
@@ -363,58 +381,83 @@ public class OverviewActivity extends ActionBarActivity {
         }
     }
 
-    public void onClickP1(View view) {
-        if (numPlayers >= 1) {
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("TAG", "1");
-            startActivity(intent);
-            this.finish();
-        }
-    }
+    private void updateLayout() {
+        updateDethroneIcon();
 
-    public void onClickP2(View view) {
-        if (numPlayers >= 2) {
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("TAG", "2");
-            startActivity(intent);
-            this.finish();
-        }
-    }
+        mTextViewP1Name.setText(mActivePlayer1.getPlayerName());
+        mTextViewP1Life.setText(String.valueOf(mActivePlayer1.getPlayerLife()));
+        mTextViewP1EDH1.setText(String.valueOf(mActivePlayer1.getPlayerEDH1()));
+        mTextViewP1EDH2.setText(String.valueOf(mActivePlayer1.getPlayerEDH2()));
+        mTextViewP1EDH3.setText(String.valueOf(mActivePlayer1.getPlayerEDH3()));
+        mTextViewP1EDH4.setText(String.valueOf(mActivePlayer1.getPlayerEDH4()));
+        mTextViewP1Name.setEnabled(mActivePlayer1.getPlayerIsAlive());
+        mTextViewP1Life.setEnabled(mActivePlayer1.getPlayerIsAlive());
+        mTextViewP1EDH1.setEnabled(mActivePlayer1.getPlayerIsAlive());
+        mTextViewP1EDH2.setEnabled(mActivePlayer1.getPlayerIsAlive());
+        mTextViewP1EDH3.setEnabled(mActivePlayer1.getPlayerIsAlive());
+        mTextViewP1EDH4.setEnabled(mActivePlayer1.getPlayerIsAlive());
+        mTextViewP1Name.setTextColor(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer1.getPlayerColor()[1] : Color.LTGRAY);
+        mTextViewP1Life.setTextColor(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer1.getPlayerColor()[1] : Color.LTGRAY);
+        mTextViewP1EDH1.setTextColor(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer1.getPlayerColor()[0] : Color.LTGRAY);
+        mTextViewP1EDH2.setTextColor(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer1.getPlayerColor()[0] : Color.LTGRAY);
+        mTextViewP1EDH3.setTextColor(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer1.getPlayerColor()[0] : Color.LTGRAY);
+        mTextViewP1EDH4.setTextColor(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer1.getPlayerColor()[0] : Color.LTGRAY);
 
-    public void onClickP3(View view) {
-        if (numPlayers >= 3) {
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("TAG", "3");
-            startActivity(intent);
-            this.finish();
-        }
-    }
+        mTextViewP2Name.setText(mActivePlayer2.getPlayerName());
+        mTextViewP2Life.setText(String.valueOf(mActivePlayer2.getPlayerLife()));
+        mTextViewP2EDH1.setText(String.valueOf(mActivePlayer2.getPlayerEDH1()));
+        mTextViewP2EDH2.setText(String.valueOf(mActivePlayer2.getPlayerEDH2()));
+        mTextViewP2EDH3.setText(String.valueOf(mActivePlayer2.getPlayerEDH3()));
+        mTextViewP2EDH4.setText(String.valueOf(mActivePlayer2.getPlayerEDH4()));
+        mTextViewP2Name.setEnabled(mActivePlayer2.getPlayerIsAlive());
+        mTextViewP2Life.setEnabled(mActivePlayer2.getPlayerIsAlive());
+        mTextViewP2EDH1.setEnabled(mActivePlayer2.getPlayerIsAlive());
+        mTextViewP2EDH2.setEnabled(mActivePlayer2.getPlayerIsAlive());
+        mTextViewP2EDH3.setEnabled(mActivePlayer2.getPlayerIsAlive());
+        mTextViewP2EDH4.setEnabled(mActivePlayer2.getPlayerIsAlive());
+        mTextViewP2Name.setTextColor(mActivePlayer2.getPlayerIsAlive() ? mActivePlayer2.getPlayerColor()[1] : Color.LTGRAY);
+        mTextViewP2Life.setTextColor(mActivePlayer2.getPlayerIsAlive() ? mActivePlayer2.getPlayerColor()[1] : Color.LTGRAY);
+        mTextViewP2EDH1.setTextColor(mActivePlayer2.getPlayerIsAlive() ? mActivePlayer2.getPlayerColor()[0] : Color.LTGRAY);
+        mTextViewP2EDH2.setTextColor(mActivePlayer2.getPlayerIsAlive() ? mActivePlayer2.getPlayerColor()[0] : Color.LTGRAY);
+        mTextViewP2EDH3.setTextColor(mActivePlayer2.getPlayerIsAlive() ? mActivePlayer2.getPlayerColor()[0] : Color.LTGRAY);
+        mTextViewP2EDH4.setTextColor(mActivePlayer2.getPlayerIsAlive() ? mActivePlayer2.getPlayerColor()[0] : Color.LTGRAY);
 
-    public void onClickP4(View view) {
-        if (numPlayers >= 4) {
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("TAG", "4");
-            startActivity(intent);
-            this.finish();
-        }
-    }
+        mTextViewP3Name.setText(mActivePlayer3.getPlayerName());
+        mTextViewP3Life.setText(String.valueOf(mActivePlayer3.getPlayerLife()));
+        mTextViewP3EDH1.setText(String.valueOf(mActivePlayer3.getPlayerEDH1()));
+        mTextViewP3EDH2.setText(String.valueOf(mActivePlayer3.getPlayerEDH2()));
+        mTextViewP3EDH3.setText(String.valueOf(mActivePlayer3.getPlayerEDH3()));
+        mTextViewP3EDH4.setText(String.valueOf(mActivePlayer3.getPlayerEDH4()));
+        mTextViewP3Name.setEnabled(mActivePlayer3.getPlayerIsAlive());
+        mTextViewP3Life.setEnabled(mActivePlayer3.getPlayerIsAlive());
+        mTextViewP3EDH1.setEnabled(mActivePlayer3.getPlayerIsAlive());
+        mTextViewP3EDH2.setEnabled(mActivePlayer3.getPlayerIsAlive());
+        mTextViewP3EDH3.setEnabled(mActivePlayer3.getPlayerIsAlive());
+        mTextViewP3EDH4.setEnabled(mActivePlayer3.getPlayerIsAlive());
+        mTextViewP3Name.setTextColor(mActivePlayer3.getPlayerIsAlive() ? mActivePlayer3.getPlayerColor()[1] : Color.LTGRAY);
+        mTextViewP3Life.setTextColor(mActivePlayer3.getPlayerIsAlive() ? mActivePlayer3.getPlayerColor()[1] : Color.LTGRAY);
+        mTextViewP3EDH1.setTextColor(mActivePlayer3.getPlayerIsAlive() ? mActivePlayer3.getPlayerColor()[0] : Color.LTGRAY);
+        mTextViewP3EDH2.setTextColor(mActivePlayer3.getPlayerIsAlive() ? mActivePlayer3.getPlayerColor()[0] : Color.LTGRAY);
+        mTextViewP3EDH3.setTextColor(mActivePlayer3.getPlayerIsAlive() ? mActivePlayer3.getPlayerColor()[0] : Color.LTGRAY);
+        mTextViewP3EDH4.setTextColor(mActivePlayer3.getPlayerIsAlive() ? mActivePlayer3.getPlayerColor()[0] : Color.LTGRAY);
 
-    private boolean isPlayerActiveAndAlive(int i) {
-        if (numPlayers < i)
-            return false;
-        else {
-            switch (i) {
-                case 1:
-                    return mActivePlayer1.getPlayerIsAlive();
-                case 2:
-                    return mActivePlayer2.getPlayerIsAlive();
-                case 3:
-                    return mActivePlayer3.getPlayerIsAlive();
-                case 4:
-                    return mActivePlayer4.getPlayerIsAlive();
-                default:
-                    return true;
-            }
-        }
+        mTextViewP4Name.setText(mActivePlayer4.getPlayerName());
+        mTextViewP4Life.setText(String.valueOf(mActivePlayer4.getPlayerLife()));
+        mTextViewP4EDH1.setText(String.valueOf(mActivePlayer4.getPlayerEDH1()));
+        mTextViewP4EDH2.setText(String.valueOf(mActivePlayer4.getPlayerEDH2()));
+        mTextViewP4EDH3.setText(String.valueOf(mActivePlayer4.getPlayerEDH3()));
+        mTextViewP4EDH4.setText(String.valueOf(mActivePlayer4.getPlayerEDH4()));
+        mTextViewP4Name.setEnabled(mActivePlayer4.getPlayerIsAlive());
+        mTextViewP4Life.setEnabled(mActivePlayer4.getPlayerIsAlive());
+        mTextViewP4EDH1.setEnabled(mActivePlayer4.getPlayerIsAlive());
+        mTextViewP4EDH2.setEnabled(mActivePlayer4.getPlayerIsAlive());
+        mTextViewP4EDH3.setEnabled(mActivePlayer4.getPlayerIsAlive());
+        mTextViewP4EDH4.setEnabled(mActivePlayer4.getPlayerIsAlive());
+        mTextViewP4Name.setTextColor(mActivePlayer4.getPlayerIsAlive() ? mActivePlayer4.getPlayerColor()[1] : Color.LTGRAY);
+        mTextViewP4Life.setTextColor(mActivePlayer4.getPlayerIsAlive() ? mActivePlayer4.getPlayerColor()[1] : Color.LTGRAY);
+        mTextViewP4EDH1.setTextColor(mActivePlayer4.getPlayerIsAlive() ? mActivePlayer4.getPlayerColor()[0] : Color.LTGRAY);
+        mTextViewP4EDH2.setTextColor(mActivePlayer4.getPlayerIsAlive() ? mActivePlayer4.getPlayerColor()[0] : Color.LTGRAY);
+        mTextViewP4EDH3.setTextColor(mActivePlayer4.getPlayerIsAlive() ? mActivePlayer4.getPlayerColor()[0] : Color.LTGRAY);
+        mTextViewP4EDH4.setTextColor(mActivePlayer4.getPlayerIsAlive() ? mActivePlayer4.getPlayerColor()[0] : Color.LTGRAY);
     }
 }

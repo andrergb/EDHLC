@@ -7,6 +7,12 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
 
+import com.android.argb.edhlc.turn.Turn1PlaceholderFragment;
+import com.android.argb.edhlc.turn.Turn2PlaceholderFragment;
+import com.android.argb.edhlc.turn.Turn3PlaceholderFragment;
+import com.android.argb.edhlc.turn.Turn4PlaceholderFragment;
+import com.android.argb.edhlc.turn.Turn5PlaceholderFragment;
+
 /**
  * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
  * one of the sections/tabs/pages.

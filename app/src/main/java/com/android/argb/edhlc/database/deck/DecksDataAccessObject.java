@@ -23,11 +23,7 @@ public class DecksDataAccessObject {
         decksDBHelper = new DecksDbHelper(context);
     }
 
-    public void close() {
-        decksDBHelper.close();
-    }
-
-    public long createDeck(Deck deck) {
+    public long addDeck(Deck deck) {
         if (!isDeckAdded(deck)) {
             ContentValues values = new ContentValues();
             values.put(DecksContract.DecksEntry.COLUMN_PLAYER_NAME, deck.getPlayerName());
@@ -40,13 +36,8 @@ public class DecksDataAccessObject {
         }
     }
 
-    public long deleteDeck(Deck deck) {
-        return database.delete(
-                DecksContract.DecksEntry.TABLE_NAME,
-                DecksContract.DecksEntry.COLUMN_PLAYER_NAME + " LIKE ? AND "
-                        + DecksContract.DecksEntry.COLUMN_DECK_NAME + " LIKE ?",
-                new String[]{deck.getPlayerName(), deck.getDeckName()}
-        );
+    public void close() {
+        decksDBHelper.close();
     }
 
     public List<Deck> getAllDeckByPlayerName(String playerName) {
@@ -123,6 +114,44 @@ public class DecksDataAccessObject {
 
     public void open() {
         database = decksDBHelper.getWritableDatabase();
+    }
+
+    public long removeDeck(Deck deck) {
+        return database.delete(
+                DecksContract.DecksEntry.TABLE_NAME,
+                DecksContract.DecksEntry.COLUMN_PLAYER_NAME + " LIKE ? AND "
+                        + DecksContract.DecksEntry.COLUMN_DECK_NAME + " LIKE ?",
+                new String[]{deck.getPlayerName(), deck.getDeckName()}
+        );
+    }
+
+    public long updateDeck(Deck oldDeck, Deck newDeck) {
+        if (!isDeckAdded(newDeck)) {
+
+            ContentValues values = new ContentValues();
+            values.put(DecksContract.DecksEntry.COLUMN_PLAYER_NAME, newDeck.getPlayerName());
+            values.put(DecksContract.DecksEntry.COLUMN_DECK_NAME, newDeck.getDeckName());
+            if (newDeck.getDeckColor() != null) {
+                values.put(DecksContract.DecksEntry.COLUMN_DECK_COLOR, String.valueOf(newDeck.getDeckColor()[0] + System.getProperty("path.separator") + newDeck.getDeckColor()[1]));
+            }
+
+            return database.update(DecksContract.DecksEntry.TABLE_NAME,
+                    values,
+                    DecksContract.DecksEntry.COLUMN_PLAYER_NAME + " LIKE ? AND " + DecksContract.DecksEntry.COLUMN_DECK_NAME + " LIKE ?",
+                    new String[]{oldDeck.getPlayerName(), oldDeck.getDeckName()});
+        } else {
+            return -1;
+        }
+    }
+
+    public long updateDeck(String playerOldName, String playerNewName) {
+        ContentValues values = new ContentValues();
+        values.put(DecksContract.DecksEntry.COLUMN_PLAYER_NAME, playerNewName);
+        return database.update(DecksContract.DecksEntry.TABLE_NAME,
+                values,
+                DecksContract.DecksEntry.COLUMN_PLAYER_NAME + " LIKE ?",
+                new String[]{playerOldName});
+
     }
 
     public int updateDeckColor(Deck deck) {

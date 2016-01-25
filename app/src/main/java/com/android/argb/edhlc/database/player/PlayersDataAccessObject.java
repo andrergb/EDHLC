@@ -21,16 +21,7 @@ public class PlayersDataAccessObject {
         playersDBHelper = new PlayersDbHelper(context);
     }
 
-    public void open() {
-        database = playersDBHelper.getWritableDatabase();
-    }
-
-    public void close() {
-        playersDBHelper.close();
-    }
-
-
-    public long createPlayer(String playerName) {
+    public long addPlayer(String playerName) {
         if (!isPlayerAdded(playerName)) {
             ContentValues values = new ContentValues();
             values.put(PlayersContract.PlayersEntry.COLUMN_PLAYER_NAME, playerName);
@@ -38,6 +29,31 @@ public class PlayersDataAccessObject {
         } else {
             return -1;
         }
+    }
+
+    public void close() {
+        playersDBHelper.close();
+    }
+
+    public int deletePlayer(String player) {
+        return database.delete(
+                PlayersContract.PlayersEntry.TABLE_NAME,
+                PlayersContract.PlayersEntry.COLUMN_PLAYER_NAME + " LIKE ?",
+                new String[]{player}
+        );
+    }
+
+    public List<String> getAllPlayers() {
+        List<String> playerList = new ArrayList<>();
+        Cursor cursor = database.query(PlayersContract.PlayersEntry.TABLE_NAME, null, null, null, null, null, null);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            playerList.add(cursor.getString(cursor.getColumnIndexOrThrow(PlayersContract.PlayersEntry.COLUMN_PLAYER_NAME)));
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return playerList;
     }
 
     public boolean isPlayerAdded(String playerName) {
@@ -57,28 +73,21 @@ public class PlayersDataAccessObject {
         }
     }
 
-    public List<String> getAllPlayers() {
-        List<String> playerList = new ArrayList<>();
-        Cursor cursor = database.query(PlayersContract.PlayersEntry.TABLE_NAME, null, null, null, null, null, null);
-
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            playerList.add(cursor.getString(cursor.getColumnIndexOrThrow(PlayersContract.PlayersEntry.COLUMN_PLAYER_NAME)));
-            cursor.moveToNext();
-        }
-        cursor.close();
-        return playerList;
-    }
-
-    public int deletePlayer(String player) {
-        return database.delete(
-                PlayersContract.PlayersEntry.TABLE_NAME,
-                PlayersContract.PlayersEntry.COLUMN_PLAYER_NAME + " LIKE ?",
-                new String[]{player}
-        );
+    public void open() {
+        database = playersDBHelper.getWritableDatabase();
     }
 
     // TODO
     public void updateDeckByPlayerName() {
+    }
+
+    public long updatePlayer(String oldName, String newName) {
+        if (!isPlayerAdded(newName)) {
+            ContentValues values = new ContentValues();
+            values.put(PlayersContract.PlayersEntry.COLUMN_PLAYER_NAME, newName);
+            return database.update(PlayersContract.PlayersEntry.TABLE_NAME, values, PlayersContract.PlayersEntry.COLUMN_PLAYER_NAME + " =?", new String[]{oldName});
+        } else {
+            return -1;
+        }
     }
 }

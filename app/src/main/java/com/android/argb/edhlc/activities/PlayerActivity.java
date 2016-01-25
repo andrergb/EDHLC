@@ -102,7 +102,7 @@ public class PlayerActivity extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_overview, menu);
+        getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
 
@@ -173,7 +173,7 @@ public class PlayerActivity extends ActionBarActivity {
 
         LocalBroadcastManager.getInstance(this).registerReceiver(
                 mBroadcastReceiver,
-                new IntentFilter(Constants.BROADCAST_INTENT_FILTER_DECK_ADDED_OR_REMOVED)
+                new IntentFilter(Constants.BROADCAST_INTENT_FILTER_DECK_CRUD)
         );
 
         if (getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt(Constants.SCREEN_ON, 0) == 1)

@@ -12,8 +12,9 @@
 
     <item
         android:id="@+id/action_history"
+        android:enabled="false"
         android:icon="@drawable/icon_history"
         android:orderInCategory="2"
         android:title="@string/actions_history"
-        app:showAsAction="always"/>
+        app:showAsAction="ifRoom"/>
 </menu>

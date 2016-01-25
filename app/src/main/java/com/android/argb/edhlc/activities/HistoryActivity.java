@@ -2,6 +2,7 @@ package com.android.argb.edhlc.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,6 +22,10 @@ import android.widget.TextView;
 import com.android.argb.edhlc.Constants;
 import com.android.argb.edhlc.R;
 import com.android.argb.edhlc.objects.ActivePlayer;
+import com.android.argb.edhlc.objects.Drawer.DrawerHistory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HistoryActivity extends ActionBarActivity {
 
@@ -41,57 +46,7 @@ public class HistoryActivity extends ActionBarActivity {
 
     private int numPlayers;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_history);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = this.getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(this.getResources().getColor(R.color.edh_default_secondary));
-        }
-
-        numPlayers = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt(Constants.TOTAL_PLAYERS, 4);
-
-        createLayout(this.findViewById(android.R.id.content));
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mActivePlayer1 = ActivePlayer.loadPlayerSharedPreferences(this, 1);
-        mActivePlayer2 = ActivePlayer.loadPlayerSharedPreferences(this, 2);
-        mActivePlayer3 = ActivePlayer.loadPlayerSharedPreferences(this, 3);
-        mActivePlayer4 = ActivePlayer.loadPlayerSharedPreferences(this, 4);
-
-        if (getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt(Constants.SCREEN_ON, 0) == 1)
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        else
-            getWindow().clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
-        updateLayout();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_overview, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        this.finish();
-    }
+    private DrawerHistory drawerHistory;
 
     public void createLayout(View view) {
         if (view != null) {
@@ -121,6 +76,126 @@ public class HistoryActivity extends ActionBarActivity {
                 mLinearLayoutP4.setVisibility(View.GONE);
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawerHistory.isDrawerOpen()) {
+            drawerHistory.dismiss();
+        } else {
+            super.onBackPressed();
+            this.finish();
+        }
+    }
+
+    public void onClickP1(View view) {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("TAG", "1");
+        startActivity(intent);
+        this.finish();
+    }
+
+    public void onClickP2(View view) {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("TAG", "2");
+        startActivity(intent);
+        this.finish();
+    }
+
+    public void onClickP3(View view) {
+        if (isPlayerActive(3)) {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("TAG", "3");
+            startActivity(intent);
+            this.finish();
+        }
+    }
+
+    public void onClickP4(View view) {
+        if (isPlayerActive(4)) {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("TAG", "4");
+            startActivity(intent);
+            this.finish();
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        drawerHistory.getDrawerToggle().onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_history, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //DrawerMain menu
+        if (drawerHistory.getDrawerToggle().onOptionsItemSelected(item)) {
+            return true;
+        }
+
+        //Option menu
+        int id = item.getItemId();
+        if (id == R.id.action_overview) {
+            startActivity(new Intent(this, OverviewActivity.class));
+            this.finish();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_history);
+
+        //DrawerMain menu
+        List<String[]> drawerLists = new ArrayList<>();
+        drawerLists.add(getResources().getStringArray(R.array.string_menu_history_1));
+        drawerLists.add(getResources().getStringArray(R.array.string_menu_history_2));
+
+        assert getSupportActionBar() != null;
+        drawerHistory = new DrawerHistory(this, drawerLists);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = this.getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(this.getResources().getColor(R.color.edh_default_secondary));
+        }
+
+        numPlayers = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt(Constants.TOTAL_PLAYERS, 4);
+
+        createLayout(this.findViewById(android.R.id.content));
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        drawerHistory.getDrawerToggle().syncState();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mActivePlayer1 = ActivePlayer.loadPlayerSharedPreferences(this, 1);
+        mActivePlayer2 = ActivePlayer.loadPlayerSharedPreferences(this, 2);
+        mActivePlayer3 = ActivePlayer.loadPlayerSharedPreferences(this, 3);
+        mActivePlayer4 = ActivePlayer.loadPlayerSharedPreferences(this, 4);
+
+        if (getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt(Constants.SCREEN_ON, 0) == 1)
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        else
+            getWindow().clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        updateLayout();
     }
 
     private boolean isPlayerActive(int i) {
@@ -171,45 +246,13 @@ public class HistoryActivity extends ActionBarActivity {
         }
     }
 
-    public void onClickP1(View view) {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("TAG", "1");
-        startActivity(intent);
-        this.finish();
-    }
-
-    public void onClickP2(View view) {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("TAG", "2");
-        startActivity(intent);
-        this.finish();
-    }
-
-    public void onClickP3(View view) {
-        if (isPlayerActive(3)) {
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("TAG", "3");
-            startActivity(intent);
-            this.finish();
-        }
-    }
-
-    public void onClickP4(View view) {
-        if (isPlayerActive(4)) {
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("TAG", "4");
-            startActivity(intent);
-            this.finish();
-        }
-    }
-
     static class customHistoryListViewAdapter extends BaseAdapter {
 
+        private static LayoutInflater inflater = null;
         Context context;
         String[] dataLife;
         String[] dataEDH;
         int color;
-        private static LayoutInflater inflater = null;
 
         public customHistoryListViewAdapter(Context context, String[] dataLife, String[] dataEDH, int color) {
             this.context = context;
