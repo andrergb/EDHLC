@@ -16,6 +16,7 @@ import android.widget.ListView;
 import com.android.argb.edhlc.R;
 import com.android.argb.edhlc.activities.PlayerListActivity;
 import com.android.argb.edhlc.activities.RecordsActivity;
+import com.android.argb.edhlc.activities.SettingsActivity;
 
 import java.util.List;
 
@@ -60,6 +61,10 @@ public class DrawerHistory {
 
     }
 
+    public void dismiss() {
+        mDrawerLayout.closeDrawers();
+    }
+
     public ActionBarDrawerToggle getDrawerToggle() {
         return mDrawerToggle;
     }
@@ -68,8 +73,24 @@ public class DrawerHistory {
         return (mDrawerLayout.isDrawerOpen(linearLayoutDrawer));
     }
 
-    public void dismiss() {
-        mDrawerLayout.closeDrawers();
+    private void createAboutDialog(View view) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
+        alertDialogBuilder.setTitle("About " + parentActivity.getResources().getString(R.string.app_name));
+        String message;
+        try {
+            message = "\nVersion: " + parentActivity.getPackageManager().getPackageInfo(parentActivity.getPackageName(), 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            message = "";
+        }
+        alertDialogBuilder.setMessage("Created by ARGB" + message);
+        alertDialogBuilder.setPositiveButton("Ok",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
     private class DrawerItemClickListener1 implements AdapterView.OnItemClickListener {
@@ -98,7 +119,8 @@ public class DrawerHistory {
                     break;
                 case 3: //Settings
                     mDrawerLayout.closeDrawers();
-                    // parentActivity.startActivity(new Intent(parentActivity, SettingsActivity.class));
+                    parentActivity.startActivity(new Intent(parentActivity, SettingsActivity.class));
+                    parentActivity.finish();
                     break;
                 case 4: //About
                     mDrawerLayout.closeDrawers();
@@ -106,26 +128,6 @@ public class DrawerHistory {
                     break;
             }
         }
-    }
-
-    private void createAboutDialog(View view) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
-        alertDialogBuilder.setTitle("About " + parentActivity.getResources().getString(R.string.app_name));
-        String message;
-        try {
-            message = "\nVersion: " + parentActivity.getPackageManager().getPackageInfo(parentActivity.getPackageName(), 0).versionName;
-        } catch (PackageManager.NameNotFoundException e) {
-            message = "";
-        }
-        alertDialogBuilder.setMessage("Created by ARGB" + message);
-        alertDialogBuilder.setPositiveButton("Ok",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
     }
 
 }

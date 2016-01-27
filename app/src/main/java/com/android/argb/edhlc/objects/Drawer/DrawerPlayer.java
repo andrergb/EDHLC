@@ -402,6 +402,7 @@ public class DrawerPlayer {
                 case 3: //Settings
                     mDrawerLayout.closeDrawers();
                     parentActivity.startActivity(new Intent(parentActivity, SettingsActivity.class));
+                    parentActivity.finish();
                     break;
                 case 4: //About
                     mDrawerLayout.closeDrawers();
