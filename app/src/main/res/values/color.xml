@@ -1,14 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <item name="selection_lighter_gray" type="color">#ececec</item>
+    <item name="selection_darker_gray" type="color">#bebebe</item>
+
+    <item name="gray" type="color">#666666</item>
+
+    <item name="gray200" type="color">#EEEEEE</item>
+    <item name="gray300" type="color">#E0E0E0</item>
+    <item name="gray400" type="color">#BDBDBD</item>
+    <item name="gray500" type="color">#9E9E9E</item>
+    <item name="gray600" type="color">#757575</item>
+    <item name="gray700" type="color">#616161</item>
+    <item name="gray800" type="color">#424242</item>
+    <item name="gray900" type="color">#212121</item>
+
     <item name="edh_default_primary" type="color">#FF348cac</item>
     <item name="edh_default_secondary" type="color">#ff3580a1</item>
     <integer-array name="edh_default">
         <item>@color/edh_default_primary</item>
         <item>@color/edh_default_secondary</item>
     </integer-array>
+
     <item name="edh_default_primary_aplha" type="color">#32348cac</item>
 
+    <item name="edh_mana_black" type="color">#ccc2c0</item>
+    <item name="edh_mana_blue" type="color">#FFaae0fa</item>
+    <item name="edh_mana_colorless" type="color">#cbc6c1</item>
+    <item name="edh_mana_red" type="color">#faaa8f</item>
+    <item name="edh_mana_green" type="color">#9bd3ae</item>
+    <item name="edh_mana_white" type="color">#FFFFFCD6</item>
 
     <item name="edh_mtg_green" type="color">#0ec60e</item>
     <item name="edh_mtg_white" type="color">#FFFFFFFF</item>
@@ -16,7 +37,6 @@
     <item name="edh_mtg_black" type="color">#FF000000</item>
     <item name="edh_mtg_red" type="color">#e61818</item>
     <item name="edh_mtg_incolor" type="color">#a6a6a6</item>
-
 
     <item name="edh_shield_turquoise_main" type="color">#ff00c5ce</item>
     <item name="edh_shield_turquoise_dark" type="color">#ff00b6bf</item>
