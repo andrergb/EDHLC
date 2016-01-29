@@ -6,7 +6,6 @@
 
     <!-- Main content view -->
     <ExpandableListView
-        android:background="@android:color/background_light"
         android:id="@+id/expandableListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -17,6 +16,7 @@
         android:listSelector="@android:color/transparent"
         android:scrollbars="vertical">
     </ExpandableListView>
+    <!--android:background="@android:color/background_light"-->
 
     <!-- Navigation drawer -->
     <LinearLayout

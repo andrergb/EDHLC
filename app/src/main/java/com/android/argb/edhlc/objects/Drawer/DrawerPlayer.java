@@ -122,49 +122,49 @@ public class DrawerPlayer {
     }
 
     private void createAddDeckDialog(final View view) {
-        View playerNameView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_deck_name, null);
-        final EditText userInput = (EditText) playerNameView.findViewById(R.id.editTextDeckName);
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
-        alertDialogBuilder.setView(playerNameView);
-        alertDialogBuilder.setTitle("Add new Deck");
-        alertDialogBuilder.setMessage("Deck name:");
-        alertDialogBuilder.setPositiveButton("ADD",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                    }
-                });
-        alertDialogBuilder.setNegativeButton("CANCEL",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-        final AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-        alertDialog.show();
-
-        //Override POSITIVE button
-        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String tempName = userInput.getText().toString();
-                if (!tempName.equalsIgnoreCase("")) {
-                    DecksDataAccessObject decksDB = new DecksDataAccessObject(parentActivity);
-                    decksDB.open();
-                    long result = decksDB.addDeck(new Deck(currentPlayer, tempName, new int[]{parentActivity.getResources().getColor(R.color.edh_default_primary), parentActivity.getResources().getColor(R.color.edh_default_secondary)}));
-                    decksDB.close();
-                    if (result != -1) {
-                        Toast.makeText(view.getContext(), tempName + " added", Toast.LENGTH_SHORT).show();
-                        LocalBroadcastManager.getInstance(parentActivity).sendBroadcast(new Intent(Constants.BROADCAST_INTENT_FILTER_DECK_CRUD));
-                        alertDialog.dismiss();
-                    } else {
-                        Toast.makeText(view.getContext(), "Fail: Deck " + tempName + " already exists", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(view.getContext(), "Inset a name", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+//        View playerNameView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_deck_name, null);
+//        final EditText userInput = (EditText) playerNameView.findViewById(R.id.editTextDeckName);
+//        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
+//        alertDialogBuilder.setView(playerNameView);
+//        alertDialogBuilder.setTitle("Add new Deck");
+//        alertDialogBuilder.setMessage("Deck name:");
+//        alertDialogBuilder.setPositiveButton("ADD",
+//                new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int id) {
+//                    }
+//                });
+//        alertDialogBuilder.setNegativeButton("CANCEL",
+//                new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int id) {
+//                        dialog.cancel();
+//                    }
+//                });
+//        final AlertDialog alertDialog = alertDialogBuilder.create();
+//        alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+//        alertDialog.show();
+//
+//        //Override POSITIVE button
+//        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                String tempName = userInput.getText().toString();
+//                if (!tempName.equalsIgnoreCase("")) {
+//                    DecksDataAccessObject decksDB = new DecksDataAccessObject(parentActivity);
+//                    decksDB.open();
+//                    long result = decksDB.addDeck(new Deck(currentPlayer, tempName, new int[]{parentActivity.getResources().getColor(R.color.edh_default_primary), parentActivity.getResources().getColor(R.color.edh_default_secondary)}));
+//                    decksDB.close();
+//                    if (result != -1) {
+//                        Toast.makeText(view.getContext(), tempName + " added", Toast.LENGTH_SHORT).show();
+//                        LocalBroadcastManager.getInstance(parentActivity).sendBroadcast(new Intent(Constants.BROADCAST_INTENT_FILTER_DECK_CRUD));
+//                        alertDialog.dismiss();
+//                    } else {
+//                        Toast.makeText(view.getContext(), "Fail: Deck " + tempName + " already exists", Toast.LENGTH_SHORT).show();
+//                    }
+//                } else {
+//                    Toast.makeText(view.getContext(), "Inset a name", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        });
     }
 
     private void createEditDeckDialog(final View view) {

@@ -29,6 +29,7 @@ public class DecksDataAccessObject {
             values.put(DecksContract.DecksEntry.COLUMN_PLAYER_NAME, deck.getPlayerName());
             values.put(DecksContract.DecksEntry.COLUMN_DECK_NAME, deck.getDeckName());
             values.put(DecksContract.DecksEntry.COLUMN_DECK_COLOR, String.valueOf(deck.getDeckColor()[0] + System.getProperty("path.separator") + deck.getDeckColor()[1]));
+            values.put(DecksContract.DecksEntry.COLUMN_DECK_IDENTITY, deck.getDeckIdentity());
 
             return database.insert(DecksContract.DecksEntry.TABLE_NAME, null, values);
         } else {
@@ -44,7 +45,7 @@ public class DecksDataAccessObject {
         List<Deck> deckList = new ArrayList<>();
         Cursor cursor = database.query(
                 DecksContract.DecksEntry.TABLE_NAME,
-                new String[]{DecksContract.DecksEntry.COLUMN_PLAYER_NAME, DecksContract.DecksEntry.COLUMN_DECK_NAME, DecksContract.DecksEntry.COLUMN_DECK_COLOR},
+                new String[]{DecksContract.DecksEntry.COLUMN_PLAYER_NAME, DecksContract.DecksEntry.COLUMN_DECK_NAME, DecksContract.DecksEntry.COLUMN_DECK_COLOR, DecksContract.DecksEntry.COLUMN_DECK_IDENTITY},
                 DecksContract.DecksEntry.COLUMN_PLAYER_NAME + " LIKE ?",
                 new String[]{playerName},
                 null,
@@ -78,7 +79,7 @@ public class DecksDataAccessObject {
         List<Deck> deckList = new ArrayList<>();
         Cursor cursor = database.query(
                 DecksContract.DecksEntry.TABLE_NAME,
-                new String[]{DecksContract.DecksEntry.COLUMN_PLAYER_NAME, DecksContract.DecksEntry.COLUMN_DECK_NAME, DecksContract.DecksEntry.COLUMN_DECK_COLOR},
+                new String[]{DecksContract.DecksEntry.COLUMN_PLAYER_NAME, DecksContract.DecksEntry.COLUMN_DECK_NAME, DecksContract.DecksEntry.COLUMN_DECK_COLOR, DecksContract.DecksEntry.COLUMN_DECK_IDENTITY},
                 DecksContract.DecksEntry.COLUMN_PLAYER_NAME + " LIKE ? AND " + DecksContract.DecksEntry.COLUMN_DECK_NAME + " LIKE ?",
                 new String[]{playerName, deckName},
                 null,
@@ -131,9 +132,11 @@ public class DecksDataAccessObject {
             ContentValues values = new ContentValues();
             values.put(DecksContract.DecksEntry.COLUMN_PLAYER_NAME, newDeck.getPlayerName());
             values.put(DecksContract.DecksEntry.COLUMN_DECK_NAME, newDeck.getDeckName());
-            if (newDeck.getDeckColor() != null) {
+            if (newDeck.getDeckColor() != null)
                 values.put(DecksContract.DecksEntry.COLUMN_DECK_COLOR, String.valueOf(newDeck.getDeckColor()[0] + System.getProperty("path.separator") + newDeck.getDeckColor()[1]));
-            }
+
+            if (newDeck.getDeckIdentity() != null)
+                values.put(DecksContract.DecksEntry.COLUMN_DECK_IDENTITY, newDeck.getDeckIdentity());
 
             return database.update(DecksContract.DecksEntry.TABLE_NAME,
                     values,
@@ -171,6 +174,7 @@ public class DecksDataAccessObject {
         deck.setDeckColor(
                 new int[]{Integer.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(DecksContract.DecksEntry.COLUMN_DECK_COLOR)).split(System.getProperty("path.separator"))[0]),
                         Integer.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(DecksContract.DecksEntry.COLUMN_DECK_COLOR)).split(System.getProperty("path.separator"))[1])});
+        deck.setDeckIdentity(cursor.getString(cursor.getColumnIndexOrThrow(DecksContract.DecksEntry.COLUMN_DECK_IDENTITY)));
         return deck;
     }
 

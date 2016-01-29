@@ -8,11 +8,7 @@ public class Deck {
     protected String playerName;
     protected String deckName;
     protected int[] deckColor;
-
-    //TODO Deck Improvement
-    //protected String general;
-    //protected String type;
-    //protected String deckList;
+    protected String deckIdentity;
 
     public Deck() {
     }
@@ -28,12 +24,27 @@ public class Deck {
         this.deckColor = deckColor;
     }
 
+    public Deck(String playerName, String deckName, int[] deckColor, String deckIdentity) {
+        this.playerName = playerName;
+        this.deckName = deckName;
+        this.deckColor = deckColor;
+        this.deckIdentity = deckIdentity;
+    }
+
     public int[] getDeckColor() {
         return deckColor;
     }
 
     public void setDeckColor(int[] deckColor) {
         this.deckColor = deckColor;
+    }
+
+    public String getDeckIdentity() {
+        return deckIdentity;
+    }
+
+    public void setDeckIdentity(String identity) {
+        this.deckIdentity = identity;
     }
 
     public String getDeckName() {

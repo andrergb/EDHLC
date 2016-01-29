@@ -16,5 +16,6 @@ public class DecksContract {
         public static final String COLUMN_PLAYER_NAME = "playername";
         public static final String COLUMN_DECK_NAME = "deckname";
         public static final String COLUMN_DECK_COLOR = "deckcolor";
+        public static final String COLUMN_DECK_IDENTITY = "deckidentity";
     }
 }

@@ -2,16 +2,12 @@ package com.android.argb.edhlc.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,14 +33,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class PlayerListActivity extends ActionBarActivity {
+public class PlayerListActivity extends AppCompatActivity {
 
     private static CheckBox checkBox;
-    BroadcastReceiver mPlayerCRUDBroadcastReceiver;
     ExpandableListAdapter mExpandableListAdapter;
     ExpandableListView mExpandableListView;
     List<String[]> listDataHeader;
-    HashMap<String, List<String>> listDataChild;
+    HashMap<String, List<String[]>> listDataChild;
     Activity activity;
 
     private PlayersDataAccessObject playersDB;
@@ -57,32 +52,23 @@ public class PlayerListActivity extends ActionBarActivity {
         if (view != null) {
             checkBox = (CheckBox) findViewById(R.id.checkBoxKeepScreenOn);
 
-            // get the listview
             mExpandableListView = (ExpandableListView) findViewById(R.id.expandableListView);
 
             mExpandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
                 @Override
                 public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                    Toast.makeText(
-                            getApplicationContext(),
-                            listDataHeader.get(groupPosition)[0]
-                                    + " : "
-                                    + listDataChild.get(
-                                    listDataHeader.get(groupPosition)[0]).get(
-                                    childPosition), Toast.LENGTH_SHORT)
-                            .show();
-
+                    Toast.makeText(getApplicationContext(), listDataHeader.get(groupPosition)[0] + " : " + listDataChild.get(listDataHeader.get(groupPosition)[0]).get(childPosition)[0], Toast.LENGTH_SHORT).show();
 
 //                    Intent intent = new Intent(PlayerListActivity.this, RecordsActivity.class);
 //                    intent.putExtra("RECORDS_PLAYER_NAME", listDataHeader.get(groupPosition)[0]);
-//                    intent.putExtra("RECORDS_DECK_NAME", listDataChild.get(
-//                            listDataHeader.get(groupPosition)[0]).get(
-//                            childPosition));
+//                    intent.putExtra("RECORDS_DECK_NAME", listDataChild.get(listDataHeader.get(groupPosition)[0]).get(childPosition));
 //                    startActivity(intent);
 
                     Intent intent = new Intent(PlayerListActivity.this, PlayerActivity.class);
                     intent.putExtra("PLAYERNAME", listDataHeader.get(groupPosition)[0]);
                     startActivity(intent);
+
+                    PlayerListActivity.this.finish();
 
                     return false;
                 }
@@ -100,6 +86,13 @@ public class PlayerListActivity extends ActionBarActivity {
                 }
             });
         }
+
+        listDataHeader = new ArrayList<>();
+        listDataChild = new HashMap<>();
+        prepareListData();
+
+        mExpandableListAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
+        mExpandableListView.setAdapter(mExpandableListAdapter);
     }
 
     @Override
@@ -110,7 +103,7 @@ public class PlayerListActivity extends ActionBarActivity {
             super.onBackPressed();
     }
 
-    public void onClickButtonMoreHeader(final String player) {
+    public void onClickButtonMoreHeader(final String player, final int position) {
         View viewMoreHeader = LayoutInflater.from(this).inflate(R.layout.dialog_header_options, null);
         RelativeLayout layoutAddDeck = (RelativeLayout) viewMoreHeader.findViewById(R.id.layoutAddDeck);
         RelativeLayout layoutEditPlayer = (RelativeLayout) viewMoreHeader.findViewById(R.id.layoutEditPlayer);
@@ -125,7 +118,8 @@ public class PlayerListActivity extends ActionBarActivity {
         layoutAddDeck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO
+                createAddDeckDialog(v, player, position);
+                alertDialog.dismiss();
             }
         });
         layoutEditPlayer.setOnClickListener(new View.OnClickListener() {
@@ -138,12 +132,7 @@ public class PlayerListActivity extends ActionBarActivity {
         layoutRemovePlayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (playersDB.deletePlayer(player) != 0) {
-                    updateLayout();
-                    Toast.makeText(v.getContext(), player + " removed", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(v.getContext(), "ERROR", Toast.LENGTH_SHORT).show();
-                }
+                createDeletePlayerDialog(v, player);
                 alertDialog.dismiss();
             }
         });
@@ -208,25 +197,12 @@ public class PlayerListActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        //Broadcast
-        mPlayerCRUDBroadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                updateLayout();
-            }
-        };
-        LocalBroadcastManager.getInstance(this).registerReceiver(
-                mPlayerCRUDBroadcastReceiver,
-                new IntentFilter(Constants.BROADCAST_INTENT_FILTER_PLAYER_CRUD)
-        );
-
         createLayout(this.findViewById(android.R.id.content));
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mPlayerCRUDBroadcastReceiver);
         playersDB.close();
         recordsDB.close();
         decksDB.close();
@@ -255,13 +231,96 @@ public class PlayerListActivity extends ActionBarActivity {
         updateLayout();
     }
 
+    private void createAddDeckDialog(final View view, final String player, final int position) {
+        View playerNameView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_deck_name, null);
+        final EditText userInput = (EditText) playerNameView.findViewById(R.id.editTextDeckName);
+        final CheckBox checkBoxManaWhite = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_white);
+        final CheckBox checkBoxManaBlue = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_blue);
+        final CheckBox checkBoxManaBlack = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_black);
+        final CheckBox checkBoxManaRed = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_red);
+        final CheckBox checkBoxManaGreen = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_green);
+        final CheckBox checkBoxManaColorless = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_colorless);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
+        alertDialogBuilder.setView(playerNameView);
+        alertDialogBuilder.setTitle("Add new Deck for " + player);
+        alertDialogBuilder.setPositiveButton("ADD",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                });
+        alertDialogBuilder.setNegativeButton("CANCEL",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        alertDialog.show();
+
+        //Override POSITIVE button
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String tempName = userInput.getText().toString();
+                if (!tempName.equalsIgnoreCase("")) {
+
+                    String colorIdentity = "";
+                    colorIdentity = checkBoxManaWhite.isChecked() ? colorIdentity.concat("1") : colorIdentity.concat("0");
+                    colorIdentity = checkBoxManaBlue.isChecked() ? colorIdentity.concat("1") : colorIdentity.concat("0");
+                    colorIdentity = checkBoxManaBlack.isChecked() ? colorIdentity.concat("1") : colorIdentity.concat("0");
+                    colorIdentity = checkBoxManaRed.isChecked() ? colorIdentity.concat("1") : colorIdentity.concat("0");
+                    colorIdentity = checkBoxManaGreen.isChecked() ? colorIdentity.concat("1") : colorIdentity.concat("0");
+                    colorIdentity = checkBoxManaColorless.isChecked() ? colorIdentity.concat("1") : colorIdentity.concat("0");
+
+                    if (decksDB.addDeck(new Deck(player, tempName, new int[]{PlayerListActivity.this.getResources().getColor(R.color.edh_default_primary), PlayerListActivity.this.getResources().getColor(R.color.edh_default_secondary)}, colorIdentity)) != -1) {
+                        Toast.makeText(view.getContext(), tempName + " added", Toast.LENGTH_SHORT).show();
+                        updateLayout();
+                        alertDialog.dismiss();
+                        mExpandableListView.expandGroup(position);
+                    } else {
+                        Toast.makeText(view.getContext(), "Fail: Deck " + tempName + " already exists", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(view.getContext(), "Insert a name", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void createDeletePlayerDialog(final View view, final String player) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
+        alertDialogBuilder.setTitle("Delete " + player);
+        alertDialogBuilder.setPositiveButton("DELETE",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        if (playersDB.deletePlayer(player) != 0) {
+                            updateLayout();
+                            Toast.makeText(view.getContext(), player + " removed", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(view.getContext(), "ERROR", Toast.LENGTH_SHORT).show();
+                        }
+                        dialog.cancel();
+                    }
+                });
+        alertDialogBuilder.setNegativeButton("CANCEL",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
     private void createEditPlayerDialog(final View view, final String oldName) {
         View playerNameView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_player_name, null);
         final EditText userInput = (EditText) playerNameView.findViewById(R.id.editTextPlayerName);
+        userInput.setText(oldName);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
         alertDialogBuilder.setView(playerNameView);
-        alertDialogBuilder.setTitle("Edit Player");
-        alertDialogBuilder.setMessage("Choose a new name for " + oldName + ": ");
+        alertDialogBuilder.setTitle("Edit " + oldName);
         alertDialogBuilder.setPositiveButton("EDIT",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -301,13 +360,17 @@ public class PlayerListActivity extends ActionBarActivity {
         });
     }
 
-    private void createRemovePlayerDialog(final View view, final String player) {
-
-    }
-
     private void prepareListData() {
-        listDataHeader = new ArrayList<>();
-        listDataChild = new HashMap<>();
+        if (listDataHeader == null)
+            listDataHeader = new ArrayList<>();
+        else
+            listDataHeader.clear();
+
+        if (listDataChild == null)
+            listDataChild = new HashMap<>();
+        else
+            listDataChild.clear();
+
 
         List<String> auxAllPlayers = new ArrayList<>(playersDB.getAllPlayers());
         for (int i = 0; i < auxAllPlayers.size(); i++) {
@@ -322,9 +385,10 @@ public class PlayerListActivity extends ActionBarActivity {
         for (int i = 0; i < listDataHeader.size(); i++) {
             List<Deck> decks = decksDB.getAllDeckByPlayerName(listDataHeader.get(i)[0]);
 
-            List<String> auxDecks = new ArrayList<>();
-            for (int j = 0; j < decks.size(); j++)
-                auxDecks.add(decks.get(j).getDeckName());
+            List<String[]> auxDecks = new ArrayList<>();
+            for (int j = 0; j < decks.size(); j++) {
+                auxDecks.add(new String[]{decks.get(j).getDeckName(), decks.get(j).getDeckIdentity()});
+            }
 
             listDataChild.put(listDataHeader.get(i)[0], auxDecks);
         }
@@ -332,8 +396,8 @@ public class PlayerListActivity extends ActionBarActivity {
 
     private void updateLayout() {
         prepareListData();
-        mExpandableListAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
-        mExpandableListView.setAdapter(mExpandableListAdapter);
+
+        mExpandableListAdapter.notifyDataSetChanged();
 
         if (getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt(Constants.SCREEN_ON, 0) == 1) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
