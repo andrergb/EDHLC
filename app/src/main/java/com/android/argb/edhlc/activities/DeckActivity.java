@@ -1,47 +1,40 @@
 package com.android.argb.edhlc.activities;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.media.Image;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.ExpandableListView;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.argb.edhlc.Constants;
-import com.android.argb.edhlc.ExpandableListAdapter;
 import com.android.argb.edhlc.R;
 import com.android.argb.edhlc.database.deck.DecksDataAccessObject;
-import com.android.argb.edhlc.database.player.PlayersDataAccessObject;
 import com.android.argb.edhlc.database.record.RecordsDataAccessObject;
 import com.android.argb.edhlc.objects.Deck;
-import com.android.argb.edhlc.objects.Drawer.DrawerPlayerList;
 import com.android.argb.edhlc.objects.Record;
 
+import org.achartengine.ChartFactory;
+import org.achartengine.GraphicalView;
+import org.achartengine.model.MultipleCategorySeries;
+import org.achartengine.renderer.DefaultRenderer;
+import org.achartengine.renderer.SimpleSeriesRenderer;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class DeckActivity extends AppCompatActivity {
 
-
-    private TextView textviewDeckName;
+    private LinearLayout doughnutChartLinearLayout;
     private ImageView imageViewShieldColor;
+    private TextView textViewDeckName;
     private List<ImageView> listIdentityHolder;
     private ImageView imageViewMana1;
     private ImageView imageViewMana2;
@@ -50,13 +43,23 @@ public class DeckActivity extends AppCompatActivity {
     private ImageView imageViewMana5;
     private ImageView imageViewMana6;
     private TextView textViewTotalGame;
-    private TextView textViewGames;
+
+    private int[] COLORS;
+    private MultipleCategorySeries mMultipleCategorySeriesDataSet;
+    private DefaultRenderer mDoughnutRender;
+    private GraphicalView mDoughnutChartView;
+
+    private Deck currentDeck;
     private String mPlayerName;
     private String mDeckName;
     private String mDeckIdentity;
+
     private DecksDataAccessObject decksDB;
     private RecordsDataAccessObject recordsDB;
-    private Deck currentDeck;
+    private TextView textViewFirst;
+    private TextView textViewSecond;
+    private TextView textViewThird;
+    private TextView textViewFourth;
 
     @Override
     public void onBackPressed() {
@@ -83,6 +86,53 @@ public class DeckActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void updateDonutChart(int first, int second, int third, int fourth) {
+        textViewFirst.setText("1st: " + first);
+        textViewSecond.setText("2nd: " + second);
+        textViewThird.setText("3rd: " + third);
+        textViewFourth.setText("4th: " + fourth);
+
+        List<double[]> values = new ArrayList<>();
+        values.add(new double[]{first, second, third, fourth});
+        values.add(new double[]{0, 0, 0, 0});
+        values.add(new double[]{0, 0, 0, 0});
+
+        List<String[]> titles = new ArrayList<>();
+        titles.add(new String[]{String.valueOf(first), String.valueOf(second), String.valueOf(third), String.valueOf(fourth)});
+        titles.add(new String[]{"", "", "", ""});
+        titles.add(new String[]{"", "", "", ""});
+
+        mMultipleCategorySeriesDataSet = new MultipleCategorySeries("");
+        mMultipleCategorySeriesDataSet.clear();
+        for (int i = 0; i < values.size(); i++)
+            mMultipleCategorySeriesDataSet.add(titles.get(i), values.get(i));
+
+        mDoughnutRender = new DefaultRenderer();
+        for (int color : COLORS) {
+            SimpleSeriesRenderer r = new SimpleSeriesRenderer();
+            r.setColor(color);
+            mDoughnutRender.addSeriesRenderer(r);
+        }
+
+        mDoughnutRender.setZoomEnabled(false);
+        mDoughnutRender.setZoomButtonsVisible(false);
+        mDoughnutRender.setPanEnabled(false);
+        mDoughnutRender.setShowLegend(false);
+        mDoughnutRender.setClickEnabled(false);
+        mDoughnutRender.setScale((float) 1.2);
+        mDoughnutRender.setShowLabels(false);
+        mDoughnutRender.setDisplayValues(true);
+        mDoughnutRender.setStartAngle(225);
+        mDoughnutRender.setBackgroundColor(Color.TRANSPARENT);
+
+        mDoughnutChartView = ChartFactory.getDoughnutChartView(this, mMultipleCategorySeriesDataSet, mDoughnutRender);
+
+        doughnutChartLinearLayout.removeAllViews();
+        doughnutChartLinearLayout.addView(mDoughnutChartView);
+
+        mDoughnutChartView.repaint();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,13 +157,57 @@ public class DeckActivity extends AppCompatActivity {
         decksDB.open();
         recordsDB.open();
 
+        COLORS = new int[]{this.getResources().getColor(R.color.first),
+                this.getResources().getColor(R.color.second),
+                this.getResources().getColor(R.color.third),
+                this.getResources().getColor(R.color.fourth)};
+
         createLayout(this.findViewById(android.R.id.content));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        decksDB.close();
+        recordsDB.close();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedState) {
+        super.onRestoreInstanceState(savedState);
+        mMultipleCategorySeriesDataSet = (MultipleCategorySeries) savedState.getSerializable("current_series");
+        mDoughnutRender = (DefaultRenderer) savedState.getSerializable("current_renderer");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        updateLayout();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("current_series", mMultipleCategorySeriesDataSet);
+        outState.putSerializable("current_renderer", mDoughnutRender);
     }
 
     private void createLayout(View view) {
         if (view != null) {
             //Deck name
-            textviewDeckName = (TextView) view.findViewById(R.id.textviewDeckName);
+            textViewDeckName = (TextView) view.findViewById(R.id.textviewDeckName);
 
             //Shield color
             imageViewShieldColor = (ImageView) view.findViewById(R.id.imageViewShieldColor);
@@ -144,14 +238,23 @@ public class DeckActivity extends AppCompatActivity {
             //Total games
             textViewTotalGame = (TextView) view.findViewById(R.id.textViewTotalGame);
 
-            //Game history (0/0/0/0)
-            textViewGames = (TextView) view.findViewById(R.id.textViewGames);
+            //Chart game history
+            //LinearLayout layoutChart = (LinearLayout) findViewById(R.id.chart);
+            //layoutChart.addView(mChartView);
+
+            //TODO
+            doughnutChartLinearLayout = (LinearLayout) findViewById(R.id.chart);
+
+            textViewFirst = (TextView) view.findViewById(R.id.textViewFirst);
+            textViewSecond = (TextView) view.findViewById(R.id.textViewSecond);
+            textViewThird = (TextView) view.findViewById(R.id.textViewThird);
+            textViewFourth = (TextView) view.findViewById(R.id.textViewFourth);
         }
     }
 
     private void updateLayout() {
         //Deck name
-        textviewDeckName.setText(mDeckName);
+        textViewDeckName.setText(mDeckName);
 
         //Shield color
         imageViewShieldColor.setColorFilter(decksDB.getDeck(mPlayerName, mDeckName).getDeckColor()[0]);
@@ -190,39 +293,15 @@ public class DeckActivity extends AppCompatActivity {
 
         //Total games
         List<Record> records = recordsDB.getAllRecordsByDeck(currentDeck);
-        textViewTotalGame.setText(records.size() + " games played");
+        textViewTotalGame.setText("" + records.size());
 
         //Game history (0/0/0/0)
         int first = recordsDB.getAllFirstPlaceRecordsByDeck(currentDeck).size();
         int second = recordsDB.getAllSecondPlaceRecordsByDeck(currentDeck).size();
         int third = recordsDB.getAllThirdPlaceRecordsByDeck(currentDeck).size();
         int fourth = recordsDB.getAllFourthPlaceRecordsByDeck(currentDeck).size();
-        textViewGames.setText("(" + first + "/" + second + "/" + third + "/" + fourth + ")");
 
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        decksDB.close();
-        recordsDB.close();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        updateLayout();
+        //TODO
+        updateDonutChart(5, 4, 3, 2);
     }
 }
