@@ -10,23 +10,28 @@ public class Record {
 
     protected Deck emptyDeck = new Deck("", "");
 
+    protected int totalPlayers;
     protected Deck fistPlace;
     protected Deck secondPlace;
     protected Deck thirdPlace;
     protected Deck fourthPlace;
+    private String date;
 
     public Record() {
     }
+//
+//    public Record(Deck fistPlace, Deck secondPlace, Deck thirdPlace, Deck fourthPlace) {
+//        this.fistPlace = fistPlace;
+//        this.secondPlace = secondPlace;
+//        this.thirdPlace = thirdPlace;
+//        this.fourthPlace = fourthPlace;
+//    }
 
-    public Record(Deck fistPlace, Deck secondPlace, Deck thirdPlace, Deck fourthPlace) {
-        this.fistPlace = fistPlace;
-        this.secondPlace = secondPlace;
-        this.thirdPlace = thirdPlace;
-        this.fourthPlace = fourthPlace;
+    public Record(List<Deck> listDeck, String date) {
+        this.date = date;
 
-    }
+        this.totalPlayers = listDeck.size();
 
-    public Record(List<Deck> listDeck) {
         this.fistPlace = emptyDeck;
         this.secondPlace = emptyDeck;
         this.thirdPlace = emptyDeck;
@@ -42,17 +47,6 @@ public class Record {
             this.fourthPlace = listDeck.get(3);
     }
 
-    public static boolean isValidRecord(List<Deck> deckList) {
-        for (int j = 0; j <= deckList.size() - 2; j++) {
-            for (int i = j + 1; i <= deckList.size() - 1; i++) {
-                if (deckList.get(j).isEqualDeck(deckList.get(i))) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
     public static boolean isValidRecord(List<Deck> deckList, Deck analyzed) {
         List<Deck> aux = new ArrayList<>(deckList);
         aux.add(analyzed);
@@ -66,6 +60,14 @@ public class Record {
         }
         aux.clear();
         return true;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public Deck getFirstPlace() {
@@ -94,6 +96,14 @@ public class Record {
 
     public void setThirdPlace(Deck thirdPlace) {
         this.thirdPlace = thirdPlace;
+    }
+
+    public int getTotalPlayers() {
+        return this.totalPlayers;
+    }
+
+    public void setTotalPlayers(int totalPlayers) {
+        this.totalPlayers = totalPlayers;
     }
 
     public void setFistPlace(Deck fistPlace) {

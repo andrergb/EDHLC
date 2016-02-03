@@ -417,7 +417,7 @@ public class DynamicListView extends ListView {
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(LINE_THICKNESS);
-        paint.setColor(getResources().getColor(R.color.edh_default_secondary));
+        paint.setColor(getResources().getColor(R.color.dark_primary_color));
 
         can.drawBitmap(bitmap, 0, 0, null);
         can.drawRoundRect(rectF, RADIUS, RADIUS, paint);

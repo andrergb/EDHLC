@@ -43,7 +43,7 @@ public class SettingsActivity extends ActionBarActivity {
             Window window = this.getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(this.getResources().getColor(R.color.edh_default_secondary));
+            window.setStatusBarColor(this.getResources().getColor(R.color.dark_primary_color));
         }
 
         //DrawerMain menu

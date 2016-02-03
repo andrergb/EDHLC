@@ -124,7 +124,7 @@ public class PlayerActivity extends ActionBarActivity {
             Window window = this.getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(this.getResources().getColor(R.color.edh_default_secondary));
+            window.setStatusBarColor(this.getResources().getColor(R.color.dark_primary_color));
         }
 
         decksDB = new DecksDataAccessObject(this);
@@ -188,60 +188,60 @@ public class PlayerActivity extends ActionBarActivity {
     }
 
     private void updateLayout() {
-        if (getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt(Constants.SCREEN_ON, 0) == 1) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-            checkBox.setChecked(true);
-        } else {
-            checkBox.setChecked(false);
-            getWindow().clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        }
-
-        /*ActivePlayer's info - for all decks*/
-        List<Record> recordsAllPositions = recordsDB.getAllRecordsByPlayerName(mPlayerName);
-        List<Record> recordsFirst = recordsDB.getAllFirstPlaceRecordsByPlayerName(mPlayerName);
-        List<Record> recordsSecond = recordsDB.getAllSecondPlaceRecordsByPlayerName(mPlayerName);
-        List<Record> recordsThird = recordsDB.getAllThirdPlaceRecordsByPlayerName(mPlayerName);
-        List<Record> recordsFourth = recordsDB.getAllFourthPlaceRecordsByPlayerName(mPlayerName);
-
-        textViewPlayerName.setText(mPlayerName);
-        textViewPlayerGames.setText(getString(R.string.player_games,
-                recordsAllPositions.size(),
-                recordsFirst.size(),
-                recordsSecond.size(),
-                recordsThird.size(),
-                recordsFourth.size()));
-
-        /*Information for each deck*/
-        List<Deck> decks = decksDB.getAllDeckByPlayerName(mPlayerName);
-        textViewPlayerTotalDecks.setText(getString(R.string.player_decks, decks.size()));
-
-        /*
-        * List<Record> => All records in 1st/2nd/3rd/4th for a specific deck
-        * List < List<Record>> => each position is a list from a specific deck
-        * */
-        List<List<Record>> recordsFirstPlaceByDeck = new ArrayList<>();
-        List<List<Record>> recordsSecondPlaceByDeck = new ArrayList<>();
-        List<List<Record>> recordsThirdPlaceByDeck = new ArrayList<>();
-        List<List<Record>> recordsFourthPlaceByDeck = new ArrayList<>();
-
-        /*
-        * Get all 1st/2nd/3rd/4th records for each active player's deck
-        * */
-        for (int i = 0; i < decks.size(); i++) {
-            recordsFirstPlaceByDeck.add(recordsDB.getAllFirstPlaceRecordsByDeck(decks.get(i)));
-            recordsSecondPlaceByDeck.add(recordsDB.getAllSecondPlaceRecordsByDeck(decks.get(i)));
-            recordsThirdPlaceByDeck.add(recordsDB.getAllThirdPlaceRecordsByDeck(decks.get(i)));
-            recordsFourthPlaceByDeck.add(recordsDB.getAllFourthPlaceRecordsByDeck(decks.get(i)));
-        }
-
-
-        listViewPlayerDecks.setAdapter(new customDeckListViewAdapter(
-                this.getBaseContext(),
-                decks,
-                recordsFirstPlaceByDeck,
-                recordsSecondPlaceByDeck,
-                recordsThirdPlaceByDeck,
-                recordsFourthPlaceByDeck));
+//        if (getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt(Constants.SCREEN_ON, 0) == 1) {
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+//            checkBox.setChecked(true);
+//        } else {
+//            checkBox.setChecked(false);
+//            getWindow().clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+//        }
+//
+//        /*ActivePlayer's info - for all decks*/
+//        List<Record> recordsAllPositions = recordsDB.getAllRecordsByPlayerName(mPlayerName);
+//        List<Record> recordsFirst = recordsDB.getAllFirstPlaceRecordsByPlayerName(mPlayerName);
+//        List<Record> recordsSecond = recordsDB.getAllSecondPlaceRecordsByPlayerName(mPlayerName);
+//        List<Record> recordsThird = recordsDB.getAllThirdPlaceRecordsByPlayerName(mPlayerName);
+//        List<Record> recordsFourth = recordsDB.getAllFourthPlaceRecordsByPlayerName(mPlayerName);
+//
+//        textViewPlayerName.setText(mPlayerName);
+//        textViewPlayerGames.setText(getString(R.string.player_games,
+//                recordsAllPositions.size(),
+//                recordsFirst.size(),
+//                recordsSecond.size(),
+//                recordsThird.size(),
+//                recordsFourth.size()));
+//
+//        /*Information for each deck*/
+//        List<Deck> decks = decksDB.getAllDeckByPlayerName(mPlayerName);
+//        textViewPlayerTotalDecks.setText(getString(R.string.player_decks, decks.size()));
+//
+//        /*
+//        * List<Record> => All records in 1st/2nd/3rd/4th for a specific deck
+//        * List < List<Record>> => each position is a list from a specific deck
+//        * */
+//        List<List<Record>> recordsFirstPlaceByDeck = new ArrayList<>();
+//        List<List<Record>> recordsSecondPlaceByDeck = new ArrayList<>();
+//        List<List<Record>> recordsThirdPlaceByDeck = new ArrayList<>();
+//        List<List<Record>> recordsFourthPlaceByDeck = new ArrayList<>();
+//
+//        /*
+//        * Get all 1st/2nd/3rd/4th records for each active player's deck
+//        * */
+//        for (int i = 0; i < decks.size(); i++) {
+//            recordsFirstPlaceByDeck.add(recordsDB.getAllFirstPlaceRecordsByDeck(decks.get(i)));
+//            recordsSecondPlaceByDeck.add(recordsDB.getAllSecondPlaceRecordsByDeck(decks.get(i)));
+//            recordsThirdPlaceByDeck.add(recordsDB.getAllThirdPlaceRecordsByDeck(decks.get(i)));
+//            recordsFourthPlaceByDeck.add(recordsDB.getAllFourthPlaceRecordsByDeck(decks.get(i)));
+//        }
+//
+//
+//        listViewPlayerDecks.setAdapter(new customDeckListViewAdapter(
+//                this.getBaseContext(),
+//                decks,
+//                recordsFirstPlaceByDeck,
+//                recordsSecondPlaceByDeck,
+//                recordsThirdPlaceByDeck,
+//                recordsFourthPlaceByDeck));
     }
 
     class customDeckListViewAdapter extends BaseAdapter {

@@ -3,7 +3,7 @@ package com.android.argb.edhlc.database.record;
 import android.provider.BaseColumns;
 
 /**
- * Created by agbarros on 05/11/2015.
+ * -Created by agbarros on 05/11/2015.
  */
 public class RecordsContract {
 
@@ -13,6 +13,10 @@ public class RecordsContract {
     public static abstract class RecordsEntry implements BaseColumns {
         public static final String TABLE_NAME = "records";
         public static final String COLUMN_ID = "_id";
+
+        public static final String COLUMN_DATE = "logdate";
+
+        public static final String COLUMN_TOTAL_PLAYERS = "totalplayers";
 
         public static final String COLUMN_FIRST_PLAYER_NAME = "firstplayername";
         public static final String COLUMN_FIRST_PLAYER_DECK = "firstplayerdeck";

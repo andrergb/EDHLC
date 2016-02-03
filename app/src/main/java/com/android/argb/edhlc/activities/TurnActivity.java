@@ -48,7 +48,7 @@ public class TurnActivity extends ActionBarActivity {
             Window window = this.getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(this.getResources().getColor(R.color.edh_default_secondary));
+            window.setStatusBarColor(this.getResources().getColor(R.color.dark_primary_color));
         }
 
         mSectionsPagerAdapter = new TurnSectionsPagerAdapter(getSupportFragmentManager());
@@ -242,19 +242,19 @@ public class TurnActivity extends ActionBarActivity {
 
         switch (mViewPager.getCurrentItem()) {
             case 0:
-                textViewPhase1.setTextColor(getResources().getColor(R.color.edh_mtg_black));
+                textViewPhase1.setTextColor(getResources().getColor(android.R.color.black));
                 break;
             case 1:
-                textViewPhase2.setTextColor(getResources().getColor(R.color.edh_mtg_black));
+                textViewPhase2.setTextColor(getResources().getColor(android.R.color.black));
                 break;
             case 2:
-                textViewPhase3.setTextColor(getResources().getColor(R.color.edh_mtg_black));
+                textViewPhase3.setTextColor(getResources().getColor(android.R.color.black));
                 break;
             case 3:
-                textViewPhase4.setTextColor(getResources().getColor(R.color.edh_mtg_black));
+                textViewPhase4.setTextColor(getResources().getColor(android.R.color.black));
                 break;
             case 4:
-                textViewPhase5.setTextColor(getResources().getColor(R.color.edh_mtg_black));
+                textViewPhase5.setTextColor(getResources().getColor(android.R.color.black));
                 break;
         }
     }

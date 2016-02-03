@@ -36,6 +36,7 @@ import com.android.argb.edhlc.objects.Record;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -264,8 +265,15 @@ public class DrawerMain {
                 if (mDecksListToBeRecorded.size() >= 2) {
                     RecordsDataAccessObject recordDB = new RecordsDataAccessObject(parentActivity);
                     recordDB.open();
-                    long result = recordDB.addRecord(new Record(mDecksListToBeRecorded));
+
+                    Calendar c = Calendar.getInstance();
+                    String date = String.valueOf(c.get(Calendar.YEAR))
+                            + "/" + String.valueOf(c.get(Calendar.MONTH))
+                            + "/" + String.valueOf(c.get(Calendar.DAY_OF_MONTH));
+
+                    long result = recordDB.addRecord(new Record(mDecksListToBeRecorded, date));
                     recordDB.close();
+
                     if (result != -1)
                         Toast.makeText(view.getContext(), "Game saved", Toast.LENGTH_SHORT).show();
                     else
@@ -483,7 +491,7 @@ public class DrawerMain {
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             mNewGameDecks.remove(position);
-                            String defaultColor = parentActivity.getResources().getColor(R.color.edh_default_primary) + System.getProperty("path.separator") + parentActivity.getResources().getColor(R.color.edh_default_secondary);
+                            String defaultColor = parentActivity.getResources().getColor(R.color.primary_color) + System.getProperty("path.separator") + parentActivity.getResources().getColor(R.color.dark_primary_color);
                             if (!mNewGameDecks.contains(parentActivity.getResources().getString(R.string.default_player_1) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_1)))
                                 mNewGameDecks.add(position, parentActivity.getResources().getString(R.string.default_player_1) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_1) + System.getProperty("line.separator") + defaultColor);
                             else if (!mNewGameDecks.contains(parentActivity.getResources().getString(R.string.default_player_2) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_2)))
@@ -642,7 +650,7 @@ public class DrawerMain {
                     mDrawerLayout.closeDrawers();
 
                     mNewGameDecks = new ArrayList<>();
-                    String defaultColor = parentActivity.getResources().getColor(R.color.edh_default_primary) + System.getProperty("path.separator") + parentActivity.getResources().getColor(R.color.edh_default_secondary);
+                    String defaultColor = parentActivity.getResources().getColor(R.color.primary_color) + System.getProperty("path.separator") + parentActivity.getResources().getColor(R.color.dark_primary_color);
                     mNewGameDecks.add(parentActivity.getResources().getString(R.string.default_player_1) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_1) + System.getProperty("line.separator") + defaultColor);
                     mNewGameDecks.add(parentActivity.getResources().getString(R.string.default_player_2) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_2) + System.getProperty("line.separator") + defaultColor);
                     mNewGameDecks.add(parentActivity.getResources().getString(R.string.default_player_3) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_3) + System.getProperty("line.separator") + defaultColor);

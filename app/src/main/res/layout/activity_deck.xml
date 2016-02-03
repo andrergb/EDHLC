@@ -1,290 +1,828 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:card_view="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              tools:context=".activities.MainActivity$PlaceholderFragment">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            tools:context=".activities.MainActivity$PlaceholderFragment">
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/cardView"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="6dp"
-        android:layout_marginLeft="6dp"
-        android:layout_marginRight="6dp"
-        android:layout_marginTop="6dp"
-        card_view:cardElevation="4dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <!-- Card1 main info -->
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    android:id="@+id/imageViewShieldColor"
-                    android:layout_width="12dp"
-                    android:layout_height="12dp"
-                    android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@+id/textviewDeckName"
-                    android:layout_toStartOf="@+id/textviewDeckName"
-                    android:src="@drawable/icon_circle"/>
-
-                <TextView
-                    android:id="@id/textviewDeckName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:ellipsize="end"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:gravity="center"
-                    android:maxEms="7"
-                    android:maxLines="2"
-                    android:padding="8dp"
-                    android:textSize="30sp"
-                    android:textStyle="bold"/>
-            </RelativeLayout>
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:layout_marginTop="6dp"
+            card_view:cardElevation="4dp">
 
             <LinearLayout
-                android:id="@+id/linearIdentity"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/imageViewMana6"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_margin="1dp"
-                    android:background="@drawable/icon_circle"/>
-
-                <ImageView
-                    android:id="@+id/imageViewMana5"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_margin="1dp"
-                    android:background="@drawable/icon_circle"/>
-
-                <ImageView
-                    android:id="@+id/imageViewMana4"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_margin="1dp"
-                    android:background="@drawable/icon_circle"/>
-
-                <ImageView
-                    android:id="@+id/imageViewMana3"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_margin="1dp"
-                    android:background="@drawable/icon_circle"/>
-
-                <ImageView
-                    android:id="@+id/imageViewMana2"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_margin="1dp"
-                    android:background="@drawable/icon_circle"/>
-
-                <ImageView
-                    android:id="@+id/imageViewMana1"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_margin="1dp"
-                    android:background="@drawable/icon_circle"/>
-            </LinearLayout>
-
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="25dp"/>
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
-
-    <android.support.v7.widget.CardView
-        android:id="@+id/cardView2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="6dp"
-        android:layout_marginLeft="6dp"
-        android:layout_marginRight="6dp"
-        android:layout_marginTop="6dp"
-        card_view:cardElevation="4dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="15dp"/>
-
-            <!-- Full chart + legends -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="1">
-
-                <!-- Full chart -->
                 <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="180dp"
-                    android:layout_weight="0.6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/imageViewShieldColor"
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
+                        android:layout_centerVertical="true"
+                        android:layout_toLeftOf="@+id/textviewDeckName"
+                        android:layout_toStartOf="@+id/textviewDeckName"
+                        android:src="@drawable/icon_circle"/>
+
+                    <TextView
+                        android:id="@id/textviewDeckName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:ellipsize="end"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:gravity="center"
+                        android:maxEms="7"
+                        android:maxLines="2"
+                        android:padding="8dp"
+                        android:textSize="30sp"
+                        android:textStyle="bold"/>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearIdentity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:gravity="center">
 
-                    <!-- Chart -->
-                    <LinearLayout
-                        android:id="@+id/chart"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center">
-                    </LinearLayout>
+                    <ImageView
+                        android:id="@+id/imageViewMana6"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_margin="1dp"
+                        android:background="@drawable/icon_circle"/>
 
-                    <!-- Games played -->
+                    <ImageView
+                        android:id="@+id/imageViewMana5"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_margin="1dp"
+                        android:background="@drawable/icon_circle"/>
+
+                    <ImageView
+                        android:id="@+id/imageViewMana4"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_margin="1dp"
+                        android:background="@drawable/icon_circle"/>
+
+                    <ImageView
+                        android:id="@+id/imageViewMana3"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_margin="1dp"
+                        android:background="@drawable/icon_circle"/>
+
+                    <ImageView
+                        android:id="@+id/imageViewMana2"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_margin="1dp"
+                        android:background="@drawable/icon_circle"/>
+
+                    <ImageView
+                        android:id="@+id/imageViewMana1"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_margin="1dp"
+                        android:background="@drawable/icon_circle"/>
+                </LinearLayout>
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp"/>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <!-- Card last game played -->
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardViewLastGamePlayed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="6dp"
+            card_view:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <!-- Header -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <!-- Title -->
                     <LinearLayout
+                        android:onClick="onClickCardExpansion"
+                        android:id="@+id/linearTitleLastGame"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
+                        android:layout_height="wrap_content"
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/textViewTotalGame"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="10"
-                            android:textSize="28sp"/>
+                            android:layout_margin="16dp"
+                            android:gravity="center_vertical"
+                            android:text="Last game played"
+                            android:textColor="@color/accent_color"
+                            android:textSize="16sp"/>
+                    </LinearLayout>
 
-                        <TextView
-                            android:id="@+id/textViewTotalGame"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="games played"
-                            android:textSize="12sp"/>
+                    <!-- separator -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:alpha="0.5"
+                        android:background="@color/divider"/>
+                </LinearLayout>
+
+                <!-- Middle content -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp">
+
+                    <!-- Date -->
+                    <TextView
+                        android:id="@+id/textViewDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:text="25/12/2015"
+                        android:textColor="@color/divider"
+                        android:textSize="12sp"/>
+
+                    <!-- Record -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <!-- Deck1 -->
+                        <LinearLayout
+                            android:id="@+id/linearLastGame1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:paddingBottom="4dp">
+
+                            <TextView
+                                android:id="@+id/textViewPlayer1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Player1"
+                                android:textSize="16sp"/>
+
+                            <TextView
+                                android:id="@+id/textViewDeck1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Deck1"
+                                android:textSize="12sp"/>
+                        </LinearLayout>
+
+                        <!-- Deck2 -->
+                        <LinearLayout
+                            android:id="@+id/linearLastGame2"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:paddingBottom="4dp"
+                            android:paddingTop="4dp">
+
+                            <TextView
+                                android:id="@+id/textViewPlayer2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Player2"
+                                android:textSize="16sp"/>
+
+                            <TextView
+                                android:id="@+id/textViewDeck2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Deck2"
+                                android:textSize="12sp"/>
+                        </LinearLayout>
+
+                        <!-- Deck3 -->
+                        <LinearLayout
+                            android:id="@+id/linearLastGame3"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:paddingBottom="4dp"
+                            android:paddingTop="4dp">
+
+                            <TextView
+                                android:id="@+id/textViewPlayer3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Player3"
+                                android:textSize="16sp"/>
+
+                            <TextView
+                                android:id="@+id/textViewDeck3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Deck3"
+                                android:textSize="12sp"/>
+                        </LinearLayout>
+
+                        <!-- Deck4 -->
+                        <LinearLayout
+                            android:id="@+id/linearLastGame4"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:paddingTop="4dp">
+
+                            <TextView
+                                android:id="@+id/textViewPlayer4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Player4"
+                                android:textSize="16sp"/>
+
+                            <TextView
+                                android:id="@+id/textViewDeck4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Deck4"
+                                android:textSize="12sp"/>
+                        </LinearLayout>
                     </LinearLayout>
                 </RelativeLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
 
-                <!-- Legends -->
+        <!-- Card2 1v1 -->
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:layout_marginTop="6dp"
+            card_view:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <!-- Header -->
                 <LinearLayout
-                    android:id="@+id/linearLegends"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_weight="0.4"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical"
-                    android:paddingLeft="15dp"
-                    android:paddingStart="15dp">
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/textTitle2"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                        android:padding="16dp"
+                        android:text="Deck History - 1v1"
+                        android:textColor="@color/accent_color"
+                        android:textSize="16sp"/>
 
-                        <View
-                            android:layout_width="12dp"
-                            android:layout_height="12dp"
-                            android:layout_margin="4dp"
-                            android:background="@drawable/icon_circle"
-                            android:backgroundTint="@color/first"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:alpha="0.5"
+                        android:background="@color/divider"/>
+                </LinearLayout>
 
-                        <TextView
-                            android:id="@+id/textViewFirst"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="4dp"
-                            android:layout_marginRight="8dp"
-                            android:layout_marginTop="4dp"
-                            android:text="First"
-                            android:textSize="12sp"/>
-                    </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp"/>
 
+                <!-- Full chart + legends -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <!-- Full chart -->
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.5"
+                        android:gravity="center">
+
+                        <!-- Chart -->
+                        <LinearLayout
+                            android:id="@+id/chart2"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center">
+                        </LinearLayout>
+
+                        <!-- Games played -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/textViewTotalGame2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="10"
+                                android:textSize="28sp"/>
+
+                            <TextView
+                                android:id="@+id/textViewTotalGame2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="games played"
+                                android:textSize="12sp"/>
+                        </LinearLayout>
+                    </RelativeLayout>
+
+                    <!-- Legends -->
                     <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:id="@+id/linearLegends2"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_weight="0.5"
                         android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                        android:orientation="vertical"
+                        android:paddingLeft="28dp"
+                        android:paddingStart="28dp">
 
-                        <View
-                            android:layout_width="12dp"
-                            android:layout_height="12dp"
-                            android:layout_margin="4dp"
-                            android:background="@drawable/icon_circle"
-                            android:backgroundTint="@color/second"/>
-
-                        <TextView
-                            android:id="@+id/textViewSecond"
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="4dp"
-                            android:layout_marginRight="8dp"
-                            android:layout_marginTop="4dp"
-                            android:text="Second"
-                            android:textSize="12sp"/>
-                    </LinearLayout>
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                            <View
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
+                                android:layout_margin="4dp"
+                                android:background="@drawable/icon_circle"
+                                android:backgroundTint="@color/first"/>
 
-                        <View
-                            android:layout_width="12dp"
-                            android:layout_height="12dp"
-                            android:layout_margin="4dp"
-                            android:background="@drawable/icon_circle"
-                            android:backgroundTint="@color/third"/>
+                            <TextView
+                                android:id="@+id/textViewFirst2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="4dp"
+                                android:layout_marginRight="8dp"
+                                android:layout_marginTop="4dp"
+                                android:text="First"
+                                android:textSize="12sp"/>
+                        </LinearLayout>
 
-                        <TextView
-                            android:id="@+id/textViewThird"
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="4dp"
-                            android:layout_marginRight="8dp"
-                            android:layout_marginTop="4dp"
-                            android:text="Third"
-                            android:textSize="12sp"/>
-                    </LinearLayout>
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                            <View
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
+                                android:layout_margin="4dp"
+                                android:background="@drawable/icon_circle"
+                                android:backgroundTint="@color/second"/>
 
-                        <View
-                            android:layout_width="12dp"
-                            android:layout_height="12dp"
-                            android:layout_margin="4dp"
-                            android:background="@drawable/icon_circle"
-                            android:backgroundTint="@color/fourth"/>
-
-                        <TextView
-                            android:id="@+id/textViewFourth"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="4dp"
-                            android:layout_marginTop="4dp"
-                            android:text="Fourth"
-                            android:textSize="12sp"/>
+                            <TextView
+                                android:id="@+id/textViewSecond2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="4dp"
+                                android:layout_marginRight="8dp"
+                                android:layout_marginTop="4dp"
+                                android:text="Second"
+                                android:textSize="12sp"/>
+                        </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
 
-            <View
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp"/>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <!-- Card3 1v1v1 -->
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:layout_marginTop="6dp"
+            card_view:cardElevation="4dp">
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="15dp"/>
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
-</LinearLayout>
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <!-- Header -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textTitle3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:padding="16dp"
+                        android:text="Deck History - 1v1v1"
+                        android:textColor="@color/accent_color"
+                        android:textSize="16sp"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:alpha="0.5"
+                        android:background="@color/divider"/>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp"/>
+
+                <!-- Full chart + legends -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <!-- Full chart -->
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="150dp"
+                        android:layout_weight="0.5"
+                        android:gravity="center">
+
+                        <!-- Chart -->
+                        <LinearLayout
+                            android:id="@+id/chart3"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center">
+                        </LinearLayout>
+
+                        <!-- Games played -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/textViewTotalGame3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="10"
+                                android:textSize="28sp"/>
+
+                            <TextView
+                                android:id="@+id/textViewTotalGame3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="games played"
+                                android:textSize="12sp"/>
+                        </LinearLayout>
+                    </RelativeLayout>
+
+                    <!-- Legends -->
+                    <LinearLayout
+                        android:id="@+id/linearLegends3"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_weight="0.5"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:paddingLeft="28dp"
+                        android:paddingStart="28dp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <View
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
+                                android:layout_margin="4dp"
+                                android:background="@drawable/icon_circle"
+                                android:backgroundTint="@color/first"/>
+
+                            <TextView
+                                android:id="@+id/textViewFirst3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="4dp"
+                                android:layout_marginRight="8dp"
+                                android:layout_marginTop="4dp"
+                                android:text="First"
+                                android:textSize="12sp"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <View
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
+                                android:layout_margin="4dp"
+                                android:background="@drawable/icon_circle"
+                                android:backgroundTint="@color/second"/>
+
+                            <TextView
+                                android:id="@+id/textViewSecond3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="4dp"
+                                android:layout_marginRight="8dp"
+                                android:layout_marginTop="4dp"
+                                android:text="Second"
+                                android:textSize="12sp"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <View
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
+                                android:layout_margin="4dp"
+                                android:background="@drawable/icon_circle"
+                                android:backgroundTint="@color/third"/>
+
+                            <TextView
+                                android:id="@+id/textViewThird3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="4dp"
+                                android:layout_marginRight="8dp"
+                                android:layout_marginTop="4dp"
+                                android:text="Third"
+                                android:textSize="12sp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp"/>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <!-- Card4 1v1v1v1 -->
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:layout_marginTop="6dp"
+            card_view:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <!-- Header -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textTitle4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:padding="16dp"
+                        android:text="Deck History - 1v1v1v1"
+                        android:textColor="@color/accent_color"
+                        android:textSize="16sp"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:alpha="0.5"
+                        android:background="@color/divider"/>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp"/>
+
+                <!-- Full chart + legends -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <!-- Full chart -->
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="150dp"
+                        android:layout_weight="0.5"
+                        android:gravity="center">
+
+                        <!-- Chart -->
+                        <LinearLayout
+                            android:id="@+id/chart4"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center">
+                        </LinearLayout>
+
+                        <!-- Games played -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/textViewTotalGame4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="10"
+                                android:textSize="28sp"/>
+
+                            <TextView
+                                android:id="@+id/textViewTotalGame4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="games played"
+                                android:textSize="12sp"/>
+                        </LinearLayout>
+                    </RelativeLayout>
+
+                    <!-- Legends -->
+                    <LinearLayout
+                        android:id="@+id/linearLegends4"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_weight="0.5"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:paddingLeft="28dp"
+                        android:paddingStart="28dp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <View
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
+                                android:layout_margin="4dp"
+                                android:background="@drawable/icon_circle"
+                                android:backgroundTint="@color/first"/>
+
+                            <TextView
+                                android:id="@+id/textViewFirst4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="4dp"
+                                android:layout_marginRight="8dp"
+                                android:layout_marginTop="4dp"
+                                android:text="First"
+                                android:textSize="12sp"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <View
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
+                                android:layout_margin="4dp"
+                                android:background="@drawable/icon_circle"
+                                android:backgroundTint="@color/second"/>
+
+                            <TextView
+                                android:id="@+id/textViewSecond4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="4dp"
+                                android:layout_marginRight="8dp"
+                                android:layout_marginTop="4dp"
+                                android:text="Second"
+                                android:textSize="12sp"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <View
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
+                                android:layout_margin="4dp"
+                                android:background="@drawable/icon_circle"
+                                android:backgroundTint="@color/third"/>
+
+                            <TextView
+                                android:id="@+id/textViewThird4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="4dp"
+                                android:layout_marginRight="8dp"
+                                android:layout_marginTop="4dp"
+                                android:text="Third"
+                                android:textSize="12sp"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <View
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
+                                android:layout_margin="4dp"
+                                android:background="@drawable/icon_circle"
+                                android:backgroundTint="@color/fourth"/>
+
+                            <TextView
+                                android:id="@+id/textViewFourth4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="4dp"
+                                android:layout_marginTop="4dp"
+                                android:text="Fourth"
+                                android:textSize="12sp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp"/>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+</ScrollView>

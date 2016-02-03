@@ -2,15 +2,12 @@ package com.android.argb.edhlc;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Typeface;
 import android.support.v7.widget.CardView;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -174,12 +171,12 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         ImageView expandableIndicator = (ImageView) convertView.findViewById(R.id.iconIndicator);
         expandableIndicator.setFocusable(false);
         expandableIndicator.setImageDrawable(isExpanded ? convertView.getResources().getDrawable(R.drawable.arrow_down) : convertView.getResources().getDrawable(R.drawable.arrow_right));
-        expandableIndicator.setColorFilter(isExpanded ? convertView.getResources().getColor(android.R.color.black) : convertView.getResources().getColor(R.color.gray600));
+        expandableIndicator.setColorFilter(isExpanded ? convertView.getResources().getColor(R.color.accent_color) : convertView.getResources().getColor(R.color.gray600));
 
         //Group 1st line: player name
         TextView textHeader = (TextView) convertView.findViewById(R.id.textHeader);
         textHeader.setText(headerText);
-        textHeader.setTextColor(isExpanded ? convertView.getResources().getColor(android.R.color.black) : convertView.getResources().getColor(R.color.gray600));
+        textHeader.setTextColor(isExpanded ? convertView.getResources().getColor(R.color.primary_text) : convertView.getResources().getColor(R.color.gray600));
 
         //Group 2nd line: player info
         TextView textHeaderSub = (TextView) convertView.findViewById(R.id.textHeaderSub);
