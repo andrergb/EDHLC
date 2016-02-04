@@ -104,7 +104,6 @@
                         android:background="@drawable/icon_circle"/>
                 </LinearLayout>
 
-
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="25dp"/>
@@ -125,36 +124,42 @@
                 android:orientation="vertical">
 
                 <!-- Header -->
-                <LinearLayout
+                <RelativeLayout
+                    android:id="@+id/relativeTitleLastGamePlayed"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:onClick="onClickCardExpansion"
+                    android:padding="16dp">
 
-                    <!-- Title -->
-                    <LinearLayout
-                        android:onClick="onClickCardExpansion"
-                        android:id="@+id/linearTitleLastGame"
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/textTitleLastGamePlayed"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:text="Last game played"
+                        android:textColor="@color/secondary_text"
+                        android:textSize="16sp"/>
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="16dp"
-                            android:gravity="center_vertical"
-                            android:text="Last game played"
-                            android:textColor="@color/accent_color"
-                            android:textSize="16sp"/>
-                    </LinearLayout>
+                    <ImageView
+                        android:id="@+id/iconIndicatorLastGamePlayed"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:clickable="false"
+                        android:src="@drawable/arrow_right"
+                        android:tint="@color/secondary_text"/>
+                </RelativeLayout>
 
-                    <!-- separator -->
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:alpha="0.5"
-                        android:background="@color/divider"/>
-                </LinearLayout>
+                <!-- separator -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:alpha="0.5"
+                    android:background="@color/divider"/>
 
                 <!-- Middle content -->
                 <RelativeLayout
@@ -278,7 +283,7 @@
 
         <!-- Card2 1v1 -->
         <android.support.v7.widget.CardView
-            android:id="@+id/cardView2"
+            android:id="@+id/cardViewDeckHistory2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="6dp"
@@ -293,27 +298,41 @@
                 android:orientation="vertical">
 
                 <!-- Header -->
-                <LinearLayout
+                <RelativeLayout
+                    android:id="@+id/relativeTitleDeckHistory2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:onClick="onClickCardExpansion"
+                    android:padding="16dp">
 
                     <TextView
-                        android:id="@+id/textTitle2"
-                        android:layout_width="match_parent"
+                        android:id="@+id/textTitleDeckHistory2"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:padding="16dp"
-                        android:text="Deck History - 1v1"
-                        android:textColor="@color/accent_color"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:text="Deck History - 2 players"
+                        android:textColor="@color/secondary_text"
                         android:textSize="16sp"/>
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:alpha="0.5"
-                        android:background="@color/divider"/>
-                </LinearLayout>
+                    <ImageView
+                        android:id="@+id/iconIndicatorDeckHistory2"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:clickable="false"
+                        android:src="@drawable/arrow_right"
+                        android:tint="@color/secondary_text"/>
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:alpha="0.5"
+                    android:background="@color/divider"/>
 
                 <View
                     android:layout_width="match_parent"
@@ -322,14 +341,14 @@
                 <!-- Full chart + legends -->
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:weightSum="1">
 
                     <!-- Full chart -->
                     <RelativeLayout
                         android:layout_width="0dp"
-                        android:layout_height="match_parent"
+                        android:layout_height="150dp"
                         android:layout_weight="0.5"
                         android:gravity="center">
 
@@ -437,7 +456,7 @@
 
         <!-- Card3 1v1v1 -->
         <android.support.v7.widget.CardView
-            android:id="@+id/cardView3"
+            android:id="@+id/cardViewDeckHistory3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="6dp"
@@ -452,27 +471,41 @@
                 android:orientation="vertical">
 
                 <!-- Header -->
-                <LinearLayout
+                <RelativeLayout
+                    android:id="@+id/relativeTitleDeckHistory3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:onClick="onClickCardExpansion"
+                    android:padding="16dp">
 
                     <TextView
-                        android:id="@+id/textTitle3"
-                        android:layout_width="match_parent"
+                        android:id="@+id/textTitleDeckHistory3"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:padding="16dp"
-                        android:text="Deck History - 1v1v1"
-                        android:textColor="@color/accent_color"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:text="Deck History - 3 players"
+                        android:textColor="@color/secondary_text"
                         android:textSize="16sp"/>
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:alpha="0.5"
-                        android:background="@color/divider"/>
-                </LinearLayout>
+                    <ImageView
+                        android:id="@+id/iconIndicatorDeckHistory3"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:clickable="false"
+                        android:src="@drawable/arrow_right"
+                        android:tint="@color/secondary_text"/>
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:alpha="0.5"
+                    android:background="@color/divider"/>
 
                 <View
                     android:layout_width="match_parent"
@@ -620,7 +653,7 @@
 
         <!-- Card4 1v1v1v1 -->
         <android.support.v7.widget.CardView
-            android:id="@+id/cardView4"
+            android:id="@+id/cardViewDeckHistory4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="6dp"
@@ -635,27 +668,41 @@
                 android:orientation="vertical">
 
                 <!-- Header -->
-                <LinearLayout
+                <RelativeLayout
+                    android:id="@+id/relativeTitleDeckHistory4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:onClick="onClickCardExpansion"
+                    android:padding="16dp">
 
                     <TextView
-                        android:id="@+id/textTitle4"
-                        android:layout_width="match_parent"
+                        android:id="@+id/textTitleDeckHistory4"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:padding="16dp"
-                        android:text="Deck History - 1v1v1v1"
-                        android:textColor="@color/accent_color"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:text="Deck History - 4 players"
+                        android:textColor="@color/secondary_text"
                         android:textSize="16sp"/>
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:alpha="0.5"
-                        android:background="@color/divider"/>
-                </LinearLayout>
+                    <ImageView
+                        android:id="@+id/iconIndicatorDeckHistory4"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:clickable="false"
+                        android:src="@drawable/arrow_right"
+                        android:tint="@color/secondary_text"/>
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:alpha="0.5"
+                    android:background="@color/divider"/>
 
                 <View
                     android:layout_width="match_parent"
@@ -823,6 +870,5 @@
                     android:layout_height="4dp"/>
             </LinearLayout>
         </android.support.v7.widget.CardView>
-
     </LinearLayout>
 </ScrollView>
