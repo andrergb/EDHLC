@@ -409,7 +409,7 @@
                                 android:layout_height="12dp"
                                 android:layout_margin="4dp"
                                 android:background="@drawable/icon_circle"
-                                android:backgroundTint="@color/first"/>
+                                android:backgroundTint="@color/first2"/>
 
                             <TextView
                                 android:id="@+id/textViewFirst2"
@@ -433,7 +433,7 @@
                                 android:layout_height="12dp"
                                 android:layout_margin="4dp"
                                 android:background="@drawable/icon_circle"
-                                android:backgroundTint="@color/second"/>
+                                android:backgroundTint="@color/second2"/>
 
                             <TextView
                                 android:id="@+id/textViewSecond2"
@@ -582,7 +582,7 @@
                                 android:layout_height="12dp"
                                 android:layout_margin="4dp"
                                 android:background="@drawable/icon_circle"
-                                android:backgroundTint="@color/first"/>
+                                android:backgroundTint="@color/first3"/>
 
                             <TextView
                                 android:id="@+id/textViewFirst3"
@@ -606,7 +606,7 @@
                                 android:layout_height="12dp"
                                 android:layout_margin="4dp"
                                 android:background="@drawable/icon_circle"
-                                android:backgroundTint="@color/second"/>
+                                android:backgroundTint="@color/second3"/>
 
                             <TextView
                                 android:id="@+id/textViewSecond3"
@@ -630,7 +630,7 @@
                                 android:layout_height="12dp"
                                 android:layout_margin="4dp"
                                 android:background="@drawable/icon_circle"
-                                android:backgroundTint="@color/third"/>
+                                android:backgroundTint="@color/third3"/>
 
                             <TextView
                                 android:id="@+id/textViewThird3"
@@ -779,7 +779,7 @@
                                 android:layout_height="12dp"
                                 android:layout_margin="4dp"
                                 android:background="@drawable/icon_circle"
-                                android:backgroundTint="@color/first"/>
+                                android:backgroundTint="@color/first4"/>
 
                             <TextView
                                 android:id="@+id/textViewFirst4"
@@ -803,7 +803,7 @@
                                 android:layout_height="12dp"
                                 android:layout_margin="4dp"
                                 android:background="@drawable/icon_circle"
-                                android:backgroundTint="@color/second"/>
+                                android:backgroundTint="@color/second4"/>
 
                             <TextView
                                 android:id="@+id/textViewSecond4"
@@ -827,7 +827,7 @@
                                 android:layout_height="12dp"
                                 android:layout_margin="4dp"
                                 android:background="@drawable/icon_circle"
-                                android:backgroundTint="@color/third"/>
+                                android:backgroundTint="@color/third4"/>
 
                             <TextView
                                 android:id="@+id/textViewThird4"
@@ -851,7 +851,7 @@
                                 android:layout_height="12dp"
                                 android:layout_margin="4dp"
                                 android:background="@drawable/icon_circle"
-                                android:backgroundTint="@color/fourth"/>
+                                android:backgroundTint="@color/fourth4"/>
 
                             <TextView
                                 android:id="@+id/textViewFourth4"

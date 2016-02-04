@@ -12,10 +12,17 @@
     <!--<item name="gray900" type="color">#212121</item>-->
 
     <!-- LEGENDS -->
-    <item name="first" type="color">#FFD54F</item>
-    <item name="second" type="color">#80DEEA</item>
-    <item name="third" type="color">#EF5350</item>
-    <item name="fourth" type="color">#A1887F</item>
+    <item name="first2" type="color">#a1e1ff</item>
+    <item name="second2" type="color">#faaa8f</item>
+
+    <item name="first3" type="color">#a1e1ff</item>
+    <item name="second3" type="color">#faaa8f</item>
+    <item name="third3" type="color">#95dfaf</item>
+
+    <item name="first4" type="color">#a1e1ff</item>
+    <item name="second4" type="color">#faaa8f</item>
+    <item name="third4" type="color">#95dfaf</item>
+    <item name="fourth4" type="color">#b7b7b7</item>
 
     <!-- THEME -->
     <item name="primary_color" type="color">#FF03A9F4</item>
