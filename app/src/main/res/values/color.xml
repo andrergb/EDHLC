@@ -18,7 +18,7 @@
     <item name="third" type="color">#c27548</item>
     <item name="fourth" type="color">#6b6b6b</item>
 
-    <!--&lt;!&ndash;Grayscale&ndash;&gt;-->
+    <!-- GrayScale -->
     <!--<item name="first4" type="color">#EAEAEA</item>-->
     <!--<item name="second4" type="color">#BBBBBB</item>-->
     <!--<item name="third4" type="color">#5A5A5A</item>-->

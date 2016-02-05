@@ -68,7 +68,8 @@ public class DeckActivity extends AppCompatActivity {
     private TextView textViewFirst2;
     private TextView textViewSecond2;
     private LinearLayout doughnutChartLinearLayout2;
-    private TextView textViewTotalGame2;
+    private TextView textViewTotalGameNumber2;
+    private TextView textViewTotalGameText2;
     private DefaultRenderer mDoughnutRender2;
     private MultipleCategorySeries mMultipleCategorySeriesDataSet2;
     private GraphicalView mDoughnutChartView2;
@@ -83,7 +84,8 @@ public class DeckActivity extends AppCompatActivity {
     private TextView textViewSecond3;
     private TextView textViewThird3;
     private LinearLayout doughnutChartLinearLayout3;
-    private TextView textViewTotalGame3;
+    private TextView textViewTotalGameNumber3;
+    private TextView textViewTotalGameText3;
     private DefaultRenderer mDoughnutRender3;
     private MultipleCategorySeries mMultipleCategorySeriesDataSet3;
     private GraphicalView mDoughnutChartView3;
@@ -99,7 +101,8 @@ public class DeckActivity extends AppCompatActivity {
     private TextView textViewThird4;
     private TextView textViewFourth4;
     private LinearLayout doughnutChartLinearLayout4;
-    private TextView textViewTotalGame4;
+    private TextView textViewTotalGameNumber4;
+    private TextView textViewTotalGameText4;
     private MultipleCategorySeries mMultipleCategorySeriesDataSet4;
     private DefaultRenderer mDoughnutRender4;
     private GraphicalView mDoughnutChartView4;
@@ -428,7 +431,8 @@ public class DeckActivity extends AppCompatActivity {
             textTitleDeckHistory2 = (TextView) findViewById(R.id.textTitleDeckHistory2);
             iconIndicatorDeckHistory2 = (ImageView) findViewById(R.id.iconIndicatorDeckHistory2);
             doughnutChartLinearLayout2 = (LinearLayout) findViewById(R.id.chart2);
-            textViewTotalGame2 = (TextView) view.findViewById(R.id.textViewTotalGame2);
+            textViewTotalGameNumber2 = (TextView) view.findViewById(R.id.textViewTotalGameNumber2);
+            textViewTotalGameText2 = (TextView) view.findViewById(R.id.textViewTotalGameText2);
             textViewFirst2 = (TextView) view.findViewById(R.id.textViewFirst2);
             textViewSecond2 = (TextView) view.findViewById(R.id.textViewSecond2);
             cardViewDeckHistory2.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
@@ -449,7 +453,8 @@ public class DeckActivity extends AppCompatActivity {
             textTitleDeckHistory3 = (TextView) findViewById(R.id.textTitleDeckHistory3);
             iconIndicatorDeckHistory3 = (ImageView) findViewById(R.id.iconIndicatorDeckHistory3);
             doughnutChartLinearLayout3 = (LinearLayout) findViewById(R.id.chart3);
-            textViewTotalGame3 = (TextView) view.findViewById(R.id.textViewTotalGame3);
+            textViewTotalGameNumber3 = (TextView) view.findViewById(R.id.textViewTotalGameNumber3);
+            textViewTotalGameText3 = (TextView) view.findViewById(R.id.textViewTotalGameText3);
             textViewFirst3 = (TextView) view.findViewById(R.id.textViewFirst3);
             textViewSecond3 = (TextView) view.findViewById(R.id.textViewSecond3);
             textViewThird3 = (TextView) view.findViewById(R.id.textViewThird3);
@@ -471,7 +476,8 @@ public class DeckActivity extends AppCompatActivity {
             textTitleDeckHistory4 = (TextView) findViewById(R.id.textTitleDeckHistory4);
             iconIndicatorDeckHistory4 = (ImageView) findViewById(R.id.iconIndicatorDeckHistory4);
             doughnutChartLinearLayout4 = (LinearLayout) findViewById(R.id.chart4);
-            textViewTotalGame4 = (TextView) view.findViewById(R.id.textViewTotalGame4);
+            textViewTotalGameNumber4 = (TextView) view.findViewById(R.id.textViewTotalGameNumber4);
+            textViewTotalGameText4 = (TextView) view.findViewById(R.id.textViewTotalGameText4);
             textViewFirst4 = (TextView) view.findViewById(R.id.textViewFirst4);
             textViewSecond4 = (TextView) view.findViewById(R.id.textViewSecond4);
             textViewThird4 = (TextView) view.findViewById(R.id.textViewThird4);
@@ -529,11 +535,11 @@ public class DeckActivity extends AppCompatActivity {
     private void toggleCardExpansion(final CardView card, TextView title, ImageView selector, int minHeight, int maxHeight) {
         // expand
         if (card.getHeight() == minHeight) {
-            title.setTextColor(this.getResources().getColor(R.color.accent_color));
+            title.setTextColor(this.getResources().getColor(R.color.dark_primary_color));
 
             Animation rotation = AnimationUtils.loadAnimation(this, R.anim.rotate_90_clockwise);
             selector.startAnimation(rotation);
-            selector.setColorFilter(this.getResources().getColor(R.color.accent_color));
+            selector.setColorFilter(this.getResources().getColor(R.color.dark_primary_color));
 
             ValueAnimator anim = ValueAnimator.ofInt(card.getMeasuredHeightAndState(), maxHeight);
             anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -691,7 +697,8 @@ public class DeckActivity extends AppCompatActivity {
         cardViewDeckHistory2.setVisibility(View.GONE);
         if (total2 != 0) {
             cardViewDeckHistory2.setVisibility(View.VISIBLE);
-            textViewTotalGame2.setText("" + total2);
+            textViewTotalGameNumber2.setText("" + total2);
+            textViewTotalGameText2.setText(total2 == 1 ? "game played" : "games played");
             updateDonutChart2(firstIn2, secondIn2);
         }
 
@@ -704,7 +711,8 @@ public class DeckActivity extends AppCompatActivity {
         cardViewDeckHistory3.setVisibility(View.GONE);
         if (total3 != 0) {
             cardViewDeckHistory3.setVisibility(View.VISIBLE);
-            textViewTotalGame3.setText("" + total3);
+            textViewTotalGameNumber3.setText("" + total3);
+            textViewTotalGameText3.setText(total3 == 1 ? "game played" : "games played");
             updateDonutChart3(firstIn3, secondIn3, thirdIn3);
         }
 
@@ -718,7 +726,8 @@ public class DeckActivity extends AppCompatActivity {
         cardViewDeckHistory4.setVisibility(View.GONE);
         if (total4 != 0) {
             cardViewDeckHistory4.setVisibility(View.VISIBLE);
-            textViewTotalGame4.setText("" + total4);
+            textViewTotalGameNumber4.setText("" + total4);
+            textViewTotalGameText4.setText(total4 == 1 ? "game played" : "games played");
             updateDonutChart4(firstIn4, secondIn4, thirdIn4, fourthIn4);
         }
     }

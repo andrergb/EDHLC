@@ -368,7 +368,7 @@
                             android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/textViewTotalGame2"
+                                android:id="@+id/textViewTotalGameNumber2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
@@ -376,7 +376,7 @@
                                 android:textSize="28sp"/>
 
                             <TextView
-                                android:id="@+id/textViewTotalGame2"
+                                android:id="@+id/textViewTotalGameText2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
@@ -404,8 +404,7 @@
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
 
-                            <android.support.v7.widget.AppCompatImageView
-                                xmlns:app="http://schemas.android.com/apk/res-auto"
+                            <View
                                 android:layout_width="12dp"
                                 android:layout_height="12dp"
                                 android:layout_margin="4dp"
@@ -428,8 +427,7 @@
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
 
-                            <android.support.v7.widget.AppCompatImageView
-                                xmlns:app="http://schemas.android.com/apk/res-auto"
+                            <View
                                 android:layout_width="12dp"
                                 android:layout_height="12dp"
                                 android:layout_margin="4dp"
@@ -541,7 +539,7 @@
                             android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/textViewTotalGame3"
+                                android:id="@+id/textViewTotalGameNumber3"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
@@ -549,7 +547,7 @@
                                 android:textSize="28sp"/>
 
                             <TextView
-                                android:id="@+id/textViewTotalGame3"
+                                android:id="@+id/textViewTotalGameText3"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
@@ -577,8 +575,7 @@
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
 
-                            <android.support.v7.widget.AppCompatImageView
-                                xmlns:app="http://schemas.android.com/apk/res-auto"
+                            <View
                                 android:layout_width="12dp"
                                 android:layout_height="12dp"
                                 android:layout_margin="4dp"
@@ -601,8 +598,7 @@
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
 
-                            <android.support.v7.widget.AppCompatImageView
-                                xmlns:app="http://schemas.android.com/apk/res-auto"
+                            <View
                                 android:layout_width="12dp"
                                 android:layout_height="12dp"
                                 android:layout_margin="4dp"
@@ -625,8 +621,7 @@
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
 
-                            <android.support.v7.widget.AppCompatImageView
-                                xmlns:app="http://schemas.android.com/apk/res-auto"
+                            <View
                                 android:layout_width="12dp"
                                 android:layout_height="12dp"
                                 android:layout_margin="4dp"
@@ -738,7 +733,7 @@
                             android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/textViewTotalGame4"
+                                android:id="@+id/textViewTotalGameNumber4"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
@@ -746,7 +741,7 @@
                                 android:textSize="28sp"/>
 
                             <TextView
-                                android:id="@+id/textViewTotalGame4"
+                                android:id="@+id/textViewTotalGameText4"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
@@ -774,8 +769,7 @@
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
 
-                            <android.support.v7.widget.AppCompatImageView
-                                xmlns:app="http://schemas.android.com/apk/res-auto"
+                            <View
                                 android:layout_width="12dp"
                                 android:layout_height="12dp"
                                 android:layout_margin="4dp"
@@ -798,8 +792,7 @@
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
 
-                            <android.support.v7.widget.AppCompatImageView
-                                xmlns:app="http://schemas.android.com/apk/res-auto"
+                            <View
                                 android:layout_width="12dp"
                                 android:layout_height="12dp"
                                 android:layout_margin="4dp"
@@ -822,8 +815,7 @@
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
 
-                            <android.support.v7.widget.AppCompatImageView
-                                xmlns:app="http://schemas.android.com/apk/res-auto"
+                            <View
                                 android:layout_width="12dp"
                                 android:layout_height="12dp"
                                 android:layout_margin="4dp"
@@ -846,8 +838,7 @@
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
 
-                            <android.support.v7.widget.AppCompatImageView
-                                xmlns:app="http://schemas.android.com/apk/res-auto"
+                            <View
                                 android:layout_width="12dp"
                                 android:layout_height="12dp"
                                 android:layout_margin="4dp"
