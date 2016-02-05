@@ -1,10 +1,13 @@
 package com.android.argb.edhlc.activities;
 
 import android.animation.ValueAnimator;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -28,6 +31,7 @@ import com.android.argb.edhlc.database.deck.DecksDataAccessObject;
 import com.android.argb.edhlc.database.record.RecordsDataAccessObject;
 import com.android.argb.edhlc.objects.Deck;
 import com.android.argb.edhlc.objects.Record;
+import com.android.camera.CropImageIntentBuilder;
 
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
@@ -35,19 +39,21 @@ import org.achartengine.model.MultipleCategorySeries;
 import org.achartengine.renderer.DefaultRenderer;
 import org.achartengine.renderer.SimpleSeriesRenderer;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+//Crop: https://github.com/lvillani/android-cropimage
 public class DeckActivity extends AppCompatActivity {
 
+    private static int REQUEST_PICTURE = 1;
+    private static int REQUEST_CROP_PICTURE = 2;
     private Deck currentDeck;
     private String mPlayerName;
     private String mDeckName;
     private String mDeckIdentity;
-
     private DecksDataAccessObject decksDB;
     private RecordsDataAccessObject recordsDB;
-
     //Main card - Deck info
     private ImageView imageViewShieldColor;
     private TextView textViewDeckName;
@@ -58,9 +64,7 @@ public class DeckActivity extends AppCompatActivity {
     private ImageView imageViewMana4;
     private ImageView imageViewMana5;
     private ImageView imageViewMana6;
-
     private int[] COLORS;
-
     //Card - Chart deck history 2 - 1v1
     private CardView cardViewDeckHistory2;
     private ImageView iconIndicatorDeckHistory2;
@@ -75,7 +79,6 @@ public class DeckActivity extends AppCompatActivity {
     private GraphicalView mDoughnutChartView2;
     private RelativeLayout relativeTitleDeckHistory2;
     private int mCardViewFullHeightDeckHistory2;
-
     //Card - Chart deck history 3 - 1v1v1
     private CardView cardViewDeckHistory3;
     private ImageView iconIndicatorDeckHistory3;
@@ -91,7 +94,6 @@ public class DeckActivity extends AppCompatActivity {
     private GraphicalView mDoughnutChartView3;
     private RelativeLayout relativeTitleDeckHistory3;
     private int mCardViewFullHeightDeckHistory3;
-
     //Card - Chart deck history 4 - 1v1v1v1
     private CardView cardViewDeckHistory4;
     private ImageView iconIndicatorDeckHistory4;
@@ -108,7 +110,6 @@ public class DeckActivity extends AppCompatActivity {
     private GraphicalView mDoughnutChartView4;
     private RelativeLayout relativeTitleDeckHistory4;
     private int mCardViewFullHeightDeckHistory4;
-
     //Card - Last game played
     private CardView cardViewLastGamePlayed;
     private RelativeLayout relativeTitleLastGamePlayed;
@@ -127,6 +128,15 @@ public class DeckActivity extends AppCompatActivity {
     private TextView textViewPlayer4;
     private TextView textViewDeck4;
     private int mCardViewFullHeightLastGamePlayed;
+    private ImageView imageViewBanner;
+
+    //TODO mediaUtils
+    public static Intent getPickImageIntent(final Context context) {
+        final Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        return Intent.createChooser(intent, "Select picture");
+    }
 
     @Override
     public void onBackPressed() {
@@ -155,6 +165,11 @@ public class DeckActivity extends AppCompatActivity {
                 toggleCardExpansion(cardViewDeckHistory4, textTitleDeckHistory4, iconIndicatorDeckHistory4, relativeTitleDeckHistory4.getHeight(), mCardViewFullHeightDeckHistory4);
                 break;
         }
+    }
+
+    public void onClickImageBanner(View view) {
+        //TODO opcao de camera ou gallery
+        startActivityForResult(getPickImageIntent(this), REQUEST_PICTURE);
     }
 
     @Override
@@ -312,6 +327,30 @@ public class DeckActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_PICTURE) {
+            if (resultCode == RESULT_OK) {
+                File croppedImageFile = new File(getFilesDir(), "image_" + mPlayerName + "_" + mDeckName + ".png");
+                Uri croppedImageUri = Uri.fromFile(croppedImageFile);
+
+                CropImageIntentBuilder cropImage = new CropImageIntentBuilder(16, 9, 800, 450, croppedImageUri);
+                cropImage.setSourceImage(data.getData());
+
+                startActivityForResult(cropImage.getIntent(this), REQUEST_CROP_PICTURE);
+            }
+        }
+        if (requestCode == REQUEST_CROP_PICTURE) {
+            if (resultCode == RESULT_OK) {
+                File croppedImageFile = new File(getFilesDir(), "image_" + mPlayerName + "_" + mDeckName + ".png");
+                imageViewBanner.setImageBitmap(BitmapFactory.decodeFile(croppedImageFile.getAbsolutePath()));
+                imageViewBanner.setAdjustViewBounds(true);
+            }
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_deck);
@@ -396,6 +435,9 @@ public class DeckActivity extends AppCompatActivity {
 
     private void createLayout(View view) {
         if (view != null) {
+            //Deck banner image
+            imageViewBanner = (ImageView) findViewById(R.id.imageViewBanner);
+
             //Deck name
             textViewDeckName = (TextView) view.findViewById(R.id.textviewDeckName);
 
@@ -577,6 +619,13 @@ public class DeckActivity extends AppCompatActivity {
     }
 
     private void updateLayout() {
+        //Deck banner image
+        File croppedImageFile = new File(getFilesDir(), "image_" + mPlayerName + "_" + mDeckName + ".png");
+        if (croppedImageFile.isFile()) {
+            imageViewBanner.setImageBitmap(BitmapFactory.decodeFile(croppedImageFile.getAbsolutePath()));
+            imageViewBanner.setAdjustViewBounds(true);
+        }
+
         //Deck name
         textViewDeckName.setText(mDeckName);
 
