@@ -404,12 +404,12 @@
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
 
-                            <View
+                            <android.support.v7.widget.AppCompatImageView
+                                xmlns:app="http://schemas.android.com/apk/res-auto"
                                 android:layout_width="12dp"
                                 android:layout_height="12dp"
                                 android:layout_margin="4dp"
-                                android:background="@drawable/icon_circle"
-                                android:backgroundTint="@color/first2"/>
+                                android:background="@drawable/icon_circle_first"/>
 
                             <TextView
                                 android:id="@+id/textViewFirst2"
@@ -428,12 +428,12 @@
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
 
-                            <View
+                            <android.support.v7.widget.AppCompatImageView
+                                xmlns:app="http://schemas.android.com/apk/res-auto"
                                 android:layout_width="12dp"
                                 android:layout_height="12dp"
                                 android:layout_margin="4dp"
-                                android:background="@drawable/icon_circle"
-                                android:backgroundTint="@color/second2"/>
+                                android:background="@drawable/icon_circle_second"/>
 
                             <TextView
                                 android:id="@+id/textViewSecond2"
@@ -577,12 +577,12 @@
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
 
-                            <View
+                            <android.support.v7.widget.AppCompatImageView
+                                xmlns:app="http://schemas.android.com/apk/res-auto"
                                 android:layout_width="12dp"
                                 android:layout_height="12dp"
                                 android:layout_margin="4dp"
-                                android:background="@drawable/icon_circle"
-                                android:backgroundTint="@color/first3"/>
+                                android:background="@drawable/icon_circle_first"/>
 
                             <TextView
                                 android:id="@+id/textViewFirst3"
@@ -601,12 +601,12 @@
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
 
-                            <View
+                            <android.support.v7.widget.AppCompatImageView
+                                xmlns:app="http://schemas.android.com/apk/res-auto"
                                 android:layout_width="12dp"
                                 android:layout_height="12dp"
                                 android:layout_margin="4dp"
-                                android:background="@drawable/icon_circle"
-                                android:backgroundTint="@color/second3"/>
+                                android:background="@drawable/icon_circle_second"/>
 
                             <TextView
                                 android:id="@+id/textViewSecond3"
@@ -625,12 +625,12 @@
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
 
-                            <View
+                            <android.support.v7.widget.AppCompatImageView
+                                xmlns:app="http://schemas.android.com/apk/res-auto"
                                 android:layout_width="12dp"
                                 android:layout_height="12dp"
                                 android:layout_margin="4dp"
-                                android:background="@drawable/icon_circle"
-                                android:backgroundTint="@color/third3"/>
+                                android:background="@drawable/icon_circle_third"/>
 
                             <TextView
                                 android:id="@+id/textViewThird3"
@@ -774,12 +774,12 @@
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
 
-                            <View
+                            <android.support.v7.widget.AppCompatImageView
+                                xmlns:app="http://schemas.android.com/apk/res-auto"
                                 android:layout_width="12dp"
                                 android:layout_height="12dp"
                                 android:layout_margin="4dp"
-                                android:background="@drawable/icon_circle"
-                                android:backgroundTint="@color/first4"/>
+                                android:background="@drawable/icon_circle_first"/>
 
                             <TextView
                                 android:id="@+id/textViewFirst4"
@@ -798,12 +798,12 @@
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
 
-                            <View
+                            <android.support.v7.widget.AppCompatImageView
+                                xmlns:app="http://schemas.android.com/apk/res-auto"
                                 android:layout_width="12dp"
                                 android:layout_height="12dp"
                                 android:layout_margin="4dp"
-                                android:background="@drawable/icon_circle"
-                                android:backgroundTint="@color/second4"/>
+                                android:background="@drawable/icon_circle_second"/>
 
                             <TextView
                                 android:id="@+id/textViewSecond4"
@@ -822,12 +822,12 @@
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
 
-                            <View
+                            <android.support.v7.widget.AppCompatImageView
+                                xmlns:app="http://schemas.android.com/apk/res-auto"
                                 android:layout_width="12dp"
                                 android:layout_height="12dp"
                                 android:layout_margin="4dp"
-                                android:background="@drawable/icon_circle"
-                                android:backgroundTint="@color/third4"/>
+                                android:background="@drawable/icon_circle_third"/>
 
                             <TextView
                                 android:id="@+id/textViewThird4"
@@ -846,12 +846,12 @@
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
 
-                            <View
+                            <android.support.v7.widget.AppCompatImageView
+                                xmlns:app="http://schemas.android.com/apk/res-auto"
                                 android:layout_width="12dp"
                                 android:layout_height="12dp"
                                 android:layout_margin="4dp"
-                                android:background="@drawable/icon_circle"
-                                android:backgroundTint="@color/fourth4"/>
+                                android:background="@drawable/icon_circle_fourth"/>
 
                             <TextView
                                 android:id="@+id/textViewFourth4"

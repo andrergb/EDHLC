@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <item name="white" type="color">#FFFFFF</item>
     <!-- GRAY -->
     <!--<item name="gray200" type="color">#EEEEEE</item>-->
     <item name="gray300" type="color">#E0E0E0</item>
@@ -12,17 +13,16 @@
     <!--<item name="gray900" type="color">#212121</item>-->
 
     <!-- LEGENDS -->
-    <item name="first2" type="color">#a1e1ff</item>
-    <item name="second2" type="color">#faaa8f</item>
+    <item name="first" type="color">#f5dd5b</item>
+    <item name="second" type="color">#d4dcdf</item>
+    <item name="third" type="color">#c27548</item>
+    <item name="fourth" type="color">#6b6b6b</item>
 
-    <item name="first3" type="color">#a1e1ff</item>
-    <item name="second3" type="color">#faaa8f</item>
-    <item name="third3" type="color">#95dfaf</item>
-
-    <item name="first4" type="color">#a1e1ff</item>
-    <item name="second4" type="color">#faaa8f</item>
-    <item name="third4" type="color">#95dfaf</item>
-    <item name="fourth4" type="color">#b7b7b7</item>
+    <!--&lt;!&ndash;Grayscale&ndash;&gt;-->
+    <!--<item name="first4" type="color">#EAEAEA</item>-->
+    <!--<item name="second4" type="color">#BBBBBB</item>-->
+    <!--<item name="third4" type="color">#5A5A5A</item>-->
+    <!--<item name="fourth4" type="color">#000000</item>-->
 
     <!-- THEME -->
     <item name="primary_color" type="color">#FF03A9F4</item>

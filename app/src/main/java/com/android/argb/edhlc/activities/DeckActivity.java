@@ -59,9 +59,7 @@ public class DeckActivity extends AppCompatActivity {
     private ImageView imageViewMana5;
     private ImageView imageViewMana6;
 
-    private int[] COLORS2;
-    private int[] COLORS3;
-    private int[] COLORS4;
+    private int[] COLORS;
 
     //Card - Chart deck history 2 - 1v1
     private CardView cardViewDeckHistory2;
@@ -192,7 +190,7 @@ public class DeckActivity extends AppCompatActivity {
             mMultipleCategorySeriesDataSet2.add(titles.get(i), values.get(i));
 
         mDoughnutRender2 = new DefaultRenderer();
-        for (int color : COLORS2) {
+        for (int color : COLORS) {
             SimpleSeriesRenderer r = new SimpleSeriesRenderer();
             r.setColor(color);
             mDoughnutRender2.addSeriesRenderer(r);
@@ -238,7 +236,7 @@ public class DeckActivity extends AppCompatActivity {
             mMultipleCategorySeriesDataSet3.add(titles.get(i), values.get(i));
 
         mDoughnutRender3 = new DefaultRenderer();
-        for (int color : COLORS3) {
+        for (int color : COLORS) {
             SimpleSeriesRenderer r = new SimpleSeriesRenderer();
             r.setColor(color);
             mDoughnutRender3.addSeriesRenderer(r);
@@ -285,7 +283,7 @@ public class DeckActivity extends AppCompatActivity {
             mMultipleCategorySeriesDataSet4.add(titles.get(i), values.get(i));
 
         mDoughnutRender4 = new DefaultRenderer();
-        for (int color : COLORS4) {
+        for (int color : COLORS) {
             SimpleSeriesRenderer r = new SimpleSeriesRenderer();
             r.setColor(color);
             mDoughnutRender4.addSeriesRenderer(r);
@@ -334,18 +332,10 @@ public class DeckActivity extends AppCompatActivity {
         decksDB.open();
         recordsDB.open();
 
-        //TODO
-        COLORS2 = new int[]{this.getResources().getColor(R.color.first2),
-                this.getResources().getColor(R.color.second2)};
-
-        COLORS3 = new int[]{this.getResources().getColor(R.color.first3),
-                this.getResources().getColor(R.color.second3),
-                this.getResources().getColor(R.color.third3)};
-
-        COLORS4 = new int[]{this.getResources().getColor(R.color.first4),
-                this.getResources().getColor(R.color.second4),
-                this.getResources().getColor(R.color.third4),
-                this.getResources().getColor(R.color.fourth4)};
+        COLORS = new int[]{this.getResources().getColor(R.color.first),
+                this.getResources().getColor(R.color.second),
+                this.getResources().getColor(R.color.third),
+                this.getResources().getColor(R.color.fourth)};
 
         createLayout(this.findViewById(android.R.id.content));
     }
