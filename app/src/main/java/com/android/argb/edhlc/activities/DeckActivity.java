@@ -194,15 +194,23 @@ public class DeckActivity extends AppCompatActivity {
         textViewFirst2.setText("First: " + first);
         textViewSecond2.setText("Second: " + second);
 
+        COLORS = new int[]{this.getResources().getColor(R.color.first),
+                this.getResources().getColor(android.R.color.transparent),
+                this.getResources().getColor(R.color.second),
+                this.getResources().getColor(android.R.color.transparent)};
+
         List<double[]> values = new ArrayList<>();
-        values.add(new double[]{first, second});
-        values.add(new double[]{0, 0});
-        values.add(new double[]{0, 0});
+        double total = (double) (first + second);
+        double emptySpace = (total == first || total == second) ? 0 : total * 0.01;
+        values.add(new double[]{first, first > 0 ? emptySpace : 0,
+                second, second > 0 ? emptySpace : 0});
+        values.add(new double[]{0, 0, 0, 0});
+        values.add(new double[]{0, 0, 0, 0});
 
         List<String[]> titles = new ArrayList<>();
-        titles.add(new String[]{String.valueOf(first), String.valueOf(second)});
-        titles.add(new String[]{"", ""});
-        titles.add(new String[]{"", ""});
+        titles.add(new String[]{String.valueOf(first), "", String.valueOf(second), ""});
+        titles.add(new String[]{"", "", "", ""});
+        titles.add(new String[]{"", "", "", ""});
 
         mMultipleCategorySeriesDataSet2 = new MultipleCategorySeries("");
         mMultipleCategorySeriesDataSet2.clear();
@@ -240,15 +248,26 @@ public class DeckActivity extends AppCompatActivity {
         textViewSecond3.setText("Second: " + second);
         textViewThird3.setText("Third: " + third);
 
+        COLORS = new int[]{this.getResources().getColor(R.color.first),
+                this.getResources().getColor(android.R.color.transparent),
+                this.getResources().getColor(R.color.second),
+                this.getResources().getColor(android.R.color.transparent),
+                this.getResources().getColor(R.color.third),
+                this.getResources().getColor(android.R.color.transparent)};
+
         List<double[]> values = new ArrayList<>();
-        values.add(new double[]{first, second, third});
-        values.add(new double[]{0, 0, 0});
-        values.add(new double[]{0, 0, 0});
+        double total = (double) (first + second + third);
+        double emptySpace = (total == first || total == second || total == third) ? 0 : total * 0.01;
+        values.add(new double[]{first, first > 0 ? emptySpace : 0,
+                second, second > 0 ? emptySpace : 0,
+                third, third > 0 ? emptySpace : 0});
+        values.add(new double[]{0, 0, 0, 0, 0, 0});
+        values.add(new double[]{0, 0, 0, 0, 0, 0});
 
         List<String[]> titles = new ArrayList<>();
-        titles.add(new String[]{String.valueOf(first), String.valueOf(second), String.valueOf(third)});
-        titles.add(new String[]{"", "", ""});
-        titles.add(new String[]{"", "", ""});
+        titles.add(new String[]{String.valueOf(first), "", String.valueOf(second), "", String.valueOf(third), ""});
+        titles.add(new String[]{"", "", "", "", "", ""});
+        titles.add(new String[]{"", "", "", "", "", ""});
 
         mMultipleCategorySeriesDataSet3 = new MultipleCategorySeries("");
         mMultipleCategorySeriesDataSet3.clear();
@@ -287,15 +306,29 @@ public class DeckActivity extends AppCompatActivity {
         textViewThird4.setText("Third: " + third);
         textViewFourth4.setText("Fourth: " + fourth);
 
+        COLORS = new int[]{this.getResources().getColor(R.color.first),
+                this.getResources().getColor(android.R.color.transparent),
+                this.getResources().getColor(R.color.second),
+                this.getResources().getColor(android.R.color.transparent),
+                this.getResources().getColor(R.color.third),
+                this.getResources().getColor(android.R.color.transparent),
+                this.getResources().getColor(R.color.fourth),
+                this.getResources().getColor(android.R.color.transparent)};
+
         List<double[]> values = new ArrayList<>();
-        values.add(new double[]{first, second, third, fourth});
-        values.add(new double[]{0, 0, 0, 0});
-        values.add(new double[]{0, 0, 0, 0});
+        double total = (double) (first + second + third + fourth);
+        double emptySpace = (total == first || total == second || total == third || total == fourth) ? 0 : total * 0.01;
+        values.add(new double[]{first, first > 0 ? emptySpace : 0,
+                second, second > 0 ? emptySpace : 0,
+                third, third > 0 ? emptySpace : 0,
+                fourth, fourth > 0 ? emptySpace : 0});
+        values.add(new double[]{0, 0, 0, 0, 0, 0, 0, 0});
+        values.add(new double[]{0, 0, 0, 0, 0, 0, 0, 0});
 
         List<String[]> titles = new ArrayList<>();
-        titles.add(new String[]{String.valueOf(first), String.valueOf(second), String.valueOf(third), String.valueOf(fourth)});
-        titles.add(new String[]{"", "", "", ""});
-        titles.add(new String[]{"", "", "", ""});
+        titles.add(new String[]{String.valueOf(first), "", String.valueOf(second), "", String.valueOf(third), "", String.valueOf(fourth), ""});
+        titles.add(new String[]{"", "", "", "", "", "", "", ""});
+        titles.add(new String[]{"", "", "", "", "", "", "", ""});
 
         mMultipleCategorySeriesDataSet4 = new MultipleCategorySeries("");
         mMultipleCategorySeriesDataSet4.clear();
@@ -384,11 +417,6 @@ public class DeckActivity extends AppCompatActivity {
         recordsDB = new RecordsDataAccessObject(this);
         decksDB.open();
         recordsDB.open();
-
-        COLORS = new int[]{this.getResources().getColor(R.color.first),
-                this.getResources().getColor(R.color.second),
-                this.getResources().getColor(R.color.third),
-                this.getResources().getColor(R.color.fourth)};
 
         createLayout(this.findViewById(android.R.id.content));
     }
