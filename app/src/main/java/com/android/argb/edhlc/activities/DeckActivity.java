@@ -10,8 +10,11 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -130,7 +133,6 @@ public class DeckActivity extends AppCompatActivity {
     private int mCardViewFullHeightLastGamePlayed;
     private ImageView imageViewBanner;
 
-    //TODO mediaUtils
     public static Intent getPickImageIntent(final Context context) {
         final Intent intent = new Intent();
         intent.setType("image/*");
@@ -335,7 +337,11 @@ public class DeckActivity extends AppCompatActivity {
                 File croppedImageFile = new File(getFilesDir(), "image_" + mPlayerName + "_" + mDeckName + ".png");
                 Uri croppedImageUri = Uri.fromFile(croppedImageFile);
 
-                CropImageIntentBuilder cropImage = new CropImageIntentBuilder(16, 9, 800, 450, croppedImageUri);
+                ViewGroup.LayoutParams layoutParams = imageViewBanner.getLayoutParams();
+                int auxWidth = imageViewBanner.getWidth();
+                int auxHeight = (int) (layoutParams.width * (float) 9 / 16);
+
+                CropImageIntentBuilder cropImage = new CropImageIntentBuilder(16, 9, auxWidth, auxHeight, croppedImageUri);
                 cropImage.setSourceImage(data.getData());
 
                 startActivityForResult(cropImage.getIntent(this), REQUEST_CROP_PICTURE);
@@ -362,11 +368,16 @@ public class DeckActivity extends AppCompatActivity {
             window.setStatusBarColor(this.getResources().getColor(R.color.dark_primary_color));
         }
 
+        assert getSupportActionBar() != null;
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
         Intent intent = getIntent();
         mPlayerName = intent.getStringExtra("PLAYERNAME");
         mDeckName = intent.getStringExtra("DECKNAME");
         mDeckIdentity = intent.getStringExtra("DECKIDENTITY");
-
         currentDeck = new Deck(mPlayerName, mDeckName);
 
         decksDB = new DecksDataAccessObject(this);
@@ -435,6 +446,13 @@ public class DeckActivity extends AppCompatActivity {
 
     private void createLayout(View view) {
         if (view != null) {
+
+            CollapsingToolbarLayout mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.main_collapsing);
+            mCollapsingToolbarLayout.setTitle(mDeckName);
+            mCollapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.white));
+            mCollapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.white));
+            //mCollapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(android.R.color.transparent));
+
             //Deck banner image
             imageViewBanner = (ImageView) findViewById(R.id.imageViewBanner);
 
@@ -624,6 +642,12 @@ public class DeckActivity extends AppCompatActivity {
         if (croppedImageFile.isFile()) {
             imageViewBanner.setImageBitmap(BitmapFactory.decodeFile(croppedImageFile.getAbsolutePath()));
             imageViewBanner.setAdjustViewBounds(true);
+        } else {
+            DisplayMetrics displaymetrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+            ViewGroup.LayoutParams layoutParams = imageViewBanner.getLayoutParams();
+            layoutParams.height = (int) (displaymetrics.widthPixels * (float) 9 / 16);
+            imageViewBanner.setLayoutParams(layoutParams);
         }
 
         //Deck name
