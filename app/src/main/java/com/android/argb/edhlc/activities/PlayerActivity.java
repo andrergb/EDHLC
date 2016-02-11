@@ -124,7 +124,7 @@ public class PlayerActivity extends ActionBarActivity {
             Window window = this.getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(this.getResources().getColor(R.color.dark_primary_color));
+            window.setStatusBarColor(this.getResources().getColor(R.color.secondary_color));
         }
 
         decksDB = new DecksDataAccessObject(this);

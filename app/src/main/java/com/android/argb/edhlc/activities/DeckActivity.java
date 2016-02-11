@@ -58,9 +58,16 @@ public class DeckActivity extends AppCompatActivity {
     private DecksDataAccessObject decksDB;
     private RecordsDataAccessObject recordsDB;
     //Main card - Deck info
+    private CardView cardViewDeckInfo;
+    private RelativeLayout relativeTitleDeckInfo;
+    private TextView textTitleDeckInfo;
+    private ImageView iconIndicatorDeckInfo;
+    private int mCardViewFullHeightDeckInfo;
     private ImageView imageViewShieldColor;
-    private TextView textViewDeckName;
+    private TextView textViewCommander;
     private List<ImageView> listIdentityHolder;
+    private TextView textViewTotalGames;
+    private TextView textViewWins;
     private ImageView imageViewMana1;
     private ImageView imageViewMana2;
     private ImageView imageViewMana3;
@@ -151,6 +158,11 @@ public class DeckActivity extends AppCompatActivity {
 
     public void onClickCardExpansion(View v) {
         switch (v.getId()) {
+
+            case R.id.relativeTitleDeckInfo:
+                toggleCardExpansion(cardViewDeckInfo, textTitleDeckInfo, iconIndicatorDeckInfo, relativeTitleDeckInfo.getHeight(), mCardViewFullHeightDeckInfo);
+                break;
+
             case R.id.relativeTitleLastGamePlayed:
                 toggleCardExpansion(cardViewLastGamePlayed, textTitleLastGamePlayed, iconIndicatorLastGamePlayed, relativeTitleLastGamePlayed.getHeight(), mCardViewFullHeightLastGamePlayed);
                 break;
@@ -396,9 +408,9 @@ public class DeckActivity extends AppCompatActivity {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = this.getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(this.getResources().getColor(R.color.dark_primary_color));
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(this.getResources().getColor(android.R.color.transparent));
         }
 
         assert getSupportActionBar() != null;
@@ -484,12 +496,27 @@ public class DeckActivity extends AppCompatActivity {
             //Deck banner image
             imageViewBanner = (ImageView) findViewById(R.id.imageViewBanner);
 
+            //Card Deck info
+            cardViewDeckInfo = (CardView) view.findViewById(R.id.cardViewDeckInfo);
+            cardViewDeckInfo.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                @Override
+                public boolean onPreDraw() {
+                    cardViewDeckInfo.getViewTreeObserver().removeOnPreDrawListener(this);
+                    mCardViewFullHeightDeckInfo = cardViewDeckInfo.getHeight();
+                    return true;
+                }
+            });
+            relativeTitleDeckInfo = (RelativeLayout) view.findViewById(R.id.relativeTitleDeckInfo);
+            textTitleDeckInfo = (TextView) view.findViewById(R.id.textTitleDeckInfo);
+            iconIndicatorDeckInfo = (ImageView) view.findViewById(R.id.iconIndicatorDeckInfo);
             //Deck name
-            textViewDeckName = (TextView) view.findViewById(R.id.textviewDeckName);
-
+            textViewCommander = (TextView) view.findViewById(R.id.textViewCommander);
             //Shield color
             imageViewShieldColor = (ImageView) view.findViewById(R.id.imageViewShieldColor);
-
+            //Total games
+            textViewTotalGames = (TextView) view.findViewById(R.id.textViewTotalGames);
+            //Wins
+            textViewWins = (TextView) view.findViewById(R.id.textViewWins);
             //Deck identity
             imageViewMana1 = (ImageView) view.findViewById(R.id.imageViewMana1);
             imageViewMana2 = (ImageView) view.findViewById(R.id.imageViewMana2);
@@ -623,11 +650,13 @@ public class DeckActivity extends AppCompatActivity {
     private void toggleCardExpansion(final CardView card, TextView title, ImageView selector, int minHeight, int maxHeight) {
         // expand
         if (card.getHeight() == minHeight) {
-            title.setTextColor(this.getResources().getColor(R.color.dark_primary_color));
+            title.setTextColor(this.getResources().getColor(R.color.secondary_color));
 
-            Animation rotation = AnimationUtils.loadAnimation(this, R.anim.rotate_90_clockwise);
+            Animation rotation = AnimationUtils.loadAnimation(this, R.anim.rotate_180_anticlockwise);
+            selector.setImageDrawable(getResources().getDrawable(R.drawable.arrow_up));
+            selector.setRotation(0);
             selector.startAnimation(rotation);
-            selector.setColorFilter(this.getResources().getColor(R.color.dark_primary_color));
+            selector.setColorFilter(this.getResources().getColor(R.color.secondary_color));
 
             ValueAnimator anim = ValueAnimator.ofInt(card.getMeasuredHeightAndState(), maxHeight);
             anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -646,7 +675,7 @@ public class DeckActivity extends AppCompatActivity {
             // collapse
             title.setTextColor(this.getResources().getColor(R.color.secondary_text));
 
-            Animation rotation = AnimationUtils.loadAnimation(this, R.anim.rotate_90_anticlockwise);
+            Animation rotation = AnimationUtils.loadAnimation(this, R.anim.rotate_180_clockwise);
             selector.startAnimation(rotation);
             selector.setColorFilter(this.getResources().getColor(R.color.secondary_text));
 
@@ -678,8 +707,18 @@ public class DeckActivity extends AppCompatActivity {
             imageViewBanner.setLayoutParams(layoutParams);
         }
 
+        //Deck info title
+        if (cardViewDeckInfo.getHeight() == mCardViewFullHeightDeckInfo) {
+            textTitleDeckInfo.setTextColor(this.getResources().getColor(R.color.secondary_color));
+            iconIndicatorDeckInfo.setImageDrawable(getResources().getDrawable(R.drawable.arrow_up));
+            iconIndicatorDeckInfo.setColorFilter(this.getResources().getColor(R.color.secondary_color));
+        } else {
+            textTitleDeckInfo.setTextColor(this.getResources().getColor(R.color.secondary_text));
+            iconIndicatorDeckInfo.setColorFilter(this.getResources().getColor(R.color.secondary_text));
+        }
+
         //Deck name
-        textViewDeckName.setText(mDeckName);
+        textViewCommander.setText(mDeckName);
 
         //Shield color
         imageViewShieldColor.setColorFilter(decksDB.getDeck(mPlayerName, mDeckName).getDeckColor()[0]);
@@ -831,5 +870,10 @@ public class DeckActivity extends AppCompatActivity {
             textViewTotalGameText4.setText(total4 == 1 ? "game played" : "games played");
             updateDonutChart4(firstIn4, secondIn4, thirdIn4, fourthIn4);
         }
+
+        //Total Games
+        textViewTotalGames.setText("" + (total2 + total3 + total4));
+        //Wins
+        textViewWins.setText("" + (firstIn2 + firstIn3 + firstIn4));
     }
 }

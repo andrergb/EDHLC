@@ -491,7 +491,7 @@ public class DrawerMain {
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             mNewGameDecks.remove(position);
-                            String defaultColor = parentActivity.getResources().getColor(R.color.primary_color) + System.getProperty("path.separator") + parentActivity.getResources().getColor(R.color.dark_primary_color);
+                            String defaultColor = parentActivity.getResources().getColor(R.color.primary_color) + System.getProperty("path.separator") + parentActivity.getResources().getColor(R.color.secondary_color);
                             if (!mNewGameDecks.contains(parentActivity.getResources().getString(R.string.default_player_1) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_1)))
                                 mNewGameDecks.add(position, parentActivity.getResources().getString(R.string.default_player_1) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_1) + System.getProperty("line.separator") + defaultColor);
                             else if (!mNewGameDecks.contains(parentActivity.getResources().getString(R.string.default_player_2) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_2)))
@@ -650,7 +650,7 @@ public class DrawerMain {
                     mDrawerLayout.closeDrawers();
 
                     mNewGameDecks = new ArrayList<>();
-                    String defaultColor = parentActivity.getResources().getColor(R.color.primary_color) + System.getProperty("path.separator") + parentActivity.getResources().getColor(R.color.dark_primary_color);
+                    String defaultColor = parentActivity.getResources().getColor(R.color.primary_color) + System.getProperty("path.separator") + parentActivity.getResources().getColor(R.color.secondary_color);
                     mNewGameDecks.add(parentActivity.getResources().getString(R.string.default_player_1) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_1) + System.getProperty("line.separator") + defaultColor);
                     mNewGameDecks.add(parentActivity.getResources().getString(R.string.default_player_2) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_2) + System.getProperty("line.separator") + defaultColor);
                     mNewGameDecks.add(parentActivity.getResources().getString(R.string.default_player_3) + System.getProperty("line.separator") + parentActivity.getResources().getString(R.string.default_deck_3) + System.getProperty("line.separator") + defaultColor);

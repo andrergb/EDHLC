@@ -159,22 +159,24 @@ public class RecordsDataAccessObject {
             Cursor cursor = database.query(
                     RecordsContract.RecordsEntry.TABLE_NAME,
                     null,
-                    "(" + RecordsContract.RecordsEntry.COLUMN_FIRST_PLAYER_NAME + " LIKE ? OR "
-                            + RecordsContract.RecordsEntry.COLUMN_SECOND_PLAYER_NAME + " LIKE ? OR "
-                            + RecordsContract.RecordsEntry.COLUMN_THIRD_PLAYER_NAME + " LIKE ? OR "
-                            + RecordsContract.RecordsEntry.COLUMN_FOURTH_PLAYER_NAME + " LIKE ?"
-                            + ") AND ("
-                            + RecordsContract.RecordsEntry.COLUMN_FIRST_PLAYER_DECK + " LIKE ? OR "
-                            + RecordsContract.RecordsEntry.COLUMN_SECOND_PLAYER_DECK + " LIKE ? OR "
-                            + RecordsContract.RecordsEntry.COLUMN_THIRD_PLAYER_DECK + " LIKE ? OR "
+                    "(" + RecordsContract.RecordsEntry.COLUMN_FIRST_PLAYER_NAME + " LIKE ? AND "
+                            + RecordsContract.RecordsEntry.COLUMN_FIRST_PLAYER_DECK + " LIKE ?"
+                            + ") OR ("
+                            + RecordsContract.RecordsEntry.COLUMN_SECOND_PLAYER_NAME + " LIKE ? AND "
+                            + RecordsContract.RecordsEntry.COLUMN_SECOND_PLAYER_DECK + " LIKE ?"
+                            + ") OR ("
+                            + RecordsContract.RecordsEntry.COLUMN_THIRD_PLAYER_NAME + " LIKE ? AND "
+                            + RecordsContract.RecordsEntry.COLUMN_THIRD_PLAYER_DECK + " LIKE ?"
+                            + ") OR ("
+                            + RecordsContract.RecordsEntry.COLUMN_FOURTH_PLAYER_NAME + " LIKE ? AND "
                             + RecordsContract.RecordsEntry.COLUMN_FOURTH_PLAYER_DECK + " LIKE ?)",
                     new String[]{deck.getPlayerName(),
-                            deck.getPlayerName(),
-                            deck.getPlayerName(),
+                            deck.getDeckName(),
                             deck.getPlayerName(),
                             deck.getDeckName(),
+                            deck.getPlayerName(),
                             deck.getDeckName(),
-                            deck.getDeckName(),
+                            deck.getPlayerName(),
                             deck.getDeckName()},
                     null,
                     null,

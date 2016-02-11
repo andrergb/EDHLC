@@ -3,6 +3,7 @@
     <color name="translucent_scrim_bottom">#37000000</color>
 
     <item name="white" type="color">#FFFFFF</item>
+
     <!-- GRAY -->
     <!--<item name="gray200" type="color">#EEEEEE</item>-->
     <item name="gray300" type="color">#E0E0E0</item>
@@ -27,10 +28,9 @@
 
     <!-- THEME -->
     <item name="primary_color" type="color">#FF03A9F4</item>
-    <item name="dark_primary_color" type="color">#FF0288D1</item>
-    <item name="light_primary_color" type="color">#FFB3E5FC</item>
-
+    <item name="secondary_color" type="color">#FF0288D1</item>
     <item name="accent_color" type="color">#FFFF5722</item>
+    <item name="light_primary_color" type="color">#FFB3E5FC</item>
 
     <item name="primary_text" type="color">#FF212121</item>
     <item name="secondary_text" type="color">#FF727272</item>
@@ -39,7 +39,7 @@
 
     <integer-array name="edh_default">
         <item>@color/primary_color</item>
-        <item>@color/dark_primary_color</item>
+        <item>@color/secondary_color</item>
         <item>@color/light_primary_color</item>
     </integer-array>
 

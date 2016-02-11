@@ -174,7 +174,7 @@ public class PlayerListActivity extends AppCompatActivity {
             Window window = this.getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(this.getResources().getColor(R.color.dark_primary_color));
+            window.setStatusBarColor(this.getResources().getColor(R.color.secondary_color));
         }
 
         recordsDB = new RecordsDataAccessObject(this);
@@ -270,7 +270,7 @@ public class PlayerListActivity extends AppCompatActivity {
                     colorIdentity = checkBoxManaGreen.isChecked() ? colorIdentity.concat("1") : colorIdentity.concat("0");
                     colorIdentity = checkBoxManaColorless.isChecked() ? colorIdentity.concat("1") : colorIdentity.concat("0");
 
-                    if (decksDB.addDeck(new Deck(player, tempName, new int[]{PlayerListActivity.this.getResources().getColor(R.color.primary_color), PlayerListActivity.this.getResources().getColor(R.color.dark_primary_color)}, colorIdentity)) != -1) {
+                    if (decksDB.addDeck(new Deck(player, tempName, new int[]{PlayerListActivity.this.getResources().getColor(R.color.primary_color), PlayerListActivity.this.getResources().getColor(R.color.secondary_color)}, colorIdentity)) != -1) {
                         Toast.makeText(view.getContext(), tempName + " added", Toast.LENGTH_SHORT).show();
                         updateLayout();
                         alertDialog.dismiss();
