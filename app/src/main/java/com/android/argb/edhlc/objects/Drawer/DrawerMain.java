@@ -267,9 +267,9 @@ public class DrawerMain {
                     recordDB.open();
 
                     Calendar c = Calendar.getInstance();
-                    String date = String.valueOf(c.get(Calendar.YEAR))
-                            + "/" + String.valueOf(c.get(Calendar.MONTH))
-                            + "/" + String.valueOf(c.get(Calendar.DAY_OF_MONTH));
+                    String date = String.valueOf(c.get(Calendar.DAY_OF_MONTH))
+                            + "/" + Constants.MONTH[c.get(Calendar.MONTH)]
+                            + "/" + String.valueOf(c.get(Calendar.YEAR));
 
                     long result = recordDB.addRecord(new Record(mDecksListToBeRecorded, date));
                     recordDB.close();
@@ -529,7 +529,7 @@ public class DrawerMain {
                     if (!auxPlayerName.equalsIgnoreCase(parentActivity.getString(R.string.edh_spinner_player_hint)) && !tempPlayerDeck.equalsIgnoreCase(parentActivity.getString(R.string.edh_spinner_deck_hint))) {
                         if (Record.isValidRecord(mDeckListAux, new Deck(auxPlayerName, tempPlayerDeck))) {
                             mNewGameDecks.remove(position);
-                            mNewGameDecks.add(position, auxPlayerName + System.getProperty("line.separator") + tempPlayerDeck + System.getProperty("line.separator") + decksDB.getDeck(auxPlayerName, tempPlayerDeck).getDeckColor()[0] + System.getProperty("path.separator") + decksDB.getDeck(auxPlayerName, tempPlayerDeck).getDeckColor()[1]);
+                            mNewGameDecks.add(position, auxPlayerName + System.getProperty("line.separator") + tempPlayerDeck + System.getProperty("line.separator") + decksDB.getDeck(auxPlayerName, tempPlayerDeck).getDeckShieldColor()[0] + System.getProperty("path.separator") + decksDB.getDeck(auxPlayerName, tempPlayerDeck).getDeckShieldColor()[1]);
                             newGameSelectPlayersDialog.dismiss();
                             createNewGameConfirmationDialog(v);
                         } else {
@@ -634,7 +634,7 @@ public class DrawerMain {
         });
 
         if (selectedPlayerPreviously != null) {
-            String comparePlayerName = selectedPlayerPreviously.getPlayerName();
+            String comparePlayerName = selectedPlayerPreviously.getDeckOwnerName();
             if (!comparePlayerName.equals(null)) {
                 int spinnerPosition = playersNameAdapter.getPosition(comparePlayerName);
                 spinnerName.setSelection(spinnerPosition);
@@ -660,11 +660,11 @@ public class DrawerMain {
                     for (int i = 0; i < mNewGameDecksActive.size(); i++) {
                         mNewGameDecks.remove(i);
                         mNewGameDecks.add(i,
-                                mNewGameDecksActive.get(i).getPlayerName()
+                                mNewGameDecksActive.get(i).getDeckOwnerName()
                                         + System.getProperty("line.separator")
                                         + mNewGameDecksActive.get(i).getDeckName()
                                         + System.getProperty("line.separator")
-                                        + String.valueOf(mNewGameDecksActive.get(i).getDeckColor()[0] + System.getProperty("path.separator") + mNewGameDecksActive.get(i).getDeckColor()[1]));
+                                        + String.valueOf(mNewGameDecksActive.get(i).getDeckShieldColor()[0] + System.getProperty("path.separator") + mNewGameDecksActive.get(i).getDeckShieldColor()[1]));
                     }
 
                     createNewGameConfirmationDialog(view);
@@ -678,12 +678,12 @@ public class DrawerMain {
                     ArrayList<Deck> mDeadDecksList = MainActivity.getDeadDecksList();
                     if (mDeadDecksList != null)
                         for (int i = 0; i < mDeadDecksList.size(); i++)
-                            mLogGameDecks.add(mDeadDecksList.get(i).getPlayerName() + System.getProperty("line.separator") + mDeadDecksList.get(i).getDeckName());
+                            mLogGameDecks.add(mDeadDecksList.get(i).getDeckOwnerName() + System.getProperty("line.separator") + mDeadDecksList.get(i).getDeckName());
 
                     ArrayList<Deck> mAliveDecksList = MainActivity.getAliveDecksList();
                     if (mAliveDecksList != null)
                         for (int i = 0; i < mAliveDecksList.size(); i++)
-                            mLogGameDecks.add(mAliveDecksList.get(i).getPlayerName() + System.getProperty("line.separator") + mAliveDecksList.get(i).getDeckName());
+                            mLogGameDecks.add(mAliveDecksList.get(i).getDeckOwnerName() + System.getProperty("line.separator") + mAliveDecksList.get(i).getDeckName());
 
                     switch (mLogGameDecks.size()) {
                         case 0:

@@ -49,8 +49,8 @@ import java.util.List;
 //Crop: https://github.com/lvillani/android-cropimage
 public class DeckActivity extends AppCompatActivity {
 
-    private static int REQUEST_PICTURE = 1;
-    private static int REQUEST_CROP_PICTURE = 2;
+    private static int REQUEST_PICTURE_PICKER = 1;
+    private static int REQUEST_CROP_PICTURE = 0;
     private Deck currentDeck;
     private String mPlayerName;
     private String mDeckName;
@@ -65,6 +65,7 @@ public class DeckActivity extends AppCompatActivity {
     private int mCardViewFullHeightDeckInfo;
     private ImageView imageViewShieldColor;
     private TextView textViewCommander;
+    private TextView textViewCreationDate;
     private List<ImageView> listIdentityHolder;
     private TextView textViewTotalGames;
     private TextView textViewWins;
@@ -126,6 +127,7 @@ public class DeckActivity extends AppCompatActivity {
     private TextView textTitleLastGamePlayed;
     private ImageView iconIndicatorLastGamePlayed;
     private LinearLayout linearLastGame1;
+    private TextView textViewRecordDate;
     private TextView textViewPlayer1;
     private TextView textViewDeck1;
     private LinearLayout linearLastGame2;
@@ -144,7 +146,7 @@ public class DeckActivity extends AppCompatActivity {
         final Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        return Intent.createChooser(intent, "Select picture");
+        return Intent.createChooser(intent, "Select Picture");
     }
 
     @Override
@@ -182,8 +184,7 @@ public class DeckActivity extends AppCompatActivity {
     }
 
     public void onClickImageBanner(View view) {
-        //TODO opcao de camera ou gallery
-        startActivityForResult(getPickImageIntent(this), REQUEST_PICTURE);
+        startActivityForResult(getPickImageIntent(this), REQUEST_PICTURE_PICKER);
     }
 
     @Override
@@ -377,7 +378,7 @@ public class DeckActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == REQUEST_PICTURE) {
+        if (requestCode == REQUEST_PICTURE_PICKER) {
             if (resultCode == RESULT_OK) {
                 File croppedImageFile = new File(getFilesDir(), "image_" + mPlayerName + "_" + mDeckName + ".png");
                 Uri croppedImageUri = Uri.fromFile(croppedImageFile);
@@ -423,12 +424,13 @@ public class DeckActivity extends AppCompatActivity {
         mPlayerName = intent.getStringExtra("PLAYERNAME");
         mDeckName = intent.getStringExtra("DECKNAME");
         mDeckIdentity = intent.getStringExtra("DECKIDENTITY");
-        currentDeck = new Deck(mPlayerName, mDeckName);
 
         decksDB = new DecksDataAccessObject(this);
         recordsDB = new RecordsDataAccessObject(this);
         decksDB.open();
         recordsDB.open();
+
+        currentDeck = decksDB.getDeck(mPlayerName, mDeckName);
 
         createLayout(this.findViewById(android.R.id.content));
     }
@@ -511,6 +513,8 @@ public class DeckActivity extends AppCompatActivity {
             iconIndicatorDeckInfo = (ImageView) view.findViewById(R.id.iconIndicatorDeckInfo);
             //Deck name
             textViewCommander = (TextView) view.findViewById(R.id.textViewCommander);
+            //Creation Date
+            textViewCreationDate = (TextView) view.findViewById(R.id.textViewCreationDate);
             //Shield color
             imageViewShieldColor = (ImageView) view.findViewById(R.id.imageViewShieldColor);
             //Total games
@@ -615,6 +619,7 @@ public class DeckActivity extends AppCompatActivity {
             relativeTitleLastGamePlayed = (RelativeLayout) findViewById(R.id.relativeTitleLastGamePlayed);
             iconIndicatorLastGamePlayed = (ImageView) findViewById(R.id.iconIndicatorLastGamePlayed);
             textTitleLastGamePlayed = (TextView) findViewById(R.id.textTitleLastGamePlayed);
+            textViewRecordDate = (TextView) findViewById(R.id.textViewRecordDate);
 
             linearLastGame1 = (LinearLayout) findViewById(R.id.linearLastGame1);
             textViewPlayer1 = (TextView) view.findViewById(R.id.textViewPlayer1);
@@ -720,8 +725,11 @@ public class DeckActivity extends AppCompatActivity {
         //Deck name
         textViewCommander.setText(mDeckName);
 
+        //Creation Date
+        textViewCreationDate.setText(currentDeck.getDeckCreationDate());
+
         //Shield color
-        imageViewShieldColor.setColorFilter(decksDB.getDeck(mPlayerName, mDeckName).getDeckColor()[0]);
+        imageViewShieldColor.setColorFilter(decksDB.getDeck(mPlayerName, mDeckName).getDeckShieldColor()[0]);
 
         //Deck Identity
         int index = 0;
@@ -761,16 +769,17 @@ public class DeckActivity extends AppCompatActivity {
         if (allRecords.size() != 0) {
             cardViewLastGamePlayed.setVisibility(View.VISIBLE);
             Record lastRecord = allRecords.get(allRecords.size() - 1);
+            textViewRecordDate.setText(lastRecord.getDate());
             switch (lastRecord.getTotalPlayers()) {
                 case 2:
                     linearLastGame1.setVisibility(View.VISIBLE);
-                    textViewPlayer1.setText(lastRecord.getFirstPlace().getPlayerName());
+                    textViewPlayer1.setText(lastRecord.getFirstPlace().getDeckOwnerName());
                     textViewDeck1.setText(lastRecord.getFirstPlace().getDeckName());
                     textViewPlayer1.setTypeface(null, currentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? Typeface.BOLD : Typeface.NORMAL);
                     textViewDeck1.setTypeface(null, currentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? Typeface.BOLD : Typeface.NORMAL);
 
                     linearLastGame2.setVisibility(View.VISIBLE);
-                    textViewPlayer2.setText(lastRecord.getSecondPlace().getPlayerName());
+                    textViewPlayer2.setText(lastRecord.getSecondPlace().getDeckOwnerName());
                     textViewDeck2.setText(lastRecord.getSecondPlace().getDeckName());
                     textViewPlayer2.setTypeface(null, currentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? Typeface.BOLD : Typeface.NORMAL);
                     textViewDeck2.setTypeface(null, currentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? Typeface.BOLD : Typeface.NORMAL);
@@ -781,19 +790,19 @@ public class DeckActivity extends AppCompatActivity {
 
                 case 3:
                     linearLastGame1.setVisibility(View.VISIBLE);
-                    textViewPlayer1.setText(lastRecord.getFirstPlace().getPlayerName());
+                    textViewPlayer1.setText(lastRecord.getFirstPlace().getDeckOwnerName());
                     textViewDeck1.setText(lastRecord.getFirstPlace().getDeckName());
                     textViewPlayer1.setTypeface(null, currentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? Typeface.BOLD : Typeface.NORMAL);
                     textViewDeck1.setTypeface(null, currentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? Typeface.BOLD : Typeface.NORMAL);
 
                     linearLastGame2.setVisibility(View.VISIBLE);
-                    textViewPlayer2.setText(lastRecord.getSecondPlace().getPlayerName());
+                    textViewPlayer2.setText(lastRecord.getSecondPlace().getDeckOwnerName());
                     textViewDeck2.setText(lastRecord.getSecondPlace().getDeckName());
                     textViewPlayer2.setTypeface(null, currentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? Typeface.BOLD : Typeface.NORMAL);
                     textViewDeck2.setTypeface(null, currentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? Typeface.BOLD : Typeface.NORMAL);
 
                     linearLastGame3.setVisibility(View.VISIBLE);
-                    textViewPlayer3.setText(lastRecord.getThirdPlace().getPlayerName());
+                    textViewPlayer3.setText(lastRecord.getThirdPlace().getDeckOwnerName());
                     textViewDeck3.setText(lastRecord.getThirdPlace().getDeckName());
                     textViewPlayer3.setTypeface(null, currentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? Typeface.BOLD : Typeface.NORMAL);
                     textViewDeck3.setTypeface(null, currentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? Typeface.BOLD : Typeface.NORMAL);
@@ -803,25 +812,25 @@ public class DeckActivity extends AppCompatActivity {
 
                 case 4:
                     linearLastGame1.setVisibility(View.VISIBLE);
-                    textViewPlayer1.setText(lastRecord.getFirstPlace().getPlayerName());
+                    textViewPlayer1.setText(lastRecord.getFirstPlace().getDeckOwnerName());
                     textViewDeck1.setText(lastRecord.getFirstPlace().getDeckName());
                     textViewPlayer1.setTypeface(null, currentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? Typeface.BOLD : Typeface.NORMAL);
                     textViewDeck1.setTypeface(null, currentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? Typeface.BOLD : Typeface.NORMAL);
 
                     linearLastGame2.setVisibility(View.VISIBLE);
-                    textViewPlayer2.setText(lastRecord.getSecondPlace().getPlayerName());
+                    textViewPlayer2.setText(lastRecord.getSecondPlace().getDeckOwnerName());
                     textViewDeck2.setText(lastRecord.getSecondPlace().getDeckName());
                     textViewPlayer2.setTypeface(null, currentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? Typeface.BOLD : Typeface.NORMAL);
                     textViewDeck2.setTypeface(null, currentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? Typeface.BOLD : Typeface.NORMAL);
 
                     linearLastGame3.setVisibility(View.VISIBLE);
-                    textViewPlayer3.setText(lastRecord.getThirdPlace().getPlayerName());
+                    textViewPlayer3.setText(lastRecord.getThirdPlace().getDeckOwnerName());
                     textViewDeck3.setText(lastRecord.getThirdPlace().getDeckName());
                     textViewPlayer3.setTypeface(null, currentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? Typeface.BOLD : Typeface.NORMAL);
                     textViewDeck3.setTypeface(null, currentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? Typeface.BOLD : Typeface.NORMAL);
 
                     linearLastGame4.setVisibility(View.VISIBLE);
-                    textViewPlayer4.setText(lastRecord.getFourthPlace().getPlayerName());
+                    textViewPlayer4.setText(lastRecord.getFourthPlace().getDeckOwnerName());
                     textViewDeck4.setText(lastRecord.getFourthPlace().getDeckName());
                     textViewPlayer4.setTypeface(null, currentDeck.isEqualDeck(lastRecord.getFourthPlace()) ? Typeface.BOLD : Typeface.NORMAL);
                     textViewDeck4.setTypeface(null, currentDeck.isEqualDeck(lastRecord.getFourthPlace()) ? Typeface.BOLD : Typeface.NORMAL);

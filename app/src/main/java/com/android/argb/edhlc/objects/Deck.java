@@ -5,38 +5,40 @@ package com.android.argb.edhlc.objects;
  */
 public class Deck {
 
-    protected String playerName;
-    protected String deckName;
-    protected int[] deckColor;
-    protected String deckIdentity;
+    private String deckOwnerName;
+    private String deckName;
+    private int[] deckShieldColor;
+    private String deckIdentity;
+    private String deckCreationDate;
 
     public Deck() {
     }
 
-    public Deck(String playerName, String deckName) {
-        this.playerName = playerName;
+    public Deck(String deckOwnerName, String deckName) {
+        this.deckOwnerName = deckOwnerName;
         this.deckName = deckName;
     }
 
-    public Deck(String playerName, String deckName, int[] deckColor) {
-        this.playerName = playerName;
+    public Deck(String deckOwnerName, String deckName, int[] deckShieldColor) {
+        this.deckOwnerName = deckOwnerName;
         this.deckName = deckName;
-        this.deckColor = deckColor;
+        this.deckShieldColor = deckShieldColor;
     }
 
-    public Deck(String playerName, String deckName, int[] deckColor, String deckIdentity) {
-        this.playerName = playerName;
+    public Deck(String deckOwnerName, String deckName, int[] deckShieldColor, String deckIdentity, String deckCreationDate) {
+        this.deckOwnerName = deckOwnerName;
         this.deckName = deckName;
-        this.deckColor = deckColor;
+        this.deckShieldColor = deckShieldColor;
         this.deckIdentity = deckIdentity;
+        this.deckCreationDate = deckCreationDate;
     }
 
-    public int[] getDeckColor() {
-        return deckColor;
+    public String getDeckCreationDate() {
+        return deckCreationDate;
     }
 
-    public void setDeckColor(int[] deckColor) {
-        this.deckColor = deckColor;
+    public void setDeckCreationDate(String deckCreationDate) {
+        this.deckCreationDate = deckCreationDate;
     }
 
     public String getDeckIdentity() {
@@ -55,16 +57,24 @@ public class Deck {
         this.deckName = deckName;
     }
 
-    public String getPlayerName() {
-        return playerName;
+    public String getDeckOwnerName() {
+        return deckOwnerName;
     }
 
-    public void setPlayerName(String playerName) {
-        this.playerName = playerName;
+    public void setDeckOwnerName(String deckOwnerName) {
+        this.deckOwnerName = deckOwnerName;
+    }
+
+    public int[] getDeckShieldColor() {
+        return deckShieldColor;
+    }
+
+    public void setDeckShieldColor(int[] deckShieldColor) {
+        this.deckShieldColor = deckShieldColor;
     }
 
     public boolean isEqualDeck(Deck b) {
-        return (this.getPlayerName().equalsIgnoreCase(b.getPlayerName()) && this.getDeckName().equalsIgnoreCase(b.getDeckName()));
+        return (this.getDeckOwnerName().equalsIgnoreCase(b.getDeckOwnerName()) && this.getDeckName().equalsIgnoreCase(b.getDeckName()));
     }
 
 }

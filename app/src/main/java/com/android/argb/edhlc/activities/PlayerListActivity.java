@@ -30,6 +30,7 @@ import com.android.argb.edhlc.objects.Deck;
 import com.android.argb.edhlc.objects.Drawer.DrawerPlayerList;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -270,7 +271,12 @@ public class PlayerListActivity extends AppCompatActivity {
                     colorIdentity = checkBoxManaGreen.isChecked() ? colorIdentity.concat("1") : colorIdentity.concat("0");
                     colorIdentity = checkBoxManaColorless.isChecked() ? colorIdentity.concat("1") : colorIdentity.concat("0");
 
-                    if (decksDB.addDeck(new Deck(player, tempName, new int[]{PlayerListActivity.this.getResources().getColor(R.color.primary_color), PlayerListActivity.this.getResources().getColor(R.color.secondary_color)}, colorIdentity)) != -1) {
+                    Calendar c = Calendar.getInstance();
+                    String date = String.valueOf(c.get(Calendar.DAY_OF_MONTH))
+                            + "/" + Constants.MONTH[c.get(Calendar.MONTH)]
+                            + "/" + String.valueOf(c.get(Calendar.YEAR));
+
+                    if (decksDB.addDeck(new Deck(player, tempName, new int[]{PlayerListActivity.this.getResources().getColor(R.color.primary_color), PlayerListActivity.this.getResources().getColor(R.color.secondary_color)}, colorIdentity, date)) != -1) {
                         Toast.makeText(view.getContext(), tempName + " added", Toast.LENGTH_SHORT).show();
                         updateLayout();
                         alertDialog.dismiss();
@@ -341,7 +347,7 @@ public class PlayerListActivity extends AppCompatActivity {
                 if (!newName.equalsIgnoreCase("")) {
                     long result = playersDB.updatePlayer(oldName, newName);
                     if (result != -1) {
-                        decksDB.updateDeck(oldName, newName);
+                        decksDB.updateDeckOwner(oldName, newName);
                         recordsDB.updateRecord(oldName, newName);
                         updateLayout();
                         Toast.makeText(view.getContext(), newName + " edited", Toast.LENGTH_SHORT).show();

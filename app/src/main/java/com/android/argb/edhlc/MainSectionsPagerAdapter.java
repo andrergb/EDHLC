@@ -50,19 +50,19 @@ public class MainSectionsPagerAdapter extends FragmentStatePagerAdapter {
 //        switch (position) {
 //            case 0:
 //                if (MainActivity.mActivePlayer1 != null)
-//                    return MainActivity.mActivePlayer1.getPlayerName();
+//                    return MainActivity.mActivePlayer1.getDeckOwnerName();
 //                return "";
 //            case 1:
 //                if (MainActivity.mActivePlayer2 != null)
-//                    return MainActivity.mActivePlayer2.getPlayerName();
+//                    return MainActivity.mActivePlayer2.getDeckOwnerName();
 //                return "";
 //            case 2:
 //                if (MainActivity.mActivePlayer3 != null)
-//                    return MainActivity.mActivePlayer3.getPlayerName();
+//                    return MainActivity.mActivePlayer3.getDeckOwnerName();
 //                return "";
 //            case 3:
 //                if (MainActivity.mActivePlayer4 != null)
-//                    return MainActivity.mActivePlayer4.getPlayerName();
+//                    return MainActivity.mActivePlayer4.getDeckOwnerName();
 //                return "";
 //        }
         return null;

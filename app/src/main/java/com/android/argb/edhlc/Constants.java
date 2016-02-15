@@ -4,28 +4,24 @@ package com.android.argb.edhlc;
  * -Created by agbarros on 05/11/2015.
  */
 public class Constants {
+    public static final String PHASE1_TIMER = "PHASE1_TIMER";
+    public static final String PHASE2_TIMER = "PHASE2_TIMER";
+    public static final String PHASE3_TIMER = "PHASE3_TIMER";
+    public static final String PHASE4_TIMER = "PHASE4_TIMER";
+    public static final String PHASE5_TIMER = "PHASE5_TIMER";
     public static String INITIAL_PLAYER_LIFE_STRING = "40";
     public static String MIN_PLAYER_LIFE_STRING = "-99";
     public static String MAX_PLAYER_LIFE_STRING = "99";
     public static int INITIAL_PLAYER_LIFE_INT = 40;
     public static int MIN_PLAYER_LIFE_INT = -99;
     public static int MAX_PLAYER_LIFE_INT = 99;
-
     public static int INITIAL_EDH_DAMAGE_INT = 0;
     public static int MIN_EDH_DAMAGE_INT = 0;
     public static int MAX_EDH_DAMAGE_INT = 21;
-
     public static String TOTAL_PLAYERS = "4";
     public static String SCREEN_ON = "SCREEN_ON";
     public static String CURRENT_PAGE = "CURRENT_PAGE";
     public static String CURRENT_PAGE_TURN = "CURRENT_PAGE_TURN";
-
-    public static final String PHASE1_TIMER = "PHASE1_TIMER";
-    public static final String PHASE2_TIMER = "PHASE2_TIMER";
-    public static final String PHASE3_TIMER = "PHASE3_TIMER";
-    public static final String PHASE4_TIMER = "PHASE4_TIMER";
-    public static final String PHASE5_TIMER = "PHASE5_TIMER";
-
     public static String PREFERENCE_NAME = "PREF_EDH_LC";
     public static String PLAYER_NAME = "PLAYER_NAME";
     public static String PLAYER_DECK = "PLAYER_DECK";
@@ -49,4 +45,6 @@ public class Constants {
     public static String BROADCAST_MESSAGE_NEW_GAME_PLAYERS = "broadcast_message_new_game_players";
     public static String BROADCAST_MESSAGE_NEW_GAME_DECKS = "broadcast_message_new_game_decks";
     public static String BROADCAST_MESSAGE_NEW_GAME_COLOR = "broadcast_message_new_game_color";
+
+    public static String[] MONTH = {"Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"};
 }

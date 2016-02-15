@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by agbarros on 05/11/2015.
+ * -Created by agbarros on 05/11/2015.
  */
 public class DecksDataAccessObject {
 
@@ -26,10 +26,11 @@ public class DecksDataAccessObject {
     public long addDeck(Deck deck) {
         if (!isDeckAdded(deck)) {
             ContentValues values = new ContentValues();
-            values.put(DecksContract.DecksEntry.COLUMN_PLAYER_NAME, deck.getPlayerName());
+            values.put(DecksContract.DecksEntry.COLUMN_PLAYER_NAME, deck.getDeckOwnerName());
             values.put(DecksContract.DecksEntry.COLUMN_DECK_NAME, deck.getDeckName());
-            values.put(DecksContract.DecksEntry.COLUMN_DECK_COLOR, String.valueOf(deck.getDeckColor()[0] + System.getProperty("path.separator") + deck.getDeckColor()[1]));
+            values.put(DecksContract.DecksEntry.COLUMN_DECK_COLOR, String.valueOf(deck.getDeckShieldColor()[0] + System.getProperty("path.separator") + deck.getDeckShieldColor()[1]));
             values.put(DecksContract.DecksEntry.COLUMN_DECK_IDENTITY, deck.getDeckIdentity());
+            values.put(DecksContract.DecksEntry.COLUMN_DECK_CREATION_DATE, deck.getDeckCreationDate());
 
             return database.insert(DecksContract.DecksEntry.TABLE_NAME, null, values);
         } else {
@@ -45,7 +46,7 @@ public class DecksDataAccessObject {
         List<Deck> deckList = new ArrayList<>();
         Cursor cursor = database.query(
                 DecksContract.DecksEntry.TABLE_NAME,
-                new String[]{DecksContract.DecksEntry.COLUMN_PLAYER_NAME, DecksContract.DecksEntry.COLUMN_DECK_NAME, DecksContract.DecksEntry.COLUMN_DECK_COLOR, DecksContract.DecksEntry.COLUMN_DECK_IDENTITY},
+                null,
                 DecksContract.DecksEntry.COLUMN_PLAYER_NAME + " LIKE ?",
                 new String[]{playerName},
                 null,
@@ -79,7 +80,7 @@ public class DecksDataAccessObject {
         List<Deck> deckList = new ArrayList<>();
         Cursor cursor = database.query(
                 DecksContract.DecksEntry.TABLE_NAME,
-                new String[]{DecksContract.DecksEntry.COLUMN_PLAYER_NAME, DecksContract.DecksEntry.COLUMN_DECK_NAME, DecksContract.DecksEntry.COLUMN_DECK_COLOR, DecksContract.DecksEntry.COLUMN_DECK_IDENTITY},
+                null,
                 DecksContract.DecksEntry.COLUMN_PLAYER_NAME + " LIKE ? AND " + DecksContract.DecksEntry.COLUMN_DECK_NAME + " LIKE ?",
                 new String[]{playerName, deckName},
                 null,
@@ -101,7 +102,7 @@ public class DecksDataAccessObject {
                 DecksContract.DecksEntry.TABLE_NAME,
                 new String[]{DecksContract.DecksEntry.COLUMN_PLAYER_NAME, DecksContract.DecksEntry.COLUMN_DECK_NAME},
                 DecksContract.DecksEntry.COLUMN_PLAYER_NAME + " LIKE ? AND " + DecksContract.DecksEntry.COLUMN_DECK_NAME + " LIKE ?",
-                new String[]{deck.getPlayerName(), deck.getDeckName()}, null, null, null);
+                new String[]{deck.getDeckOwnerName(), deck.getDeckName()}, null, null, null);
 
         cursor.moveToFirst();
         if (cursor.getCount() > 0) {
@@ -122,7 +123,7 @@ public class DecksDataAccessObject {
                 DecksContract.DecksEntry.TABLE_NAME,
                 DecksContract.DecksEntry.COLUMN_PLAYER_NAME + " LIKE ? AND "
                         + DecksContract.DecksEntry.COLUMN_DECK_NAME + " LIKE ?",
-                new String[]{deck.getPlayerName(), deck.getDeckName()}
+                new String[]{deck.getDeckOwnerName(), deck.getDeckName()}
         );
     }
 
@@ -130,51 +131,57 @@ public class DecksDataAccessObject {
         if (!isDeckAdded(newDeck)) {
 
             ContentValues values = new ContentValues();
-            values.put(DecksContract.DecksEntry.COLUMN_PLAYER_NAME, newDeck.getPlayerName());
+            values.put(DecksContract.DecksEntry.COLUMN_PLAYER_NAME, newDeck.getDeckOwnerName());
             values.put(DecksContract.DecksEntry.COLUMN_DECK_NAME, newDeck.getDeckName());
-            if (newDeck.getDeckColor() != null)
-                values.put(DecksContract.DecksEntry.COLUMN_DECK_COLOR, String.valueOf(newDeck.getDeckColor()[0] + System.getProperty("path.separator") + newDeck.getDeckColor()[1]));
+
+            if (newDeck.getDeckShieldColor() != null)
+                values.put(DecksContract.DecksEntry.COLUMN_DECK_COLOR, String.valueOf(newDeck.getDeckShieldColor()[0] + System.getProperty("path.separator") + newDeck.getDeckShieldColor()[1]));
 
             if (newDeck.getDeckIdentity() != null)
                 values.put(DecksContract.DecksEntry.COLUMN_DECK_IDENTITY, newDeck.getDeckIdentity());
 
+            if (newDeck.getDeckCreationDate() != null)
+                values.put(DecksContract.DecksEntry.COLUMN_DECK_CREATION_DATE, newDeck.getDeckCreationDate());
+
             return database.update(DecksContract.DecksEntry.TABLE_NAME,
                     values,
                     DecksContract.DecksEntry.COLUMN_PLAYER_NAME + " LIKE ? AND " + DecksContract.DecksEntry.COLUMN_DECK_NAME + " LIKE ?",
-                    new String[]{oldDeck.getPlayerName(), oldDeck.getDeckName()});
+                    new String[]{oldDeck.getDeckOwnerName(), oldDeck.getDeckName()});
         } else {
             return -1;
         }
     }
 
-    public long updateDeck(String playerOldName, String playerNewName) {
-        ContentValues values = new ContentValues();
-        values.put(DecksContract.DecksEntry.COLUMN_PLAYER_NAME, playerNewName);
-        return database.update(DecksContract.DecksEntry.TABLE_NAME,
-                values,
-                DecksContract.DecksEntry.COLUMN_PLAYER_NAME + " LIKE ?",
-                new String[]{playerOldName});
-
-    }
-
     public int updateDeckColor(Deck deck) {
         ContentValues values = new ContentValues();
-        values.put(DecksContract.DecksEntry.COLUMN_DECK_COLOR, String.valueOf(String.valueOf(deck.getDeckColor()[0] + System.getProperty("path.separator") + deck.getDeckColor()[1])));
+        values.put(DecksContract.DecksEntry.COLUMN_DECK_COLOR, String.valueOf(String.valueOf(deck.getDeckShieldColor()[0] + System.getProperty("path.separator") + deck.getDeckShieldColor()[1])));
 
         return database.update(DecksContract.DecksEntry.TABLE_NAME,
                 values,
                 DecksContract.DecksEntry.COLUMN_PLAYER_NAME + " LIKE ? AND " + DecksContract.DecksEntry.COLUMN_DECK_NAME + " LIKE ?",
-                new String[]{deck.getPlayerName(), deck.getDeckName()});
+                new String[]{deck.getDeckOwnerName(), deck.getDeckName()});
+    }
+
+    public long updateDeckOwner(String oldOwnerName, String newOwnerName) {
+        ContentValues values = new ContentValues();
+        values.put(DecksContract.DecksEntry.COLUMN_PLAYER_NAME, newOwnerName);
+
+        return database.update(DecksContract.DecksEntry.TABLE_NAME,
+                values,
+                DecksContract.DecksEntry.COLUMN_PLAYER_NAME + " LIKE ?",
+                new String[]{oldOwnerName});
+
     }
 
     private Deck cursorToDeck(Cursor cursor) {
         Deck deck = new Deck();
-        deck.setPlayerName(cursor.getString(cursor.getColumnIndexOrThrow(DecksContract.DecksEntry.COLUMN_PLAYER_NAME)));
+        deck.setDeckOwnerName(cursor.getString(cursor.getColumnIndexOrThrow(DecksContract.DecksEntry.COLUMN_PLAYER_NAME)));
         deck.setDeckName(cursor.getString(cursor.getColumnIndexOrThrow(DecksContract.DecksEntry.COLUMN_DECK_NAME)));
-        deck.setDeckColor(
+        deck.setDeckShieldColor(
                 new int[]{Integer.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(DecksContract.DecksEntry.COLUMN_DECK_COLOR)).split(System.getProperty("path.separator"))[0]),
                         Integer.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(DecksContract.DecksEntry.COLUMN_DECK_COLOR)).split(System.getProperty("path.separator"))[1])});
         deck.setDeckIdentity(cursor.getString(cursor.getColumnIndexOrThrow(DecksContract.DecksEntry.COLUMN_DECK_IDENTITY)));
+        deck.setDeckCreationDate(cursor.getString(cursor.getColumnIndexOrThrow(DecksContract.DecksEntry.COLUMN_DECK_CREATION_DATE)));
         return deck;
     }
 

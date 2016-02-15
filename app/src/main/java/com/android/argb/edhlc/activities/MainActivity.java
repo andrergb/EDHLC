@@ -345,14 +345,14 @@ public class MainActivity extends AppCompatActivity {
                 String tempPlayerDeck = spinnerPlayerDeck.getSelectedItem().toString();
 
                 Deck aux = mDecksDB.getDeck(tempPlayerName, tempPlayerDeck);
-                int[] tempPlayerColor = aux.getDeckColor();
+                int[] tempPlayerColor = aux.getDeckShieldColor();
 
                 if (!tempPlayerName.equalsIgnoreCase(getResources().getString(R.string.edh_spinner_player_hint))
                         && !tempPlayerDeck.equalsIgnoreCase(getResources().getString(R.string.edh_spinner_deck_hint))) {
                     List<Deck> mDeckListAux = new ArrayList<>(mActiveDecksList);
                     if (Record.isValidRecord(mDeckListAux, new Deck(tempPlayerName, tempPlayerDeck))) {
                         for (int i = 0; i < mActiveDecksList.size(); i++) {
-                            if (mActiveDecksList.get(i).getPlayerName().equalsIgnoreCase(getCurrentActivePlayer().getPlayerName())
+                            if (mActiveDecksList.get(i).getDeckOwnerName().equalsIgnoreCase(getCurrentActivePlayer().getPlayerName())
                                     && mActiveDecksList.get(i).getDeckName().equalsIgnoreCase(getCurrentActivePlayer().getPlayerDeck())) {
                                 mActiveDecksList.remove(i);
                                 mActiveDecksList.add(i, new Deck(tempPlayerName, tempPlayerDeck, tempPlayerColor));

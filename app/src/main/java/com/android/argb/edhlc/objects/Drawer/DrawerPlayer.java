@@ -78,7 +78,7 @@ public class DrawerPlayer {
                 List<Deck> a = decksDB.getAllDecks();
                 decksDB.close();
                 for (int i = 0; i < a.size(); i++) {
-                    Log.d("dezao", a.get(i).getPlayerName() + " - " + a.get(i).getDeckName());
+                    Log.d("dezao", a.get(i).getDeckOwnerName() + " - " + a.get(i).getDeckName());
                 }
             }
         };

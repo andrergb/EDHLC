@@ -246,7 +246,7 @@ public class DrawerPlayerList {
                     if (result != -1) {
                         DecksDataAccessObject decksDB = new DecksDataAccessObject(parentActivity);
                         decksDB.open();
-                        decksDB.updateDeck(oldName, newName);
+                        decksDB.updateDeckOwner(oldName, newName);
                         decksDB.close();
 
                         RecordsDataAccessObject recordsDB = new RecordsDataAccessObject(parentActivity);

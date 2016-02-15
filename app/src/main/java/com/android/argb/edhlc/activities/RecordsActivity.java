@@ -221,12 +221,12 @@ public class RecordsActivity extends ActionBarActivity {
             }
 
             TextView textViewFirstPlayerName = (TextView) vi.findViewById(R.id.textViewFirstPlayerName);
-            textViewFirstPlayerName.setText(dataRecords.get(position).getFirstPlace().getPlayerName());
+            textViewFirstPlayerName.setText(dataRecords.get(position).getFirstPlace().getDeckOwnerName());
             TextView textViewFirstPlayerDeck = (TextView) vi.findViewById(R.id.textViewFirstPlayerDeck);
             textViewFirstPlayerDeck.setText(dataRecords.get(position).getFirstPlace().getDeckName());
             textViewFirstPlayerName.setTypeface(null, Typeface.NORMAL);
             textViewFirstPlayerDeck.setTypeface(null, Typeface.NORMAL);
-            if (dataRecords.get(position).getFirstPlace().getPlayerName().equalsIgnoreCase(mPlayerName) &&
+            if (dataRecords.get(position).getFirstPlace().getDeckOwnerName().equalsIgnoreCase(mPlayerName) &&
                     dataRecords.get(position).getFirstPlace().getDeckName().equalsIgnoreCase(mDeckName)) {
                 textViewFirstPlayerName.setTypeface(null, Typeface.BOLD);
                 textViewFirstPlayerDeck.setTypeface(null, Typeface.BOLD);
@@ -236,12 +236,12 @@ public class RecordsActivity extends ActionBarActivity {
             }
 
             TextView textViewSecondPlayerName = (TextView) vi.findViewById(R.id.textViewSecondPlayerName);
-            textViewSecondPlayerName.setText(dataRecords.get(position).getSecondPlace().getPlayerName());
+            textViewSecondPlayerName.setText(dataRecords.get(position).getSecondPlace().getDeckOwnerName());
             TextView textViewSecondPlayerDeck = (TextView) vi.findViewById(R.id.textViewSecondPlayerDeck);
             textViewSecondPlayerDeck.setText(dataRecords.get(position).getSecondPlace().getDeckName());
             textViewSecondPlayerName.setTypeface(null, Typeface.NORMAL);
             textViewSecondPlayerDeck.setTypeface(null, Typeface.NORMAL);
-            if (dataRecords.get(position).getSecondPlace().getPlayerName().equalsIgnoreCase(mPlayerName) &&
+            if (dataRecords.get(position).getSecondPlace().getDeckOwnerName().equalsIgnoreCase(mPlayerName) &&
                     dataRecords.get(position).getSecondPlace().getDeckName().equalsIgnoreCase(mDeckName)) {
                 textViewSecondPlayerName.setTypeface(null, Typeface.BOLD);
                 textViewSecondPlayerDeck.setTypeface(null, Typeface.BOLD);
@@ -251,12 +251,12 @@ public class RecordsActivity extends ActionBarActivity {
             }
 
             TextView textViewThirdPlayerName = (TextView) vi.findViewById(R.id.textViewThirdPlayerName);
-            textViewThirdPlayerName.setText(dataRecords.get(position).getThirdPlace().getPlayerName());
+            textViewThirdPlayerName.setText(dataRecords.get(position).getThirdPlace().getDeckOwnerName());
             TextView textViewThirdPlayerDeck = (TextView) vi.findViewById(R.id.textViewThirdPlayerDeck);
             textViewThirdPlayerDeck.setText(dataRecords.get(position).getThirdPlace().getDeckName());
             textViewThirdPlayerName.setTypeface(null, Typeface.NORMAL);
             textViewThirdPlayerDeck.setTypeface(null, Typeface.NORMAL);
-            if (dataRecords.get(position).getThirdPlace().getPlayerName().equalsIgnoreCase(mPlayerName) &&
+            if (dataRecords.get(position).getThirdPlace().getDeckOwnerName().equalsIgnoreCase(mPlayerName) &&
                     dataRecords.get(position).getThirdPlace().getDeckName().equalsIgnoreCase(mDeckName)) {
                 textViewThirdPlayerName.setTypeface(null, Typeface.BOLD);
                 textViewThirdPlayerDeck.setTypeface(null, Typeface.BOLD);
@@ -266,12 +266,12 @@ public class RecordsActivity extends ActionBarActivity {
             }
 
             TextView textViewFourthPlayerName = (TextView) vi.findViewById(R.id.textViewFourthPlayerName);
-            textViewFourthPlayerName.setText(dataRecords.get(position).getFourthPlace().getPlayerName());
+            textViewFourthPlayerName.setText(dataRecords.get(position).getFourthPlace().getDeckOwnerName());
             TextView textViewFourthPlayerDeck = (TextView) vi.findViewById(R.id.textViewFourthPlayerDeck);
             textViewFourthPlayerDeck.setText(dataRecords.get(position).getFourthPlace().getDeckName());
             textViewFourthPlayerName.setTypeface(null, Typeface.NORMAL);
             textViewFourthPlayerDeck.setTypeface(null, Typeface.NORMAL);
-            if (dataRecords.get(position).getFourthPlace().getPlayerName().equalsIgnoreCase(mPlayerName) &&
+            if (dataRecords.get(position).getFourthPlace().getDeckOwnerName().equalsIgnoreCase(mPlayerName) &&
                     dataRecords.get(position).getFourthPlace().getDeckName().equalsIgnoreCase(mDeckName)) {
                 textViewFourthPlayerName.setTypeface(null, Typeface.BOLD);
                 textViewFourthPlayerDeck.setTypeface(null, Typeface.BOLD);

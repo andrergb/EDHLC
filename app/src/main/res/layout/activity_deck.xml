@@ -4,7 +4,6 @@
                                                  xmlns:card_view="http://schemas.android.com/apk/res-auto"
                                                  android:layout_width="match_parent"
                                                  android:layout_height="match_parent"
-                                                 android:background="@android:color/background_light"
                                                  android:fitsSystemWindows="true">
 
     <android.support.design.widget.AppBarLayout
@@ -73,7 +72,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="6dp"
-                card_view:cardElevation="4dp">
+                card_view:cardElevation="2dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -358,7 +357,7 @@
                                     android:orientation="vertical">
 
                                     <TextView
-                                        android:id="@+id/textViewDate"
+                                        android:id="@+id/textViewCreationDate"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="01/01/01"
@@ -409,7 +408,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="6dp"
-                card_view:cardElevation="4dp">
+                card_view:cardElevation="2dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -462,7 +461,7 @@
 
                         <!-- Date -->
                         <TextView
-                            android:id="@+id/textViewDate"
+                            android:id="@+id/textViewRecordDate"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="right"
@@ -591,7 +590,7 @@
                 android:layout_marginLeft="6dp"
                 android:layout_marginRight="6dp"
                 android:layout_marginTop="6dp"
-                card_view:cardElevation="4dp">
+                card_view:cardElevation="2dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -762,7 +761,7 @@
                 android:layout_marginLeft="6dp"
                 android:layout_marginRight="6dp"
                 android:layout_marginTop="6dp"
-                card_view:cardElevation="4dp">
+                card_view:cardElevation="2dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -956,7 +955,7 @@
                 android:layout_marginLeft="6dp"
                 android:layout_marginRight="6dp"
                 android:layout_marginTop="6dp"
-                card_view:cardElevation="4dp">
+                card_view:cardElevation="2dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
