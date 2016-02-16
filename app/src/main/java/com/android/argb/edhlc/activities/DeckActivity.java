@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
@@ -19,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
@@ -652,6 +654,74 @@ public class DeckActivity extends AppCompatActivity {
         }
     }
 
+    private void makeViewVisible(View view) {
+        int viewTop = view.getTop();
+        int viewBottom = view.getBottom();
+
+        for (; ; ) {
+            ViewParent viewParent = view.getParent();
+            if (viewParent == null || !(viewParent instanceof ViewGroup))
+                break;
+
+            ViewGroup viewGroupParent = (ViewGroup) viewParent;
+            if (viewGroupParent instanceof NestedScrollView) {
+
+                NestedScrollView nestedScrollView = (NestedScrollView) viewGroupParent;
+                int height = nestedScrollView.getHeight();
+                int screenTop = nestedScrollView.getScrollY();
+                int screenBottom = screenTop + height;
+                int fadingEdge = nestedScrollView.getVerticalFadingEdgeLength();
+
+                // leave room for top fading edge as long as rect isn't at very top
+                if (viewTop > 0)
+                    screenTop += fadingEdge;
+
+                // leave room for bottom fading edge as long as rect isn't at very bottom
+                if (viewBottom < nestedScrollView.getChildAt(0).getHeight())
+                    screenBottom -= fadingEdge;
+
+                int scrollYDelta = 0;
+
+                if (viewBottom > screenBottom && viewTop > screenTop) {
+                    // need to move down to get it in view: move down just enough so
+                    // that the entire rectangle is in view (or at least the first
+                    // screen size chunk).
+
+                    if (viewBottom - viewTop > height) // just enough to get screen size chunk on
+                        scrollYDelta += (viewTop - screenTop);
+                    else              // get entire rect at bottom of screen
+                        scrollYDelta += (viewBottom - screenBottom);
+
+                    // make sure we aren't scrolling beyond the end of our content
+                    int bottom = nestedScrollView.getChildAt(0).getBottom();
+                    int distanceToBottom = bottom - screenBottom;
+                    scrollYDelta = Math.min(scrollYDelta, distanceToBottom);
+
+                } else if (viewTop < screenTop && viewBottom < screenBottom) {
+                    // need to move up to get it in view: move up just enough so that
+                    // entire rectangle is in view (or at least the first screen
+                    // size chunk of it).
+
+                    if (viewBottom - viewTop > height)    // screen size chunk
+                        scrollYDelta -= (screenBottom - viewBottom);
+                    else                  // entire rect at top
+                        scrollYDelta -= (screenTop - viewTop);
+
+                    // make sure we aren't scrolling any further than the top our content
+                    scrollYDelta = Math.max(scrollYDelta, -nestedScrollView.getScrollY());
+                }
+                nestedScrollView.smoothScrollBy(0, scrollYDelta);
+                break;
+            }
+            // Transform coordinates to parent:
+            int dy = viewGroupParent.getTop() - viewGroupParent.getScrollY();
+            viewTop += dy;
+            viewBottom += dy;
+
+            view = viewGroupParent;
+        }
+    }
+
     private void toggleCardExpansion(final CardView card, TextView title, ImageView selector, int minHeight, int maxHeight) {
         // expand
         if (card.getHeight() == minHeight) {
@@ -671,11 +741,10 @@ public class DeckActivity extends AppCompatActivity {
                     ViewGroup.LayoutParams layoutParams = card.getLayoutParams();
                     layoutParams.height = val;
                     card.setLayoutParams(layoutParams);
+                    makeViewVisible(card);
                 }
             });
-
             anim.start();
-
         } else {
             // collapse
             title.setTextColor(this.getResources().getColor(R.color.secondary_text));
