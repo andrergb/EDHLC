@@ -37,7 +37,7 @@ public class DrawerRecords {
         this.parentActivity = parentActivity;
         playersDB = new PlayersDataAccessObject(parentActivity);
 
-        linearLayoutDrawer = (LinearLayout) parentActivity.findViewById(R.id.linearLayoutDrawer);
+        linearLayoutDrawer = (LinearLayout) parentActivity.findViewById(R.id.drawer);
         mDrawerLayout = (DrawerLayout) parentActivity.findViewById(R.id.drawer_layout);
 
         ListView mDrawerList1 = (ListView) parentActivity.findViewById(R.id.listViewDrawer1);

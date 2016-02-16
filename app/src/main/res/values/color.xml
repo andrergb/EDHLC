@@ -3,9 +3,11 @@
     <color name="translucent_scrim_bottom">#37000000</color>
 
     <item name="white" type="color">#FFFFFF</item>
+    <item name="black" type="color">#000000</item>
+    <item name="white_transparent" type="color">#80ffffff</item>
 
     <!-- GRAY -->
-    <!--<item name="gray200" type="color">#EEEEEE</item>-->
+    <item name="gray200" type="color">#EEEEEE</item>
     <item name="gray300" type="color">#E0E0E0</item>
     <!--<item name="gray400" type="color">#BDBDBD</item>-->
     <!--<item name="gray500" type="color">#9E9E9E</item>-->

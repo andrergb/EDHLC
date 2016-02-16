@@ -66,7 +66,7 @@ public class DrawerMain {
     public DrawerMain(final Activity parentActivity, List<String[]> options) {
         this.parentActivity = parentActivity;
 
-        linearLayoutDrawer = (LinearLayout) parentActivity.findViewById(R.id.linearLayoutDrawer);
+        linearLayoutDrawer = (LinearLayout) parentActivity.findViewById(R.id.drawer);
         mDrawerLayout = (DrawerLayout) parentActivity.findViewById(R.id.drawer_layout);
 
         ListView mDrawerList1 = (ListView) parentActivity.findViewById(R.id.listViewDrawer1);

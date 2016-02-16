@@ -1,7 +1,6 @@
 package com.android.argb.edhlc.activities;
 
 import android.animation.ValueAnimator;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
@@ -11,7 +10,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
@@ -29,8 +31,10 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 
+import com.android.argb.edhlc.Constants;
 import com.android.argb.edhlc.R;
 import com.android.argb.edhlc.database.deck.DecksDataAccessObject;
 import com.android.argb.edhlc.database.record.RecordsDataAccessObject;
@@ -52,7 +56,6 @@ import java.util.List;
 public class DeckActivity extends AppCompatActivity {
 
     private static int REQUEST_PICTURE_PICKER = 1;
-    private static int REQUEST_CROP_PICTURE = 0;
     private Deck currentDeck;
     private String mPlayerName;
     private String mDeckName;
@@ -71,12 +74,6 @@ public class DeckActivity extends AppCompatActivity {
     private List<ImageView> listIdentityHolder;
     private TextView textViewTotalGames;
     private TextView textViewWins;
-    private ImageView imageViewMana1;
-    private ImageView imageViewMana2;
-    private ImageView imageViewMana3;
-    private ImageView imageViewMana4;
-    private ImageView imageViewMana5;
-    private ImageView imageViewMana6;
     private int[] COLORS;
     //Card - Chart deck history 2 - 1v1
     private CardView cardViewDeckHistory2;
@@ -89,7 +86,6 @@ public class DeckActivity extends AppCompatActivity {
     private TextView textViewTotalGameText2;
     private DefaultRenderer mDoughnutRender2;
     private MultipleCategorySeries mMultipleCategorySeriesDataSet2;
-    private GraphicalView mDoughnutChartView2;
     private RelativeLayout relativeTitleDeckHistory2;
     private int mCardViewFullHeightDeckHistory2;
     //Card - Chart deck history 3 - 1v1v1
@@ -104,7 +100,6 @@ public class DeckActivity extends AppCompatActivity {
     private TextView textViewTotalGameText3;
     private DefaultRenderer mDoughnutRender3;
     private MultipleCategorySeries mMultipleCategorySeriesDataSet3;
-    private GraphicalView mDoughnutChartView3;
     private RelativeLayout relativeTitleDeckHistory3;
     private int mCardViewFullHeightDeckHistory3;
     //Card - Chart deck history 4 - 1v1v1v1
@@ -120,7 +115,6 @@ public class DeckActivity extends AppCompatActivity {
     private TextView textViewTotalGameText4;
     private MultipleCategorySeries mMultipleCategorySeriesDataSet4;
     private DefaultRenderer mDoughnutRender4;
-    private GraphicalView mDoughnutChartView4;
     private RelativeLayout relativeTitleDeckHistory4;
     private int mCardViewFullHeightDeckHistory4;
     //Card - Last game played
@@ -144,7 +138,12 @@ public class DeckActivity extends AppCompatActivity {
     private int mCardViewFullHeightLastGamePlayed;
     private ImageView imageViewBanner;
 
-    public static Intent getPickImageIntent(final Context context) {
+    private DrawerLayout mDeckDrawerLayout;
+    private LinearLayout mDeckDrawer;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private Switch switchScreen;
+
+    public static Intent getPickImageIntent() {
         final Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -153,11 +152,14 @@ public class DeckActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-
-        Intent intent = new Intent(DeckActivity.this, PlayerListActivity.class);
-        startActivity(intent);
-        this.finish();
+        if (mDeckDrawerLayout.isDrawerOpen(mDeckDrawer))
+            mDeckDrawerLayout.closeDrawers();
+        else {
+            super.onBackPressed();
+            Intent intent = new Intent(DeckActivity.this, PlayerListActivity.class);
+            startActivity(intent);
+            this.finish();
+        }
     }
 
     public void onClickCardExpansion(View v) {
@@ -185,13 +187,58 @@ public class DeckActivity extends AppCompatActivity {
         }
     }
 
+    //TODO to be used in all activities
+    public void onClickDrawerItem(View view) {
+        switch (view.getId()) {
+            case R.id.drawerItemHome:
+                mDeckDrawerLayout.closeDrawers();
+                startActivity(new Intent(this, MainActivity.class));
+                finish();
+                break;
+
+            case R.id.drawerItemPlayers:
+                mDeckDrawerLayout.closeDrawers();
+                startActivity(new Intent(this, PlayerListActivity.class));
+                finish();
+                break;
+
+            case R.id.drawerItemRecords:
+                mDeckDrawerLayout.closeDrawers();
+                startActivity(new Intent(this, RecordsActivity.class));
+                finish();
+                break;
+
+            case R.id.drawerItemScreen:
+                if (!switchScreen.isChecked()) {
+                    getWindow().clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 0).commit();
+                } else {
+                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 1).commit();
+                }
+                break;
+
+            case R.id.drawerItemSettings:
+                mDeckDrawerLayout.closeDrawers();
+                startActivity(new Intent(this, SettingsActivity.class));
+                finish();
+                break;
+
+            case R.id.drawerItemAbout:
+                mDeckDrawerLayout.closeDrawers();
+                //TODO
+                break;
+        }
+    }
+
     public void onClickImageBanner(View view) {
-        startActivityForResult(getPickImageIntent(this), REQUEST_PICTURE_PICKER);
+        startActivityForResult(getPickImageIntent(), REQUEST_PICTURE_PICKER);
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
     @Override
@@ -202,17 +249,17 @@ public class DeckActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
+        return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
     public void updateDonutChart2(int first, int second) {
         textViewFirst2.setText("First: " + first);
         textViewSecond2.setText("Second: " + second);
 
-        COLORS = new int[]{this.getResources().getColor(R.color.first),
-                this.getResources().getColor(android.R.color.transparent),
-                this.getResources().getColor(R.color.second),
-                this.getResources().getColor(android.R.color.transparent)};
+        COLORS = new int[]{ContextCompat.getColor(this, R.color.first),
+                ContextCompat.getColor(this, android.R.color.transparent),
+                ContextCompat.getColor(this, R.color.second),
+                ContextCompat.getColor(this, android.R.color.transparent)};
 
         List<double[]> values = new ArrayList<>();
         double total = (double) (first + second);
@@ -250,7 +297,7 @@ public class DeckActivity extends AppCompatActivity {
         mDoughnutRender2.setStartAngle(225);
         mDoughnutRender2.setBackgroundColor(Color.TRANSPARENT);
 
-        mDoughnutChartView2 = ChartFactory.getDoughnutChartView(this, mMultipleCategorySeriesDataSet2, mDoughnutRender2);
+        GraphicalView mDoughnutChartView2 = ChartFactory.getDoughnutChartView(this, mMultipleCategorySeriesDataSet2, mDoughnutRender2);
 
         doughnutChartLinearLayout2.removeAllViews();
         doughnutChartLinearLayout2.addView(mDoughnutChartView2);
@@ -263,12 +310,12 @@ public class DeckActivity extends AppCompatActivity {
         textViewSecond3.setText("Second: " + second);
         textViewThird3.setText("Third: " + third);
 
-        COLORS = new int[]{this.getResources().getColor(R.color.first),
-                this.getResources().getColor(android.R.color.transparent),
-                this.getResources().getColor(R.color.second),
-                this.getResources().getColor(android.R.color.transparent),
-                this.getResources().getColor(R.color.third),
-                this.getResources().getColor(android.R.color.transparent)};
+        COLORS = new int[]{ContextCompat.getColor(this, R.color.first),
+                ContextCompat.getColor(this, android.R.color.transparent),
+                ContextCompat.getColor(this, R.color.second),
+                ContextCompat.getColor(this, android.R.color.transparent),
+                ContextCompat.getColor(this, R.color.third),
+                ContextCompat.getColor(this, android.R.color.transparent)};
 
         List<double[]> values = new ArrayList<>();
         double total = (double) (first + second + third);
@@ -307,7 +354,7 @@ public class DeckActivity extends AppCompatActivity {
         mDoughnutRender3.setStartAngle(225);
         mDoughnutRender3.setBackgroundColor(Color.TRANSPARENT);
 
-        mDoughnutChartView3 = ChartFactory.getDoughnutChartView(this, mMultipleCategorySeriesDataSet3, mDoughnutRender3);
+        GraphicalView mDoughnutChartView3 = ChartFactory.getDoughnutChartView(this, mMultipleCategorySeriesDataSet3, mDoughnutRender3);
 
         doughnutChartLinearLayout3.removeAllViews();
         doughnutChartLinearLayout3.addView(mDoughnutChartView3);
@@ -321,14 +368,14 @@ public class DeckActivity extends AppCompatActivity {
         textViewThird4.setText("Third: " + third);
         textViewFourth4.setText("Fourth: " + fourth);
 
-        COLORS = new int[]{this.getResources().getColor(R.color.first),
-                this.getResources().getColor(android.R.color.transparent),
-                this.getResources().getColor(R.color.second),
-                this.getResources().getColor(android.R.color.transparent),
-                this.getResources().getColor(R.color.third),
-                this.getResources().getColor(android.R.color.transparent),
-                this.getResources().getColor(R.color.fourth),
-                this.getResources().getColor(android.R.color.transparent)};
+        COLORS = new int[]{ContextCompat.getColor(this, R.color.first),
+                ContextCompat.getColor(this, android.R.color.transparent),
+                ContextCompat.getColor(this, R.color.second),
+                ContextCompat.getColor(this, android.R.color.transparent),
+                ContextCompat.getColor(this, R.color.third),
+                ContextCompat.getColor(this, android.R.color.transparent),
+                ContextCompat.getColor(this, R.color.fourth),
+                ContextCompat.getColor(this, android.R.color.transparent)};
 
         List<double[]> values = new ArrayList<>();
         double total = (double) (first + second + third + fourth);
@@ -368,7 +415,7 @@ public class DeckActivity extends AppCompatActivity {
         mDoughnutRender4.setStartAngle(225);
         mDoughnutRender4.setBackgroundColor(Color.TRANSPARENT);
 
-        mDoughnutChartView4 = ChartFactory.getDoughnutChartView(this, mMultipleCategorySeriesDataSet4, mDoughnutRender4);
+        GraphicalView mDoughnutChartView4 = ChartFactory.getDoughnutChartView(this, mMultipleCategorySeriesDataSet4, mDoughnutRender4);
 
         doughnutChartLinearLayout4.removeAllViews();
         doughnutChartLinearLayout4.addView(mDoughnutChartView4);
@@ -380,6 +427,7 @@ public class DeckActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        int REQUEST_CROP_PICTURE = 0;
         if (requestCode == REQUEST_PICTURE_PICKER) {
             if (resultCode == RESULT_OK) {
                 File croppedImageFile = new File(getFilesDir(), "image_" + mPlayerName + "_" + mDeckName + ".png");
@@ -413,7 +461,7 @@ public class DeckActivity extends AppCompatActivity {
             Window window = this.getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(this.getResources().getColor(android.R.color.transparent));
+            window.setStatusBarColor(ContextCompat.getColor(this, android.R.color.transparent));
         }
 
         assert getSupportActionBar() != null;
@@ -421,6 +469,21 @@ public class DeckActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+
+        mDeckDrawer = (LinearLayout) findViewById(R.id.deck_drawer);
+        mDeckDrawerLayout = (DrawerLayout) findViewById(R.id.deck_drawer_layout);
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDeckDrawerLayout, R.string.app_name, R.string.app_name) {
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+                invalidateOptionsMenu();
+            }
+
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                invalidateOptionsMenu();
+            }
+        };
+        mDeckDrawerLayout.setDrawerListener(mDrawerToggle);
 
         Intent intent = getIntent();
         mPlayerName = intent.getStringExtra("PLAYERNAME");
@@ -435,6 +498,15 @@ public class DeckActivity extends AppCompatActivity {
         currentDeck = decksDB.getDeck(mPlayerName, mDeckName);
 
         createLayout(this.findViewById(android.R.id.content));
+
+        //TODO selected item on drawer - temp local
+        LinearLayout drawerItemPlayers = (LinearLayout) findViewById(R.id.drawerItemPlayers);
+        ImageView drawerItemIconPlayers = (ImageView) findViewById(R.id.drawerItemIconPlayers);
+        TextView drawerItemTextPlayers = (TextView) findViewById(R.id.drawerItemTextPlayers);
+        drawerItemPlayers.setBackgroundColor(ContextCompat.getColor(this, R.color.gray200));
+        drawerItemIconPlayers.setColorFilter(ContextCompat.getColor(this, R.color.accent_color));
+        drawerItemTextPlayers.setTextColor(ContextCompat.getColor(this, R.color.accent_color));
+        switchScreen = (Switch) findViewById(R.id.switchScreen);
     }
 
     @Override
@@ -453,6 +525,7 @@ public class DeckActivity extends AppCompatActivity {
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+        mDrawerToggle.syncState();
     }
 
     @Override
@@ -471,6 +544,13 @@ public class DeckActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if (getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt(Constants.SCREEN_ON, 0) == 1) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            switchScreen.setChecked(true);
+        } else {
+            getWindow().clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            switchScreen.setChecked(false);
+        }
 
         updateLayout();
     }
@@ -493,9 +573,8 @@ public class DeckActivity extends AppCompatActivity {
 
             CollapsingToolbarLayout mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.main_collapsing);
             mCollapsingToolbarLayout.setTitle(mDeckName);
-            mCollapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.white));
-            mCollapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.white));
-            //mCollapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(android.R.color.transparent));
+            mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(this, R.color.white));
+            mCollapsingToolbarLayout.setCollapsedTitleTextColor(ContextCompat.getColor(this, R.color.white));
 
             //Deck banner image
             imageViewBanner = (ImageView) findViewById(R.id.imageViewBanner);
@@ -524,12 +603,12 @@ public class DeckActivity extends AppCompatActivity {
             //Wins
             textViewWins = (TextView) view.findViewById(R.id.textViewWins);
             //Deck identity
-            imageViewMana1 = (ImageView) view.findViewById(R.id.imageViewMana1);
-            imageViewMana2 = (ImageView) view.findViewById(R.id.imageViewMana2);
-            imageViewMana3 = (ImageView) view.findViewById(R.id.imageViewMana3);
-            imageViewMana4 = (ImageView) view.findViewById(R.id.imageViewMana4);
-            imageViewMana5 = (ImageView) view.findViewById(R.id.imageViewMana5);
-            imageViewMana6 = (ImageView) view.findViewById(R.id.imageViewMana6);
+            ImageView imageViewMana1 = (ImageView) view.findViewById(R.id.imageViewMana1);
+            ImageView imageViewMana2 = (ImageView) view.findViewById(R.id.imageViewMana2);
+            ImageView imageViewMana3 = (ImageView) view.findViewById(R.id.imageViewMana3);
+            ImageView imageViewMana4 = (ImageView) view.findViewById(R.id.imageViewMana4);
+            ImageView imageViewMana5 = (ImageView) view.findViewById(R.id.imageViewMana5);
+            ImageView imageViewMana6 = (ImageView) view.findViewById(R.id.imageViewMana6);
 
             imageViewMana1.setVisibility(View.GONE);
             imageViewMana2.setVisibility(View.GONE);
@@ -725,13 +804,13 @@ public class DeckActivity extends AppCompatActivity {
     private void toggleCardExpansion(final CardView card, TextView title, ImageView selector, int minHeight, int maxHeight) {
         // expand
         if (card.getHeight() == minHeight) {
-            title.setTextColor(this.getResources().getColor(R.color.secondary_color));
+            title.setTextColor(ContextCompat.getColor(this, R.color.secondary_color));
 
             Animation rotation = AnimationUtils.loadAnimation(this, R.anim.rotate_180_anticlockwise);
-            selector.setImageDrawable(getResources().getDrawable(R.drawable.arrow_up));
+            selector.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.arrow_up));
             selector.setRotation(0);
             selector.startAnimation(rotation);
-            selector.setColorFilter(this.getResources().getColor(R.color.secondary_color));
+            selector.setColorFilter(ContextCompat.getColor(this, R.color.secondary_color));
 
             ValueAnimator anim = ValueAnimator.ofInt(card.getMeasuredHeightAndState(), maxHeight);
             anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -747,11 +826,11 @@ public class DeckActivity extends AppCompatActivity {
             anim.start();
         } else {
             // collapse
-            title.setTextColor(this.getResources().getColor(R.color.secondary_text));
+            title.setTextColor(ContextCompat.getColor(this, R.color.secondary_text));
 
             Animation rotation = AnimationUtils.loadAnimation(this, R.anim.rotate_180_clockwise);
             selector.startAnimation(rotation);
-            selector.setColorFilter(this.getResources().getColor(R.color.secondary_text));
+            selector.setColorFilter(ContextCompat.getColor(this, R.color.secondary_text));
 
             ValueAnimator anim = ValueAnimator.ofInt(card.getMeasuredHeightAndState(), minHeight);
             anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -783,12 +862,12 @@ public class DeckActivity extends AppCompatActivity {
 
         //Deck info title
         if (cardViewDeckInfo.getHeight() == mCardViewFullHeightDeckInfo) {
-            textTitleDeckInfo.setTextColor(this.getResources().getColor(R.color.secondary_color));
-            iconIndicatorDeckInfo.setImageDrawable(getResources().getDrawable(R.drawable.arrow_up));
-            iconIndicatorDeckInfo.setColorFilter(this.getResources().getColor(R.color.secondary_color));
+            textTitleDeckInfo.setTextColor(ContextCompat.getColor(this, R.color.secondary_color));
+            iconIndicatorDeckInfo.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.arrow_up));
+            iconIndicatorDeckInfo.setColorFilter(ContextCompat.getColor(this, R.color.secondary_color));
         } else {
-            textTitleDeckInfo.setTextColor(this.getResources().getColor(R.color.secondary_text));
-            iconIndicatorDeckInfo.setColorFilter(this.getResources().getColor(R.color.secondary_text));
+            textTitleDeckInfo.setTextColor(ContextCompat.getColor(this, R.color.secondary_text));
+            iconIndicatorDeckInfo.setColorFilter(ContextCompat.getColor(this, R.color.secondary_text));
         }
 
         //Deck name
@@ -803,32 +882,32 @@ public class DeckActivity extends AppCompatActivity {
         //Deck Identity
         int index = 0;
         if (mDeckIdentity.charAt(0) == '1') {
-            listIdentityHolder.get(index).setBackground(this.getResources().getDrawable(R.drawable.mana_white));
+            listIdentityHolder.get(index).setBackground(ContextCompat.getDrawable(this, R.drawable.mana_white));
             listIdentityHolder.get(index).setVisibility(View.VISIBLE);
             index++;
         }
         if (mDeckIdentity.charAt(1) == '1') {
-            listIdentityHolder.get(index).setBackground(this.getResources().getDrawable(R.drawable.mana_blue));
+            listIdentityHolder.get(index).setBackground(ContextCompat.getDrawable(this, R.drawable.mana_blue));
             listIdentityHolder.get(index).setVisibility(View.VISIBLE);
             index++;
         }
         if (mDeckIdentity.charAt(2) == '1') {
-            listIdentityHolder.get(index).setBackground(this.getResources().getDrawable(R.drawable.mana_black));
+            listIdentityHolder.get(index).setBackground(ContextCompat.getDrawable(this, R.drawable.mana_black));
             listIdentityHolder.get(index).setVisibility(View.VISIBLE);
             index++;
         }
         if (mDeckIdentity.charAt(3) == '1') {
-            listIdentityHolder.get(index).setBackground(this.getResources().getDrawable(R.drawable.mana_red));
+            listIdentityHolder.get(index).setBackground(ContextCompat.getDrawable(this, R.drawable.mana_red));
             listIdentityHolder.get(index).setVisibility(View.VISIBLE);
             index++;
         }
         if (mDeckIdentity.charAt(4) == '1') {
-            listIdentityHolder.get(index).setBackground(this.getResources().getDrawable(R.drawable.mana_green));
+            listIdentityHolder.get(index).setBackground(ContextCompat.getDrawable(this, R.drawable.mana_green));
             listIdentityHolder.get(index).setVisibility(View.VISIBLE);
             index++;
         }
         if (mDeckIdentity.charAt(5) == '1') {
-            listIdentityHolder.get(index).setBackground(this.getResources().getDrawable(R.drawable.mana_colorless));
+            listIdentityHolder.get(index).setBackground(ContextCompat.getDrawable(this, R.drawable.mana_colorless));
             listIdentityHolder.get(index).setVisibility(View.VISIBLE);
         }
 

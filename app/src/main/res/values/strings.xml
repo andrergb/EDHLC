@@ -80,6 +80,13 @@
     <string name="default_deck_3">Deck 3</string>
     <string name="default_deck_4">Deck 4</string>
 
+    <string name="drawer_home">Home</string>
+    <string name="drawer_players">Players</string>
+    <string name="drawer_records">Records</string>
+    <string name="drawer_screen">Keep screen on</string>
+    <string name="drawer_settings">Settings</string>
+    <string name="drawer_about">About</string>
+
     <!-- Current match -->
     <string-array name="string_menu_main_1">
         <item>New Game</item>
