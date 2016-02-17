@@ -298,7 +298,7 @@ public class MainActivity extends AppCompatActivity {
                     if (mColor[i] == color)
                         color_dark = mColor_dark[i];
                 getCurrentActivePlayer().setPlayerColor(new int[]{color, color_dark});
-                mDecksDB.updateDeckColor(new Deck(getCurrentActivePlayer().getPlayerName(), getCurrentActivePlayer().getPlayerDeck(), getCurrentActivePlayer().getPlayerColor()));
+                mDecksDB.updateDeckShieldColor(new Deck(getCurrentActivePlayer().getPlayerName(), getCurrentActivePlayer().getPlayerDeck(), getCurrentActivePlayer().getPlayerColor()));
             }
         });
         colorCalendar.show(getFragmentManager(), "cal");
@@ -524,7 +524,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickKeepScreenOn(View view) {
-
         if (!mCheckBoxKeepScreenOn.isChecked()) {
             getWindow().clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 0).commit();

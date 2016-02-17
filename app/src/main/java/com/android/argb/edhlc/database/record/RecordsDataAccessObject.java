@@ -372,6 +372,48 @@ public class RecordsDataAccessObject {
         return totalUpdate;
     }
 
+    public long updateDeckNameRecord(Deck deck, String newDeckName) {
+        long totalUpdate = 0;
+
+        ContentValues values1 = new ContentValues();
+        values1.put(RecordsContract.RecordsEntry.COLUMN_FIRST_PLAYER_DECK, newDeckName);
+        totalUpdate += database.update(
+                RecordsContract.RecordsEntry.TABLE_NAME,
+                values1,
+                RecordsContract.RecordsEntry.COLUMN_FIRST_PLAYER_NAME + "=? AND " + RecordsContract.RecordsEntry.COLUMN_FIRST_PLAYER_DECK + "=?",
+                new String[]{deck.getDeckOwnerName(), deck.getDeckName()}
+        );
+
+        ContentValues values2 = new ContentValues();
+        values2.put(RecordsContract.RecordsEntry.COLUMN_SECOND_PLAYER_DECK, newDeckName);
+        totalUpdate += database.update(
+                RecordsContract.RecordsEntry.TABLE_NAME,
+                values2,
+                RecordsContract.RecordsEntry.COLUMN_SECOND_PLAYER_NAME + "=? AND " + RecordsContract.RecordsEntry.COLUMN_SECOND_PLAYER_DECK + "=?",
+                new String[]{deck.getDeckOwnerName(), deck.getDeckName()}
+        );
+
+        ContentValues values3 = new ContentValues();
+        values3.put(RecordsContract.RecordsEntry.COLUMN_THIRD_PLAYER_DECK, newDeckName);
+        totalUpdate += database.update(
+                RecordsContract.RecordsEntry.TABLE_NAME,
+                values3,
+                RecordsContract.RecordsEntry.COLUMN_THIRD_PLAYER_NAME + "=? AND " + RecordsContract.RecordsEntry.COLUMN_THIRD_PLAYER_DECK + "=?",
+                new String[]{deck.getDeckOwnerName(), deck.getDeckName()}
+        );
+
+        ContentValues values4 = new ContentValues();
+        values4.put(RecordsContract.RecordsEntry.COLUMN_FOURTH_PLAYER_DECK, newDeckName);
+        totalUpdate += database.update(
+                RecordsContract.RecordsEntry.TABLE_NAME,
+                values4,
+                RecordsContract.RecordsEntry.COLUMN_FOURTH_PLAYER_NAME + "=? AND " + RecordsContract.RecordsEntry.COLUMN_FOURTH_PLAYER_DECK + "=?",
+                new String[]{deck.getDeckOwnerName(), deck.getDeckName()}
+        );
+
+        return totalUpdate;
+    }
+
     public long updateRecord(Deck oldDeck, Deck newDeck) {
         long totalUpdate = 0;
 

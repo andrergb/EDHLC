@@ -152,14 +152,28 @@ public class DecksDataAccessObject {
         }
     }
 
-    public int updateDeckColor(Deck deck) {
+    public int updateDeckIdentity(Deck deck, String identity) {
         ContentValues values = new ContentValues();
-        values.put(DecksContract.DecksEntry.COLUMN_DECK_COLOR, String.valueOf(String.valueOf(deck.getDeckShieldColor()[0] + System.getProperty("path.separator") + deck.getDeckShieldColor()[1])));
+        values.put(DecksContract.DecksEntry.COLUMN_DECK_IDENTITY, identity);
 
         return database.update(DecksContract.DecksEntry.TABLE_NAME,
                 values,
                 DecksContract.DecksEntry.COLUMN_PLAYER_NAME + " LIKE ? AND " + DecksContract.DecksEntry.COLUMN_DECK_NAME + " LIKE ?",
                 new String[]{deck.getDeckOwnerName(), deck.getDeckName()});
+    }
+
+    public int updateDeckName(Deck deck, String deckName) {
+        if (!isDeckAdded(new Deck(deck.getDeckOwnerName(), deckName))) {
+            ContentValues values = new ContentValues();
+            values.put(DecksContract.DecksEntry.COLUMN_DECK_NAME, deckName);
+
+            return database.update(DecksContract.DecksEntry.TABLE_NAME,
+                    values,
+                    DecksContract.DecksEntry.COLUMN_PLAYER_NAME + " LIKE ? AND " + DecksContract.DecksEntry.COLUMN_DECK_NAME + " LIKE ?",
+                    new String[]{deck.getDeckOwnerName(), deck.getDeckName()});
+        } else {
+            return -1;
+        }
     }
 
     public long updateDeckOwner(String oldOwnerName, String newOwnerName) {
@@ -171,6 +185,16 @@ public class DecksDataAccessObject {
                 DecksContract.DecksEntry.COLUMN_PLAYER_NAME + " LIKE ?",
                 new String[]{oldOwnerName});
 
+    }
+
+    public int updateDeckShieldColor(Deck deck) {
+        ContentValues values = new ContentValues();
+        values.put(DecksContract.DecksEntry.COLUMN_DECK_COLOR, String.valueOf(String.valueOf(deck.getDeckShieldColor()[0] + System.getProperty("path.separator") + deck.getDeckShieldColor()[1])));
+
+        return database.update(DecksContract.DecksEntry.TABLE_NAME,
+                values,
+                DecksContract.DecksEntry.COLUMN_PLAYER_NAME + " LIKE ? AND " + DecksContract.DecksEntry.COLUMN_DECK_NAME + " LIKE ?",
+                new String[]{deck.getDeckOwnerName(), deck.getDeckName()});
     }
 
     private Deck cursorToDeck(Cursor cursor) {

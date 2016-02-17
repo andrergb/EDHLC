@@ -29,14 +29,18 @@
     <!--<item name="fourth4" type="color">#000000</item>-->
 
     <!-- THEME -->
-    <item name="primary_color" type="color">#FF03A9F4</item>
-    <item name="secondary_color" type="color">#FF0288D1</item>
-    <item name="accent_color" type="color">#FFFF5722</item>
-    <item name="light_primary_color" type="color">#FFB3E5FC</item>
+    <!--<item name="primary_color" type="color">#FF03A9F4</item>-->
+    <!--<item name="secondary_color" type="color">#FF0288D1</item>-->
+    <!--<item name="accent_color" type="color">#FFFF5722</item>-->
+    <!--<item name="light_primary_color" type="color">#FFB3E5FC</item>-->
+    <item name="primary_color" type="color">#FF3F51B5</item>
+    <item name="secondary_color" type="color">#FF303F9F</item>
+    <item name="light_primary_color" type="color">#FFC5CAE9</item>
+    <item name="accent_color" type="color">#FFFF3D00</item>
+    <item name="accent_secondary_color" type="color">#FFFF9E80</item>
 
     <item name="primary_text" type="color">#FF212121</item>
     <item name="secondary_text" type="color">#FF727272</item>
-
     <item name="divider" type="color">#FFB6B6B6</item>
 
     <integer-array name="edh_default">

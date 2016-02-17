@@ -48,6 +48,12 @@ public class PlayerListActivity extends AppCompatActivity {
     private RecordsDataAccessObject recordsDB;
 
     private DrawerPlayerList mDrawerPlayerList;
+    private CheckBox checkBoxManaWhite;
+    private CheckBox checkBoxManaBlue;
+    private CheckBox checkBoxManaBlack;
+    private CheckBox checkBoxManaRed;
+    private CheckBox checkBoxManaGreen;
+    private CheckBox checkBoxManaColorless;
 
     public void createLayout(View view) {
         if (view != null) {
@@ -145,6 +151,17 @@ public class PlayerListActivity extends AppCompatActivity {
         }
     }
 
+    public void onClickManaCheckBox(View view) {
+        if (checkBoxManaWhite.isChecked() ||
+                checkBoxManaBlue.isChecked() ||
+                checkBoxManaBlack.isChecked() ||
+                checkBoxManaRed.isChecked() ||
+                checkBoxManaGreen.isChecked())
+            checkBoxManaColorless.setChecked(false);
+        else
+            checkBoxManaColorless.setChecked(true);
+    }
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -229,14 +246,14 @@ public class PlayerListActivity extends AppCompatActivity {
     }
 
     private void createAddDeckDialog(final View view, final String player, final int position) {
-        View playerNameView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_deck_name, null);
+        View playerNameView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_deck, null);
         final EditText userInput = (EditText) playerNameView.findViewById(R.id.editTextDeckName);
-        final CheckBox checkBoxManaWhite = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_white);
-        final CheckBox checkBoxManaBlue = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_blue);
-        final CheckBox checkBoxManaBlack = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_black);
-        final CheckBox checkBoxManaRed = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_red);
-        final CheckBox checkBoxManaGreen = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_green);
-        final CheckBox checkBoxManaColorless = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_colorless);
+        checkBoxManaWhite = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_white);
+        checkBoxManaBlue = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_blue);
+        checkBoxManaBlack = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_black);
+        checkBoxManaRed = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_red);
+        checkBoxManaGreen = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_green);
+        checkBoxManaColorless = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_colorless);
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
         alertDialogBuilder.setView(playerNameView);

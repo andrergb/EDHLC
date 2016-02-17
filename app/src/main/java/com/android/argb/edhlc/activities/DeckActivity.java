@@ -1,7 +1,10 @@
 package com.android.argb.edhlc.activities;
 
 import android.animation.ValueAnimator;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -10,6 +13,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.NestedScrollView;
@@ -18,6 +23,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,13 +34,17 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.argb.edhlc.Constants;
+import com.android.argb.edhlc.FABScrollBehavior;
 import com.android.argb.edhlc.R;
 import com.android.argb.edhlc.database.deck.DecksDataAccessObject;
 import com.android.argb.edhlc.database.record.RecordsDataAccessObject;
@@ -56,7 +66,7 @@ import java.util.List;
 public class DeckActivity extends AppCompatActivity {
 
     private static int REQUEST_PICTURE_PICKER = 1;
-    private Deck currentDeck;
+    private Deck mCurrentDeck;
     private String mPlayerName;
     private String mDeckName;
     private String mDeckIdentity;
@@ -70,6 +80,7 @@ public class DeckActivity extends AppCompatActivity {
     private int mCardViewFullHeightDeckInfo;
     private ImageView imageViewShieldColor;
     private TextView textViewCommander;
+    private TextView textViewOwnerName;
     private TextView textViewCreationDate;
     private List<ImageView> listIdentityHolder;
     private TextView textViewTotalGames;
@@ -143,11 +154,63 @@ public class DeckActivity extends AppCompatActivity {
     private ActionBarDrawerToggle mDrawerToggle;
     private Switch switchScreen;
 
+    private boolean isFabOpen;
+    private FloatingActionButton fabMain;
+    private FloatingActionButton fabEdit;
+    private FloatingActionButton fabDelete;
+
+    private CheckBox checkBoxManaWhite;
+    private CheckBox checkBoxManaBlue;
+    private CheckBox checkBoxManaBlack;
+    private CheckBox checkBoxManaRed;
+    private CheckBox checkBoxManaGreen;
+    private CheckBox checkBoxManaColorless;
+
     public static Intent getPickImageIntent() {
         final Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         return Intent.createChooser(intent, "Select Picture");
+    }
+
+    public void animateFAB() {
+        Animation fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
+        Animation fab_close = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
+        Animation rotate45Clockwise = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_45_clockwise);
+        Animation rotate45Anticlockwise = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_45_anticlockwise);
+        if (isFabOpen) {
+            fabMain.startAnimation(rotate45Anticlockwise);
+            fabMain.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.accent_color)));
+
+            fabEdit.setClickable(false);
+            fabEdit.setVisibility(View.GONE);
+            fabEdit.startAnimation(fab_close);
+
+            fabDelete.setClickable(false);
+            fabDelete.setVisibility(View.GONE);
+            fabDelete.startAnimation(fab_close);
+
+            isFabOpen = false;
+        } else {
+            fabMain.startAnimation(rotate45Clockwise);
+            fabMain.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.accent_secondary_color)));
+
+            fabEdit.setClickable(true);
+            fabEdit.setVisibility(View.VISIBLE);
+            fabEdit.startAnimation(fab_open);
+            CoordinatorLayout.LayoutParams p = (CoordinatorLayout.LayoutParams) fabEdit.getLayoutParams();
+            p.setBehavior(new FABScrollBehavior());
+            fabEdit.setLayoutParams(p);
+
+            fabDelete.setClickable(true);
+            fabDelete.setVisibility(View.VISIBLE);
+            fabDelete.startAnimation(fab_open);
+            p = (CoordinatorLayout.LayoutParams) fabDelete.getLayoutParams();
+            p.setBehavior(new FABScrollBehavior());
+            fabDelete.setLayoutParams(p);
+
+            isFabOpen = true;
+        }
     }
 
     @Override
@@ -209,8 +272,9 @@ public class DeckActivity extends AppCompatActivity {
                 break;
 
             case R.id.drawerItemScreen:
+                switchScreen.setChecked(!switchScreen.isChecked());
                 if (!switchScreen.isChecked()) {
-                    getWindow().clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
                     getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 0).commit();
                 } else {
                     getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -231,8 +295,33 @@ public class DeckActivity extends AppCompatActivity {
         }
     }
 
+    public void onClickFabButton(View view) {
+        switch (view.getId()) {
+            case R.id.fabMain:
+                animateFAB();
+                break;
+            case R.id.fabEdit:
+                createEditDeckDialog();
+                break;
+            case R.id.fabDelete:
+                createRemoveDeckDialog();
+                break;
+        }
+    }
+
     public void onClickImageBanner(View view) {
         startActivityForResult(getPickImageIntent(), REQUEST_PICTURE_PICKER);
+    }
+
+    public void onClickManaCheckBox(View view) {
+        if (checkBoxManaWhite.isChecked() ||
+                checkBoxManaBlue.isChecked() ||
+                checkBoxManaBlack.isChecked() ||
+                checkBoxManaRed.isChecked() ||
+                checkBoxManaGreen.isChecked())
+            checkBoxManaColorless.setChecked(false);
+        else
+            checkBoxManaColorless.setChecked(true);
     }
 
     @Override
@@ -495,7 +584,7 @@ public class DeckActivity extends AppCompatActivity {
         decksDB.open();
         recordsDB.open();
 
-        currentDeck = decksDB.getDeck(mPlayerName, mDeckName);
+        mCurrentDeck = decksDB.getDeck(mPlayerName, mDeckName);
 
         createLayout(this.findViewById(android.R.id.content));
 
@@ -506,7 +595,8 @@ public class DeckActivity extends AppCompatActivity {
         drawerItemPlayers.setBackgroundColor(ContextCompat.getColor(this, R.color.gray200));
         drawerItemIconPlayers.setColorFilter(ContextCompat.getColor(this, R.color.accent_color));
         drawerItemTextPlayers.setTextColor(ContextCompat.getColor(this, R.color.accent_color));
-        switchScreen = (Switch) findViewById(R.id.switchScreen);
+//        switchScreen.getThumbDrawable().setColorFilter(ContextCompat.getColor(this, R.color.accent_color), PorterDuff.Mode.MULTIPLY);
+//        switchScreen.getTrackDrawable().setColorFilter(ContextCompat.getColor(this, R.color.accent_secondary_color), PorterDuff.Mode.MULTIPLY);
     }
 
     @Override
@@ -548,7 +638,7 @@ public class DeckActivity extends AppCompatActivity {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             switchScreen.setChecked(true);
         } else {
-            getWindow().clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             switchScreen.setChecked(false);
         }
 
@@ -568,6 +658,89 @@ public class DeckActivity extends AppCompatActivity {
         outState.putSerializable("current_renderer4", mDoughnutRender4);
     }
 
+    private void createEditDeckDialog() {
+        View dialogDeckView = LayoutInflater.from(DeckActivity.this).inflate(R.layout.dialog_deck, null);
+        final EditText userInput = (EditText) dialogDeckView.findViewById(R.id.editTextDeckName);
+        checkBoxManaWhite = (CheckBox) dialogDeckView.findViewById(R.id.checkbox_mana_white);
+        checkBoxManaBlue = (CheckBox) dialogDeckView.findViewById(R.id.checkbox_mana_blue);
+        checkBoxManaBlack = (CheckBox) dialogDeckView.findViewById(R.id.checkbox_mana_black);
+        checkBoxManaRed = (CheckBox) dialogDeckView.findViewById(R.id.checkbox_mana_red);
+        checkBoxManaGreen = (CheckBox) dialogDeckView.findViewById(R.id.checkbox_mana_green);
+        checkBoxManaColorless = (CheckBox) dialogDeckView.findViewById(R.id.checkbox_mana_colorless);
+
+        userInput.setText(mDeckName);
+        final String currentColorIdentity = mCurrentDeck.getDeckIdentity();
+        checkBoxManaWhite.setChecked(currentColorIdentity.length() >= 0 && currentColorIdentity.charAt(0) == '1');
+        checkBoxManaBlue.setChecked(currentColorIdentity.length() >= 1 && currentColorIdentity.charAt(1) == '1');
+        checkBoxManaBlack.setChecked(currentColorIdentity.length() >= 2 && currentColorIdentity.charAt(2) == '1');
+        checkBoxManaRed.setChecked(currentColorIdentity.length() >= 3 && currentColorIdentity.charAt(3) == '1');
+        checkBoxManaGreen.setChecked(currentColorIdentity.length() >= 4 && currentColorIdentity.charAt(4) == '1');
+        checkBoxManaColorless.setChecked(currentColorIdentity.length() >= 5 && currentColorIdentity.charAt(5) == '1');
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(DeckActivity.this);
+        alertDialogBuilder.setView(dialogDeckView);
+        alertDialogBuilder.setTitle("Edit deck");
+        alertDialogBuilder.setPositiveButton("EDIT",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                });
+        alertDialogBuilder.setNegativeButton("CANCEL",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        alertDialog.show();
+
+        //Override POSITIVE button
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String newDeckName = userInput.getText().toString();
+                if (!newDeckName.equalsIgnoreCase("")) {
+                    String colorIdentity = "";
+                    colorIdentity = checkBoxManaWhite.isChecked() ? colorIdentity.concat("1") : colorIdentity.concat("0");
+                    colorIdentity = checkBoxManaBlue.isChecked() ? colorIdentity.concat("1") : colorIdentity.concat("0");
+                    colorIdentity = checkBoxManaBlack.isChecked() ? colorIdentity.concat("1") : colorIdentity.concat("0");
+                    colorIdentity = checkBoxManaRed.isChecked() ? colorIdentity.concat("1") : colorIdentity.concat("0");
+                    colorIdentity = checkBoxManaGreen.isChecked() ? colorIdentity.concat("1") : colorIdentity.concat("0");
+                    colorIdentity = checkBoxManaColorless.isChecked() ? colorIdentity.concat("1") : colorIdentity.concat("0");
+
+                    if (!colorIdentity.equalsIgnoreCase(currentColorIdentity)) {
+                        decksDB.updateDeckIdentity(mCurrentDeck, colorIdentity);
+                        mDeckIdentity = colorIdentity;
+                        mCurrentDeck = decksDB.getDeck(mPlayerName, mDeckName);
+                        updateLayout();
+                    }
+
+                    if (!newDeckName.equalsIgnoreCase(mDeckName)) {
+                        if (decksDB.updateDeckName(mCurrentDeck, newDeckName) != -1) {
+                            recordsDB.updateDeckNameRecord(mCurrentDeck, newDeckName);
+
+                            File oldFile = new File(getFilesDir(), "image_" + mPlayerName + "_" + mDeckName + ".png");
+                            File newFile = new File(getFilesDir(), "image_" + mPlayerName + "_" + newDeckName + ".png");
+                            if (oldFile.renameTo(newFile))
+                                Toast.makeText(DeckActivity.this, "Successfully edited ", Toast.LENGTH_SHORT).show();
+
+                            mDeckName = newDeckName;
+                            mCurrentDeck = decksDB.getDeck(mPlayerName, mDeckName);
+
+                            updateLayout();
+                        } else {
+                            Toast.makeText(DeckActivity.this, "Fail: Deck " + newDeckName + " already exists", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    alertDialog.dismiss();
+                } else {
+                    Toast.makeText(DeckActivity.this, "Insert a name", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
     private void createLayout(View view) {
         if (view != null) {
 
@@ -575,6 +748,26 @@ public class DeckActivity extends AppCompatActivity {
             mCollapsingToolbarLayout.setTitle(mDeckName);
             mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(this, R.color.white));
             mCollapsingToolbarLayout.setCollapsedTitleTextColor(ContextCompat.getColor(this, R.color.white));
+
+            //Drawer
+            switchScreen = (Switch) findViewById(R.id.switchScreen);
+            switchScreen.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!switchScreen.isChecked()) {
+                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                        getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 0).commit();
+                    } else {
+                        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                        getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 1).commit();
+                    }
+                }
+            });
+
+            //FloatingActionButton
+            fabMain = (FloatingActionButton) findViewById(R.id.fabMain);
+            fabEdit = (FloatingActionButton) findViewById(R.id.fabEdit);
+            fabDelete = (FloatingActionButton) findViewById(R.id.fabDelete);
 
             //Deck banner image
             imageViewBanner = (ImageView) findViewById(R.id.imageViewBanner);
@@ -594,6 +787,8 @@ public class DeckActivity extends AppCompatActivity {
             iconIndicatorDeckInfo = (ImageView) view.findViewById(R.id.iconIndicatorDeckInfo);
             //Deck name
             textViewCommander = (TextView) view.findViewById(R.id.textViewCommander);
+            //Deck Owner
+            textViewOwnerName = (TextView) view.findViewById(R.id.textViewOwnerName);
             //Creation Date
             textViewCreationDate = (TextView) view.findViewById(R.id.textViewCreationDate);
             //Shield color
@@ -603,27 +798,13 @@ public class DeckActivity extends AppCompatActivity {
             //Wins
             textViewWins = (TextView) view.findViewById(R.id.textViewWins);
             //Deck identity
-            ImageView imageViewMana1 = (ImageView) view.findViewById(R.id.imageViewMana1);
-            ImageView imageViewMana2 = (ImageView) view.findViewById(R.id.imageViewMana2);
-            ImageView imageViewMana3 = (ImageView) view.findViewById(R.id.imageViewMana3);
-            ImageView imageViewMana4 = (ImageView) view.findViewById(R.id.imageViewMana4);
-            ImageView imageViewMana5 = (ImageView) view.findViewById(R.id.imageViewMana5);
-            ImageView imageViewMana6 = (ImageView) view.findViewById(R.id.imageViewMana6);
-
-            imageViewMana1.setVisibility(View.GONE);
-            imageViewMana2.setVisibility(View.GONE);
-            imageViewMana3.setVisibility(View.GONE);
-            imageViewMana4.setVisibility(View.GONE);
-            imageViewMana5.setVisibility(View.GONE);
-            imageViewMana6.setVisibility(View.GONE);
-
             listIdentityHolder = new ArrayList<>();
-            listIdentityHolder.add(imageViewMana6);
-            listIdentityHolder.add(imageViewMana5);
-            listIdentityHolder.add(imageViewMana4);
-            listIdentityHolder.add(imageViewMana3);
-            listIdentityHolder.add(imageViewMana2);
-            listIdentityHolder.add(imageViewMana1);
+            listIdentityHolder.add((ImageView) view.findViewById(R.id.imageViewMana6));
+            listIdentityHolder.add((ImageView) view.findViewById(R.id.imageViewMana5));
+            listIdentityHolder.add((ImageView) view.findViewById(R.id.imageViewMana4));
+            listIdentityHolder.add((ImageView) view.findViewById(R.id.imageViewMana3));
+            listIdentityHolder.add((ImageView) view.findViewById(R.id.imageViewMana2));
+            listIdentityHolder.add((ImageView) view.findViewById(R.id.imageViewMana1));
 
             //Chart 1v1
             cardViewDeckHistory2 = (CardView) findViewById(R.id.cardViewDeckHistory2);
@@ -731,6 +912,33 @@ public class DeckActivity extends AppCompatActivity {
             });
 
         }
+    }
+
+    private void createRemoveDeckDialog() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(DeckActivity.this);
+        alertDialogBuilder.setTitle("Delete deck");
+        alertDialogBuilder.setMessage("Are you sure to delete this deck?");
+        alertDialogBuilder.setPositiveButton("Delete",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        long result = decksDB.removeDeck(mCurrentDeck);
+                        if (result != 0) {
+                            dialog.cancel();
+                            //TODO confirm flux
+                            DeckActivity.this.finish();
+                        } else {
+                            Toast.makeText(DeckActivity.this, "Fail", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+        alertDialogBuilder.setNeutralButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
     private void makeViewVisible(View view) {
@@ -846,6 +1054,7 @@ public class DeckActivity extends AppCompatActivity {
         }
     }
 
+    //TODO rename updateList
     private void updateLayout() {
         //Deck banner image
         File croppedImageFile = new File(getFilesDir(), "image_" + mPlayerName + "_" + mDeckName + ".png");
@@ -873,13 +1082,22 @@ public class DeckActivity extends AppCompatActivity {
         //Deck name
         textViewCommander.setText(mDeckName);
 
+        //Deck owned
+        textViewOwnerName.setText(mPlayerName);
+
         //Creation Date
-        textViewCreationDate.setText(currentDeck.getDeckCreationDate());
+        textViewCreationDate.setText(mCurrentDeck.getDeckCreationDate());
 
         //Shield color
         imageViewShieldColor.setColorFilter(decksDB.getDeck(mPlayerName, mDeckName).getDeckShieldColor()[0]);
 
         //Deck Identity
+        listIdentityHolder.get(0).setVisibility(View.GONE);
+        listIdentityHolder.get(1).setVisibility(View.GONE);
+        listIdentityHolder.get(2).setVisibility(View.GONE);
+        listIdentityHolder.get(3).setVisibility(View.GONE);
+        listIdentityHolder.get(4).setVisibility(View.GONE);
+        listIdentityHolder.get(5).setVisibility(View.GONE);
         int index = 0;
         if (mDeckIdentity.charAt(0) == '1') {
             listIdentityHolder.get(index).setBackground(ContextCompat.getDrawable(this, R.drawable.mana_white));
@@ -912,7 +1130,7 @@ public class DeckActivity extends AppCompatActivity {
         }
 
         //Record card
-        List<Record> allRecords = recordsDB.getAllRecordsByDeck(currentDeck);
+        List<Record> allRecords = recordsDB.getAllRecordsByDeck(mCurrentDeck);
         cardViewLastGamePlayed.setVisibility(View.GONE);
         if (allRecords.size() != 0) {
             cardViewLastGamePlayed.setVisibility(View.VISIBLE);
@@ -923,14 +1141,14 @@ public class DeckActivity extends AppCompatActivity {
                     linearLastGame1.setVisibility(View.VISIBLE);
                     textViewPlayer1.setText(lastRecord.getFirstPlace().getDeckOwnerName());
                     textViewDeck1.setText(lastRecord.getFirstPlace().getDeckName());
-                    textViewPlayer1.setTypeface(null, currentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? Typeface.BOLD : Typeface.NORMAL);
-                    textViewDeck1.setTypeface(null, currentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? Typeface.BOLD : Typeface.NORMAL);
+                    textViewPlayer1.setTypeface(null, mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? Typeface.BOLD : Typeface.NORMAL);
+                    textViewDeck1.setTypeface(null, mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? Typeface.BOLD : Typeface.NORMAL);
 
                     linearLastGame2.setVisibility(View.VISIBLE);
                     textViewPlayer2.setText(lastRecord.getSecondPlace().getDeckOwnerName());
                     textViewDeck2.setText(lastRecord.getSecondPlace().getDeckName());
-                    textViewPlayer2.setTypeface(null, currentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? Typeface.BOLD : Typeface.NORMAL);
-                    textViewDeck2.setTypeface(null, currentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? Typeface.BOLD : Typeface.NORMAL);
+                    textViewPlayer2.setTypeface(null, mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? Typeface.BOLD : Typeface.NORMAL);
+                    textViewDeck2.setTypeface(null, mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? Typeface.BOLD : Typeface.NORMAL);
 
                     linearLastGame3.setVisibility(View.GONE);
                     linearLastGame4.setVisibility(View.GONE);
@@ -940,20 +1158,20 @@ public class DeckActivity extends AppCompatActivity {
                     linearLastGame1.setVisibility(View.VISIBLE);
                     textViewPlayer1.setText(lastRecord.getFirstPlace().getDeckOwnerName());
                     textViewDeck1.setText(lastRecord.getFirstPlace().getDeckName());
-                    textViewPlayer1.setTypeface(null, currentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? Typeface.BOLD : Typeface.NORMAL);
-                    textViewDeck1.setTypeface(null, currentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? Typeface.BOLD : Typeface.NORMAL);
+                    textViewPlayer1.setTypeface(null, mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? Typeface.BOLD : Typeface.NORMAL);
+                    textViewDeck1.setTypeface(null, mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? Typeface.BOLD : Typeface.NORMAL);
 
                     linearLastGame2.setVisibility(View.VISIBLE);
                     textViewPlayer2.setText(lastRecord.getSecondPlace().getDeckOwnerName());
                     textViewDeck2.setText(lastRecord.getSecondPlace().getDeckName());
-                    textViewPlayer2.setTypeface(null, currentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? Typeface.BOLD : Typeface.NORMAL);
-                    textViewDeck2.setTypeface(null, currentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? Typeface.BOLD : Typeface.NORMAL);
+                    textViewPlayer2.setTypeface(null, mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? Typeface.BOLD : Typeface.NORMAL);
+                    textViewDeck2.setTypeface(null, mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? Typeface.BOLD : Typeface.NORMAL);
 
                     linearLastGame3.setVisibility(View.VISIBLE);
                     textViewPlayer3.setText(lastRecord.getThirdPlace().getDeckOwnerName());
                     textViewDeck3.setText(lastRecord.getThirdPlace().getDeckName());
-                    textViewPlayer3.setTypeface(null, currentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? Typeface.BOLD : Typeface.NORMAL);
-                    textViewDeck3.setTypeface(null, currentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? Typeface.BOLD : Typeface.NORMAL);
+                    textViewPlayer3.setTypeface(null, mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? Typeface.BOLD : Typeface.NORMAL);
+                    textViewDeck3.setTypeface(null, mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? Typeface.BOLD : Typeface.NORMAL);
 
                     linearLastGame4.setVisibility(View.GONE);
                     break;
@@ -962,33 +1180,33 @@ public class DeckActivity extends AppCompatActivity {
                     linearLastGame1.setVisibility(View.VISIBLE);
                     textViewPlayer1.setText(lastRecord.getFirstPlace().getDeckOwnerName());
                     textViewDeck1.setText(lastRecord.getFirstPlace().getDeckName());
-                    textViewPlayer1.setTypeface(null, currentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? Typeface.BOLD : Typeface.NORMAL);
-                    textViewDeck1.setTypeface(null, currentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? Typeface.BOLD : Typeface.NORMAL);
+                    textViewPlayer1.setTypeface(null, mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? Typeface.BOLD : Typeface.NORMAL);
+                    textViewDeck1.setTypeface(null, mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? Typeface.BOLD : Typeface.NORMAL);
 
                     linearLastGame2.setVisibility(View.VISIBLE);
                     textViewPlayer2.setText(lastRecord.getSecondPlace().getDeckOwnerName());
                     textViewDeck2.setText(lastRecord.getSecondPlace().getDeckName());
-                    textViewPlayer2.setTypeface(null, currentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? Typeface.BOLD : Typeface.NORMAL);
-                    textViewDeck2.setTypeface(null, currentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? Typeface.BOLD : Typeface.NORMAL);
+                    textViewPlayer2.setTypeface(null, mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? Typeface.BOLD : Typeface.NORMAL);
+                    textViewDeck2.setTypeface(null, mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? Typeface.BOLD : Typeface.NORMAL);
 
                     linearLastGame3.setVisibility(View.VISIBLE);
                     textViewPlayer3.setText(lastRecord.getThirdPlace().getDeckOwnerName());
                     textViewDeck3.setText(lastRecord.getThirdPlace().getDeckName());
-                    textViewPlayer3.setTypeface(null, currentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? Typeface.BOLD : Typeface.NORMAL);
-                    textViewDeck3.setTypeface(null, currentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? Typeface.BOLD : Typeface.NORMAL);
+                    textViewPlayer3.setTypeface(null, mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? Typeface.BOLD : Typeface.NORMAL);
+                    textViewDeck3.setTypeface(null, mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? Typeface.BOLD : Typeface.NORMAL);
 
                     linearLastGame4.setVisibility(View.VISIBLE);
                     textViewPlayer4.setText(lastRecord.getFourthPlace().getDeckOwnerName());
                     textViewDeck4.setText(lastRecord.getFourthPlace().getDeckName());
-                    textViewPlayer4.setTypeface(null, currentDeck.isEqualDeck(lastRecord.getFourthPlace()) ? Typeface.BOLD : Typeface.NORMAL);
-                    textViewDeck4.setTypeface(null, currentDeck.isEqualDeck(lastRecord.getFourthPlace()) ? Typeface.BOLD : Typeface.NORMAL);
+                    textViewPlayer4.setTypeface(null, mCurrentDeck.isEqualDeck(lastRecord.getFourthPlace()) ? Typeface.BOLD : Typeface.NORMAL);
+                    textViewDeck4.setTypeface(null, mCurrentDeck.isEqualDeck(lastRecord.getFourthPlace()) ? Typeface.BOLD : Typeface.NORMAL);
                     break;
             }
         }
 
         //Total games and Chart2 1v1
-        int firstIn2 = recordsDB.getRecordsByPosition(currentDeck, 1, 2).size();
-        int secondIn2 = recordsDB.getRecordsByPosition(currentDeck, 2, 2).size();
+        int firstIn2 = recordsDB.getRecordsByPosition(mCurrentDeck, 1, 2).size();
+        int secondIn2 = recordsDB.getRecordsByPosition(mCurrentDeck, 2, 2).size();
         int total2 = firstIn2 + secondIn2;
 
         cardViewDeckHistory2.setVisibility(View.GONE);
@@ -1000,9 +1218,9 @@ public class DeckActivity extends AppCompatActivity {
         }
 
         //Total games and Chart3 1v1v1
-        int firstIn3 = recordsDB.getRecordsByPosition(currentDeck, 1, 3).size();
-        int secondIn3 = recordsDB.getRecordsByPosition(currentDeck, 2, 3).size();
-        int thirdIn3 = recordsDB.getRecordsByPosition(currentDeck, 3, 3).size();
+        int firstIn3 = recordsDB.getRecordsByPosition(mCurrentDeck, 1, 3).size();
+        int secondIn3 = recordsDB.getRecordsByPosition(mCurrentDeck, 2, 3).size();
+        int thirdIn3 = recordsDB.getRecordsByPosition(mCurrentDeck, 3, 3).size();
         int total3 = firstIn3 + secondIn3 + thirdIn3;
 
         cardViewDeckHistory3.setVisibility(View.GONE);
@@ -1014,10 +1232,10 @@ public class DeckActivity extends AppCompatActivity {
         }
 
         //Total games and Chart4 1v1v1v1
-        int firstIn4 = recordsDB.getRecordsByPosition(currentDeck, 1, 4).size();
-        int secondIn4 = recordsDB.getRecordsByPosition(currentDeck, 2, 4).size();
-        int thirdIn4 = recordsDB.getRecordsByPosition(currentDeck, 3, 4).size();
-        int fourthIn4 = recordsDB.getRecordsByPosition(currentDeck, 4, 4).size();
+        int firstIn4 = recordsDB.getRecordsByPosition(mCurrentDeck, 1, 4).size();
+        int secondIn4 = recordsDB.getRecordsByPosition(mCurrentDeck, 2, 4).size();
+        int thirdIn4 = recordsDB.getRecordsByPosition(mCurrentDeck, 3, 4).size();
+        int fourthIn4 = recordsDB.getRecordsByPosition(mCurrentDeck, 4, 4).size();
         int total4 = firstIn4 + secondIn4 + thirdIn4 + fourthIn4;
 
         cardViewDeckHistory4.setVisibility(View.GONE);

@@ -20,7 +20,8 @@
             android:layout_height="25dp"
             android:layout_margin="5dp"
             android:background="@drawable/checkbox_white"
-            android:button="@null"/>
+            android:button="@null"
+            android:onClick="onClickManaCheckBox"/>
 
         <CheckBox
             android:id="@+id/checkbox_mana_blue"
@@ -28,7 +29,8 @@
             android:layout_height="25dp"
             android:layout_margin="5dp"
             android:background="@drawable/checkbox_blue"
-            android:button="@null"/>
+            android:button="@null"
+            android:onClick="onClickManaCheckBox"/>
 
         <CheckBox
             android:id="@+id/checkbox_mana_black"
@@ -36,7 +38,8 @@
             android:layout_height="25dp"
             android:layout_margin="5dp"
             android:background="@drawable/checkbox_black"
-            android:button="@null"/>
+            android:button="@null"
+            android:onClick="onClickManaCheckBox"/>
 
         <CheckBox
             android:id="@+id/checkbox_mana_red"
@@ -44,7 +47,8 @@
             android:layout_height="25dp"
             android:layout_margin="5dp"
             android:background="@drawable/checkbox_red"
-            android:button="@null"/>
+            android:button="@null"
+            android:onClick="onClickManaCheckBox"/>
 
         <CheckBox
             android:id="@+id/checkbox_mana_green"
@@ -52,7 +56,8 @@
             android:layout_height="25dp"
             android:layout_margin="5dp"
             android:background="@drawable/checkbox_green"
-            android:button="@null"/>
+            android:button="@null"
+            android:onClick="onClickManaCheckBox"/>
 
         <CheckBox
             android:id="@+id/checkbox_mana_colorless"
@@ -60,7 +65,10 @@
             android:layout_height="25dp"
             android:layout_margin="5dp"
             android:background="@drawable/checkbox_colorless"
-            android:button="@null"/>
+            android:button="@null"
+            android:checked="true"
+            android:clickable="false"
+            android:onClick="onClickManaCheckBox"/>
     </LinearLayout>
 
     <View
