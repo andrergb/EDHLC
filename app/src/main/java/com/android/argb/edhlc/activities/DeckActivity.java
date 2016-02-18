@@ -165,6 +165,7 @@ public class DeckActivity extends AppCompatActivity {
     private CheckBox checkBoxManaRed;
     private CheckBox checkBoxManaGreen;
     private CheckBox checkBoxManaColorless;
+    private CollapsingToolbarLayout mCollapsingToolbarLayout;
 
     public static Intent getPickImageIntent() {
         final Intent intent = new Intent();
@@ -744,8 +745,7 @@ public class DeckActivity extends AppCompatActivity {
     private void createLayout(View view) {
         if (view != null) {
 
-            CollapsingToolbarLayout mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.main_collapsing);
-            mCollapsingToolbarLayout.setTitle(mDeckName);
+            mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.main_collapsing);
             mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(this, R.color.white));
             mCollapsingToolbarLayout.setCollapsedTitleTextColor(ContextCompat.getColor(this, R.color.white));
 
@@ -774,14 +774,6 @@ public class DeckActivity extends AppCompatActivity {
 
             //Card Deck info
             cardViewDeckInfo = (CardView) view.findViewById(R.id.cardViewDeckInfo);
-            cardViewDeckInfo.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                @Override
-                public boolean onPreDraw() {
-                    cardViewDeckInfo.getViewTreeObserver().removeOnPreDrawListener(this);
-                    mCardViewFullHeightDeckInfo = cardViewDeckInfo.getHeight();
-                    return true;
-                }
-            });
             relativeTitleDeckInfo = (RelativeLayout) view.findViewById(R.id.relativeTitleDeckInfo);
             textTitleDeckInfo = (TextView) view.findViewById(R.id.textTitleDeckInfo);
             iconIndicatorDeckInfo = (ImageView) view.findViewById(R.id.iconIndicatorDeckInfo);
@@ -816,17 +808,6 @@ public class DeckActivity extends AppCompatActivity {
             textViewTotalGameText2 = (TextView) view.findViewById(R.id.textViewTotalGameText2);
             textViewFirst2 = (TextView) view.findViewById(R.id.textViewFirst2);
             textViewSecond2 = (TextView) view.findViewById(R.id.textViewSecond2);
-            cardViewDeckHistory2.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                @Override
-                public boolean onPreDraw() {
-                    cardViewDeckHistory2.getViewTreeObserver().removeOnPreDrawListener(this);
-                    mCardViewFullHeightDeckHistory2 = cardViewDeckHistory2.getHeight();
-                    ViewGroup.LayoutParams layoutParams = cardViewDeckHistory2.getLayoutParams();
-                    layoutParams.height = relativeTitleDeckHistory2.getHeight();
-                    cardViewDeckHistory2.setLayoutParams(layoutParams);
-                    return true;
-                }
-            });
 
             //Chart 1v1v1
             cardViewDeckHistory3 = (CardView) findViewById(R.id.cardViewDeckHistory3);
@@ -839,17 +820,6 @@ public class DeckActivity extends AppCompatActivity {
             textViewFirst3 = (TextView) view.findViewById(R.id.textViewFirst3);
             textViewSecond3 = (TextView) view.findViewById(R.id.textViewSecond3);
             textViewThird3 = (TextView) view.findViewById(R.id.textViewThird3);
-            cardViewDeckHistory3.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                @Override
-                public boolean onPreDraw() {
-                    cardViewDeckHistory3.getViewTreeObserver().removeOnPreDrawListener(this);
-                    mCardViewFullHeightDeckHistory3 = cardViewDeckHistory3.getHeight();
-                    ViewGroup.LayoutParams layoutParams = cardViewDeckHistory3.getLayoutParams();
-                    layoutParams.height = relativeTitleDeckHistory3.getHeight();
-                    cardViewDeckHistory3.setLayoutParams(layoutParams);
-                    return true;
-                }
-            });
 
             //Chart 1v1v1v1
             cardViewDeckHistory4 = (CardView) findViewById(R.id.cardViewDeckHistory4);
@@ -863,18 +833,6 @@ public class DeckActivity extends AppCompatActivity {
             textViewSecond4 = (TextView) view.findViewById(R.id.textViewSecond4);
             textViewThird4 = (TextView) view.findViewById(R.id.textViewThird4);
             textViewFourth4 = (TextView) view.findViewById(R.id.textViewFourth4);
-
-            cardViewDeckHistory4.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                @Override
-                public boolean onPreDraw() {
-                    cardViewDeckHistory4.getViewTreeObserver().removeOnPreDrawListener(this);
-                    mCardViewFullHeightDeckHistory4 = cardViewDeckHistory4.getHeight();
-                    ViewGroup.LayoutParams layoutParams = cardViewDeckHistory4.getLayoutParams();
-                    layoutParams.height = relativeTitleDeckHistory4.getHeight();
-                    cardViewDeckHistory4.setLayoutParams(layoutParams);
-                    return true;
-                }
-            });
 
             //Chart lastGamePlayed
             cardViewLastGamePlayed = (CardView) findViewById(R.id.cardViewLastGamePlayed);
@@ -898,19 +856,6 @@ public class DeckActivity extends AppCompatActivity {
             linearLastGame4 = (LinearLayout) findViewById(R.id.linearLastGame4);
             textViewPlayer4 = (TextView) view.findViewById(R.id.textViewPlayer4);
             textViewDeck4 = (TextView) view.findViewById(R.id.textViewDeck4);
-
-            cardViewLastGamePlayed.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                @Override
-                public boolean onPreDraw() {
-                    cardViewLastGamePlayed.getViewTreeObserver().removeOnPreDrawListener(this);
-                    mCardViewFullHeightLastGamePlayed = cardViewLastGamePlayed.getHeight();
-                    ViewGroup.LayoutParams layoutParams = cardViewLastGamePlayed.getLayoutParams();
-                    layoutParams.height = relativeTitleLastGamePlayed.getHeight();
-                    cardViewLastGamePlayed.setLayoutParams(layoutParams);
-                    return true;
-                }
-            });
-
         }
     }
 
@@ -1056,7 +1001,10 @@ public class DeckActivity extends AppCompatActivity {
 
     //TODO rename updateList
     private void updateLayout() {
-        //Deck banner image
+        //ToolBar - DeckName
+        mCollapsingToolbarLayout.setTitle(mDeckName);
+
+        //ToolBar - Deck Image
         File croppedImageFile = new File(getFilesDir(), "image_" + mPlayerName + "_" + mDeckName + ".png");
         if (croppedImageFile.isFile()) {
             imageViewBanner.setImageBitmap(BitmapFactory.decodeFile(croppedImageFile.getAbsolutePath()));
@@ -1069,7 +1017,16 @@ public class DeckActivity extends AppCompatActivity {
             imageViewBanner.setLayoutParams(layoutParams);
         }
 
-        //Deck info title
+        //Deck info - Card
+        cardViewDeckInfo.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                cardViewDeckInfo.getViewTreeObserver().removeOnPreDrawListener(this);
+                mCardViewFullHeightDeckInfo = cardViewDeckInfo.getHeight();
+                return true;
+            }
+        });
+        //Deck info - title
         if (cardViewDeckInfo.getHeight() == mCardViewFullHeightDeckInfo) {
             textTitleDeckInfo.setTextColor(ContextCompat.getColor(this, R.color.secondary_color));
             iconIndicatorDeckInfo.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.arrow_up));
@@ -1079,19 +1036,19 @@ public class DeckActivity extends AppCompatActivity {
             iconIndicatorDeckInfo.setColorFilter(ContextCompat.getColor(this, R.color.secondary_text));
         }
 
-        //Deck name
+        //Deck info - Deck name
         textViewCommander.setText(mDeckName);
 
-        //Deck owned
+        //Deck info - Deck owner
         textViewOwnerName.setText(mPlayerName);
 
-        //Creation Date
+        //Deck info - Creation Date
         textViewCreationDate.setText(mCurrentDeck.getDeckCreationDate());
 
-        //Shield color
+        //Deck info - Shield color
         imageViewShieldColor.setColorFilter(decksDB.getDeck(mPlayerName, mDeckName).getDeckShieldColor()[0]);
 
-        //Deck Identity
+        //Deck info - Deck Identity
         listIdentityHolder.get(0).setVisibility(View.GONE);
         listIdentityHolder.get(1).setVisibility(View.GONE);
         listIdentityHolder.get(2).setVisibility(View.GONE);
@@ -1134,6 +1091,18 @@ public class DeckActivity extends AppCompatActivity {
         cardViewLastGamePlayed.setVisibility(View.GONE);
         if (allRecords.size() != 0) {
             cardViewLastGamePlayed.setVisibility(View.VISIBLE);
+            cardViewLastGamePlayed.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                @Override
+                public boolean onPreDraw() {
+                    cardViewLastGamePlayed.getViewTreeObserver().removeOnPreDrawListener(this);
+                    mCardViewFullHeightLastGamePlayed = cardViewLastGamePlayed.getHeight();
+                    ViewGroup.LayoutParams layoutParams = cardViewLastGamePlayed.getLayoutParams();
+                    layoutParams.height = relativeTitleLastGamePlayed.getHeight();
+                    cardViewLastGamePlayed.setLayoutParams(layoutParams);
+                    return true;
+                }
+            });
+
             Record lastRecord = allRecords.get(allRecords.size() - 1);
             textViewRecordDate.setText(lastRecord.getDate());
             switch (lastRecord.getTotalPlayers()) {
@@ -1208,10 +1177,20 @@ public class DeckActivity extends AppCompatActivity {
         int firstIn2 = recordsDB.getRecordsByPosition(mCurrentDeck, 1, 2).size();
         int secondIn2 = recordsDB.getRecordsByPosition(mCurrentDeck, 2, 2).size();
         int total2 = firstIn2 + secondIn2;
-
         cardViewDeckHistory2.setVisibility(View.GONE);
         if (total2 != 0) {
             cardViewDeckHistory2.setVisibility(View.VISIBLE);
+            cardViewDeckHistory2.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                @Override
+                public boolean onPreDraw() {
+                    cardViewDeckHistory2.getViewTreeObserver().removeOnPreDrawListener(this);
+                    mCardViewFullHeightDeckHistory2 = cardViewDeckHistory2.getHeight();
+                    ViewGroup.LayoutParams layoutParams = cardViewDeckHistory2.getLayoutParams();
+                    layoutParams.height = relativeTitleDeckHistory2.getHeight();
+                    cardViewDeckHistory2.setLayoutParams(layoutParams);
+                    return true;
+                }
+            });
             textViewTotalGameNumber2.setText("" + total2);
             textViewTotalGameText2.setText(total2 == 1 ? "game played" : "games played");
             updateDonutChart2(firstIn2, secondIn2);
@@ -1222,10 +1201,20 @@ public class DeckActivity extends AppCompatActivity {
         int secondIn3 = recordsDB.getRecordsByPosition(mCurrentDeck, 2, 3).size();
         int thirdIn3 = recordsDB.getRecordsByPosition(mCurrentDeck, 3, 3).size();
         int total3 = firstIn3 + secondIn3 + thirdIn3;
-
         cardViewDeckHistory3.setVisibility(View.GONE);
         if (total3 != 0) {
             cardViewDeckHistory3.setVisibility(View.VISIBLE);
+            cardViewDeckHistory3.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                @Override
+                public boolean onPreDraw() {
+                    cardViewDeckHistory3.getViewTreeObserver().removeOnPreDrawListener(this);
+                    mCardViewFullHeightDeckHistory3 = cardViewDeckHistory3.getHeight();
+                    ViewGroup.LayoutParams layoutParams = cardViewDeckHistory3.getLayoutParams();
+                    layoutParams.height = relativeTitleDeckHistory3.getHeight();
+                    cardViewDeckHistory3.setLayoutParams(layoutParams);
+                    return true;
+                }
+            });
             textViewTotalGameNumber3.setText("" + total3);
             textViewTotalGameText3.setText(total3 == 1 ? "game played" : "games played");
             updateDonutChart3(firstIn3, secondIn3, thirdIn3);
@@ -1237,18 +1226,28 @@ public class DeckActivity extends AppCompatActivity {
         int thirdIn4 = recordsDB.getRecordsByPosition(mCurrentDeck, 3, 4).size();
         int fourthIn4 = recordsDB.getRecordsByPosition(mCurrentDeck, 4, 4).size();
         int total4 = firstIn4 + secondIn4 + thirdIn4 + fourthIn4;
-
         cardViewDeckHistory4.setVisibility(View.GONE);
         if (total4 != 0) {
             cardViewDeckHistory4.setVisibility(View.VISIBLE);
+            cardViewDeckHistory4.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                @Override
+                public boolean onPreDraw() {
+                    cardViewDeckHistory4.getViewTreeObserver().removeOnPreDrawListener(this);
+                    mCardViewFullHeightDeckHistory4 = cardViewDeckHistory4.getHeight();
+                    ViewGroup.LayoutParams layoutParams = cardViewDeckHistory4.getLayoutParams();
+                    layoutParams.height = relativeTitleDeckHistory4.getHeight();
+                    cardViewDeckHistory4.setLayoutParams(layoutParams);
+                    return true;
+                }
+            });
             textViewTotalGameNumber4.setText("" + total4);
             textViewTotalGameText4.setText(total4 == 1 ? "game played" : "games played");
             updateDonutChart4(firstIn4, secondIn4, thirdIn4, fourthIn4);
         }
 
-        //Total Games
+        //Deck info - Total Games
         textViewTotalGames.setText("" + (total2 + total3 + total4));
-        //Wins
+        //Deck info - Wins
         textViewWins.setText("" + (firstIn2 + firstIn3 + firstIn4));
     }
 }
