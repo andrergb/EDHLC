@@ -66,70 +66,78 @@ import java.util.List;
 public class DeckActivity extends AppCompatActivity {
 
     private static int REQUEST_PICTURE_PICKER = 1;
+
     private Deck mCurrentDeck;
     private String mPlayerName;
     private String mDeckName;
     private String mDeckIdentity;
+
     private DecksDataAccessObject decksDB;
     private RecordsDataAccessObject recordsDB;
+
     //Main card - Deck info
     private CardView cardViewDeckInfo;
+    private int mCardViewFullHeightDeckInfo = 0;
     private RelativeLayout relativeTitleDeckInfo;
     private TextView textTitleDeckInfo;
     private ImageView iconIndicatorDeckInfo;
-    private int mCardViewFullHeightDeckInfo = 0;
-    private ImageView imageViewShieldColor;
     private TextView textViewCommander;
+    private List<ImageView> listIdentityHolder;
+    private TextView textViewWins;
+    private TextView textViewTotalGames;
     private TextView textViewOwnerName;
     private TextView textViewCreationDate;
-    private List<ImageView> listIdentityHolder;
-    private TextView textViewTotalGames;
-    private TextView textViewWins;
+    private ImageView imageViewShieldColor;
     private int[] COLORS;
+
     //Card - Chart deck history 2 - 1v1
     private CardView cardViewDeckHistory2;
-    private ImageView iconIndicatorDeckHistory2;
+    private int mCardViewFullHeightDeckHistory2 = 0;
+    private RelativeLayout relativeTitleDeckHistory2;
     private TextView textTitleDeckHistory2;
-    private TextView textViewFirst2;
-    private TextView textViewSecond2;
+    private ImageView iconIndicatorDeckHistory2;
+    private DefaultRenderer mDoughnutRender2;
     private LinearLayout doughnutChartLinearLayout2;
+    private MultipleCategorySeries mMultipleCategorySeriesDataSet2;
     private TextView textViewTotalGameNumber2;
     private TextView textViewTotalGameText2;
-    private DefaultRenderer mDoughnutRender2;
-    private MultipleCategorySeries mMultipleCategorySeriesDataSet2;
-    private RelativeLayout relativeTitleDeckHistory2;
-    private int mCardViewFullHeightDeckHistory2 = 0;
+    private TextView textViewFirst2;
+    private TextView textViewSecond2;
+
     //Card - Chart deck history 3 - 1v1v1
     private CardView cardViewDeckHistory3;
-    private ImageView iconIndicatorDeckHistory3;
+    private int mCardViewFullHeightDeckHistory3 = 0;
+    private RelativeLayout relativeTitleDeckHistory3;
     private TextView textTitleDeckHistory3;
+    private ImageView iconIndicatorDeckHistory3;
+    private DefaultRenderer mDoughnutRender3;
+    private LinearLayout doughnutChartLinearLayout3;
+    private MultipleCategorySeries mMultipleCategorySeriesDataSet3;
+    private TextView textViewTotalGameNumber3;
+    private TextView textViewTotalGameText3;
     private TextView textViewFirst3;
     private TextView textViewSecond3;
     private TextView textViewThird3;
-    private LinearLayout doughnutChartLinearLayout3;
-    private TextView textViewTotalGameNumber3;
-    private TextView textViewTotalGameText3;
-    private DefaultRenderer mDoughnutRender3;
-    private MultipleCategorySeries mMultipleCategorySeriesDataSet3;
-    private RelativeLayout relativeTitleDeckHistory3;
-    private int mCardViewFullHeightDeckHistory3 = 0;
+
     //Card - Chart deck history 4 - 1v1v1v1
     private CardView cardViewDeckHistory4;
-    private ImageView iconIndicatorDeckHistory4;
+    private int mCardViewFullHeightDeckHistory4 = 0;
+    private RelativeLayout relativeTitleDeckHistory4;
     private TextView textTitleDeckHistory4;
+    private ImageView iconIndicatorDeckHistory4;
+    private DefaultRenderer mDoughnutRender4;
+    private LinearLayout doughnutChartLinearLayout4;
+    private MultipleCategorySeries mMultipleCategorySeriesDataSet4;
+    private TextView textViewTotalGameNumber4;
+    private TextView textViewTotalGameText4;
     private TextView textViewFirst4;
     private TextView textViewSecond4;
     private TextView textViewThird4;
     private TextView textViewFourth4;
-    private LinearLayout doughnutChartLinearLayout4;
-    private TextView textViewTotalGameNumber4;
-    private TextView textViewTotalGameText4;
-    private MultipleCategorySeries mMultipleCategorySeriesDataSet4;
-    private DefaultRenderer mDoughnutRender4;
-    private RelativeLayout relativeTitleDeckHistory4;
-    private int mCardViewFullHeightDeckHistory4 = 0;
+
     //Card - Last game played
     private CardView cardViewLastGamePlayed;
+    private int mCardViewFullHeightLastGamePlayed = 0;
     private RelativeLayout relativeTitleLastGamePlayed;
     private TextView textTitleLastGamePlayed;
     private ImageView iconIndicatorLastGamePlayed;
@@ -146,26 +154,30 @@ public class DeckActivity extends AppCompatActivity {
     private LinearLayout linearLastGame4;
     private TextView textViewPlayer4;
     private TextView textViewDeck4;
-    private int mCardViewFullHeightLastGamePlayed = 0;
+
+    //Toolbar
+    private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private ImageView imageViewBanner;
 
+    ///Drawer
     private DrawerLayout mDeckDrawerLayout;
     private LinearLayout mDeckDrawer;
     private ActionBarDrawerToggle mDrawerToggle;
     private Switch switchScreen;
 
+    //Fab
     private boolean isFabOpen;
     private FloatingActionButton fabMain;
     private FloatingActionButton fabEdit;
     private FloatingActionButton fabDelete;
 
+    //Edit dialog
     private CheckBox checkBoxManaWhite;
     private CheckBox checkBoxManaBlue;
     private CheckBox checkBoxManaBlack;
     private CheckBox checkBoxManaRed;
     private CheckBox checkBoxManaGreen;
     private CheckBox checkBoxManaColorless;
-    private CollapsingToolbarLayout mCollapsingToolbarLayout;
 
     public static Intent getPickImageIntent() {
         final Intent intent = new Intent();
