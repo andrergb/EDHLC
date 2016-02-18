@@ -26,6 +26,7 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -170,6 +171,7 @@ public class DeckActivity extends AppCompatActivity {
     private FloatingActionButton fabMain;
     private FloatingActionButton fabEdit;
     private FloatingActionButton fabDelete;
+    private View fabDismissView;
 
     //Edit dialog
     private CheckBox checkBoxManaWhite;
@@ -192,6 +194,9 @@ public class DeckActivity extends AppCompatActivity {
         Animation rotate45Clockwise = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_45_clockwise);
         Animation rotate45Anticlockwise = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_45_anticlockwise);
         if (isFabOpen) {
+            fabDismissView.setClickable(false);
+            fabDismissView.setVisibility(View.GONE);
+
             fabMain.startAnimation(rotate45Anticlockwise);
             fabMain.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.accent_color)));
 
@@ -205,6 +210,9 @@ public class DeckActivity extends AppCompatActivity {
 
             isFabOpen = false;
         } else {
+            fabDismissView.setClickable(true);
+            fabDismissView.setVisibility(View.VISIBLE);
+
             fabMain.startAnimation(rotate45Clockwise);
             fabMain.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.accent_secondary_color)));
 
@@ -756,10 +764,20 @@ public class DeckActivity extends AppCompatActivity {
 
     private void createLayout(View view) {
         if (view != null) {
-
             mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.main_collapsing);
-            mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(this, R.color.white));
-            mCollapsingToolbarLayout.setCollapsedTitleTextColor(ContextCompat.getColor(this, R.color.white));
+
+            fabDismissView = findViewById(R.id.fabDismissView);
+            fabDismissView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        if (fabMain.getVisibility() == View.VISIBLE && isFabOpen) {
+                            animateFAB();
+                        }
+                    }
+                    return true;
+                }
+            });
 
             //Drawer
             switchScreen = (Switch) findViewById(R.id.switchScreen);
@@ -1011,7 +1029,6 @@ public class DeckActivity extends AppCompatActivity {
         }
     }
 
-    //TODO rename updateList
     private void updateLayout() {
         //ToolBar - DeckName
         mCollapsingToolbarLayout.setTitle(mDeckName);
@@ -1273,4 +1290,15 @@ public class DeckActivity extends AppCompatActivity {
         //Deck info - Wins
         textViewWins.setText("" + (firstIn2 + firstIn3 + firstIn4));
     }
+
+//    @Override
+//    public boolean dispatchTouchEvent(MotionEvent event){
+//        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//            if(fabMain.getVisibility() == View.VISIBLE && isFabOpen){
+//                animateFAB();
+//            }
+//        }
+//
+//        return super.dispatchTouchEvent(event);
+//    }
 }

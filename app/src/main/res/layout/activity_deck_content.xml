@@ -24,11 +24,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
+                app:collapsedTitleTextAppearance="@style/CollapsedAppBarCollapsed"
                 app:contentScrim="@color/primary_color"
                 app:expandedTitleGravity="center_horizontal|bottom"
                 app:expandedTitleMarginBottom="16dp"
                 app:expandedTitleMarginEnd="16dp"
                 app:expandedTitleMarginStart="16dp"
+                app:expandedTitleTextAppearance="@style/CollapsedAppBarExpanded"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
                 app:statusBarScrim="@color/secondary_color">
 
@@ -45,7 +47,6 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:layout_alignBottom="@+id/image"
                     android:layout_gravity="bottom"
                     android:background="@drawable/scrim_bottom"/>
 
@@ -1195,6 +1196,15 @@
                 </android.support.v7.widget.CardView>
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
+
+        <View
+            android:id="@+id/fabDismissView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.8"
+            android:background="@color/white"
+            android:fitsSystemWindows="true"
+            android:visibility="gone"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fabEdit"

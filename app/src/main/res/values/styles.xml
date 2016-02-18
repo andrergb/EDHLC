@@ -15,4 +15,17 @@
     <style name="MyActionBarParallax" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
         <item name="android:textColorSecondary">#FFFFFF</item>
     </style>
+
+    <style name="CollapsedAppBarExpanded" parent="@android:style/Widget.Material.Toolbar">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">"sans-serif-medium"</item>
+    </style>
+
+    <style name="CollapsedAppBarCollapsed" parent="@android:style/Widget.Material.Toolbar">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">"sans-serif-medium"</item>
+    </style>
 </resources>
