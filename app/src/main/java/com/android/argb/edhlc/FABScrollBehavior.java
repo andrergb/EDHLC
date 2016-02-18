@@ -24,6 +24,11 @@ public class FABScrollBehavior extends FloatingActionButton.Behavior {
         } else if (dyConsumed < 0 && child.getVisibility() == View.GONE) {
             child.show();
         }
+        if (dyUnconsumed > 0 && child.getVisibility() == View.VISIBLE) {
+            child.hide();
+        } else if (dyUnconsumed < 0 && child.getVisibility() == View.GONE) {
+            child.show();
+        }
     }
 
     @Override
