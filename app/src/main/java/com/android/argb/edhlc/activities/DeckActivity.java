@@ -189,11 +189,10 @@ public class DeckActivity extends AppCompatActivity {
     }
 
     public void animateFAB() {
-        Animation fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
-        Animation fab_close = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
-        Animation rotate45Clockwise = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_45_clockwise);
-        Animation rotate45Anticlockwise = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_45_anticlockwise);
         if (isFabOpen) {
+            Animation fab_close = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
+            Animation rotate45Anticlockwise = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_45_anticlockwise);
+
             fabDismissView.setClickable(false);
             fabDismissView.setVisibility(View.GONE);
 
@@ -201,15 +200,16 @@ public class DeckActivity extends AppCompatActivity {
             fabMain.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.accent_color)));
 
             fabEdit.setClickable(false);
-            fabEdit.setVisibility(View.GONE);
             fabEdit.startAnimation(fab_close);
 
             fabDelete.setClickable(false);
-            fabDelete.setVisibility(View.GONE);
             fabDelete.startAnimation(fab_close);
 
             isFabOpen = false;
         } else {
+            Animation fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
+            Animation rotate45Clockwise = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_45_clockwise);
+
             fabDismissView.setClickable(true);
             fabDismissView.setVisibility(View.VISIBLE);
 
@@ -217,14 +217,12 @@ public class DeckActivity extends AppCompatActivity {
             fabMain.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.accent_secondary_color)));
 
             fabEdit.setClickable(true);
-            fabEdit.setVisibility(View.VISIBLE);
             fabEdit.startAnimation(fab_open);
             CoordinatorLayout.LayoutParams p = (CoordinatorLayout.LayoutParams) fabEdit.getLayoutParams();
             p.setBehavior(new FABScrollBehavior());
             fabEdit.setLayoutParams(p);
 
             fabDelete.setClickable(true);
-            fabDelete.setVisibility(View.VISIBLE);
             fabDelete.startAnimation(fab_open);
             p = (CoordinatorLayout.LayoutParams) fabDelete.getLayoutParams();
             p.setBehavior(new FABScrollBehavior());
@@ -323,9 +321,11 @@ public class DeckActivity extends AppCompatActivity {
                 break;
             case R.id.fabEdit:
                 createEditDeckDialog();
+                animateFAB();
                 break;
             case R.id.fabDelete:
                 createRemoveDeckDialog();
+                animateFAB();
                 break;
         }
     }
