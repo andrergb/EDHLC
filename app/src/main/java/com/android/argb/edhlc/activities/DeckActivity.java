@@ -146,18 +146,22 @@ public class DeckActivity extends AppCompatActivity {
     private ImageView iconIndicatorLastGamePlayed;
     private TextView textViewRecordDate;
     private LinearLayout linearLastGame1;
-    private View deckInfoDivider1;
+    private TextView textViewFirstIndicator;
     private TextView textViewPlayer1;
     private TextView textViewDeck1;
+    private View deckInfoDivider1;
     private LinearLayout linearLastGame2;
-    private View deckInfoDivider2;
+    private TextView textViewSecondIndicator;
     private TextView textViewPlayer2;
     private TextView textViewDeck2;
+    private View deckInfoDivider2;
     private LinearLayout linearLastGame3;
-    private View deckInfoDivider3;
+    private TextView textViewThirdIndicator;
     private TextView textViewPlayer3;
     private TextView textViewDeck3;
+    private View deckInfoDivider3;
     private LinearLayout linearLastGame4;
+    private TextView textViewFourthIndicator;
     private TextView textViewPlayer4;
     private TextView textViewDeck4;
 
@@ -185,6 +189,7 @@ public class DeckActivity extends AppCompatActivity {
     private CheckBox checkBoxManaRed;
     private CheckBox checkBoxManaGreen;
     private CheckBox checkBoxManaColorless;
+
 
     public static Intent getPickImageIntent() {
         final Intent intent = new Intent();
@@ -928,23 +933,28 @@ public class DeckActivity extends AppCompatActivity {
             textViewRecordDate = (TextView) findViewById(R.id.textViewRecordDate);
 
             linearLastGame1 = (LinearLayout) findViewById(R.id.linearLastGame1);
-            deckInfoDivider1 = (View) findViewById(R.id.deckInfoDivider1);
+            textViewFirstIndicator = (TextView) findViewById(R.id.textViewFirstIndicator);
             textViewPlayer1 = (TextView) view.findViewById(R.id.textViewPlayer1);
             textViewDeck1 = (TextView) view.findViewById(R.id.textViewDeck1);
+            deckInfoDivider1 = findViewById(R.id.deckInfoDivider1);
 
             linearLastGame2 = (LinearLayout) findViewById(R.id.linearLastGame2);
-            deckInfoDivider2 = (View) findViewById(R.id.deckInfoDivider2);
+            textViewSecondIndicator = (TextView) findViewById(R.id.textViewSecondIndicator);
             textViewPlayer2 = (TextView) view.findViewById(R.id.textViewPlayer2);
             textViewDeck2 = (TextView) view.findViewById(R.id.textViewDeck2);
+            deckInfoDivider2 = findViewById(R.id.deckInfoDivider2);
 
             linearLastGame3 = (LinearLayout) findViewById(R.id.linearLastGame3);
-            deckInfoDivider3 = (View) findViewById(R.id.deckInfoDivider3);
+            textViewThirdIndicator = (TextView) findViewById(R.id.textViewThirdIndicator);
             textViewPlayer3 = (TextView) view.findViewById(R.id.textViewPlayer3);
             textViewDeck3 = (TextView) view.findViewById(R.id.textViewDeck3);
+            deckInfoDivider3 = findViewById(R.id.deckInfoDivider3);
 
             linearLastGame4 = (LinearLayout) findViewById(R.id.linearLastGame4);
+            textViewFourthIndicator = (TextView) findViewById(R.id.textViewFourthIndicator);
             textViewPlayer4 = (TextView) view.findViewById(R.id.textViewPlayer4);
             textViewDeck4 = (TextView) view.findViewById(R.id.textViewDeck4);
+
         }
     }
 
@@ -1195,10 +1205,6 @@ public class DeckActivity extends AppCompatActivity {
                 });
             }
 
-            TextView textViewFirstIndicator = (TextView) findViewById(R.id.textViewFirstIndicator);
-            TextView textViewSecondIndicator = (TextView) findViewById(R.id.textViewSecondIndicator);
-            TextView textViewThirdIndicator = (TextView) findViewById(R.id.textViewThirdIndicator);
-            TextView textViewFourthIndicator = (TextView) findViewById(R.id.textViewFourthIndicator);
             Typeface typefaceMedium = Typeface.create("sans-serif-medium", Typeface.NORMAL);
             Typeface typefaceNormal = Typeface.create("sans-serif", Typeface.NORMAL);
             int colorSelected = ContextCompat.getColor(this, R.color.accent_color);
