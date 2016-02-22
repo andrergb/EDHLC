@@ -32,7 +32,7 @@
                 app:expandedTitleMarginStart="16dp"
                 app:expandedTitleTextAppearance="@style/CollapsedAppBarExpanded"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                app:statusBarScrim="@color/secondary_color">
+                app:statusBarScrim="@color/primary_color">
 
                 <ImageView
                     android:id="@+id/imageViewBanner"
@@ -411,6 +411,7 @@
 
                                     <!-- Shield color -->
                                     <LinearLayout
+                                        android:id="@+id/linearShieldColor"
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         android:orientation="vertical">
@@ -681,7 +682,7 @@
                             <!-- Full chart -->
                             <RelativeLayout
                                 android:layout_width="0dp"
-                                android:layout_height="150dp"
+                                android:layout_height="145dp"
                                 android:layout_weight="0.5"
                                 android:gravity="center">
 
@@ -852,7 +853,7 @@
                             <!-- Full chart -->
                             <RelativeLayout
                                 android:layout_width="0dp"
-                                android:layout_height="150dp"
+                                android:layout_height="145dp"
                                 android:layout_weight="0.5"
                                 android:gravity="center">
 
@@ -1046,7 +1047,7 @@
                             <!-- Full chart -->
                             <RelativeLayout
                                 android:layout_width="0dp"
-                                android:layout_height="150dp"
+                                android:layout_height="145dp"
                                 android:layout_weight="0.5"
                                 android:gravity="center">
 

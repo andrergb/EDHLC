@@ -1,12 +1,51 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:orientation="vertical">
+              android:orientation="vertical"
+              android:padding="5dp">
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="20dp"/>
+        android:layout_height="10dp"/>
 
+    <!-- Shield color -->
+    <LinearLayout
+        android:id="@+id/linearEditShieldColor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Shield color:"
+            android:textColor="@color/primary_text"
+            android:textSize="16sp"/>
+
+        <View
+            android:layout_width="10dp"
+            android:layout_height="match_parent"/>
+
+        <ImageView
+            android:id="@+id/imageViewEditShieldColor"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:src="@drawable/icon_circle"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="5dp"/>
+
+    <!-- Identity -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -73,10 +112,21 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="10dp"/>
+        android:layout_height="5dp"/>
 
+    <!-- Dummy item to prevent EditText from receiving focus -->
+    <LinearLayout
+        android:layout_width="0px"
+        android:layout_height="0px"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+
+        <requestFocus/>
+    </LinearLayout>
+
+    <!-- Commander -->
     <EditText
-        android:id="@+id/editTextDeckName"
+        android:id="@+id/editTextEditDeckName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
@@ -84,8 +134,4 @@
         android:gravity="center"
         android:hint="@string/hint_deckName"
         android:inputType="textPersonName|textAutoCorrect|textCapSentences"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="10dp"/>
 </LinearLayout>

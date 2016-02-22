@@ -5,6 +5,7 @@
     <item name="white" type="color">#FFFFFF</item>
     <item name="black" type="color">#000000</item>
     <item name="white_transparent" type="color">#80ffffff</item>
+    <item name="black_transparent" type="color">#3a000000</item>
 
     <!-- GRAY -->
     <item name="gray200" type="color">#EEEEEE</item>
@@ -38,6 +39,7 @@
     <item name="light_primary_color" type="color">#FFC5CAE9</item>
     <item name="accent_color" type="color">#FFFF3D00</item>
     <item name="accent_secondary_color" type="color">#FFFF9E80</item>
+    <item name="accent_secondary_black_color" type="color">#b62b00</item>
 
     <item name="primary_text" type="color">#FF212121</item>
     <item name="secondary_text" type="color">#FF727272</item>

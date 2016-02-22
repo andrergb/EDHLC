@@ -47,6 +47,8 @@ import android.widget.Toast;
 import com.android.argb.edhlc.Constants;
 import com.android.argb.edhlc.FABScrollBehavior;
 import com.android.argb.edhlc.R;
+import com.android.argb.edhlc.colorpicker.ColorPickerDialog;
+import com.android.argb.edhlc.colorpicker.ColorPickerSwatch;
 import com.android.argb.edhlc.database.deck.DecksDataAccessObject;
 import com.android.argb.edhlc.database.record.RecordsDataAccessObject;
 import com.android.argb.edhlc.objects.Deck;
@@ -214,7 +216,7 @@ public class DeckActivity extends AppCompatActivity {
             fabDismissView.setVisibility(View.VISIBLE);
 
             fabMain.startAnimation(rotate45Clockwise);
-            fabMain.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.accent_secondary_color)));
+            fabMain.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.accent_secondary_black_color)));
 
             fabEdit.setClickable(true);
             fabEdit.startAnimation(fab_open);
@@ -331,7 +333,23 @@ public class DeckActivity extends AppCompatActivity {
     }
 
     public void onClickImageBanner(View view) {
-        startActivityForResult(getPickImageIntent(), REQUEST_PICTURE_PICKER);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(DeckActivity.this);
+        alertDialogBuilder.setTitle("Pick image");
+//        alertDialogBuilder.setMessage("");
+        alertDialogBuilder.setPositiveButton("PICK IMAGE",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        startActivityForResult(getPickImageIntent(), REQUEST_PICTURE_PICKER);
+                    }
+                });
+        alertDialogBuilder.setNeutralButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
     public void onClickManaCheckBox(View view) {
@@ -571,7 +589,7 @@ public class DeckActivity extends AppCompatActivity {
             Window window = this.getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(ContextCompat.getColor(this, android.R.color.transparent));
+            window.setStatusBarColor(ContextCompat.getColor(this, R.color.black_transparent));
         }
 
         assert getSupportActionBar() != null;
@@ -681,7 +699,9 @@ public class DeckActivity extends AppCompatActivity {
 
     private void createEditDeckDialog() {
         View dialogDeckView = LayoutInflater.from(DeckActivity.this).inflate(R.layout.dialog_deck, null);
-        final EditText userInput = (EditText) dialogDeckView.findViewById(R.id.editTextDeckName);
+        final EditText userInput = (EditText) dialogDeckView.findViewById(R.id.editTextEditDeckName);
+        final ImageView shieldColor = (ImageView) dialogDeckView.findViewById(R.id.imageViewEditShieldColor);
+        final LinearLayout linearEditShieldColor = (LinearLayout) dialogDeckView.findViewById(R.id.linearEditShieldColor);
         checkBoxManaWhite = (CheckBox) dialogDeckView.findViewById(R.id.checkbox_mana_white);
         checkBoxManaBlue = (CheckBox) dialogDeckView.findViewById(R.id.checkbox_mana_blue);
         checkBoxManaBlack = (CheckBox) dialogDeckView.findViewById(R.id.checkbox_mana_black);
@@ -689,7 +709,34 @@ public class DeckActivity extends AppCompatActivity {
         checkBoxManaGreen = (CheckBox) dialogDeckView.findViewById(R.id.checkbox_mana_green);
         checkBoxManaColorless = (CheckBox) dialogDeckView.findViewById(R.id.checkbox_mana_colorless);
 
+        final int[] editShieldColor = new int[]{mCurrentDeck.getDeckShieldColor()[0], mCurrentDeck.getDeckShieldColor()[1]};
+
         userInput.setText(mDeckName);
+        shieldColor.setColorFilter(mCurrentDeck.getDeckShieldColor()[0]);
+        linearEditShieldColor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final int[] mColor = getResources().getIntArray(R.array.edh_shield_colors);
+                final int[] mColor_dark = getResources().getIntArray(R.array.edh_shield_colors_dark);
+                ColorPickerDialog colorCalendar = ColorPickerDialog.newInstance(R.string.color_picker_default_title, mColor, editShieldColor[0], 5, ColorPickerDialog.SIZE_SMALL);
+                colorCalendar.setOnColorSelectedListener(new ColorPickerSwatch.OnColorSelectedListener() {
+                    @Override
+                    public void onColorSelected(int color) {
+                        int color_dark = color;
+                        for (int i = 0; i < mColor.length; i++)
+                            if (mColor[i] == color)
+                                color_dark = mColor_dark[i];
+
+                        editShieldColor[0] = color;
+                        editShieldColor[1] = color_dark;
+
+                        shieldColor.setColorFilter(color);
+                    }
+                });
+                colorCalendar.show(getFragmentManager(), "cal");
+            }
+        });
+
         final String currentColorIdentity = mCurrentDeck.getDeckIdentity();
         checkBoxManaWhite.setChecked(currentColorIdentity.length() >= 0 && currentColorIdentity.charAt(0) == '1');
         checkBoxManaBlue.setChecked(currentColorIdentity.length() >= 1 && currentColorIdentity.charAt(1) == '1');
@@ -713,7 +760,7 @@ public class DeckActivity extends AppCompatActivity {
                     }
                 });
         final AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         alertDialog.show();
 
         //Override POSITIVE button
@@ -733,6 +780,12 @@ public class DeckActivity extends AppCompatActivity {
                     if (!colorIdentity.equalsIgnoreCase(currentColorIdentity)) {
                         decksDB.updateDeckIdentity(mCurrentDeck, colorIdentity);
                         mDeckIdentity = colorIdentity;
+                        mCurrentDeck = decksDB.getDeck(mPlayerName, mDeckName);
+                        updateLayout();
+                    }
+
+                    if (editShieldColor[0] != mCurrentDeck.getDeckShieldColor()[0] && editShieldColor[1] != mCurrentDeck.getDeckShieldColor()[1]) {
+                        decksDB.updateDeckShieldColor(mCurrentDeck, editShieldColor);
                         mCurrentDeck = decksDB.getDeck(mPlayerName, mDeckName);
                         updateLayout();
                     }
@@ -1077,7 +1130,7 @@ public class DeckActivity extends AppCompatActivity {
         textViewCreationDate.setText(mCurrentDeck.getDeckCreationDate());
 
         //Deck info - Shield color
-        imageViewShieldColor.setColorFilter(decksDB.getDeck(mPlayerName, mDeckName).getDeckShieldColor()[0]);
+        imageViewShieldColor.setColorFilter(mCurrentDeck.getDeckShieldColor()[0]);
 
         //Deck info - Deck Identity
         listIdentityHolder.get(0).setVisibility(View.GONE);

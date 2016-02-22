@@ -197,6 +197,16 @@ public class DecksDataAccessObject {
                 new String[]{deck.getDeckOwnerName(), deck.getDeckName()});
     }
 
+    public int updateDeckShieldColor(Deck deck, int[] colors) {
+        ContentValues values = new ContentValues();
+        values.put(DecksContract.DecksEntry.COLUMN_DECK_COLOR, String.valueOf(colors[0]) + System.getProperty("path.separator") + String.valueOf(colors[1]));
+
+        return database.update(DecksContract.DecksEntry.TABLE_NAME,
+                values,
+                DecksContract.DecksEntry.COLUMN_PLAYER_NAME + " LIKE ? AND " + DecksContract.DecksEntry.COLUMN_DECK_NAME + " LIKE ?",
+                new String[]{deck.getDeckOwnerName(), deck.getDeckName()});
+    }
+
     private Deck cursorToDeck(Cursor cursor) {
         Deck deck = new Deck();
         deck.setDeckOwnerName(cursor.getString(cursor.getColumnIndexOrThrow(DecksContract.DecksEntry.COLUMN_PLAYER_NAME)));

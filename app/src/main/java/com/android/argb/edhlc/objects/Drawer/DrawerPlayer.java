@@ -235,7 +235,7 @@ public class DrawerPlayer {
 
     private void createEditDeckDialog(final View view, final Deck oldDeck) {
         View playerNameView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_deck, null);
-        final EditText userInput = (EditText) playerNameView.findViewById(R.id.editTextDeckName);
+        final EditText userInput = (EditText) playerNameView.findViewById(R.id.editTextEditDeckName);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
         alertDialogBuilder.setView(playerNameView);
         alertDialogBuilder.setTitle("Edit Deck");

@@ -247,7 +247,7 @@ public class PlayerListActivity extends AppCompatActivity {
 
     private void createAddDeckDialog(final View view, final String player, final int position) {
         View playerNameView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_deck, null);
-        final EditText userInput = (EditText) playerNameView.findViewById(R.id.editTextDeckName);
+        final EditText userInput = (EditText) playerNameView.findViewById(R.id.editTextEditDeckName);
         checkBoxManaWhite = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_white);
         checkBoxManaBlue = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_blue);
         checkBoxManaBlack = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_black);
