@@ -144,14 +144,17 @@ public class DeckActivity extends AppCompatActivity {
     private RelativeLayout relativeTitleLastGamePlayed;
     private TextView textTitleLastGamePlayed;
     private ImageView iconIndicatorLastGamePlayed;
-    private LinearLayout linearLastGame1;
     private TextView textViewRecordDate;
+    private LinearLayout linearLastGame1;
+    private View deckInfoDivider1;
     private TextView textViewPlayer1;
     private TextView textViewDeck1;
     private LinearLayout linearLastGame2;
+    private View deckInfoDivider2;
     private TextView textViewPlayer2;
     private TextView textViewDeck2;
     private LinearLayout linearLastGame3;
+    private View deckInfoDivider3;
     private TextView textViewPlayer3;
     private TextView textViewDeck3;
     private LinearLayout linearLastGame4;
@@ -925,14 +928,17 @@ public class DeckActivity extends AppCompatActivity {
             textViewRecordDate = (TextView) findViewById(R.id.textViewRecordDate);
 
             linearLastGame1 = (LinearLayout) findViewById(R.id.linearLastGame1);
+            deckInfoDivider1 = (View) findViewById(R.id.deckInfoDivider1);
             textViewPlayer1 = (TextView) view.findViewById(R.id.textViewPlayer1);
             textViewDeck1 = (TextView) view.findViewById(R.id.textViewDeck1);
 
             linearLastGame2 = (LinearLayout) findViewById(R.id.linearLastGame2);
+            deckInfoDivider2 = (View) findViewById(R.id.deckInfoDivider2);
             textViewPlayer2 = (TextView) view.findViewById(R.id.textViewPlayer2);
             textViewDeck2 = (TextView) view.findViewById(R.id.textViewDeck2);
 
             linearLastGame3 = (LinearLayout) findViewById(R.id.linearLastGame3);
+            deckInfoDivider3 = (View) findViewById(R.id.deckInfoDivider3);
             textViewPlayer3 = (TextView) view.findViewById(R.id.textViewPlayer3);
             textViewDeck3 = (TextView) view.findViewById(R.id.textViewDeck3);
 
@@ -1189,72 +1195,132 @@ public class DeckActivity extends AppCompatActivity {
                 });
             }
 
+            TextView textViewFirstIndicator = (TextView) findViewById(R.id.textViewFirstIndicator);
+            TextView textViewSecondIndicator = (TextView) findViewById(R.id.textViewSecondIndicator);
+            TextView textViewThirdIndicator = (TextView) findViewById(R.id.textViewThirdIndicator);
+            TextView textViewFourthIndicator = (TextView) findViewById(R.id.textViewFourthIndicator);
+            Typeface typefaceMedium = Typeface.create("sans-serif-medium", Typeface.NORMAL);
+            Typeface typefaceNormal = Typeface.create("sans-serif", Typeface.NORMAL);
+            int colorSelected = ContextCompat.getColor(this, R.color.accent_color);
+            int colorPrimary = ContextCompat.getColor(this, R.color.primary_text);
+            int colorSecondary = ContextCompat.getColor(this, R.color.secondary_text);
+
             Record lastRecord = allRecords.get(allRecords.size() - 1);
             textViewRecordDate.setText(lastRecord.getDate());
             switch (lastRecord.getTotalPlayers()) {
                 case 2:
                     linearLastGame1.setVisibility(View.VISIBLE);
-                    textViewPlayer1.setText(lastRecord.getFirstPlace().getDeckOwnerName());
-                    textViewDeck1.setText(lastRecord.getFirstPlace().getDeckName());
-                    textViewPlayer1.setTypeface(null, mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? Typeface.BOLD : Typeface.NORMAL);
-                    textViewDeck1.setTypeface(null, mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? Typeface.BOLD : Typeface.NORMAL);
-
                     linearLastGame2.setVisibility(View.VISIBLE);
-                    textViewPlayer2.setText(lastRecord.getSecondPlace().getDeckOwnerName());
-                    textViewDeck2.setText(lastRecord.getSecondPlace().getDeckName());
-                    textViewPlayer2.setTypeface(null, mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? Typeface.BOLD : Typeface.NORMAL);
-                    textViewDeck2.setTypeface(null, mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? Typeface.BOLD : Typeface.NORMAL);
-
                     linearLastGame3.setVisibility(View.GONE);
                     linearLastGame4.setVisibility(View.GONE);
+
+                    deckInfoDivider1.setVisibility(View.VISIBLE);
+                    deckInfoDivider2.setVisibility(View.GONE);
+                    deckInfoDivider3.setVisibility(View.GONE);
+
+                    textViewDeck1.setText(lastRecord.getFirstPlace().getDeckName());
+                    textViewDeck1.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? colorSelected : colorPrimary);
+                    textViewDeck1.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? typefaceMedium : typefaceNormal);
+                    textViewPlayer1.setText(lastRecord.getFirstPlace().getDeckOwnerName());
+                    textViewPlayer1.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? colorSelected : colorSecondary);
+                    textViewPlayer1.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? typefaceMedium : typefaceNormal);
+                    textViewFirstIndicator.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? colorSelected : colorSecondary);
+                    textViewFirstIndicator.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? typefaceMedium : typefaceNormal);
+
+                    textViewDeck2.setText(lastRecord.getSecondPlace().getDeckName());
+                    textViewDeck2.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? colorSelected : colorPrimary);
+                    textViewDeck2.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? typefaceMedium : typefaceNormal);
+                    textViewPlayer2.setText(lastRecord.getSecondPlace().getDeckOwnerName());
+                    textViewPlayer2.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? colorSelected : colorSecondary);
+                    textViewPlayer2.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? typefaceMedium : typefaceNormal);
+                    textViewSecondIndicator.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? colorSelected : colorSecondary);
+                    textViewSecondIndicator.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? typefaceMedium : typefaceNormal);
+
                     break;
 
                 case 3:
                     linearLastGame1.setVisibility(View.VISIBLE);
-                    textViewPlayer1.setText(lastRecord.getFirstPlace().getDeckOwnerName());
-                    textViewDeck1.setText(lastRecord.getFirstPlace().getDeckName());
-                    textViewPlayer1.setTypeface(null, mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? Typeface.BOLD : Typeface.NORMAL);
-                    textViewDeck1.setTypeface(null, mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? Typeface.BOLD : Typeface.NORMAL);
-
                     linearLastGame2.setVisibility(View.VISIBLE);
-                    textViewPlayer2.setText(lastRecord.getSecondPlace().getDeckOwnerName());
-                    textViewDeck2.setText(lastRecord.getSecondPlace().getDeckName());
-                    textViewPlayer2.setTypeface(null, mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? Typeface.BOLD : Typeface.NORMAL);
-                    textViewDeck2.setTypeface(null, mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? Typeface.BOLD : Typeface.NORMAL);
-
                     linearLastGame3.setVisibility(View.VISIBLE);
-                    textViewPlayer3.setText(lastRecord.getThirdPlace().getDeckOwnerName());
-                    textViewDeck3.setText(lastRecord.getThirdPlace().getDeckName());
-                    textViewPlayer3.setTypeface(null, mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? Typeface.BOLD : Typeface.NORMAL);
-                    textViewDeck3.setTypeface(null, mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? Typeface.BOLD : Typeface.NORMAL);
-
                     linearLastGame4.setVisibility(View.GONE);
+
+                    deckInfoDivider1.setVisibility(View.VISIBLE);
+                    deckInfoDivider2.setVisibility(View.VISIBLE);
+                    deckInfoDivider3.setVisibility(View.GONE);
+
+                    textViewDeck1.setText(lastRecord.getFirstPlace().getDeckName());
+                    textViewDeck1.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? colorSelected : colorPrimary);
+                    textViewDeck1.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? typefaceMedium : typefaceNormal);
+                    textViewPlayer1.setText(lastRecord.getFirstPlace().getDeckOwnerName());
+                    textViewPlayer1.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? colorSelected : colorSecondary);
+                    textViewPlayer1.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? typefaceMedium : typefaceNormal);
+                    textViewFirstIndicator.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? colorSelected : colorSecondary);
+                    textViewFirstIndicator.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? typefaceMedium : typefaceNormal);
+
+                    textViewDeck2.setText(lastRecord.getSecondPlace().getDeckName());
+                    textViewDeck2.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? colorSelected : colorPrimary);
+                    textViewDeck2.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? typefaceMedium : typefaceNormal);
+                    textViewPlayer2.setText(lastRecord.getSecondPlace().getDeckOwnerName());
+                    textViewPlayer2.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? colorSelected : colorSecondary);
+                    textViewPlayer2.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? typefaceMedium : typefaceNormal);
+                    textViewSecondIndicator.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? colorSelected : colorSecondary);
+                    textViewSecondIndicator.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? typefaceMedium : typefaceNormal);
+
+                    textViewDeck3.setText(lastRecord.getThirdPlace().getDeckName());
+                    textViewDeck3.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? colorSelected : colorPrimary);
+                    textViewDeck3.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? typefaceMedium : typefaceNormal);
+                    textViewPlayer3.setText(lastRecord.getThirdPlace().getDeckOwnerName());
+                    textViewPlayer3.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? colorSelected : colorSecondary);
+                    textViewPlayer3.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? typefaceMedium : typefaceNormal);
+                    textViewThirdIndicator.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? colorSelected : colorSecondary);
+                    textViewThirdIndicator.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? typefaceMedium : typefaceNormal);
                     break;
 
                 case 4:
                     linearLastGame1.setVisibility(View.VISIBLE);
-                    textViewPlayer1.setText(lastRecord.getFirstPlace().getDeckOwnerName());
-                    textViewDeck1.setText(lastRecord.getFirstPlace().getDeckName());
-                    textViewPlayer1.setTypeface(null, mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? Typeface.BOLD : Typeface.NORMAL);
-                    textViewDeck1.setTypeface(null, mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? Typeface.BOLD : Typeface.NORMAL);
-
                     linearLastGame2.setVisibility(View.VISIBLE);
-                    textViewPlayer2.setText(lastRecord.getSecondPlace().getDeckOwnerName());
-                    textViewDeck2.setText(lastRecord.getSecondPlace().getDeckName());
-                    textViewPlayer2.setTypeface(null, mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? Typeface.BOLD : Typeface.NORMAL);
-                    textViewDeck2.setTypeface(null, mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? Typeface.BOLD : Typeface.NORMAL);
-
                     linearLastGame3.setVisibility(View.VISIBLE);
-                    textViewPlayer3.setText(lastRecord.getThirdPlace().getDeckOwnerName());
-                    textViewDeck3.setText(lastRecord.getThirdPlace().getDeckName());
-                    textViewPlayer3.setTypeface(null, mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? Typeface.BOLD : Typeface.NORMAL);
-                    textViewDeck3.setTypeface(null, mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? Typeface.BOLD : Typeface.NORMAL);
-
                     linearLastGame4.setVisibility(View.VISIBLE);
-                    textViewPlayer4.setText(lastRecord.getFourthPlace().getDeckOwnerName());
+
+                    deckInfoDivider1.setVisibility(View.VISIBLE);
+                    deckInfoDivider2.setVisibility(View.VISIBLE);
+                    deckInfoDivider3.setVisibility(View.VISIBLE);
+
+                    textViewDeck1.setText(lastRecord.getFirstPlace().getDeckName());
+                    textViewDeck1.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? colorSelected : colorPrimary);
+                    textViewDeck1.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? typefaceMedium : typefaceNormal);
+                    textViewPlayer1.setText(lastRecord.getFirstPlace().getDeckOwnerName());
+                    textViewPlayer1.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? colorSelected : colorSecondary);
+                    textViewPlayer1.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? typefaceMedium : typefaceNormal);
+                    textViewFirstIndicator.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? colorSelected : colorSecondary);
+                    textViewFirstIndicator.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? typefaceMedium : typefaceNormal);
+
+                    textViewDeck2.setText(lastRecord.getSecondPlace().getDeckName());
+                    textViewDeck2.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? colorSelected : colorPrimary);
+                    textViewDeck2.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? typefaceMedium : typefaceNormal);
+                    textViewPlayer2.setText(lastRecord.getSecondPlace().getDeckOwnerName());
+                    textViewPlayer2.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? colorSelected : colorSecondary);
+                    textViewPlayer2.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? typefaceMedium : typefaceNormal);
+                    textViewSecondIndicator.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? colorSelected : colorSecondary);
+                    textViewSecondIndicator.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? typefaceMedium : typefaceNormal);
+
+                    textViewDeck3.setText(lastRecord.getThirdPlace().getDeckName());
+                    textViewDeck3.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? colorSelected : colorPrimary);
+                    textViewDeck3.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? typefaceMedium : typefaceNormal);
+                    textViewPlayer3.setText(lastRecord.getThirdPlace().getDeckOwnerName());
+                    textViewPlayer3.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? colorSelected : colorSecondary);
+                    textViewPlayer3.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? typefaceMedium : typefaceNormal);
+                    textViewThirdIndicator.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? colorSelected : colorSecondary);
+                    textViewThirdIndicator.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? typefaceMedium : typefaceNormal);
+
                     textViewDeck4.setText(lastRecord.getFourthPlace().getDeckName());
-                    textViewPlayer4.setTypeface(null, mCurrentDeck.isEqualDeck(lastRecord.getFourthPlace()) ? Typeface.BOLD : Typeface.NORMAL);
-                    textViewDeck4.setTypeface(null, mCurrentDeck.isEqualDeck(lastRecord.getFourthPlace()) ? Typeface.BOLD : Typeface.NORMAL);
+                    textViewDeck4.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFourthPlace()) ? colorSelected : colorPrimary);
+                    textViewDeck4.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFourthPlace()) ? typefaceMedium : typefaceNormal);
+                    textViewPlayer4.setText(lastRecord.getFourthPlace().getDeckOwnerName());
+                    textViewPlayer4.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFourthPlace()) ? colorSelected : colorSecondary);
+                    textViewPlayer4.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFourthPlace()) ? typefaceMedium : typefaceNormal);
+                    textViewFourthIndicator.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFourthPlace()) ? colorSelected : colorSecondary);
+                    textViewFourthIndicator.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFourthPlace()) ? typefaceMedium : typefaceNormal);
                     break;
             }
         }
