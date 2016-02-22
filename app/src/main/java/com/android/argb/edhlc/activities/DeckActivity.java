@@ -391,7 +391,7 @@ public class DeckActivity extends AppCompatActivity {
 
         List<double[]> values = new ArrayList<>();
         double total = (double) (first + second);
-        double emptySpace = (total == first || total == second) ? 0 : total * 0.01;
+        double emptySpace = (total == first || total == second) ? 0 : total * 0.005;
         values.add(new double[]{first, first > 0 ? emptySpace : 0,
                 second, second > 0 ? emptySpace : 0});
         values.add(new double[]{0, 0, 0, 0});
@@ -447,7 +447,7 @@ public class DeckActivity extends AppCompatActivity {
 
         List<double[]> values = new ArrayList<>();
         double total = (double) (first + second + third);
-        double emptySpace = (total == first || total == second || total == third) ? 0 : total * 0.01;
+        double emptySpace = (total == first || total == second || total == third) ? 0 : total * 0.005;
         values.add(new double[]{first, first > 0 ? emptySpace : 0,
                 second, second > 0 ? emptySpace : 0,
                 third, third > 0 ? emptySpace : 0});
@@ -507,7 +507,7 @@ public class DeckActivity extends AppCompatActivity {
 
         List<double[]> values = new ArrayList<>();
         double total = (double) (first + second + third + fourth);
-        double emptySpace = (total == first || total == second || total == third || total == fourth) ? 0 : total * 0.01;
+        double emptySpace = (total == first || total == second || total == third || total == fourth) ? 0 : total * 0.005;
         values.add(new double[]{first, first > 0 ? emptySpace : 0,
                 second, second > 0 ? emptySpace : 0,
                 third, third > 0 ? emptySpace : 0,

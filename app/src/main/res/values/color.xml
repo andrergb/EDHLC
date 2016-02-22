@@ -20,8 +20,8 @@
     <!-- LEGENDS -->
     <item name="first" type="color">#f5dd5b</item>
     <item name="second" type="color">#d4dcdf</item>
-    <item name="third" type="color">#c27548</item>
-    <item name="fourth" type="color">#6b6b6b</item>
+    <item name="third" type="color">#cd7f32</item>
+    <item name="fourth" type="color">#878787</item>
 
     <!-- GrayScale -->
     <!--<item name="first4" type="color">#EAEAEA</item>-->
