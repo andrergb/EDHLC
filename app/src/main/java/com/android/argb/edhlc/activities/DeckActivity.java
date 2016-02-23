@@ -94,76 +94,76 @@ public class DeckActivity extends AppCompatActivity {
     private int[] COLORS;
 
     //Card - Chart deck history 2 - 1v1
-    private CardView cardViewDeckHistory2;
+    private CardView cardViewChart2Slots;
     private int mCardViewFullHeightDeckHistory2 = 0;
-    private RelativeLayout relativeTitleDeckHistory2;
-    private TextView textTitleDeckHistory2;
-    private ImageView iconIndicatorDeckHistory2;
+    private RelativeLayout relativeTitleChart2Slots;
+    private TextView textTitleChart2Slots;
+    private ImageView indicatorChart2Slots;
     private DefaultRenderer mDoughnutRender2;
-    private LinearLayout doughnutChartLinearLayout2;
+    private LinearLayout linearChart2Slots;
     private MultipleCategorySeries mMultipleCategorySeriesDataSet2;
-    private TextView textViewTotalGameNumber2;
-    private TextView textViewTotalGameText2;
-    private TextView textViewFirst2;
-    private TextView textViewSecond2;
+    private TextView textTotalGames1Chart2Slots;
+    private TextView textTotalGames2Chart2Slots;
+    private TextView textFirstChart2Slots;
+    private TextView textSecondChart2Slots;
 
     //Card - Chart deck history 3 - 1v1v1
-    private CardView cardViewDeckHistory3;
+    private CardView cardViewChart3Slots;
     private int mCardViewFullHeightDeckHistory3 = 0;
-    private RelativeLayout relativeTitleDeckHistory3;
-    private TextView textTitleDeckHistory3;
-    private ImageView iconIndicatorDeckHistory3;
+    private RelativeLayout relativeTitleChart3Slots;
+    private TextView textTitleChart3Slots;
+    private ImageView indicatorChart3Slots;
     private DefaultRenderer mDoughnutRender3;
-    private LinearLayout doughnutChartLinearLayout3;
+    private LinearLayout linearChart3Slots;
     private MultipleCategorySeries mMultipleCategorySeriesDataSet3;
-    private TextView textViewTotalGameNumber3;
-    private TextView textViewTotalGameText3;
-    private TextView textViewFirst3;
-    private TextView textViewSecond3;
-    private TextView textViewThird3;
+    private TextView textTotalGames1Chart3Slots;
+    private TextView textTotalGames2Chart3Slots;
+    private TextView textFirstChart3Slots;
+    private TextView textSecondChart3Slots;
+    private TextView textThirdChart3Slots;
 
     //Card - Chart deck history 4 - 1v1v1v1
-    private CardView cardViewDeckHistory4;
+    private CardView cardViewChart4Slots;
     private int mCardViewFullHeightDeckHistory4 = 0;
-    private RelativeLayout relativeTitleDeckHistory4;
-    private TextView textTitleDeckHistory4;
-    private ImageView iconIndicatorDeckHistory4;
+    private RelativeLayout relativeTitleChart4Slots;
+    private TextView textTitleChart4Slots;
+    private ImageView indicatorChart4Slots;
     private DefaultRenderer mDoughnutRender4;
-    private LinearLayout doughnutChartLinearLayout4;
+    private LinearLayout linearChart4Slots;
     private MultipleCategorySeries mMultipleCategorySeriesDataSet4;
-    private TextView textViewTotalGameNumber4;
-    private TextView textViewTotalGameText4;
-    private TextView textViewFirst4;
-    private TextView textViewSecond4;
-    private TextView textViewThird4;
-    private TextView textViewFourth4;
+    private TextView textTotalGames1Chart4Slots;
+    private TextView textTotalGames2Chart4Slots;
+    private TextView textFirstChart4Slots;
+    private TextView textSecondChart4Slots;
+    private TextView textThirdChart4Slots;
+    private TextView textFourthChart4Slots;
 
     //Card - Last game played
-    private CardView cardViewLastGamePlayed;
+    private CardView cardViewRecordCard;
     private int mCardViewFullHeightLastGamePlayed = 0;
-    private RelativeLayout relativeTitleLastGamePlayed;
-    private TextView textTitleLastGamePlayed;
-    private ImageView iconIndicatorLastGamePlayed;
-    private TextView textViewRecordDate;
-    private LinearLayout linearLastGame1;
-    private TextView textViewFirstIndicator;
-    private TextView textViewPlayer1;
-    private TextView textViewDeck1;
-    private View deckInfoDivider1;
-    private LinearLayout linearLastGame2;
-    private TextView textViewSecondIndicator;
-    private TextView textViewPlayer2;
-    private TextView textViewDeck2;
-    private View deckInfoDivider2;
-    private LinearLayout linearLastGame3;
-    private TextView textViewThirdIndicator;
-    private TextView textViewPlayer3;
-    private TextView textViewDeck3;
-    private View deckInfoDivider3;
-    private LinearLayout linearLastGame4;
-    private TextView textViewFourthIndicator;
-    private TextView textViewPlayer4;
-    private TextView textViewDeck4;
+    private RelativeLayout relativeTitleRecordCard;
+    private TextView textTitleRecordCard;
+    private ImageView indicatorRecordCard;
+    private TextView textDateRecordCard;
+    private LinearLayout linearFirstLineRecordCard;
+    private TextView textFirstIndicatorRecordCard;
+    private TextView textFirstPlayerRecordCard;
+    private TextView textFirstDeckRecordCard;
+    private View divider1RecordCard;
+    private LinearLayout linearSecondLineRecordCard;
+    private TextView textSecondIndicatorRecordCard;
+    private TextView textSecondPlayerRecordCard;
+    private TextView textSecondDeckRecordCard;
+    private View divider2RecordCard;
+    private LinearLayout linearThirdLineRecordCard;
+    private TextView textThirdIndicatorRecordCard;
+    private TextView textThirdPlayerRecordCard;
+    private TextView textThirdDeckRecordCard;
+    private View divider3RecordCard;
+    private LinearLayout linearFourthLineRecordCard;
+    private TextView textFourthIndicatorRecordCard;
+    private TextView textFourthPlayerRecordCard;
+    private TextView textFourthDeckRecordCard;
 
     //Toolbar
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
@@ -261,20 +261,20 @@ public class DeckActivity extends AppCompatActivity {
                 toggleCardExpansion(cardViewDeckInfo, textTitleDeckInfo, iconIndicatorDeckInfo, relativeTitleDeckInfo.getHeight(), mCardViewFullHeightDeckInfo);
                 break;
 
-            case R.id.relativeTitleLastGamePlayed:
-                toggleCardExpansion(cardViewLastGamePlayed, textTitleLastGamePlayed, iconIndicatorLastGamePlayed, relativeTitleLastGamePlayed.getHeight(), mCardViewFullHeightLastGamePlayed);
+            case R.id.relativeTitleRecordCard:
+                toggleCardExpansion(cardViewRecordCard, textTitleRecordCard, indicatorRecordCard, relativeTitleRecordCard.getHeight(), mCardViewFullHeightLastGamePlayed);
                 break;
 
-            case R.id.relativeTitleDeckHistory2:
-                toggleCardExpansion(cardViewDeckHistory2, textTitleDeckHistory2, iconIndicatorDeckHistory2, relativeTitleDeckHistory2.getHeight(), mCardViewFullHeightDeckHistory2);
+            case R.id.relativeTitleChart2Slots:
+                toggleCardExpansion(cardViewChart2Slots, textTitleChart2Slots, indicatorChart2Slots, relativeTitleChart2Slots.getHeight(), mCardViewFullHeightDeckHistory2);
                 break;
 
-            case R.id.relativeTitleDeckHistory3:
-                toggleCardExpansion(cardViewDeckHistory3, textTitleDeckHistory3, iconIndicatorDeckHistory3, relativeTitleDeckHistory3.getHeight(), mCardViewFullHeightDeckHistory3);
+            case R.id.relativeTitleChart3Slots:
+                toggleCardExpansion(cardViewChart3Slots, textTitleChart3Slots, indicatorChart3Slots, relativeTitleChart3Slots.getHeight(), mCardViewFullHeightDeckHistory3);
                 break;
 
-            case R.id.relativeTitleDeckHistory4:
-                toggleCardExpansion(cardViewDeckHistory4, textTitleDeckHistory4, iconIndicatorDeckHistory4, relativeTitleDeckHistory4.getHeight(), mCardViewFullHeightDeckHistory4);
+            case R.id.relativeTitleChart4Slots:
+                toggleCardExpansion(cardViewChart4Slots, textTitleChart4Slots, indicatorChart4Slots, relativeTitleChart4Slots.getHeight(), mCardViewFullHeightDeckHistory4);
                 break;
         }
     }
@@ -389,8 +389,8 @@ public class DeckActivity extends AppCompatActivity {
     }
 
     public void updateDonutChart2(int first, int second) {
-        textViewFirst2.setText("First: " + first);
-        textViewSecond2.setText("Second: " + second);
+        textFirstChart2Slots.setText("First: " + first);
+        textSecondChart2Slots.setText("Second: " + second);
 
         COLORS = new int[]{ContextCompat.getColor(this, R.color.first),
                 ContextCompat.getColor(this, android.R.color.transparent),
@@ -435,16 +435,16 @@ public class DeckActivity extends AppCompatActivity {
 
         GraphicalView mDoughnutChartView2 = ChartFactory.getDoughnutChartView(this, mMultipleCategorySeriesDataSet2, mDoughnutRender2);
 
-        doughnutChartLinearLayout2.removeAllViews();
-        doughnutChartLinearLayout2.addView(mDoughnutChartView2);
+        linearChart2Slots.removeAllViews();
+        linearChart2Slots.addView(mDoughnutChartView2);
 
         mDoughnutChartView2.repaint();
     }
 
     public void updateDonutChart3(int first, int second, int third) {
-        textViewFirst3.setText("First: " + first);
-        textViewSecond3.setText("Second: " + second);
-        textViewThird3.setText("Third: " + third);
+        textFirstChart3Slots.setText("First: " + first);
+        textSecondChart3Slots.setText("Second: " + second);
+        textThirdChart3Slots.setText("Third: " + third);
 
         COLORS = new int[]{ContextCompat.getColor(this, R.color.first),
                 ContextCompat.getColor(this, android.R.color.transparent),
@@ -492,17 +492,17 @@ public class DeckActivity extends AppCompatActivity {
 
         GraphicalView mDoughnutChartView3 = ChartFactory.getDoughnutChartView(this, mMultipleCategorySeriesDataSet3, mDoughnutRender3);
 
-        doughnutChartLinearLayout3.removeAllViews();
-        doughnutChartLinearLayout3.addView(mDoughnutChartView3);
+        linearChart3Slots.removeAllViews();
+        linearChart3Slots.addView(mDoughnutChartView3);
 
         mDoughnutChartView3.repaint();
     }
 
     public void updateDonutChart4(int first, int second, int third, int fourth) {
-        textViewFirst4.setText("First: " + first);
-        textViewSecond4.setText("Second: " + second);
-        textViewThird4.setText("Third: " + third);
-        textViewFourth4.setText("Fourth: " + fourth);
+        textFirstChart4Slots.setText("First: " + first);
+        textSecondChart4Slots.setText("Second: " + second);
+        textThirdChart4Slots.setText("Third: " + third);
+        textFourthChart4Slots.setText("Fourth: " + fourth);
 
         COLORS = new int[]{ContextCompat.getColor(this, R.color.first),
                 ContextCompat.getColor(this, android.R.color.transparent),
@@ -553,8 +553,8 @@ public class DeckActivity extends AppCompatActivity {
 
         GraphicalView mDoughnutChartView4 = ChartFactory.getDoughnutChartView(this, mMultipleCategorySeriesDataSet4, mDoughnutRender4);
 
-        doughnutChartLinearLayout4.removeAllViews();
-        doughnutChartLinearLayout4.addView(mDoughnutChartView4);
+        linearChart4Slots.removeAllViews();
+        linearChart4Slots.addView(mDoughnutChartView4);
 
         mDoughnutChartView4.repaint();
     }
@@ -890,70 +890,70 @@ public class DeckActivity extends AppCompatActivity {
             listIdentityHolder.add((ImageView) view.findViewById(R.id.imageViewMana1));
 
             //Chart 1v1
-            cardViewDeckHistory2 = (CardView) findViewById(R.id.cardViewDeckHistory2);
-            relativeTitleDeckHistory2 = (RelativeLayout) findViewById(R.id.relativeTitleDeckHistory2);
-            textTitleDeckHistory2 = (TextView) findViewById(R.id.textTitleDeckHistory2);
-            iconIndicatorDeckHistory2 = (ImageView) findViewById(R.id.iconIndicatorDeckHistory2);
-            doughnutChartLinearLayout2 = (LinearLayout) findViewById(R.id.chart2);
-            textViewTotalGameNumber2 = (TextView) view.findViewById(R.id.textViewTotalGameNumber2);
-            textViewTotalGameText2 = (TextView) view.findViewById(R.id.textViewTotalGameText2);
-            textViewFirst2 = (TextView) view.findViewById(R.id.textViewFirst2);
-            textViewSecond2 = (TextView) view.findViewById(R.id.textViewSecond2);
+            cardViewChart2Slots = (CardView) findViewById(R.id.cardViewChart2Slots);
+            relativeTitleChart2Slots = (RelativeLayout) findViewById(R.id.relativeTitleChart2Slots);
+            textTitleChart2Slots = (TextView) findViewById(R.id.textTitleChart2Slots);
+            indicatorChart2Slots = (ImageView) findViewById(R.id.indicatorChart2Slots);
+            linearChart2Slots = (LinearLayout) findViewById(R.id.linearChart2Slots);
+            textTotalGames1Chart2Slots = (TextView) view.findViewById(R.id.textTotalGames1Chart2Slots);
+            textTotalGames2Chart2Slots = (TextView) view.findViewById(R.id.textTotalGames2Chart2Slots);
+            textFirstChart2Slots = (TextView) view.findViewById(R.id.textFirstChart2Slots);
+            textSecondChart2Slots = (TextView) view.findViewById(R.id.textSecondChart2Slots);
 
             //Chart 1v1v1
-            cardViewDeckHistory3 = (CardView) findViewById(R.id.cardViewDeckHistory3);
-            relativeTitleDeckHistory3 = (RelativeLayout) findViewById(R.id.relativeTitleDeckHistory3);
-            textTitleDeckHistory3 = (TextView) findViewById(R.id.textTitleDeckHistory3);
-            iconIndicatorDeckHistory3 = (ImageView) findViewById(R.id.iconIndicatorDeckHistory3);
-            doughnutChartLinearLayout3 = (LinearLayout) findViewById(R.id.chart3);
-            textViewTotalGameNumber3 = (TextView) view.findViewById(R.id.textViewTotalGameNumber3);
-            textViewTotalGameText3 = (TextView) view.findViewById(R.id.textViewTotalGameText3);
-            textViewFirst3 = (TextView) view.findViewById(R.id.textViewFirst3);
-            textViewSecond3 = (TextView) view.findViewById(R.id.textViewSecond3);
-            textViewThird3 = (TextView) view.findViewById(R.id.textViewThird3);
+            cardViewChart3Slots = (CardView) findViewById(R.id.cardViewChart3Slots);
+            relativeTitleChart3Slots = (RelativeLayout) findViewById(R.id.relativeTitleChart3Slots);
+            textTitleChart3Slots = (TextView) findViewById(R.id.textTitleChart3Slots);
+            indicatorChart3Slots = (ImageView) findViewById(R.id.indicatorChart3Slots);
+            linearChart3Slots = (LinearLayout) findViewById(R.id.linearChart3Slots);
+            textTotalGames1Chart3Slots = (TextView) view.findViewById(R.id.textTotalGames1Chart3Slots);
+            textTotalGames2Chart3Slots = (TextView) view.findViewById(R.id.textTotalGames2Chart3Slots);
+            textFirstChart3Slots = (TextView) view.findViewById(R.id.textFirstChart3Slots);
+            textSecondChart3Slots = (TextView) view.findViewById(R.id.textSecondChart3Slots);
+            textThirdChart3Slots = (TextView) view.findViewById(R.id.textThirdChart3Slots);
 
             //Chart 1v1v1v1
-            cardViewDeckHistory4 = (CardView) findViewById(R.id.cardViewDeckHistory4);
-            relativeTitleDeckHistory4 = (RelativeLayout) findViewById(R.id.relativeTitleDeckHistory4);
-            textTitleDeckHistory4 = (TextView) findViewById(R.id.textTitleDeckHistory4);
-            iconIndicatorDeckHistory4 = (ImageView) findViewById(R.id.iconIndicatorDeckHistory4);
-            doughnutChartLinearLayout4 = (LinearLayout) findViewById(R.id.chart4);
-            textViewTotalGameNumber4 = (TextView) view.findViewById(R.id.textViewTotalGameNumber4);
-            textViewTotalGameText4 = (TextView) view.findViewById(R.id.textViewTotalGameText4);
-            textViewFirst4 = (TextView) view.findViewById(R.id.textViewFirst4);
-            textViewSecond4 = (TextView) view.findViewById(R.id.textViewSecond4);
-            textViewThird4 = (TextView) view.findViewById(R.id.textViewThird4);
-            textViewFourth4 = (TextView) view.findViewById(R.id.textViewFourth4);
+            cardViewChart4Slots = (CardView) findViewById(R.id.cardViewChart4Slots);
+            relativeTitleChart4Slots = (RelativeLayout) findViewById(R.id.relativeTitleChart4Slots);
+            textTitleChart4Slots = (TextView) findViewById(R.id.textTitleChart4Slots);
+            indicatorChart4Slots = (ImageView) findViewById(R.id.indicatorChart4Slots);
+            linearChart4Slots = (LinearLayout) findViewById(R.id.linearChart4Slots);
+            textTotalGames1Chart4Slots = (TextView) view.findViewById(R.id.textTotalGames1Chart4Slots);
+            textTotalGames2Chart4Slots = (TextView) view.findViewById(R.id.textTotalGames2Chart4Slots);
+            textFirstChart4Slots = (TextView) view.findViewById(R.id.textFirstChart4Slots);
+            textSecondChart4Slots = (TextView) view.findViewById(R.id.textSecondChart4Slots);
+            textThirdChart4Slots = (TextView) view.findViewById(R.id.textThirdChart4Slots);
+            textFourthChart4Slots = (TextView) view.findViewById(R.id.textFourthChart4Slots);
 
             //Chart lastGamePlayed
-            cardViewLastGamePlayed = (CardView) findViewById(R.id.cardViewLastGamePlayed);
-            relativeTitleLastGamePlayed = (RelativeLayout) findViewById(R.id.relativeTitleLastGamePlayed);
-            iconIndicatorLastGamePlayed = (ImageView) findViewById(R.id.iconIndicatorLastGamePlayed);
-            textTitleLastGamePlayed = (TextView) findViewById(R.id.textTitleLastGamePlayed);
-            textViewRecordDate = (TextView) findViewById(R.id.textViewRecordDate);
+            cardViewRecordCard = (CardView) findViewById(R.id.cardViewRecordCard);
+            relativeTitleRecordCard = (RelativeLayout) findViewById(R.id.relativeTitleRecordCard);
+            indicatorRecordCard = (ImageView) findViewById(R.id.indicatorRecordCard);
+            textTitleRecordCard = (TextView) findViewById(R.id.textTitleRecordCard);
+            textDateRecordCard = (TextView) findViewById(R.id.textDateRecordCard);
 
-            linearLastGame1 = (LinearLayout) findViewById(R.id.linearLastGame1);
-            textViewFirstIndicator = (TextView) findViewById(R.id.textViewFirstIndicator);
-            textViewPlayer1 = (TextView) view.findViewById(R.id.textViewPlayer1);
-            textViewDeck1 = (TextView) view.findViewById(R.id.textViewDeck1);
-            deckInfoDivider1 = findViewById(R.id.deckInfoDivider1);
+            linearFirstLineRecordCard = (LinearLayout) findViewById(R.id.linearFirstLineRecordCard);
+            textFirstIndicatorRecordCard = (TextView) findViewById(R.id.textFirstIndicatorRecordCard);
+            textFirstPlayerRecordCard = (TextView) view.findViewById(R.id.textFirstPlayerRecordCard);
+            textFirstDeckRecordCard = (TextView) view.findViewById(R.id.textFirstDeckRecordCard);
+            divider1RecordCard = findViewById(R.id.divider1RecordCard);
 
-            linearLastGame2 = (LinearLayout) findViewById(R.id.linearLastGame2);
-            textViewSecondIndicator = (TextView) findViewById(R.id.textViewSecondIndicator);
-            textViewPlayer2 = (TextView) view.findViewById(R.id.textViewPlayer2);
-            textViewDeck2 = (TextView) view.findViewById(R.id.textViewDeck2);
-            deckInfoDivider2 = findViewById(R.id.deckInfoDivider2);
+            linearSecondLineRecordCard = (LinearLayout) findViewById(R.id.linearSecondLineRecordCard);
+            textSecondIndicatorRecordCard = (TextView) findViewById(R.id.textSecondIndicatorRecordCard);
+            textSecondPlayerRecordCard = (TextView) view.findViewById(R.id.textSecondPlayerRecordCard);
+            textSecondDeckRecordCard = (TextView) view.findViewById(R.id.textSecondDeckRecordCard);
+            divider2RecordCard = findViewById(R.id.divider2RecordCard);
 
-            linearLastGame3 = (LinearLayout) findViewById(R.id.linearLastGame3);
-            textViewThirdIndicator = (TextView) findViewById(R.id.textViewThirdIndicator);
-            textViewPlayer3 = (TextView) view.findViewById(R.id.textViewPlayer3);
-            textViewDeck3 = (TextView) view.findViewById(R.id.textViewDeck3);
-            deckInfoDivider3 = findViewById(R.id.deckInfoDivider3);
+            linearThirdLineRecordCard = (LinearLayout) findViewById(R.id.linearThirdLineRecordCard);
+            textThirdIndicatorRecordCard = (TextView) findViewById(R.id.textThirdIndicatorRecordCard);
+            textThirdPlayerRecordCard = (TextView) view.findViewById(R.id.textThirdPlayerRecordCard);
+            textThirdDeckRecordCard = (TextView) view.findViewById(R.id.textThirdDeckRecordCard);
+            divider3RecordCard = findViewById(R.id.divider3RecordCard);
 
-            linearLastGame4 = (LinearLayout) findViewById(R.id.linearLastGame4);
-            textViewFourthIndicator = (TextView) findViewById(R.id.textViewFourthIndicator);
-            textViewPlayer4 = (TextView) view.findViewById(R.id.textViewPlayer4);
-            textViewDeck4 = (TextView) view.findViewById(R.id.textViewDeck4);
+            linearFourthLineRecordCard = (LinearLayout) findViewById(R.id.linearFourthLineRecordCard);
+            textFourthIndicatorRecordCard = (TextView) findViewById(R.id.textFourthIndicatorRecordCard);
+            textFourthPlayerRecordCard = (TextView) view.findViewById(R.id.textFourthPlayerRecordCard);
+            textFourthDeckRecordCard = (TextView) view.findViewById(R.id.textFourthDeckRecordCard);
 
         }
     }
@@ -1187,19 +1187,20 @@ public class DeckActivity extends AppCompatActivity {
         }
 
         //Record card
+
         List<Record> allRecords = recordsDB.getAllRecordsByDeck(mCurrentDeck);
-        cardViewLastGamePlayed.setVisibility(View.GONE);
+        cardViewRecordCard.setVisibility(View.GONE);
         if (allRecords.size() != 0) {
-            cardViewLastGamePlayed.setVisibility(View.VISIBLE);
+            cardViewRecordCard.setVisibility(View.VISIBLE);
             if (mCardViewFullHeightLastGamePlayed == 0) {
-                cardViewLastGamePlayed.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                cardViewRecordCard.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                     @Override
                     public boolean onPreDraw() {
-                        cardViewLastGamePlayed.getViewTreeObserver().removeOnPreDrawListener(this);
-                        mCardViewFullHeightLastGamePlayed = cardViewLastGamePlayed.getHeight();
-                        ViewGroup.LayoutParams layoutParams = cardViewLastGamePlayed.getLayoutParams();
-                        layoutParams.height = relativeTitleLastGamePlayed.getHeight();
-                        cardViewLastGamePlayed.setLayoutParams(layoutParams);
+                        cardViewRecordCard.getViewTreeObserver().removeOnPreDrawListener(this);
+                        mCardViewFullHeightLastGamePlayed = cardViewRecordCard.getHeight();
+                        ViewGroup.LayoutParams layoutParams = cardViewRecordCard.getLayoutParams();
+                        layoutParams.height = relativeTitleRecordCard.getHeight();
+                        cardViewRecordCard.setLayoutParams(layoutParams);
                         return true;
                     }
                 });
@@ -1212,121 +1213,122 @@ public class DeckActivity extends AppCompatActivity {
             int colorSecondary = ContextCompat.getColor(this, R.color.secondary_text);
 
             Record lastRecord = allRecords.get(allRecords.size() - 1);
-            textViewRecordDate.setText(lastRecord.getDate());
+            textTitleRecordCard.setText("Last game played");
+            textDateRecordCard.setText("Played on " + lastRecord.getDate());
             switch (lastRecord.getTotalPlayers()) {
                 case 2:
-                    linearLastGame1.setVisibility(View.VISIBLE);
-                    linearLastGame2.setVisibility(View.VISIBLE);
-                    linearLastGame3.setVisibility(View.GONE);
-                    linearLastGame4.setVisibility(View.GONE);
+                    linearFirstLineRecordCard.setVisibility(View.VISIBLE);
+                    linearSecondLineRecordCard.setVisibility(View.VISIBLE);
+                    linearThirdLineRecordCard.setVisibility(View.GONE);
+                    linearFourthLineRecordCard.setVisibility(View.GONE);
 
-                    deckInfoDivider1.setVisibility(View.VISIBLE);
-                    deckInfoDivider2.setVisibility(View.GONE);
-                    deckInfoDivider3.setVisibility(View.GONE);
+                    divider1RecordCard.setVisibility(View.VISIBLE);
+                    divider2RecordCard.setVisibility(View.GONE);
+                    divider3RecordCard.setVisibility(View.GONE);
 
-                    textViewDeck1.setText(lastRecord.getFirstPlace().getDeckName());
-                    textViewDeck1.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? colorSelected : colorPrimary);
-                    textViewDeck1.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? typefaceMedium : typefaceNormal);
-                    textViewPlayer1.setText(lastRecord.getFirstPlace().getDeckOwnerName());
-                    textViewPlayer1.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? colorSelected : colorSecondary);
-                    textViewPlayer1.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? typefaceMedium : typefaceNormal);
-                    textViewFirstIndicator.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? colorSelected : colorSecondary);
-                    textViewFirstIndicator.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? typefaceMedium : typefaceNormal);
+                    textFirstDeckRecordCard.setText(lastRecord.getFirstPlace().getDeckName());
+                    textFirstDeckRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? colorSelected : colorPrimary);
+                    textFirstDeckRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? typefaceMedium : typefaceNormal);
+                    textFirstPlayerRecordCard.setText(lastRecord.getFirstPlace().getDeckOwnerName());
+                    textFirstPlayerRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? colorSelected : colorSecondary);
+                    textFirstPlayerRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? typefaceMedium : typefaceNormal);
+                    textFirstIndicatorRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? colorSelected : colorSecondary);
+                    textFirstIndicatorRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? typefaceMedium : typefaceNormal);
 
-                    textViewDeck2.setText(lastRecord.getSecondPlace().getDeckName());
-                    textViewDeck2.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? colorSelected : colorPrimary);
-                    textViewDeck2.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? typefaceMedium : typefaceNormal);
-                    textViewPlayer2.setText(lastRecord.getSecondPlace().getDeckOwnerName());
-                    textViewPlayer2.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? colorSelected : colorSecondary);
-                    textViewPlayer2.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? typefaceMedium : typefaceNormal);
-                    textViewSecondIndicator.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? colorSelected : colorSecondary);
-                    textViewSecondIndicator.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? typefaceMedium : typefaceNormal);
+                    textSecondDeckRecordCard.setText(lastRecord.getSecondPlace().getDeckName());
+                    textSecondDeckRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? colorSelected : colorPrimary);
+                    textSecondDeckRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? typefaceMedium : typefaceNormal);
+                    textSecondPlayerRecordCard.setText(lastRecord.getSecondPlace().getDeckOwnerName());
+                    textSecondPlayerRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? colorSelected : colorSecondary);
+                    textSecondPlayerRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? typefaceMedium : typefaceNormal);
+                    textSecondIndicatorRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? colorSelected : colorSecondary);
+                    textSecondIndicatorRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? typefaceMedium : typefaceNormal);
 
                     break;
 
                 case 3:
-                    linearLastGame1.setVisibility(View.VISIBLE);
-                    linearLastGame2.setVisibility(View.VISIBLE);
-                    linearLastGame3.setVisibility(View.VISIBLE);
-                    linearLastGame4.setVisibility(View.GONE);
+                    linearFirstLineRecordCard.setVisibility(View.VISIBLE);
+                    linearSecondLineRecordCard.setVisibility(View.VISIBLE);
+                    linearThirdLineRecordCard.setVisibility(View.VISIBLE);
+                    linearFourthLineRecordCard.setVisibility(View.GONE);
 
-                    deckInfoDivider1.setVisibility(View.VISIBLE);
-                    deckInfoDivider2.setVisibility(View.VISIBLE);
-                    deckInfoDivider3.setVisibility(View.GONE);
+                    divider1RecordCard.setVisibility(View.VISIBLE);
+                    divider2RecordCard.setVisibility(View.VISIBLE);
+                    divider3RecordCard.setVisibility(View.GONE);
 
-                    textViewDeck1.setText(lastRecord.getFirstPlace().getDeckName());
-                    textViewDeck1.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? colorSelected : colorPrimary);
-                    textViewDeck1.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? typefaceMedium : typefaceNormal);
-                    textViewPlayer1.setText(lastRecord.getFirstPlace().getDeckOwnerName());
-                    textViewPlayer1.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? colorSelected : colorSecondary);
-                    textViewPlayer1.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? typefaceMedium : typefaceNormal);
-                    textViewFirstIndicator.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? colorSelected : colorSecondary);
-                    textViewFirstIndicator.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? typefaceMedium : typefaceNormal);
+                    textFirstDeckRecordCard.setText(lastRecord.getFirstPlace().getDeckName());
+                    textFirstDeckRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? colorSelected : colorPrimary);
+                    textFirstDeckRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? typefaceMedium : typefaceNormal);
+                    textFirstPlayerRecordCard.setText(lastRecord.getFirstPlace().getDeckOwnerName());
+                    textFirstPlayerRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? colorSelected : colorSecondary);
+                    textFirstPlayerRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? typefaceMedium : typefaceNormal);
+                    textFirstIndicatorRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? colorSelected : colorSecondary);
+                    textFirstIndicatorRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? typefaceMedium : typefaceNormal);
 
-                    textViewDeck2.setText(lastRecord.getSecondPlace().getDeckName());
-                    textViewDeck2.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? colorSelected : colorPrimary);
-                    textViewDeck2.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? typefaceMedium : typefaceNormal);
-                    textViewPlayer2.setText(lastRecord.getSecondPlace().getDeckOwnerName());
-                    textViewPlayer2.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? colorSelected : colorSecondary);
-                    textViewPlayer2.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? typefaceMedium : typefaceNormal);
-                    textViewSecondIndicator.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? colorSelected : colorSecondary);
-                    textViewSecondIndicator.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? typefaceMedium : typefaceNormal);
+                    textSecondDeckRecordCard.setText(lastRecord.getSecondPlace().getDeckName());
+                    textSecondDeckRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? colorSelected : colorPrimary);
+                    textSecondDeckRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? typefaceMedium : typefaceNormal);
+                    textSecondPlayerRecordCard.setText(lastRecord.getSecondPlace().getDeckOwnerName());
+                    textSecondPlayerRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? colorSelected : colorSecondary);
+                    textSecondPlayerRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? typefaceMedium : typefaceNormal);
+                    textSecondIndicatorRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? colorSelected : colorSecondary);
+                    textSecondIndicatorRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? typefaceMedium : typefaceNormal);
 
-                    textViewDeck3.setText(lastRecord.getThirdPlace().getDeckName());
-                    textViewDeck3.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? colorSelected : colorPrimary);
-                    textViewDeck3.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? typefaceMedium : typefaceNormal);
-                    textViewPlayer3.setText(lastRecord.getThirdPlace().getDeckOwnerName());
-                    textViewPlayer3.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? colorSelected : colorSecondary);
-                    textViewPlayer3.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? typefaceMedium : typefaceNormal);
-                    textViewThirdIndicator.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? colorSelected : colorSecondary);
-                    textViewThirdIndicator.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? typefaceMedium : typefaceNormal);
+                    textThirdDeckRecordCard.setText(lastRecord.getThirdPlace().getDeckName());
+                    textThirdDeckRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? colorSelected : colorPrimary);
+                    textThirdDeckRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? typefaceMedium : typefaceNormal);
+                    textThirdPlayerRecordCard.setText(lastRecord.getThirdPlace().getDeckOwnerName());
+                    textThirdPlayerRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? colorSelected : colorSecondary);
+                    textThirdPlayerRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? typefaceMedium : typefaceNormal);
+                    textThirdIndicatorRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? colorSelected : colorSecondary);
+                    textThirdIndicatorRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? typefaceMedium : typefaceNormal);
                     break;
 
                 case 4:
-                    linearLastGame1.setVisibility(View.VISIBLE);
-                    linearLastGame2.setVisibility(View.VISIBLE);
-                    linearLastGame3.setVisibility(View.VISIBLE);
-                    linearLastGame4.setVisibility(View.VISIBLE);
+                    linearFirstLineRecordCard.setVisibility(View.VISIBLE);
+                    linearSecondLineRecordCard.setVisibility(View.VISIBLE);
+                    linearThirdLineRecordCard.setVisibility(View.VISIBLE);
+                    linearFourthLineRecordCard.setVisibility(View.VISIBLE);
 
-                    deckInfoDivider1.setVisibility(View.VISIBLE);
-                    deckInfoDivider2.setVisibility(View.VISIBLE);
-                    deckInfoDivider3.setVisibility(View.VISIBLE);
+                    divider1RecordCard.setVisibility(View.VISIBLE);
+                    divider2RecordCard.setVisibility(View.VISIBLE);
+                    divider3RecordCard.setVisibility(View.VISIBLE);
 
-                    textViewDeck1.setText(lastRecord.getFirstPlace().getDeckName());
-                    textViewDeck1.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? colorSelected : colorPrimary);
-                    textViewDeck1.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? typefaceMedium : typefaceNormal);
-                    textViewPlayer1.setText(lastRecord.getFirstPlace().getDeckOwnerName());
-                    textViewPlayer1.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? colorSelected : colorSecondary);
-                    textViewPlayer1.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? typefaceMedium : typefaceNormal);
-                    textViewFirstIndicator.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? colorSelected : colorSecondary);
-                    textViewFirstIndicator.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? typefaceMedium : typefaceNormal);
+                    textFirstDeckRecordCard.setText(lastRecord.getFirstPlace().getDeckName());
+                    textFirstDeckRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? colorSelected : colorPrimary);
+                    textFirstDeckRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? typefaceMedium : typefaceNormal);
+                    textFirstPlayerRecordCard.setText(lastRecord.getFirstPlace().getDeckOwnerName());
+                    textFirstPlayerRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? colorSelected : colorSecondary);
+                    textFirstPlayerRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? typefaceMedium : typefaceNormal);
+                    textFirstIndicatorRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? colorSelected : colorSecondary);
+                    textFirstIndicatorRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? typefaceMedium : typefaceNormal);
 
-                    textViewDeck2.setText(lastRecord.getSecondPlace().getDeckName());
-                    textViewDeck2.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? colorSelected : colorPrimary);
-                    textViewDeck2.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? typefaceMedium : typefaceNormal);
-                    textViewPlayer2.setText(lastRecord.getSecondPlace().getDeckOwnerName());
-                    textViewPlayer2.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? colorSelected : colorSecondary);
-                    textViewPlayer2.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? typefaceMedium : typefaceNormal);
-                    textViewSecondIndicator.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? colorSelected : colorSecondary);
-                    textViewSecondIndicator.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? typefaceMedium : typefaceNormal);
+                    textSecondDeckRecordCard.setText(lastRecord.getSecondPlace().getDeckName());
+                    textSecondDeckRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? colorSelected : colorPrimary);
+                    textSecondDeckRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? typefaceMedium : typefaceNormal);
+                    textSecondPlayerRecordCard.setText(lastRecord.getSecondPlace().getDeckOwnerName());
+                    textSecondPlayerRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? colorSelected : colorSecondary);
+                    textSecondPlayerRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? typefaceMedium : typefaceNormal);
+                    textSecondIndicatorRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? colorSelected : colorSecondary);
+                    textSecondIndicatorRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? typefaceMedium : typefaceNormal);
 
-                    textViewDeck3.setText(lastRecord.getThirdPlace().getDeckName());
-                    textViewDeck3.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? colorSelected : colorPrimary);
-                    textViewDeck3.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? typefaceMedium : typefaceNormal);
-                    textViewPlayer3.setText(lastRecord.getThirdPlace().getDeckOwnerName());
-                    textViewPlayer3.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? colorSelected : colorSecondary);
-                    textViewPlayer3.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? typefaceMedium : typefaceNormal);
-                    textViewThirdIndicator.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? colorSelected : colorSecondary);
-                    textViewThirdIndicator.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? typefaceMedium : typefaceNormal);
+                    textThirdDeckRecordCard.setText(lastRecord.getThirdPlace().getDeckName());
+                    textThirdDeckRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? colorSelected : colorPrimary);
+                    textThirdDeckRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? typefaceMedium : typefaceNormal);
+                    textThirdPlayerRecordCard.setText(lastRecord.getThirdPlace().getDeckOwnerName());
+                    textThirdPlayerRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? colorSelected : colorSecondary);
+                    textThirdPlayerRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? typefaceMedium : typefaceNormal);
+                    textThirdIndicatorRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? colorSelected : colorSecondary);
+                    textThirdIndicatorRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? typefaceMedium : typefaceNormal);
 
-                    textViewDeck4.setText(lastRecord.getFourthPlace().getDeckName());
-                    textViewDeck4.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFourthPlace()) ? colorSelected : colorPrimary);
-                    textViewDeck4.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFourthPlace()) ? typefaceMedium : typefaceNormal);
-                    textViewPlayer4.setText(lastRecord.getFourthPlace().getDeckOwnerName());
-                    textViewPlayer4.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFourthPlace()) ? colorSelected : colorSecondary);
-                    textViewPlayer4.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFourthPlace()) ? typefaceMedium : typefaceNormal);
-                    textViewFourthIndicator.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFourthPlace()) ? colorSelected : colorSecondary);
-                    textViewFourthIndicator.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFourthPlace()) ? typefaceMedium : typefaceNormal);
+                    textFourthDeckRecordCard.setText(lastRecord.getFourthPlace().getDeckName());
+                    textFourthDeckRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFourthPlace()) ? colorSelected : colorPrimary);
+                    textFourthDeckRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFourthPlace()) ? typefaceMedium : typefaceNormal);
+                    textFourthPlayerRecordCard.setText(lastRecord.getFourthPlace().getDeckOwnerName());
+                    textFourthPlayerRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFourthPlace()) ? colorSelected : colorSecondary);
+                    textFourthPlayerRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFourthPlace()) ? typefaceMedium : typefaceNormal);
+                    textFourthIndicatorRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFourthPlace()) ? colorSelected : colorSecondary);
+                    textFourthIndicatorRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFourthPlace()) ? typefaceMedium : typefaceNormal);
                     break;
             }
         }
@@ -1335,24 +1337,24 @@ public class DeckActivity extends AppCompatActivity {
         int firstIn2 = recordsDB.getRecordsByPosition(mCurrentDeck, 1, 2).size();
         int secondIn2 = recordsDB.getRecordsByPosition(mCurrentDeck, 2, 2).size();
         int total2 = firstIn2 + secondIn2;
-        cardViewDeckHistory2.setVisibility(View.GONE);
+        cardViewChart2Slots.setVisibility(View.GONE);
         if (total2 != 0) {
-            cardViewDeckHistory2.setVisibility(View.VISIBLE);
+            cardViewChart2Slots.setVisibility(View.VISIBLE);
             if (mCardViewFullHeightDeckHistory2 == 0) {
-                cardViewDeckHistory2.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                cardViewChart2Slots.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                     @Override
                     public boolean onPreDraw() {
-                        cardViewDeckHistory2.getViewTreeObserver().removeOnPreDrawListener(this);
-                        mCardViewFullHeightDeckHistory2 = cardViewDeckHistory2.getHeight();
-                        ViewGroup.LayoutParams layoutParams = cardViewDeckHistory2.getLayoutParams();
-                        layoutParams.height = relativeTitleDeckHistory2.getHeight();
-                        cardViewDeckHistory2.setLayoutParams(layoutParams);
+                        cardViewChart2Slots.getViewTreeObserver().removeOnPreDrawListener(this);
+                        mCardViewFullHeightDeckHistory2 = cardViewChart2Slots.getHeight();
+                        ViewGroup.LayoutParams layoutParams = cardViewChart2Slots.getLayoutParams();
+                        layoutParams.height = relativeTitleChart2Slots.getHeight();
+                        cardViewChart2Slots.setLayoutParams(layoutParams);
                         return true;
                     }
                 });
             }
-            textViewTotalGameNumber2.setText("" + total2);
-            textViewTotalGameText2.setText(total2 == 1 ? "game played" : "games played");
+            textTotalGames1Chart2Slots.setText("" + total2);
+            textTotalGames2Chart2Slots.setText(total2 == 1 ? "game played" : "games played");
             updateDonutChart2(firstIn2, secondIn2);
         }
 
@@ -1361,24 +1363,24 @@ public class DeckActivity extends AppCompatActivity {
         int secondIn3 = recordsDB.getRecordsByPosition(mCurrentDeck, 2, 3).size();
         int thirdIn3 = recordsDB.getRecordsByPosition(mCurrentDeck, 3, 3).size();
         int total3 = firstIn3 + secondIn3 + thirdIn3;
-        cardViewDeckHistory3.setVisibility(View.GONE);
+        cardViewChart3Slots.setVisibility(View.GONE);
         if (total3 != 0) {
-            cardViewDeckHistory3.setVisibility(View.VISIBLE);
+            cardViewChart3Slots.setVisibility(View.VISIBLE);
             if (mCardViewFullHeightDeckHistory3 == 0) {
-                cardViewDeckHistory3.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                cardViewChart3Slots.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                     @Override
                     public boolean onPreDraw() {
-                        cardViewDeckHistory3.getViewTreeObserver().removeOnPreDrawListener(this);
-                        mCardViewFullHeightDeckHistory3 = cardViewDeckHistory3.getHeight();
-                        ViewGroup.LayoutParams layoutParams = cardViewDeckHistory3.getLayoutParams();
-                        layoutParams.height = relativeTitleDeckHistory3.getHeight();
-                        cardViewDeckHistory3.setLayoutParams(layoutParams);
+                        cardViewChart3Slots.getViewTreeObserver().removeOnPreDrawListener(this);
+                        mCardViewFullHeightDeckHistory3 = cardViewChart3Slots.getHeight();
+                        ViewGroup.LayoutParams layoutParams = cardViewChart3Slots.getLayoutParams();
+                        layoutParams.height = relativeTitleChart3Slots.getHeight();
+                        cardViewChart3Slots.setLayoutParams(layoutParams);
                         return true;
                     }
                 });
             }
-            textViewTotalGameNumber3.setText("" + total3);
-            textViewTotalGameText3.setText(total3 == 1 ? "game played" : "games played");
+            textTotalGames1Chart3Slots.setText("" + total3);
+            textTotalGames2Chart3Slots.setText(total3 == 1 ? "game played" : "games played");
             updateDonutChart3(firstIn3, secondIn3, thirdIn3);
         }
 
@@ -1388,25 +1390,25 @@ public class DeckActivity extends AppCompatActivity {
         int thirdIn4 = recordsDB.getRecordsByPosition(mCurrentDeck, 3, 4).size();
         int fourthIn4 = recordsDB.getRecordsByPosition(mCurrentDeck, 4, 4).size();
         int total4 = firstIn4 + secondIn4 + thirdIn4 + fourthIn4;
-        cardViewDeckHistory4.setVisibility(View.GONE);
+        cardViewChart4Slots.setVisibility(View.GONE);
         if (total4 != 0) {
-            cardViewDeckHistory4.setVisibility(View.VISIBLE);
+            cardViewChart4Slots.setVisibility(View.VISIBLE);
             if (mCardViewFullHeightDeckHistory4 == 0) {
-                cardViewDeckHistory4.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                cardViewChart4Slots.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                     @Override
                     public boolean onPreDraw() {
-                        cardViewDeckHistory4.getViewTreeObserver().removeOnPreDrawListener(this);
-                        mCardViewFullHeightDeckHistory4 = cardViewDeckHistory4.getHeight();
-                        ViewGroup.LayoutParams layoutParams = cardViewDeckHistory4.getLayoutParams();
-                        layoutParams.height = relativeTitleDeckHistory4.getHeight();
-                        cardViewDeckHistory4.setLayoutParams(layoutParams);
+                        cardViewChart4Slots.getViewTreeObserver().removeOnPreDrawListener(this);
+                        mCardViewFullHeightDeckHistory4 = cardViewChart4Slots.getHeight();
+                        ViewGroup.LayoutParams layoutParams = cardViewChart4Slots.getLayoutParams();
+                        layoutParams.height = relativeTitleChart4Slots.getHeight();
+                        cardViewChart4Slots.setLayoutParams(layoutParams);
 
                         return true;
                     }
                 });
             }
-            textViewTotalGameNumber4.setText("" + total4);
-            textViewTotalGameText4.setText(total4 == 1 ? "game played" : "games played");
+            textTotalGames1Chart4Slots.setText("" + total4);
+            textTotalGames2Chart4Slots.setText(total4 == 1 ? "game played" : "games played");
             updateDonutChart4(firstIn4, secondIn4, thirdIn4, fourthIn4);
         }
 

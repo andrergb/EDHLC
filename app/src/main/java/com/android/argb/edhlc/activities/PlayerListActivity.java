@@ -289,9 +289,9 @@ public class PlayerListActivity extends AppCompatActivity {
                     colorIdentity = checkBoxManaColorless.isChecked() ? colorIdentity.concat("1") : colorIdentity.concat("0");
 
                     Calendar c = Calendar.getInstance();
-                    String date = String.valueOf(c.get(Calendar.DAY_OF_MONTH))
-                            + "/" + Constants.MONTH[c.get(Calendar.MONTH)]
-                            + "/" + String.valueOf(c.get(Calendar.YEAR));
+                    String date = Constants.MONTH[c.get(Calendar.MONTH)]
+                            + " " + String.valueOf(c.get(Calendar.DAY_OF_MONTH))
+                            + ", " + String.valueOf(c.get(Calendar.YEAR));
 
                     if (decksDB.addDeck(new Deck(player, tempName, new int[]{PlayerListActivity.this.getResources().getColor(R.color.primary_color), PlayerListActivity.this.getResources().getColor(R.color.secondary_color)}, colorIdentity, date)) != -1) {
                         Toast.makeText(view.getContext(), tempName + " added", Toast.LENGTH_SHORT).show();

@@ -267,9 +267,9 @@ public class DrawerMain {
                     recordDB.open();
 
                     Calendar c = Calendar.getInstance();
-                    String date = String.valueOf(c.get(Calendar.DAY_OF_MONTH))
-                            + "/" + Constants.MONTH[c.get(Calendar.MONTH)]
-                            + "/" + String.valueOf(c.get(Calendar.YEAR));
+                    String date = Constants.MONTH[c.get(Calendar.MONTH)]
+                            + " " + String.valueOf(c.get(Calendar.DAY_OF_MONTH))
+                            + ", " + String.valueOf(c.get(Calendar.YEAR));
 
                     long result = recordDB.addRecord(new Record(mDecksListToBeRecorded, date));
                     recordDB.close();

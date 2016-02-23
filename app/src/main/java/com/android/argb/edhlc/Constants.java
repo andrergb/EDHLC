@@ -46,5 +46,5 @@ public class Constants {
     public static String BROADCAST_MESSAGE_NEW_GAME_DECKS = "broadcast_message_new_game_decks";
     public static String BROADCAST_MESSAGE_NEW_GAME_COLOR = "broadcast_message_new_game_color";
 
-    public static String[] MONTH = {"Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"};
+    public static String[] MONTH = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
 }
