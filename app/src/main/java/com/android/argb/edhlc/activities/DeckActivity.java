@@ -13,7 +13,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -45,7 +44,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.argb.edhlc.Constants;
-import com.android.argb.edhlc.FABScrollBehavior;
 import com.android.argb.edhlc.R;
 import com.android.argb.edhlc.colorpicker.ColorPickerDialog;
 import com.android.argb.edhlc.colorpicker.ColorPickerSwatch;
@@ -179,7 +177,9 @@ public class DeckActivity extends AppCompatActivity {
     private boolean isFabOpen;
     private FloatingActionButton fabMain;
     private FloatingActionButton fabEdit;
+    private LinearLayout fabContentEdit;
     private FloatingActionButton fabDelete;
+    private LinearLayout fabContentDelete;
     private View fabDismissView;
 
     //Edit dialog
@@ -210,10 +210,10 @@ public class DeckActivity extends AppCompatActivity {
             fabMain.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.accent_color)));
 
             fabEdit.setClickable(false);
-            fabEdit.startAnimation(fab_close);
+            fabContentEdit.startAnimation(fab_close);
 
             fabDelete.setClickable(false);
-            fabDelete.startAnimation(fab_close);
+            fabContentDelete.startAnimation(fab_close);
 
             isFabOpen = false;
         } else {
@@ -227,16 +227,12 @@ public class DeckActivity extends AppCompatActivity {
             fabMain.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.accent_secondary_black_color)));
 
             fabEdit.setClickable(true);
-            fabEdit.startAnimation(fab_open);
-            CoordinatorLayout.LayoutParams p = (CoordinatorLayout.LayoutParams) fabEdit.getLayoutParams();
-            p.setBehavior(new FABScrollBehavior());
-            fabEdit.setLayoutParams(p);
+            fabContentEdit.setVisibility(View.VISIBLE);
+            fabContentEdit.startAnimation(fab_open);
 
             fabDelete.setClickable(true);
-            fabDelete.startAnimation(fab_open);
-            p = (CoordinatorLayout.LayoutParams) fabDelete.getLayoutParams();
-            p.setBehavior(new FABScrollBehavior());
-            fabDelete.setLayoutParams(p);
+            fabContentDelete.setVisibility(View.VISIBLE);
+            fabContentDelete.startAnimation(fab_open);
 
             isFabOpen = true;
         }
@@ -857,7 +853,9 @@ public class DeckActivity extends AppCompatActivity {
 
             //FloatingActionButton
             fabMain = (FloatingActionButton) findViewById(R.id.fabMain);
+            fabContentEdit = (LinearLayout) findViewById(R.id.fabContentEdit);
             fabEdit = (FloatingActionButton) findViewById(R.id.fabEdit);
+            fabContentDelete = (LinearLayout) findViewById(R.id.fabContentDelete);
             fabDelete = (FloatingActionButton) findViewById(R.id.fabDelete);
 
             //Deck banner image
@@ -975,7 +973,7 @@ public class DeckActivity extends AppCompatActivity {
                         }
                     }
                 });
-        alertDialogBuilder.setNeutralButton("Cancel",
+        alertDialogBuilder.setNegativeButton("Cancel",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
