@@ -66,11 +66,16 @@ public class PlayerListActivity extends AppCompatActivity {
                 public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                     Toast.makeText(getApplicationContext(), listDataHeader.get(groupPosition)[0] + " : " + listDataChild.get(listDataHeader.get(groupPosition)[0]).get(childPosition)[0], Toast.LENGTH_SHORT).show();
 
-                    Intent intent = new Intent(PlayerListActivity.this, DeckActivity.class);
+                    //TODO test playerActivity
+                    Intent intent = new Intent(PlayerListActivity.this, PlayerActivity.class);
                     intent.putExtra("PLAYERNAME", listDataHeader.get(groupPosition)[0]);
-                    intent.putExtra("DECKNAME", listDataChild.get(listDataHeader.get(groupPosition)[0]).get(childPosition)[0]);
-                    intent.putExtra("DECKIDENTITY", listDataChild.get(listDataHeader.get(groupPosition)[0]).get(childPosition)[1]);
                     startActivity(intent);
+
+//                    Intent intent = new Intent(PlayerListActivity.this, DeckActivity.class);
+//                    intent.putExtra("PLAYERNAME", listDataHeader.get(groupPosition)[0]);
+//                    intent.putExtra("DECKNAME", listDataChild.get(listDataHeader.get(groupPosition)[0]).get(childPosition)[0]);
+//                    intent.putExtra("DECKIDENTITY", listDataChild.get(listDataHeader.get(groupPosition)[0]).get(childPosition)[1]);
+//                    startActivity(intent);
 
                     PlayerListActivity.this.finish();
                     return false;

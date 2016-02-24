@@ -15,7 +15,7 @@
 
         <!-- Header -->
         <RelativeLayout
-            android:id="@+id/relativeTitleRecordCard"
+            android:id="@+id/relativeCardTitleRecord"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="onClickCardExpansion"

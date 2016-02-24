@@ -38,12 +38,15 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.argb.edhlc.Constants;
+import com.android.argb.edhlc.DeckListAdapter;
 import com.android.argb.edhlc.R;
 import com.android.argb.edhlc.colorpicker.ColorPickerDialog;
 import com.android.argb.edhlc.colorpicker.ColorPickerSwatch;
@@ -238,6 +241,27 @@ public class DeckActivity extends AppCompatActivity {
         }
     }
 
+    public void justifyListViewHeightBasedOnChildren(ListView listView) {
+
+        ListAdapter adapter = listView.getAdapter();
+
+        if (adapter == null) {
+            return;
+        }
+        ViewGroup vg = listView;
+        int totalHeight = 0;
+        for (int i = 0; i < adapter.getCount(); i++) {
+            View listItem = adapter.getView(i, null, vg);
+            listItem.measure(0, 0);
+            totalHeight += listItem.getMeasuredHeight();
+        }
+
+        ViewGroup.LayoutParams par = listView.getLayoutParams();
+        par.height = totalHeight + (listView.getDividerHeight() * (adapter.getCount() - 1));
+        listView.setLayoutParams(par);
+        listView.requestLayout();
+    }
+
     @Override
     public void onBackPressed() {
         if (mDeckDrawerLayout.isDrawerOpen(mDeckDrawer))
@@ -257,19 +281,19 @@ public class DeckActivity extends AppCompatActivity {
                 toggleCardExpansion(cardViewDeckInfo, textTitleDeckInfo, iconIndicatorDeckInfo, relativeTitleDeckInfo.getHeight(), mCardViewFullHeightDeckInfo);
                 break;
 
-            case R.id.relativeTitleRecordCard:
+            case R.id.relativeCardTitleRecord:
                 toggleCardExpansion(cardViewRecordCard, textTitleRecordCard, indicatorRecordCard, relativeTitleRecordCard.getHeight(), mCardViewFullHeightLastGamePlayed);
                 break;
 
-            case R.id.relativeTitleChart2Slots:
+            case R.id.relativeCardTitleChart2Slots:
                 toggleCardExpansion(cardViewChart2Slots, textTitleChart2Slots, indicatorChart2Slots, relativeTitleChart2Slots.getHeight(), mCardViewFullHeightDeckHistory2);
                 break;
 
-            case R.id.relativeTitleChart3Slots:
+            case R.id.relativeCardTitleChart3Slots:
                 toggleCardExpansion(cardViewChart3Slots, textTitleChart3Slots, indicatorChart3Slots, relativeTitleChart3Slots.getHeight(), mCardViewFullHeightDeckHistory3);
                 break;
 
-            case R.id.relativeTitleChart4Slots:
+            case R.id.relativeCardTitleChart4Slots:
                 toggleCardExpansion(cardViewChart4Slots, textTitleChart4Slots, indicatorChart4Slots, relativeTitleChart4Slots.getHeight(), mCardViewFullHeightDeckHistory4);
                 break;
         }
@@ -640,6 +664,14 @@ public class DeckActivity extends AppCompatActivity {
         drawerItemTextPlayers.setTextColor(ContextCompat.getColor(this, R.color.accent_color));
 //        switchScreen.getThumbDrawable().setColorFilter(ContextCompat.getColor(this, R.color.accent_color), PorterDuff.Mode.MULTIPLY);
 //        switchScreen.getTrackDrawable().setColorFilter(ContextCompat.getColor(this, R.color.accent_secondary_color), PorterDuff.Mode.MULTIPLY);
+
+        //TODO test
+        ListView listview = (ListView) findViewById(R.id.listDeckListCard);
+        List<String[]> a = new ArrayList<>();
+        a.add(new String[]{"image_" + mPlayerName + "_" + mDeckName + ".png", "title 1", "title2"});
+        a.add(new String[]{"image_" + mPlayerName + "_" + mDeckName + ".png", "title 3", "title4"});
+        listview.setAdapter(new DeckListAdapter(this, a));
+        justifyListViewHeightBasedOnChildren(listview);
     }
 
     @Override
@@ -889,7 +921,7 @@ public class DeckActivity extends AppCompatActivity {
 
             //Chart 1v1
             cardViewChart2Slots = (CardView) findViewById(R.id.cardViewChart2Slots);
-            relativeTitleChart2Slots = (RelativeLayout) findViewById(R.id.relativeTitleChart2Slots);
+            relativeTitleChart2Slots = (RelativeLayout) findViewById(R.id.relativeCardTitleChart2Slots);
             textTitleChart2Slots = (TextView) findViewById(R.id.textTitleChart2Slots);
             indicatorChart2Slots = (ImageView) findViewById(R.id.indicatorChart2Slots);
             linearChart2Slots = (LinearLayout) findViewById(R.id.linearChart2Slots);
@@ -900,7 +932,7 @@ public class DeckActivity extends AppCompatActivity {
 
             //Chart 1v1v1
             cardViewChart3Slots = (CardView) findViewById(R.id.cardViewChart3Slots);
-            relativeTitleChart3Slots = (RelativeLayout) findViewById(R.id.relativeTitleChart3Slots);
+            relativeTitleChart3Slots = (RelativeLayout) findViewById(R.id.relativeCardTitleChart3Slots);
             textTitleChart3Slots = (TextView) findViewById(R.id.textTitleChart3Slots);
             indicatorChart3Slots = (ImageView) findViewById(R.id.indicatorChart3Slots);
             linearChart3Slots = (LinearLayout) findViewById(R.id.linearChart3Slots);
@@ -912,7 +944,7 @@ public class DeckActivity extends AppCompatActivity {
 
             //Chart 1v1v1v1
             cardViewChart4Slots = (CardView) findViewById(R.id.cardViewChart4Slots);
-            relativeTitleChart4Slots = (RelativeLayout) findViewById(R.id.relativeTitleChart4Slots);
+            relativeTitleChart4Slots = (RelativeLayout) findViewById(R.id.relativeCardTitleChart4Slots);
             textTitleChart4Slots = (TextView) findViewById(R.id.textTitleChart4Slots);
             indicatorChart4Slots = (ImageView) findViewById(R.id.indicatorChart4Slots);
             linearChart4Slots = (LinearLayout) findViewById(R.id.linearChart4Slots);
@@ -925,7 +957,7 @@ public class DeckActivity extends AppCompatActivity {
 
             //Chart lastGamePlayed
             cardViewRecordCard = (CardView) findViewById(R.id.cardViewRecordCard);
-            relativeTitleRecordCard = (RelativeLayout) findViewById(R.id.relativeTitleRecordCard);
+            relativeTitleRecordCard = (RelativeLayout) findViewById(R.id.relativeCardTitleRecord);
             indicatorRecordCard = (ImageView) findViewById(R.id.indicatorRecordCard);
             textTitleRecordCard = (TextView) findViewById(R.id.textTitleRecordCard);
             textDateRecordCard = (TextView) findViewById(R.id.textDateRecordCard);

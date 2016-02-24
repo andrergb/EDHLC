@@ -260,6 +260,42 @@ public class RecordsDataAccessObject {
         return recordList;
     }
 
+    public List<Record> getRecordsByPosition(String playerName, int position, int totalPlayers) {
+        String selection = "";
+        switch (position) {
+            case 1:
+                selection = RecordsContract.RecordsEntry.COLUMN_FIRST_PLAYER_NAME
+                        + " LIKE ?";
+                break;
+            case 2:
+                selection = RecordsContract.RecordsEntry.COLUMN_SECOND_PLAYER_NAME
+                        + " LIKE ?";
+                break;
+            case 3:
+                selection = RecordsContract.RecordsEntry.COLUMN_THIRD_PLAYER_NAME
+                        + " LIKE ?";
+                break;
+            case 4:
+                selection = RecordsContract.RecordsEntry.COLUMN_FOURTH_PLAYER_NAME
+                        + " LIKE ?";
+                break;
+        }
+
+        selection = selection + " AND " + RecordsContract.RecordsEntry.COLUMN_TOTAL_PLAYERS + " LIKE ?";
+        String[] selectionArgs = new String[]{playerName, String.valueOf(totalPlayers)};
+
+        List<Record> recordList = new ArrayList<>();
+        Cursor cursor = database.query(RecordsContract.RecordsEntry.TABLE_NAME, null, selection, selectionArgs, null, null, null);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            recordList.add(cursorToRecord(cursor));
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return recordList;
+    }
+
 //    public List<Record> getAllSecondPlaceRecordsByDeck(Deck deck) {
 //        List<Record> recordList = new ArrayList<>();
 //        Cursor cursor = database.query(
