@@ -98,7 +98,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="6dp"
                 android:onClick="onClickFabButton"
-                android:src="@drawable/icon_edit_white"
+                android:src="@drawable/icon_add_white"
                 app:backgroundTint="@color/accent_color"
                 app:elevation="6dp"
                 app:fabSize="mini"

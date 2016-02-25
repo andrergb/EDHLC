@@ -31,7 +31,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
-                android:text="Deck History - 2 players"
+                android:text="Deck History - 3 players"
                 android:textColor="@color/secondary_text"
                 android:textSize="16sp"/>
 

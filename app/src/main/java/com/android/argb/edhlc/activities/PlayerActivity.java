@@ -1,12 +1,10 @@
 package com.android.argb.edhlc.activities;
 
-import android.animation.ValueAnimator;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,7 +21,6 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
@@ -31,7 +28,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
@@ -40,15 +36,15 @@ import android.widget.TextView;
 import com.android.argb.edhlc.Constants;
 import com.android.argb.edhlc.DeckListAdapter;
 import com.android.argb.edhlc.R;
+import com.android.argb.edhlc.Utils;
+import com.android.argb.edhlc.chart.DonutChart;
 import com.android.argb.edhlc.database.deck.DecksDataAccessObject;
 import com.android.argb.edhlc.database.record.RecordsDataAccessObject;
+import com.android.argb.edhlc.objects.Deck;
 import com.android.argb.edhlc.objects.Record;
 
-import org.achartengine.ChartFactory;
-import org.achartengine.GraphicalView;
 import org.achartengine.model.MultipleCategorySeries;
 import org.achartengine.renderer.DefaultRenderer;
-import org.achartengine.renderer.SimpleSeriesRenderer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,6 +77,8 @@ public class PlayerActivity extends AppCompatActivity {
     private RelativeLayout relativeTitleDeckListCard;
     private TextView textTitleDeckListCard;
     private ImageView indicatorDeckListCard;
+    private ListView listDeckListCard;
+    private List<String[]> deckList;
 
     //Card - Chart deck history 2 - 1v1
     private CardView cardViewChart2Slots;
@@ -89,12 +87,8 @@ public class PlayerActivity extends AppCompatActivity {
     private TextView textTitleChart2Slots;
     private ImageView indicatorChart2Slots;
     private DefaultRenderer mDoughnutRender2;
-    private LinearLayout linearChart2Slots;
     private MultipleCategorySeries mMultipleCategorySeriesDataSet2;
-    private TextView textTotalGames1Chart2Slots;
-    private TextView textTotalGames2Chart2Slots;
-    private TextView textFirstChart2Slots;
-    private TextView textSecondChart2Slots;
+    private DonutChart donutChart2;
 
     //Card - Chart deck history 3 - 1v1v1
     private CardView cardViewChart3Slots;
@@ -103,13 +97,8 @@ public class PlayerActivity extends AppCompatActivity {
     private TextView textTitleChart3Slots;
     private ImageView indicatorChart3Slots;
     private DefaultRenderer mDoughnutRender3;
-    private LinearLayout linearChart3Slots;
     private MultipleCategorySeries mMultipleCategorySeriesDataSet3;
-    private TextView textTotalGames1Chart3Slots;
-    private TextView textTotalGames2Chart3Slots;
-    private TextView textFirstChart3Slots;
-    private TextView textSecondChart3Slots;
-    private TextView textThirdChart3Slots;
+    private DonutChart donutChart3;
 
     //Card - Chart deck history 4 - 1v1v1v1
     private CardView cardViewChart4Slots;
@@ -118,14 +107,8 @@ public class PlayerActivity extends AppCompatActivity {
     private TextView textTitleChart4Slots;
     private ImageView indicatorChart4Slots;
     private DefaultRenderer mDoughnutRender4;
-    private LinearLayout linearChart4Slots;
     private MultipleCategorySeries mMultipleCategorySeriesDataSet4;
-    private TextView textTotalGames1Chart4Slots;
-    private TextView textTotalGames2Chart4Slots;
-    private TextView textFirstChart4Slots;
-    private TextView textSecondChart4Slots;
-    private TextView textThirdChart4Slots;
-    private TextView textFourthChart4Slots;
+    private DonutChart donutChart4;
 
     //Card - Last game played
     private CardView cardViewRecordCard;
@@ -203,6 +186,7 @@ public class PlayerActivity extends AppCompatActivity {
             fabMain.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.accent_secondary_black_color)));
 
             fabAdd.setClickable(true);
+            fabContentAdd.setVisibility(View.VISIBLE);
             fabContentAdd.startAnimation(fab_open);
 
             fabEdit.setClickable(true);
@@ -215,33 +199,6 @@ public class PlayerActivity extends AppCompatActivity {
 
             isFabOpen = true;
         }
-    }
-
-    public int getStatusBarHeight() {
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
-    }
-
-    public void justifyListViewHeightBasedOnChildren(ListView listView) {
-        ListAdapter adapter = listView.getAdapter();
-        if (adapter == null)
-            return;
-
-        int totalHeight = 0;
-        for (int i = 0; i < adapter.getCount(); i++) {
-            View listItem = adapter.getView(i, null, listView);
-            listItem.measure(0, 0);
-            totalHeight += listItem.getMeasuredHeight();
-        }
-
-        ViewGroup.LayoutParams par = listView.getLayoutParams();
-        par.height = totalHeight + (listView.getDividerHeight() * (adapter.getCount() - 1));
-        listView.setLayoutParams(par);
-        listView.requestLayout();
     }
 
     @Override
@@ -261,27 +218,27 @@ public class PlayerActivity extends AppCompatActivity {
         switch (v.getId()) {
 
             case R.id.relativeCardTitlePlayerInfo:
-                toggleCardExpansion(cardViewPlayerInfo, textTitlePlayerInfo, iconIndicatorPlayerInfo, relativeTitlePlayerInfo.getHeight(), mCardViewFullHeightPlayerInfo);
+                Utils.toggleCardExpansion(this, cardViewPlayerInfo, textTitlePlayerInfo, iconIndicatorPlayerInfo, relativeTitlePlayerInfo.getHeight(), mCardViewFullHeightPlayerInfo);
                 break;
 
             case R.id.relativeCardTitleDeckList:
-                toggleCardExpansion(cardViewDeckList, textTitleDeckListCard, indicatorDeckListCard, relativeTitleDeckListCard.getHeight(), mCardViewFullHeightDeckList);
+                Utils.toggleCardExpansion(this, cardViewDeckList, textTitleDeckListCard, indicatorDeckListCard, relativeTitleDeckListCard.getHeight(), mCardViewFullHeightDeckList);
                 break;
 
             case R.id.relativeCardTitleRecord:
-                toggleCardExpansion(cardViewRecordCard, textTitleRecordCard, indicatorRecordCard, relativeTitleRecordCard.getHeight(), mCardViewFullHeightLastGamePlayed);
+                Utils.toggleCardExpansion(this, cardViewRecordCard, textTitleRecordCard, indicatorRecordCard, relativeTitleRecordCard.getHeight(), mCardViewFullHeightLastGamePlayed);
                 break;
 
             case R.id.relativeCardTitleChart2Slots:
-                toggleCardExpansion(cardViewChart2Slots, textTitleChart2Slots, indicatorChart2Slots, relativeTitleChart2Slots.getHeight(), mCardViewFullHeightDeckHistory2);
+                Utils.toggleCardExpansion(this, cardViewChart2Slots, textTitleChart2Slots, indicatorChart2Slots, relativeTitleChart2Slots.getHeight(), mCardViewFullHeightDeckHistory2);
                 break;
 
             case R.id.relativeCardTitleChart3Slots:
-                toggleCardExpansion(cardViewChart3Slots, textTitleChart3Slots, indicatorChart3Slots, relativeTitleChart3Slots.getHeight(), mCardViewFullHeightDeckHistory3);
+                Utils.toggleCardExpansion(this, cardViewChart3Slots, textTitleChart3Slots, indicatorChart3Slots, relativeTitleChart3Slots.getHeight(), mCardViewFullHeightDeckHistory3);
                 break;
 
             case R.id.relativeCardTitleChart4Slots:
-                toggleCardExpansion(cardViewChart4Slots, textTitleChart4Slots, indicatorChart4Slots, relativeTitleChart4Slots.getHeight(), mCardViewFullHeightDeckHistory4);
+                Utils.toggleCardExpansion(this, cardViewChart4Slots, textTitleChart4Slots, indicatorChart4Slots, relativeTitleChart4Slots.getHeight(), mCardViewFullHeightDeckHistory4);
                 break;
         }
     }
@@ -335,6 +292,8 @@ public class PlayerActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.fabAdd:
                 //TODO
+                createAddDeckDialog();
+                animateFAB();
                 break;
             case R.id.fabMain:
                 animateFAB();
@@ -367,176 +326,6 @@ public class PlayerActivity extends AppCompatActivity {
         return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
-    public void updateDonutChart2(int first, int second) {
-        textFirstChart2Slots.setText("First: " + first);
-        textSecondChart2Slots.setText("Second: " + second);
-
-        COLORS = new int[]{ContextCompat.getColor(this, R.color.first),
-                ContextCompat.getColor(this, android.R.color.transparent),
-                ContextCompat.getColor(this, R.color.second),
-                ContextCompat.getColor(this, android.R.color.transparent)};
-
-        List<double[]> values = new ArrayList<>();
-        double total = (double) (first + second);
-        double emptySpace = (total == first || total == second) ? 0 : total * 0.005;
-        values.add(new double[]{first, first > 0 ? emptySpace : 0,
-                second, second > 0 ? emptySpace : 0});
-        values.add(new double[]{0, 0, 0, 0});
-        values.add(new double[]{0, 0, 0, 0});
-
-        List<String[]> titles = new ArrayList<>();
-        titles.add(new String[]{String.valueOf(first), "", String.valueOf(second), ""});
-        titles.add(new String[]{"", "", "", ""});
-        titles.add(new String[]{"", "", "", ""});
-
-        mMultipleCategorySeriesDataSet2 = new MultipleCategorySeries("");
-        mMultipleCategorySeriesDataSet2.clear();
-        for (int i = 0; i < values.size(); i++)
-            mMultipleCategorySeriesDataSet2.add(titles.get(i), values.get(i));
-
-        mDoughnutRender2 = new DefaultRenderer();
-        for (int color : COLORS) {
-            SimpleSeriesRenderer r = new SimpleSeriesRenderer();
-            r.setColor(color);
-            mDoughnutRender2.addSeriesRenderer(r);
-        }
-
-        mDoughnutRender2.setZoomEnabled(false);
-        mDoughnutRender2.setZoomButtonsVisible(false);
-        mDoughnutRender2.setPanEnabled(false);
-        mDoughnutRender2.setShowLegend(false);
-        mDoughnutRender2.setClickEnabled(false);
-        mDoughnutRender2.setScale((float) 1.2);
-        mDoughnutRender2.setShowLabels(false);
-        mDoughnutRender2.setDisplayValues(true);
-        mDoughnutRender2.setStartAngle(225);
-        mDoughnutRender2.setBackgroundColor(Color.TRANSPARENT);
-
-        GraphicalView mDoughnutChartView2 = ChartFactory.getDoughnutChartView(this, mMultipleCategorySeriesDataSet2, mDoughnutRender2);
-
-        linearChart2Slots.removeAllViews();
-        linearChart2Slots.addView(mDoughnutChartView2);
-
-        mDoughnutChartView2.repaint();
-    }
-
-    public void updateDonutChart3(int first, int second, int third) {
-        textFirstChart3Slots.setText("First: " + first);
-        textSecondChart3Slots.setText("Second: " + second);
-        textThirdChart3Slots.setText("Third: " + third);
-
-        COLORS = new int[]{ContextCompat.getColor(this, R.color.first),
-                ContextCompat.getColor(this, android.R.color.transparent),
-                ContextCompat.getColor(this, R.color.second),
-                ContextCompat.getColor(this, android.R.color.transparent),
-                ContextCompat.getColor(this, R.color.third),
-                ContextCompat.getColor(this, android.R.color.transparent)};
-
-        List<double[]> values = new ArrayList<>();
-        double total = (double) (first + second + third);
-        double emptySpace = (total == first || total == second || total == third) ? 0 : total * 0.005;
-        values.add(new double[]{first, first > 0 ? emptySpace : 0,
-                second, second > 0 ? emptySpace : 0,
-                third, third > 0 ? emptySpace : 0});
-        values.add(new double[]{0, 0, 0, 0, 0, 0});
-        values.add(new double[]{0, 0, 0, 0, 0, 0});
-
-        List<String[]> titles = new ArrayList<>();
-        titles.add(new String[]{String.valueOf(first), "", String.valueOf(second), "", String.valueOf(third), ""});
-        titles.add(new String[]{"", "", "", "", "", ""});
-        titles.add(new String[]{"", "", "", "", "", ""});
-
-        mMultipleCategorySeriesDataSet3 = new MultipleCategorySeries("");
-        mMultipleCategorySeriesDataSet3.clear();
-        for (int i = 0; i < values.size(); i++)
-            mMultipleCategorySeriesDataSet3.add(titles.get(i), values.get(i));
-
-        mDoughnutRender3 = new DefaultRenderer();
-        for (int color : COLORS) {
-            SimpleSeriesRenderer r = new SimpleSeriesRenderer();
-            r.setColor(color);
-            mDoughnutRender3.addSeriesRenderer(r);
-        }
-
-        mDoughnutRender3.setZoomEnabled(false);
-        mDoughnutRender3.setZoomButtonsVisible(false);
-        mDoughnutRender3.setPanEnabled(false);
-        mDoughnutRender3.setShowLegend(false);
-        mDoughnutRender3.setClickEnabled(false);
-        mDoughnutRender3.setScale((float) 1.2);
-        mDoughnutRender3.setShowLabels(false);
-        mDoughnutRender3.setDisplayValues(true);
-        mDoughnutRender3.setStartAngle(225);
-        mDoughnutRender3.setBackgroundColor(Color.TRANSPARENT);
-
-        GraphicalView mDoughnutChartView3 = ChartFactory.getDoughnutChartView(this, mMultipleCategorySeriesDataSet3, mDoughnutRender3);
-
-        linearChart3Slots.removeAllViews();
-        linearChart3Slots.addView(mDoughnutChartView3);
-
-        mDoughnutChartView3.repaint();
-    }
-
-    public void updateDonutChart4(int first, int second, int third, int fourth) {
-        textFirstChart4Slots.setText("First: " + first);
-        textSecondChart4Slots.setText("Second: " + second);
-        textThirdChart4Slots.setText("Third: " + third);
-        textFourthChart4Slots.setText("Fourth: " + fourth);
-
-        COLORS = new int[]{ContextCompat.getColor(this, R.color.first),
-                ContextCompat.getColor(this, android.R.color.transparent),
-                ContextCompat.getColor(this, R.color.second),
-                ContextCompat.getColor(this, android.R.color.transparent),
-                ContextCompat.getColor(this, R.color.third),
-                ContextCompat.getColor(this, android.R.color.transparent),
-                ContextCompat.getColor(this, R.color.fourth),
-                ContextCompat.getColor(this, android.R.color.transparent)};
-
-        List<double[]> values = new ArrayList<>();
-        double total = (double) (first + second + third + fourth);
-        double emptySpace = (total == first || total == second || total == third || total == fourth) ? 0 : total * 0.005;
-        values.add(new double[]{first, first > 0 ? emptySpace : 0,
-                second, second > 0 ? emptySpace : 0,
-                third, third > 0 ? emptySpace : 0,
-                fourth, fourth > 0 ? emptySpace : 0});
-        values.add(new double[]{0, 0, 0, 0, 0, 0, 0, 0});
-        values.add(new double[]{0, 0, 0, 0, 0, 0, 0, 0});
-
-        List<String[]> titles = new ArrayList<>();
-        titles.add(new String[]{String.valueOf(first), "", String.valueOf(second), "", String.valueOf(third), "", String.valueOf(fourth), ""});
-        titles.add(new String[]{"", "", "", "", "", "", "", ""});
-        titles.add(new String[]{"", "", "", "", "", "", "", ""});
-
-        mMultipleCategorySeriesDataSet4 = new MultipleCategorySeries("");
-        mMultipleCategorySeriesDataSet4.clear();
-        for (int i = 0; i < values.size(); i++)
-            mMultipleCategorySeriesDataSet4.add(titles.get(i), values.get(i));
-
-        mDoughnutRender4 = new DefaultRenderer();
-        for (int color : COLORS) {
-            SimpleSeriesRenderer r = new SimpleSeriesRenderer();
-            r.setColor(color);
-            mDoughnutRender4.addSeriesRenderer(r);
-        }
-
-        mDoughnutRender4.setZoomEnabled(false);
-        mDoughnutRender4.setZoomButtonsVisible(false);
-        mDoughnutRender4.setPanEnabled(false);
-        mDoughnutRender4.setShowLegend(false);
-        mDoughnutRender4.setClickEnabled(false);
-        mDoughnutRender4.setScale((float) 1.2);
-        mDoughnutRender4.setShowLabels(false);
-        mDoughnutRender4.setDisplayValues(true);
-        mDoughnutRender4.setStartAngle(225);
-        mDoughnutRender4.setBackgroundColor(Color.TRANSPARENT);
-
-        GraphicalView mDoughnutChartView4 = ChartFactory.getDoughnutChartView(this, mMultipleCategorySeriesDataSet4, mDoughnutRender4);
-
-        linearChart4Slots.removeAllViews();
-        linearChart4Slots.addView(mDoughnutChartView4);
-
-        mDoughnutChartView4.repaint();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -546,64 +335,16 @@ public class PlayerActivity extends AppCompatActivity {
         Intent intent = getIntent();
         mPlayerName = intent.getStringExtra("PLAYERNAME");
 
-        assert getSupportActionBar() != null;
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setTitle(mPlayerName);
-
-        View statusBarBackground = findViewById(R.id.statusBarBackground);
-        ViewGroup.LayoutParams params = statusBarBackground.getLayoutParams();
-        params.height = getStatusBarHeight();
-        statusBarBackground.setLayoutParams(params);
-        statusBarBackground.setBackgroundColor(ContextCompat.getColor(this, R.color.primary_color));
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = this.getWindow();
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(ContextCompat.getColor(this, R.color.black_transparent));
-        }
-
-        mPlayerDrawer = (LinearLayout) findViewById(R.id.player_drawer);
-        mPlayerDrawerLayout = (DrawerLayout) findViewById(R.id.player_drawer_layout);
-        mDrawerToggle = new ActionBarDrawerToggle(this, mPlayerDrawerLayout, R.string.app_name, R.string.app_name) {
-            public void onDrawerClosed(View view) {
-                super.onDrawerClosed(view);
-                invalidateOptionsMenu();
-            }
-
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                invalidateOptionsMenu();
-            }
-        };
-        mPlayerDrawerLayout.setDrawerListener(mDrawerToggle);
-
         decksDB = new DecksDataAccessObject(this);
-        recordsDB = new RecordsDataAccessObject(this);
         decksDB.open();
+
+        recordsDB = new RecordsDataAccessObject(this);
         recordsDB.open();
 
-        createLayout(this.findViewById(android.R.id.content));
-
-        //TODO selected item on drawer - temp local
-        LinearLayout drawerItemPlayers = (LinearLayout) findViewById(R.id.drawerItemPlayers);
-        ImageView drawerItemIconPlayers = (ImageView) findViewById(R.id.drawerItemIconPlayers);
-        TextView drawerItemTextPlayers = (TextView) findViewById(R.id.drawerItemTextPlayers);
-        drawerItemPlayers.setBackgroundColor(ContextCompat.getColor(this, R.color.gray200));
-        drawerItemIconPlayers.setColorFilter(ContextCompat.getColor(this, R.color.accent_color));
-        drawerItemTextPlayers.setTextColor(ContextCompat.getColor(this, R.color.accent_color));
-
-        //TODO test
-        ListView listview = (ListView) findViewById(R.id.listDeckListCard);
-        List<String[]> a = new ArrayList<>();
-//        a.add(new String[]{"image_" + mPlayerName + "_" + mDeckName + ".png", "title 1", "title2"});
-//        a.add(new String[]{"image_" + mPlayerName + "_" + mDeckName + ".png", "title 3", "title4"});
-        listview.setAdapter(new DeckListAdapter(this, a));
-        justifyListViewHeightBasedOnChildren(listview);
+        createStatusBar();
+        createToolbar();
+        createDrawer();
+        createLayout();
     }
 
     @Override
@@ -665,141 +406,155 @@ public class PlayerActivity extends AppCompatActivity {
         outState.putSerializable("current_renderer4", mDoughnutRender4);
     }
 
+    private void createAddDeckDialog() {
+    }
+
+    private void createDrawer() {
+        mPlayerDrawer = (LinearLayout) findViewById(R.id.player_drawer);
+        mPlayerDrawerLayout = (DrawerLayout) findViewById(R.id.player_drawer_layout);
+        mDrawerToggle = new ActionBarDrawerToggle(this, mPlayerDrawerLayout, R.string.app_name, R.string.app_name) {
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+                invalidateOptionsMenu();
+            }
+
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                invalidateOptionsMenu();
+            }
+        };
+        mPlayerDrawerLayout.setDrawerListener(mDrawerToggle);
+
+        //TODO selected item on drawer - temp local
+        LinearLayout drawerItemPlayers = (LinearLayout) findViewById(R.id.drawerItemPlayers);
+        ImageView drawerItemIconPlayers = (ImageView) findViewById(R.id.drawerItemIconPlayers);
+        TextView drawerItemTextPlayers = (TextView) findViewById(R.id.drawerItemTextPlayers);
+        drawerItemPlayers.setBackgroundColor(ContextCompat.getColor(this, R.color.gray200));
+        drawerItemIconPlayers.setColorFilter(ContextCompat.getColor(this, R.color.accent_color));
+        drawerItemTextPlayers.setTextColor(ContextCompat.getColor(this, R.color.accent_color));
+    }
+
     private void createEditPlayerDialog() {
         //TODO
     }
 
-    //TODO set tittle
-    private void createLayout(View view) {
-        if (view != null) {
-            fabDismissView = findViewById(R.id.fabDismissView);
-            fabDismissView.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                        if (fabMain.getVisibility() == View.VISIBLE && isFabOpen) {
-                            animateFAB();
-                        }
-                    }
-                    return true;
-                }
-            });
+    private void createLayout() {
+        NestedScrollView nestedScrollView = (NestedScrollView) findViewById(R.id.nestedScrollView);
+        nestedScrollView.smoothScrollBy(0, 0);
 
-            //Drawer
-            switchScreen = (Switch) findViewById(R.id.switchScreen);
-            switchScreen.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!switchScreen.isChecked()) {
-                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                        getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 0).commit();
-                    } else {
-                        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                        getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 1).commit();
+        fabDismissView = findViewById(R.id.fabDismissView);
+        fabDismissView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    if (fabMain.getVisibility() == View.VISIBLE && isFabOpen) {
+                        animateFAB();
                     }
                 }
-            });
+                return true;
+            }
+        });
 
-            //FloatingActionButton
-            fabAdd = (FloatingActionButton) findViewById(R.id.fabAdd);
-            fabContentAdd = (LinearLayout) findViewById(R.id.fabContentAdd);
-            fabMain = (FloatingActionButton) findViewById(R.id.fabMain);
-            fabContentEdit = (LinearLayout) findViewById(R.id.fabContentEdit);
-            fabEdit = (FloatingActionButton) findViewById(R.id.fabEdit);
-            fabContentDelete = (LinearLayout) findViewById(R.id.fabContentDelete);
-            fabDelete = (FloatingActionButton) findViewById(R.id.fabDelete);
+        //Drawer
+        switchScreen = (Switch) findViewById(R.id.switchScreen);
+        switchScreen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!switchScreen.isChecked()) {
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 0).commit();
+                } else {
+                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 1).commit();
+                }
+            }
+        });
 
-            //Card Deck info
-            cardViewPlayerInfo = (CardView) view.findViewById(R.id.cardViewPlayerInfo);
-            relativeTitlePlayerInfo = (RelativeLayout) view.findViewById(R.id.relativeCardTitlePlayerInfo);
-            textTitlePlayerInfo = (TextView) view.findViewById(R.id.textTitlePlayerInfo);
-            iconIndicatorPlayerInfo = (ImageView) view.findViewById(R.id.iconIndicatorPlayerInfo);
-            //Most played general
-            textViewMostPlayedDeckPlayerInfo = (TextView) view.findViewById(R.id.textViewMostPlayedDeckPlayerInfo);
-            //Most played general - tines
-            textViewTimePlayedDeckPlayerInfo = (TextView) view.findViewById(R.id.textViewTimePlayedDeckPlayerInfo);
-            //Creation Date
-            textViewCreationDate = (TextView) view.findViewById(R.id.textViewCreationDatePlayerInfo);
-            //Total games
-            textViewTotalGames = (TextView) view.findViewById(R.id.textViewTotalGamesPlayerInfo);
-            //Wins
-            textViewWins = (TextView) view.findViewById(R.id.textViewWinsPlayerInfo);
-            //Total decks
-            textViewTotalDecksPlayerInfo = (TextView) view.findViewById(R.id.textViewTotalDecksPlayerInfo);
+        //FloatingActionButton
+        fabAdd = (FloatingActionButton) findViewById(R.id.fabAdd);
+        fabContentAdd = (LinearLayout) findViewById(R.id.fabContentAdd);
+        fabMain = (FloatingActionButton) findViewById(R.id.fabMain);
+        fabContentEdit = (LinearLayout) findViewById(R.id.fabContentEdit);
+        fabEdit = (FloatingActionButton) findViewById(R.id.fabEdit);
+        fabContentDelete = (LinearLayout) findViewById(R.id.fabContentDelete);
+        fabDelete = (FloatingActionButton) findViewById(R.id.fabDelete);
 
-            //Card deckList
-            cardViewDeckList = (CardView) view.findViewById(R.id.cardViewDeckList);
-            relativeTitleDeckListCard = (RelativeLayout) view.findViewById(R.id.relativeCardTitleDeckList);
-            textTitleDeckListCard = (TextView) view.findViewById(R.id.textTitleDeckListCard);
-            indicatorDeckListCard = (ImageView) view.findViewById(R.id.iconIndicatorDeckListCard);
+        //Card Deck info
+        cardViewPlayerInfo = (CardView) findViewById(R.id.cardViewPlayerInfo);
+        relativeTitlePlayerInfo = (RelativeLayout) findViewById(R.id.relativeCardTitlePlayerInfo);
+        textTitlePlayerInfo = (TextView) findViewById(R.id.textTitlePlayerInfo);
+        iconIndicatorPlayerInfo = (ImageView) findViewById(R.id.iconIndicatorPlayerInfo);
+        //Most played general
+        textViewMostPlayedDeckPlayerInfo = (TextView) findViewById(R.id.textViewMostPlayedDeckPlayerInfo);
+        //Most played general - tines
+        textViewTimePlayedDeckPlayerInfo = (TextView) findViewById(R.id.textViewTimePlayedDeckPlayerInfo);
+        //Creation Date
+        textViewCreationDate = (TextView) findViewById(R.id.textViewCreationDatePlayerInfo);
+        //Total games
+        textViewTotalGames = (TextView) findViewById(R.id.textViewTotalGamesPlayerInfo);
+        //Wins
+        textViewWins = (TextView) findViewById(R.id.textViewWinsPlayerInfo);
+        //Total decks
+        textViewTotalDecksPlayerInfo = (TextView) findViewById(R.id.textViewTotalDecksPlayerInfo);
 
-            //Chart 1v1
-            cardViewChart2Slots = (CardView) findViewById(R.id.cardViewChart2Slots);
-            relativeTitleChart2Slots = (RelativeLayout) findViewById(R.id.relativeCardTitleChart2Slots);
-            textTitleChart2Slots = (TextView) findViewById(R.id.textTitleChart2Slots);
-            indicatorChart2Slots = (ImageView) findViewById(R.id.indicatorChart2Slots);
-            linearChart2Slots = (LinearLayout) findViewById(R.id.linearChart2Slots);
-            textTotalGames1Chart2Slots = (TextView) view.findViewById(R.id.textTotalGames1Chart2Slots);
-            textTotalGames2Chart2Slots = (TextView) view.findViewById(R.id.textTotalGames2Chart2Slots);
-            textFirstChart2Slots = (TextView) view.findViewById(R.id.textFirstChart2Slots);
-            textSecondChart2Slots = (TextView) view.findViewById(R.id.textSecondChart2Slots);
+        //Card deckList
+        cardViewDeckList = (CardView) findViewById(R.id.cardViewDeckList);
+        relativeTitleDeckListCard = (RelativeLayout) findViewById(R.id.relativeCardTitleDeckList);
+        textTitleDeckListCard = (TextView) findViewById(R.id.textTitleDeckListCard);
+        indicatorDeckListCard = (ImageView) findViewById(R.id.iconIndicatorDeckListCard);
+        listDeckListCard = (ListView) findViewById(R.id.listDeckListCard);
 
-            //Chart 1v1v1
-            cardViewChart3Slots = (CardView) findViewById(R.id.cardViewChart3Slots);
-            relativeTitleChart3Slots = (RelativeLayout) findViewById(R.id.relativeCardTitleChart3Slots);
-            textTitleChart3Slots = (TextView) findViewById(R.id.textTitleChart3Slots);
-            indicatorChart3Slots = (ImageView) findViewById(R.id.indicatorChart3Slots);
-            linearChart3Slots = (LinearLayout) findViewById(R.id.linearChart3Slots);
-            textTotalGames1Chart3Slots = (TextView) view.findViewById(R.id.textTotalGames1Chart3Slots);
-            textTotalGames2Chart3Slots = (TextView) view.findViewById(R.id.textTotalGames2Chart3Slots);
-            textFirstChart3Slots = (TextView) view.findViewById(R.id.textFirstChart3Slots);
-            textSecondChart3Slots = (TextView) view.findViewById(R.id.textSecondChart3Slots);
-            textThirdChart3Slots = (TextView) view.findViewById(R.id.textThirdChart3Slots);
 
-            //Chart 1v1v1v1
-            cardViewChart4Slots = (CardView) findViewById(R.id.cardViewChart4Slots);
-            relativeTitleChart4Slots = (RelativeLayout) findViewById(R.id.relativeCardTitleChart4Slots);
-            textTitleChart4Slots = (TextView) findViewById(R.id.textTitleChart4Slots);
-            indicatorChart4Slots = (ImageView) findViewById(R.id.indicatorChart4Slots);
-            linearChart4Slots = (LinearLayout) findViewById(R.id.linearChart4Slots);
-            textTotalGames1Chart4Slots = (TextView) view.findViewById(R.id.textTotalGames1Chart4Slots);
-            textTotalGames2Chart4Slots = (TextView) view.findViewById(R.id.textTotalGames2Chart4Slots);
-            textFirstChart4Slots = (TextView) view.findViewById(R.id.textFirstChart4Slots);
-            textSecondChart4Slots = (TextView) view.findViewById(R.id.textSecondChart4Slots);
-            textThirdChart4Slots = (TextView) view.findViewById(R.id.textThirdChart4Slots);
-            textFourthChart4Slots = (TextView) view.findViewById(R.id.textFourthChart4Slots);
+        //Chart 1v1
+        cardViewChart2Slots = (CardView) findViewById(R.id.cardViewChart2Slots);
+        relativeTitleChart2Slots = (RelativeLayout) findViewById(R.id.relativeCardTitleChart2Slots);
+        textTitleChart2Slots = (TextView) findViewById(R.id.textTitleChart2Slots);
+        indicatorChart2Slots = (ImageView) findViewById(R.id.indicatorChart2Slots);
+        donutChart2 = new DonutChart(this, mDoughnutRender2, mMultipleCategorySeriesDataSet2);
 
-            //Chart lastGamePlayed
-            cardViewRecordCard = (CardView) findViewById(R.id.cardViewRecordCard);
-            relativeTitleRecordCard = (RelativeLayout) findViewById(R.id.relativeCardTitleRecord);
-            indicatorRecordCard = (ImageView) findViewById(R.id.indicatorRecordCard);
-            textTitleRecordCard = (TextView) findViewById(R.id.textTitleRecordCard);
-            textDateRecordCard = (TextView) findViewById(R.id.textDateRecordCard);
+        //Chart 1v1v1
+        cardViewChart3Slots = (CardView) findViewById(R.id.cardViewChart3Slots);
+        relativeTitleChart3Slots = (RelativeLayout) findViewById(R.id.relativeCardTitleChart3Slots);
+        textTitleChart3Slots = (TextView) findViewById(R.id.textTitleChart3Slots);
+        indicatorChart3Slots = (ImageView) findViewById(R.id.indicatorChart3Slots);
+        donutChart3 = new DonutChart(this, mDoughnutRender3, mMultipleCategorySeriesDataSet3);
 
-            linearFirstLineRecordCard = (LinearLayout) findViewById(R.id.linearFirstLineRecordCard);
-            textFirstIndicatorRecordCard = (TextView) findViewById(R.id.textFirstIndicatorRecordCard);
-            textFirstPlayerRecordCard = (TextView) view.findViewById(R.id.textFirstPlayerRecordCard);
-            textFirstDeckRecordCard = (TextView) view.findViewById(R.id.textFirstDeckRecordCard);
-            divider1RecordCard = findViewById(R.id.divider1RecordCard);
+        //Chart 1v1v1v1
+        cardViewChart4Slots = (CardView) findViewById(R.id.cardViewChart4Slots);
+        relativeTitleChart4Slots = (RelativeLayout) findViewById(R.id.relativeCardTitleChart4Slots);
+        textTitleChart4Slots = (TextView) findViewById(R.id.textTitleChart4Slots);
+        indicatorChart4Slots = (ImageView) findViewById(R.id.indicatorChart4Slots);
+        donutChart4 = new DonutChart(this, mDoughnutRender4, mMultipleCategorySeriesDataSet4);
 
-            linearSecondLineRecordCard = (LinearLayout) findViewById(R.id.linearSecondLineRecordCard);
-            textSecondIndicatorRecordCard = (TextView) findViewById(R.id.textSecondIndicatorRecordCard);
-            textSecondPlayerRecordCard = (TextView) view.findViewById(R.id.textSecondPlayerRecordCard);
-            textSecondDeckRecordCard = (TextView) view.findViewById(R.id.textSecondDeckRecordCard);
-            divider2RecordCard = findViewById(R.id.divider2RecordCard);
+        //Chart lastGamePlayed
+        cardViewRecordCard = (CardView) findViewById(R.id.cardViewRecordCard);
+        relativeTitleRecordCard = (RelativeLayout) findViewById(R.id.relativeCardTitleRecord);
+        indicatorRecordCard = (ImageView) findViewById(R.id.indicatorRecordCard);
+        textTitleRecordCard = (TextView) findViewById(R.id.textTitleRecordCard);
+        textDateRecordCard = (TextView) findViewById(R.id.textDateRecordCard);
 
-            linearThirdLineRecordCard = (LinearLayout) findViewById(R.id.linearThirdLineRecordCard);
-            textThirdIndicatorRecordCard = (TextView) findViewById(R.id.textThirdIndicatorRecordCard);
-            textThirdPlayerRecordCard = (TextView) view.findViewById(R.id.textThirdPlayerRecordCard);
-            textThirdDeckRecordCard = (TextView) view.findViewById(R.id.textThirdDeckRecordCard);
-            divider3RecordCard = findViewById(R.id.divider3RecordCard);
+        linearFirstLineRecordCard = (LinearLayout) findViewById(R.id.linearFirstLineRecordCard);
+        textFirstIndicatorRecordCard = (TextView) findViewById(R.id.textFirstIndicatorRecordCard);
+        textFirstPlayerRecordCard = (TextView) findViewById(R.id.textFirstPlayerRecordCard);
+        textFirstDeckRecordCard = (TextView) findViewById(R.id.textFirstDeckRecordCard);
+        divider1RecordCard = findViewById(R.id.divider1RecordCard);
 
-            linearFourthLineRecordCard = (LinearLayout) findViewById(R.id.linearFourthLineRecordCard);
-            textFourthIndicatorRecordCard = (TextView) findViewById(R.id.textFourthIndicatorRecordCard);
-            textFourthPlayerRecordCard = (TextView) view.findViewById(R.id.textFourthPlayerRecordCard);
-            textFourthDeckRecordCard = (TextView) view.findViewById(R.id.textFourthDeckRecordCard);
+        linearSecondLineRecordCard = (LinearLayout) findViewById(R.id.linearSecondLineRecordCard);
+        textSecondIndicatorRecordCard = (TextView) findViewById(R.id.textSecondIndicatorRecordCard);
+        textSecondPlayerRecordCard = (TextView) findViewById(R.id.textSecondPlayerRecordCard);
+        textSecondDeckRecordCard = (TextView) findViewById(R.id.textSecondDeckRecordCard);
+        divider2RecordCard = findViewById(R.id.divider2RecordCard);
 
-        }
+        linearThirdLineRecordCard = (LinearLayout) findViewById(R.id.linearThirdLineRecordCard);
+        textThirdIndicatorRecordCard = (TextView) findViewById(R.id.textThirdIndicatorRecordCard);
+        textThirdPlayerRecordCard = (TextView) findViewById(R.id.textThirdPlayerRecordCard);
+        textThirdDeckRecordCard = (TextView) findViewById(R.id.textThirdDeckRecordCard);
+        divider3RecordCard = findViewById(R.id.divider3RecordCard);
+
+        linearFourthLineRecordCard = (LinearLayout) findViewById(R.id.linearFourthLineRecordCard);
+        textFourthIndicatorRecordCard = (TextView) findViewById(R.id.textFourthIndicatorRecordCard);
+        textFourthPlayerRecordCard = (TextView) findViewById(R.id.textFourthPlayerRecordCard);
+        textFourthDeckRecordCard = (TextView) findViewById(R.id.textFourthDeckRecordCard);
     }
 
     private void createRemovePlayerDialog() {
@@ -822,117 +577,29 @@ public class PlayerActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    private void makeViewVisible(View view) {
-        int viewTop = view.getTop();
-        int viewBottom = view.getBottom();
+    private void createStatusBar() {
+        View statusBarBackground = findViewById(R.id.statusBarBackground);
+        ViewGroup.LayoutParams params = statusBarBackground.getLayoutParams();
+        params.height = Utils.getStatusBarHeight(this);
+        statusBarBackground.setLayoutParams(params);
+        statusBarBackground.setBackgroundColor(ContextCompat.getColor(this, R.color.primary_color));
 
-        for (; ; ) {
-            ViewParent viewParent = view.getParent();
-            if (viewParent == null || !(viewParent instanceof ViewGroup))
-                break;
-
-            ViewGroup viewGroupParent = (ViewGroup) viewParent;
-            if (viewGroupParent instanceof NestedScrollView) {
-
-                NestedScrollView nestedScrollView = (NestedScrollView) viewGroupParent;
-                int height = nestedScrollView.getHeight();
-                int screenTop = nestedScrollView.getScrollY();
-                int screenBottom = screenTop + height;
-                int fadingEdge = nestedScrollView.getVerticalFadingEdgeLength();
-
-                // leave room for top fading edge as long as rect isn't at very top
-                if (viewTop > 0)
-                    screenTop += fadingEdge;
-
-                // leave room for bottom fading edge as long as rect isn't at very bottom
-                if (viewBottom < nestedScrollView.getChildAt(0).getHeight())
-                    screenBottom -= fadingEdge;
-
-                int scrollYDelta = 0;
-
-                if (viewBottom > screenBottom && viewTop > screenTop) {
-                    // need to move down to get it in view: move down just enough so
-                    // that the entire rectangle is in view (or at least the first
-                    // screen size chunk).
-
-                    if (viewBottom - viewTop > height) // just enough to get screen size chunk on
-                        scrollYDelta += (viewTop - screenTop);
-                    else              // get entire rect at bottom of screen
-                        scrollYDelta += (viewBottom - screenBottom);
-
-                    // make sure we aren't scrolling beyond the end of our content
-                    int bottom = nestedScrollView.getChildAt(0).getBottom();
-                    int distanceToBottom = bottom - screenBottom;
-                    scrollYDelta = Math.min(scrollYDelta, distanceToBottom);
-
-                } else if (viewTop < screenTop && viewBottom < screenBottom) {
-                    // need to move up to get it in view: move up just enough so that
-                    // entire rectangle is in view (or at least the first screen
-                    // size chunk of it).
-
-                    if (viewBottom - viewTop > height)    // screen size chunk
-                        scrollYDelta -= (screenBottom - viewBottom);
-                    else                  // entire rect at top
-                        scrollYDelta -= (screenTop - viewTop);
-
-                    // make sure we aren't scrolling any further than the top our content
-                    scrollYDelta = Math.max(scrollYDelta, -nestedScrollView.getScrollY());
-                }
-                nestedScrollView.smoothScrollBy(0, scrollYDelta);
-                break;
-            }
-            // Transform coordinates to parent:
-            int dy = viewGroupParent.getTop() - viewGroupParent.getScrollY();
-            viewTop += dy;
-            viewBottom += dy;
-
-            view = viewGroupParent;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = this.getWindow();
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(ContextCompat.getColor(this, R.color.black_transparent));
         }
     }
 
-    private void toggleCardExpansion(final CardView card, TextView title, ImageView selector, int minHeight, int maxHeight) {
-        // expand
-        if (card.getHeight() == minHeight) {
-            title.setTextColor(ContextCompat.getColor(this, R.color.secondary_color));
-
-            Animation rotation = AnimationUtils.loadAnimation(this, R.anim.rotate_180_anticlockwise);
-            selector.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.arrow_up));
-            selector.setRotation(0);
-            selector.startAnimation(rotation);
-            selector.setColorFilter(ContextCompat.getColor(this, R.color.secondary_color));
-
-            ValueAnimator anim = ValueAnimator.ofInt(card.getMeasuredHeightAndState(), maxHeight);
-            anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    int val = (Integer) valueAnimator.getAnimatedValue();
-                    ViewGroup.LayoutParams layoutParams = card.getLayoutParams();
-                    layoutParams.height = val;
-                    card.setLayoutParams(layoutParams);
-                    makeViewVisible(card);
-                }
-            });
-            anim.start();
-        } else {
-            // collapse
-            title.setTextColor(ContextCompat.getColor(this, R.color.secondary_text));
-
-            Animation rotation = AnimationUtils.loadAnimation(this, R.anim.rotate_180_clockwise);
-            selector.startAnimation(rotation);
-            selector.setColorFilter(ContextCompat.getColor(this, R.color.secondary_text));
-
-            ValueAnimator anim = ValueAnimator.ofInt(card.getMeasuredHeightAndState(), minHeight);
-            anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    int val = (Integer) valueAnimator.getAnimatedValue();
-                    ViewGroup.LayoutParams layoutParams = card.getLayoutParams();
-                    layoutParams.height = val;
-                    card.setLayoutParams(layoutParams);
-                }
-            });
-            anim.start();
-        }
+    private void createToolbar() {
+        assert getSupportActionBar() != null;
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setTitle(mPlayerName);
     }
 
     private void updateLayout() {
@@ -971,6 +638,18 @@ public class PlayerActivity extends AppCompatActivity {
         textViewTotalDecksPlayerInfo.setText("TODO");
 
         //Card deckList
+        deckList = new ArrayList<>();
+        List<Deck> aux = decksDB.getAllDeckByPlayerName(mPlayerName);
+        for (int i = 0; i < aux.size(); i++) {
+            String imagePath = "image_" + mPlayerName + "_" + aux.get(i).getDeckName() + ".png";
+            String title = aux.get(i).getDeckName();
+            String subTitle = "TODO";
+
+            deckList.add(new String[]{imagePath, title, subTitle});
+        }
+        listDeckListCard.setAdapter(new DeckListAdapter(this, deckList));
+        Utils.justifyListViewHeightBasedOnChildren(listDeckListCard);
+
         if (mCardViewFullHeightDeckList == 0) {
             cardViewDeckList.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                 @Override
@@ -1151,9 +830,7 @@ public class PlayerActivity extends AppCompatActivity {
                     }
                 });
             }
-            textTotalGames1Chart2Slots.setText("" + total2);
-            textTotalGames2Chart2Slots.setText(total2 == 1 ? "game played" : "games played");
-            updateDonutChart2(firstIn2, secondIn2);
+            donutChart2.updateDonutChart(new int[]{firstIn2, secondIn2});
         }
 
         //Total games and Chart3 1v1v1
@@ -1177,9 +854,7 @@ public class PlayerActivity extends AppCompatActivity {
                     }
                 });
             }
-            textTotalGames1Chart3Slots.setText("" + total3);
-            textTotalGames2Chart3Slots.setText(total3 == 1 ? "game played" : "games played");
-            updateDonutChart3(firstIn3, secondIn3, thirdIn3);
+            donutChart3.updateDonutChart(new int[]{firstIn3, secondIn3, thirdIn3});
         }
 
         //Total games and Chart4 1v1v1v1
@@ -1205,9 +880,7 @@ public class PlayerActivity extends AppCompatActivity {
                     }
                 });
             }
-            textTotalGames1Chart4Slots.setText("" + total4);
-            textTotalGames2Chart4Slots.setText(total4 == 1 ? "game played" : "games played");
-            updateDonutChart4(firstIn4, secondIn4, thirdIn4, fourthIn4);
+            donutChart4.updateDonutChart(new int[]{firstIn4, secondIn4, thirdIn4, fourthIn4});
         }
 
         //Deck info - Total Games
