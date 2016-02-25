@@ -227,9 +227,9 @@ public class PlayerActivity extends AppCompatActivity {
                 Utils.toggleCardExpansion(this, cardViewPlayerInfo, textTitlePlayerInfo, iconIndicatorPlayerInfo, relativeTitlePlayerInfo.getHeight(), mCardViewFullHeightPlayerInfo);
                 break;
 
-//            case R.id.relativeCardTitleDeckList:
-//                Utils.toggleCardExpansion(this, cardViewDeckList, textTitleDeckListCard, indicatorDeckListCard, relativeTitleDeckListCard.getHeight(), mCardViewFullHeightDeckList);
-//                break;
+            case R.id.relativeCardTitleDeckList:
+                Utils.toggleCardExpansion(this, cardViewDeckList, textTitleDeckListCard, indicatorDeckListCard, relativeTitleDeckListCard.getHeight(), mCardViewFullHeightDeckList);
+                break;
 
             case R.id.relativeCardTitleRecord:
                 Utils.toggleCardExpansion(this, cardViewRecordCard, textTitleRecordCard, indicatorRecordCard, relativeTitleRecordCard.getHeight(), mCardViewFullHeightLastGamePlayed);
@@ -462,8 +462,25 @@ public class PlayerActivity extends AppCompatActivity {
 
                     if (decksDB.addDeck(new Deck(mPlayerName, tempName, new int[]{PlayerActivity.this.getResources().getColor(R.color.primary_color), PlayerActivity.this.getResources().getColor(R.color.secondary_color)}, colorIdentity, date)) != -1) {
                         Toast.makeText(view.getContext(), tempName + " added", Toast.LENGTH_SHORT).show();
-//                        Utils.expand(getApplicationContext(), cardViewDeckList, textTitleDeckListCard, indicatorDeckListCard, relativeTitleDeckListCard.getHeight(), mCardViewFullHeightDeckList);
+
+                        //Set card to wrap_content
+                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                        int pixel6dp = (int) Utils.convertDpToPixel((float) 6, getApplicationContext());
+                        layoutParams.setMargins(pixel6dp, pixel6dp, pixel6dp, pixel6dp);
+                        cardViewDeckList.setLayoutParams(layoutParams);
+
                         updateLayout();
+
+                        //Update fullSize to expansion
+                        cardViewDeckList.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                            @Override
+                            public boolean onPreDraw() {
+                                cardViewDeckList.getViewTreeObserver().removeOnPreDrawListener(this);
+                                mCardViewFullHeightDeckList = cardViewDeckList.getHeight();
+                                return true;
+                            }
+                        });
+
                         alertDialog.dismiss();
                     } else {
                         Toast.makeText(view.getContext(), "Fail: Deck " + tempName + " already exists", Toast.LENGTH_SHORT).show();
@@ -721,6 +738,17 @@ public class PlayerActivity extends AppCompatActivity {
         }
         mDeckListAdapter.notifyDataSetChanged();
         Utils.justifyListViewHeightBasedOnChildren(listDeckListCard);
+
+        if (mCardViewFullHeightDeckList == 0) {
+            cardViewDeckList.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                @Override
+                public boolean onPreDraw() {
+                    cardViewDeckList.getViewTreeObserver().removeOnPreDrawListener(this);
+                    mCardViewFullHeightDeckList = cardViewDeckList.getHeight();
+                    return true;
+                }
+            });
+        }
 
         //Card last game player
         List<Record> allRecords = recordsDB.getAllRecordsByPlayerName(mPlayerName);
