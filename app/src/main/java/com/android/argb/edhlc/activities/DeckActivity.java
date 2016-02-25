@@ -666,12 +666,12 @@ public class DeckActivity extends AppCompatActivity {
 //        switchScreen.getTrackDrawable().setColorFilter(ContextCompat.getColor(this, R.color.accent_secondary_color), PorterDuff.Mode.MULTIPLY);
 
         //TODO test
-        ListView listview = (ListView) findViewById(R.id.listDeckListCard);
-        List<String[]> a = new ArrayList<>();
-        a.add(new String[]{"image_" + mPlayerName + "_" + mDeckName + ".png", "title 1", "title2"});
-        a.add(new String[]{"image_" + mPlayerName + "_" + mDeckName + ".png", "title 3", "title4"});
-        listview.setAdapter(new DeckListAdapter(this, a));
-        justifyListViewHeightBasedOnChildren(listview);
+//        ListView listview = (ListView) findViewById(R.id.listDeckListCard);
+//        List<String[]> a = new ArrayList<>();
+//        a.add(new String[]{"image_" + mPlayerName + "_" + mDeckName + ".png", "title 1", "title2"});
+//        a.add(new String[]{"image_" + mPlayerName + "_" + mDeckName + ".png", "title 3", "title4"});
+//        listview.setAdapter(new DeckListAdapter(this, a));
+//        justifyListViewHeightBasedOnChildren(listview);
     }
 
     @Override

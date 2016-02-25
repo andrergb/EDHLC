@@ -10,7 +10,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -547,6 +546,20 @@ public class PlayerActivity extends AppCompatActivity {
         Intent intent = getIntent();
         mPlayerName = intent.getStringExtra("PLAYERNAME");
 
+        assert getSupportActionBar() != null;
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setTitle(mPlayerName);
+
+        View statusBarBackground = findViewById(R.id.statusBarBackground);
+        ViewGroup.LayoutParams params = statusBarBackground.getLayoutParams();
+        params.height = getStatusBarHeight();
+        statusBarBackground.setLayoutParams(params);
+        statusBarBackground.setBackgroundColor(ContextCompat.getColor(this, R.color.primary_color));
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = this.getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -658,20 +671,6 @@ public class PlayerActivity extends AppCompatActivity {
 
     //TODO set tittle
     private void createLayout(View view) {
-        assert getSupportActionBar() != null;
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        toolbar.setTitle("aaaaaaaaaaaaa");
-        ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
-        p.setMargins(0, 0, 0, getStatusBarHeight());
-        toolbar.requestLayout();
-
-        CollapsingToolbarLayout main_collapsing = (CollapsingToolbarLayout) findViewById(R.id.main_collapsing);
-        main_collapsing.setTitle("bbbbbbbbbbbbb");
-
-
         if (view != null) {
             fabDismissView = findViewById(R.id.fabDismissView);
             fabDismissView.setOnTouchListener(new View.OnTouchListener() {
