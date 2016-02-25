@@ -49,48 +49,54 @@ public class Utils {
 
 
     public static void toggleCardExpansion(Context context, final CardView card, TextView title, ImageView selector, int minHeight, int maxHeight) {
-        // expand
         if (card.getHeight() == minHeight) {
-            title.setTextColor(ContextCompat.getColor(context, R.color.secondary_color));
-
-            Animation rotation = AnimationUtils.loadAnimation(context, R.anim.rotate_180_anticlockwise);
-            selector.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.arrow_up));
-            selector.setRotation(0);
-            selector.startAnimation(rotation);
-            selector.setColorFilter(ContextCompat.getColor(context, R.color.secondary_color));
-
-            ValueAnimator anim = ValueAnimator.ofInt(card.getMeasuredHeightAndState(), maxHeight);
-            anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    int val = (Integer) valueAnimator.getAnimatedValue();
-                    ViewGroup.LayoutParams layoutParams = card.getLayoutParams();
-                    layoutParams.height = val;
-                    card.setLayoutParams(layoutParams);
-                    Utils.makeViewVisible(card);
-                }
-            });
-            anim.start();
+            expand(context, card, title, selector, minHeight, maxHeight);
         } else {
-            // collapse
-            title.setTextColor(ContextCompat.getColor(context, R.color.secondary_text));
-
-            Animation rotation = AnimationUtils.loadAnimation(context, R.anim.rotate_180_clockwise);
-            selector.startAnimation(rotation);
-            selector.setColorFilter(ContextCompat.getColor(context, R.color.secondary_text));
-
-            ValueAnimator anim = ValueAnimator.ofInt(card.getMeasuredHeightAndState(), minHeight);
-            anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    int val = (Integer) valueAnimator.getAnimatedValue();
-                    ViewGroup.LayoutParams layoutParams = card.getLayoutParams();
-                    layoutParams.height = val;
-                    card.setLayoutParams(layoutParams);
-                }
-            });
-            anim.start();
+            collapse(context, card, title, selector, minHeight, maxHeight);
         }
+    }
+
+    private static void collapse(Context context, final CardView card, TextView title, ImageView selector, int minHeight, int maxHeight) {
+        title.setTextColor(ContextCompat.getColor(context, R.color.secondary_text));
+
+        Animation rotation = AnimationUtils.loadAnimation(context, R.anim.rotate_180_clockwise);
+        selector.startAnimation(rotation);
+        selector.setColorFilter(ContextCompat.getColor(context, R.color.secondary_text));
+
+        ValueAnimator anim = ValueAnimator.ofInt(card.getMeasuredHeightAndState(), minHeight);
+        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                int val = (Integer) valueAnimator.getAnimatedValue();
+                ViewGroup.LayoutParams layoutParams = card.getLayoutParams();
+                layoutParams.height = val;
+                card.setLayoutParams(layoutParams);
+            }
+        });
+        anim.start();
+    }
+
+    public static void expand(Context context, final CardView card, TextView title, ImageView selector, int minHeight, int maxHeight) {
+        title.setTextColor(ContextCompat.getColor(context, R.color.secondary_color));
+
+        Animation rotation = AnimationUtils.loadAnimation(context, R.anim.rotate_180_anticlockwise);
+        selector.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.arrow_up));
+        selector.setRotation(0);
+        selector.startAnimation(rotation);
+        selector.setColorFilter(ContextCompat.getColor(context, R.color.secondary_color));
+
+        ValueAnimator anim = ValueAnimator.ofInt(card.getMeasuredHeightAndState(), maxHeight);
+        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                int val = (Integer) valueAnimator.getAnimatedValue();
+                ViewGroup.LayoutParams layoutParams = card.getLayoutParams();
+                layoutParams.height = val;
+                card.setLayoutParams(layoutParams);
+                Utils.makeViewVisible(card);
+            }
+        });
+        anim.start();
     }
 
     public static void makeViewVisible(View view) {
