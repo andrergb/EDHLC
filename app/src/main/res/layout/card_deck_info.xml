@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView
-    android:id="@+id/cardViewPlayerInfo"
+    android:id="@+id/cardViewDeckInfo"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -15,7 +15,7 @@
 
         <!-- Header -->
         <RelativeLayout
-            android:id="@+id/relativeCardTitlePlayerInfo"
+            android:id="@+id/relativeTitleDeckInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?android:attr/selectableItemBackground"
@@ -23,18 +23,18 @@
             android:padding="16dp">
 
             <TextView
-                android:id="@+id/textTitlePlayerInfo"
+                android:id="@+id/textTitleDeckInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
-                android:text="Player info"
+                android:text="Deck info"
                 android:textColor="@color/secondary_text"
                 android:textSize="16sp"/>
 
             <ImageView
-                android:id="@+id/iconIndicatorPlayerInfo"
+                android:id="@+id/iconIndicatorDeckInfo"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:layout_alignParentEnd="true"
@@ -75,7 +75,7 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="32dp"
                     android:layout_marginTop="16dp"
-                    android:src="@drawable/icon_favorite"
+                    android:src="@drawable/icon_star"
                     android:tint="@color/secondary_text"/>
 
                 <LinearLayout
@@ -83,7 +83,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <!-- Most played -->
+                    <!-- General -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -91,17 +91,17 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/textViewMostPlayedDeckPlayerInfo"
+                            android:id="@+id/textViewCommander"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Decks name"
+                            android:text="Commander"
                             android:textColor="@color/primary_text"
                             android:textSize="16sp"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Most played deck"
+                            android:text="Commander"
                             android:textColor="@color/secondary_text"
                             android:textSize="12sp"/>
                     </LinearLayout>
@@ -110,25 +110,66 @@
                         android:layout_width="match_parent"
                         android:layout_height="8dp"/>
 
-                    <!-- Played times -->
+                    <!-- Identity -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:textStyle="bold">
 
-                        <TextView
-                            android:id="@+id/textViewTimePlayedDeckPlayerInfo"
-                            android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:id="@+id/linearIdentity"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Decks name"
-                            android:textColor="@color/primary_text"
-                            android:textSize="16sp"/>
+                            android:gravity="center_vertical">
+
+                            <ImageView
+                                android:id="@+id/imageViewMana6"
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:layout_margin="1dp"
+                                android:background="@drawable/icon_circle"/>
+
+                            <ImageView
+                                android:id="@+id/imageViewMana5"
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:layout_margin="1dp"
+                                android:background="@drawable/icon_circle"/>
+
+                            <ImageView
+                                android:id="@+id/imageViewMana4"
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:layout_margin="1dp"
+                                android:background="@drawable/icon_circle"/>
+
+                            <ImageView
+                                android:id="@+id/imageViewMana3"
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:layout_margin="1dp"
+                                android:background="@drawable/icon_circle"/>
+
+                            <ImageView
+                                android:id="@+id/imageViewMana2"
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:layout_margin="1dp"
+                                android:background="@drawable/icon_circle"/>
+
+                            <ImageView
+                                android:id="@+id/imageViewMana1"
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:layout_margin="1dp"
+                                android:background="@drawable/icon_circle"/>
+                        </LinearLayout>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Times played"
+                            android:text="Identity"
                             android:textColor="@color/secondary_text"
                             android:textSize="12sp"/>
                     </LinearLayout>
@@ -173,7 +214,7 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/textViewTotalGamesPlayerInfo"
+                            android:id="@+id/textViewTotalGames"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0"
@@ -183,7 +224,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Games played"
+                            android:text="Games"
                             android:textColor="@color/secondary_text"
                             android:textSize="12sp"/>
                     </LinearLayout>
@@ -199,7 +240,7 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/textViewWinsPlayerInfo"
+                            android:id="@+id/textViewWins"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0"
@@ -247,6 +288,29 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
+                    <!-- Owner -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/textViewOwnerName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="OwnerName"
+                            android:textColor="@color/primary_text"
+                            android:textSize="16sp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Owner"
+                            android:textColor="@color/secondary_text"
+                            android:textSize="12sp"/>
+                    </LinearLayout>
+
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="8dp"/>
@@ -258,7 +322,7 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/textViewCreationDatePlayerInfo"
+                            android:id="@+id/textViewCreationDate"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="01/01/01"
@@ -284,18 +348,17 @@
                         android:layout_height="match_parent"
                         android:orientation="vertical">
 
-                        <TextView
-                            android:id="@+id/textViewTotalDecksPlayerInfo"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0"
-                            android:textColor="@color/primary_text"
-                            android:textSize="16sp"/>
+                        <ImageView
+                            android:id="@+id/imageViewShieldColor"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/icon_circle"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Total decks"
+                            android:text="Shield color"
                             android:textColor="@color/secondary_text"
                             android:textSize="12sp"/>
                     </LinearLayout>

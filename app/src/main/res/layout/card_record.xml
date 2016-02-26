@@ -18,6 +18,7 @@
             android:id="@+id/relativeCardTitleRecord"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
             android:onClick="onClickCardExpansion"
             android:padding="16dp">
 
@@ -66,9 +67,9 @@
                 android:gravity="center_horizontal"
                 android:paddingBottom="4dp"
                 android:text="Played on 25/12/2015"
-                android:textStyle="italic"
                 android:textColor="@color/secondary_text"
-                android:textSize="14sp"/>
+                android:textSize="14sp"
+                android:textStyle="italic"/>
 
             <LinearLayout
                 android:layout_width="match_parent"

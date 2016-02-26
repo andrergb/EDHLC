@@ -754,7 +754,8 @@ public class PlayerActivity extends AppCompatActivity {
             String imagePath = "image_" + mPlayerName + "_" + allDecks.get(i).getDeckName() + ".png";
             String title = allDecks.get(i).getDeckName();
             String subTitle = "TODO";
-            deckList.add(new String[]{imagePath, title, subTitle});
+            String identity = allDecks.get(i).getDeckIdentity();
+            deckList.add(new String[]{imagePath, title, subTitle, identity});
         }
         mDeckListAdapter.notifyDataSetChanged();
         Utils.justifyListViewHeightBasedOnChildren(listDeckListCard);

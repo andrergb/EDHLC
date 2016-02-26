@@ -3,6 +3,7 @@ package com.android.argb.edhlc;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.CardView;
@@ -86,6 +87,24 @@ public class Utils {
                 + " " + String.valueOf(c.get(Calendar.DAY_OF_MONTH))
                 + ", " + String.valueOf(c.get(Calendar.YEAR));
         return date;
+    }
+
+    public static Bitmap getSquareBitmap(Bitmap sourceBitmap) {
+        if (sourceBitmap.getWidth() >= sourceBitmap.getHeight()) {
+            return Bitmap.createBitmap(sourceBitmap,
+                    sourceBitmap.getWidth() / 2 - sourceBitmap.getHeight() / 2,
+                    0,
+                    sourceBitmap.getHeight(),
+                    sourceBitmap.getHeight()
+            );
+        } else {
+            return Bitmap.createBitmap(sourceBitmap,
+                    0,
+                    sourceBitmap.getHeight() / 2 - sourceBitmap.getWidth() / 2,
+                    sourceBitmap.getWidth(),
+                    sourceBitmap.getWidth()
+            );
+        }
     }
 
     public static void expand(Context context, final CardView card, TextView title, ImageView selector, int minHeight, int maxHeight) {
