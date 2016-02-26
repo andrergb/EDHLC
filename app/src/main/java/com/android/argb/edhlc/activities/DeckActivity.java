@@ -254,7 +254,6 @@ public class DeckActivity extends AppCompatActivity {
         }
     }
 
-    //TODO to be used in all activities
     public void onClickDrawerItem(View view) {
         switch (view.getId()) {
             case R.id.drawerItemHome:
@@ -775,6 +774,9 @@ public class DeckActivity extends AppCompatActivity {
     }
 
     private void updateLayout() {
+        List<Record> allRecords = recordsDB.getAllRecordsByDeck(mCurrentDeck);
+        List<Record> allFirstRecords = recordsDB.getRecordsByPosition(mPlayerName, 1);
+
         //ToolBar - DeckName
         mCollapsingToolbarLayout.setTitle(mDeckName);
 
@@ -862,9 +864,14 @@ public class DeckActivity extends AppCompatActivity {
             listIdentityHolder.get(index).setVisibility(View.VISIBLE);
         }
 
-        //Record card
 
-        List<Record> allRecords = recordsDB.getAllRecordsByDeck(mCurrentDeck);
+        //Deck info - Total Games
+        textViewTotalGames.setText("" + allRecords.size());
+        //Deck info - Wins
+        textViewWins.setText("" + allFirstRecords.size());
+
+
+        //Record card
         cardViewRecordCard.setVisibility(View.GONE);
         if (allRecords.size() != 0) {
             cardViewRecordCard.setVisibility(View.VISIBLE);
@@ -1081,10 +1088,5 @@ public class DeckActivity extends AppCompatActivity {
             }
             donutChart4.updateDonutChart(new int[]{firstIn4, secondIn4, thirdIn4, fourthIn4});
         }
-
-        //Deck info - Total Games
-        textViewTotalGames.setText("" + (total2 + total3 + total4));
-        //Deck info - Wins
-        textViewWins.setText("" + (firstIn2 + firstIn3 + firstIn4));
     }
 }

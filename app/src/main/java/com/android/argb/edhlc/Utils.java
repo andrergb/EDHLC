@@ -17,6 +17,8 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.Calendar;
+
 /**
  * -Created by agbarros on 25/02/2016.
  */
@@ -76,6 +78,14 @@ public class Utils {
             }
         });
         anim.start();
+    }
+
+    public static String getCurrentDate() {
+        Calendar c = Calendar.getInstance();
+        String date = Constants.MONTH[c.get(Calendar.MONTH)]
+                + " " + String.valueOf(c.get(Calendar.DAY_OF_MONTH))
+                + ", " + String.valueOf(c.get(Calendar.YEAR));
+        return date;
     }
 
     public static void expand(Context context, final CardView card, TextView title, ImageView selector, int minHeight, int maxHeight) {

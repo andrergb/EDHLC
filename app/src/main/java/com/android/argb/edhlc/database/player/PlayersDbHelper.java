@@ -15,7 +15,8 @@ public class PlayersDbHelper extends SQLiteOpenHelper {
     private static final String DATABASE_CREATE = "create table "
             + PlayersContract.PlayersEntry.TABLE_NAME + "("
             + PlayersContract.PlayersEntry.COLUMN_ID + " integer primary key autoincrement, "
-            + PlayersContract.PlayersEntry.COLUMN_PLAYER_NAME + " text not null);";
+            + PlayersContract.PlayersEntry.COLUMN_PLAYER_NAME + " text not null, "
+            + PlayersContract.PlayersEntry.COLUMN_PLAYER_DATE + " text not null);";
 
     public PlayersDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

@@ -547,7 +547,7 @@ public class DrawerMain {
         playersDB.open();
         decksDB.open();
 
-        final ArrayList<String> players = (ArrayList<String>) playersDB.getAllPlayers();
+        final ArrayList<String> players = (ArrayList<String>) playersDB.getAllPlayersName();
         players.add(0, parentActivity.getString(R.string.edh_spinner_player_hint));
 
         final ArrayList<String> decks;

@@ -43,15 +43,16 @@ import com.android.argb.edhlc.R;
 import com.android.argb.edhlc.Utils;
 import com.android.argb.edhlc.chart.DonutChart;
 import com.android.argb.edhlc.database.deck.DecksDataAccessObject;
+import com.android.argb.edhlc.database.player.PlayersDataAccessObject;
 import com.android.argb.edhlc.database.record.RecordsDataAccessObject;
 import com.android.argb.edhlc.objects.Deck;
+import com.android.argb.edhlc.objects.Player;
 import com.android.argb.edhlc.objects.Record;
 
 import org.achartengine.model.MultipleCategorySeries;
 import org.achartengine.renderer.DefaultRenderer;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 //Crop: https://github.com/lvillani/android-cropimage
@@ -61,6 +62,7 @@ public class PlayerActivity extends AppCompatActivity {
 
     private DecksDataAccessObject decksDB;
     private RecordsDataAccessObject recordsDB;
+    private PlayersDataAccessObject playersDB;
 
     //Main card - Deck info
     private CardView cardViewPlayerInfo;
@@ -74,7 +76,6 @@ public class PlayerActivity extends AppCompatActivity {
     private TextView textViewTotalGames;
     private TextView textViewCreationDate;
     private TextView textViewTotalDecksPlayerInfo;
-    private int[] COLORS;
 
     //Card - Deck list
     private CardView cardViewDeckList;
@@ -142,6 +143,14 @@ public class PlayerActivity extends AppCompatActivity {
     private TextView textFourthIndicatorRecordCard;
     private TextView textFourthPlayerRecordCard;
     private TextView textFourthDeckRecordCard;
+
+    //Add deck dialog
+    private CheckBox checkBoxManaWhite;
+    private CheckBox checkBoxManaBlue;
+    private CheckBox checkBoxManaBlack;
+    private CheckBox checkBoxManaRed;
+    private CheckBox checkBoxManaGreen;
+    private CheckBox checkBoxManaColorless;
 
     ///Drawer
     private DrawerLayout mPlayerDrawerLayout;
@@ -315,6 +324,17 @@ public class PlayerActivity extends AppCompatActivity {
         }
     }
 
+    public void onClickManaCheckBox(View view) {
+        if (checkBoxManaWhite.isChecked() ||
+                checkBoxManaBlue.isChecked() ||
+                checkBoxManaBlack.isChecked() ||
+                checkBoxManaRed.isChecked() ||
+                checkBoxManaGreen.isChecked())
+            checkBoxManaColorless.setChecked(false);
+        else
+            checkBoxManaColorless.setChecked(true);
+    }
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -332,7 +352,6 @@ public class PlayerActivity extends AppCompatActivity {
         return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -346,6 +365,9 @@ public class PlayerActivity extends AppCompatActivity {
 
         recordsDB = new RecordsDataAccessObject(this);
         recordsDB.open();
+
+        playersDB = new PlayersDataAccessObject(this);
+        playersDB.open();
 
         createStatusBar();
         createToolbar();
@@ -415,12 +437,12 @@ public class PlayerActivity extends AppCompatActivity {
     private void createAddDeckDialog(final View view) {
         View playerNameView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_add_deck, null);
         final EditText userInput = (EditText) playerNameView.findViewById(R.id.editTextEditDeckName);
-        final CheckBox checkBoxManaWhite = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_white);
-        final CheckBox checkBoxManaBlue = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_blue);
-        final CheckBox checkBoxManaBlack = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_black);
-        final CheckBox checkBoxManaRed = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_red);
-        final CheckBox checkBoxManaGreen = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_green);
-        final CheckBox checkBoxManaColorless = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_colorless);
+        checkBoxManaWhite = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_white);
+        checkBoxManaBlue = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_blue);
+        checkBoxManaBlack = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_black);
+        checkBoxManaRed = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_red);
+        checkBoxManaGreen = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_green);
+        checkBoxManaColorless = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_colorless);
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
         alertDialogBuilder.setView(playerNameView);
@@ -455,12 +477,7 @@ public class PlayerActivity extends AppCompatActivity {
                     colorIdentity = checkBoxManaGreen.isChecked() ? colorIdentity.concat("1") : colorIdentity.concat("0");
                     colorIdentity = checkBoxManaColorless.isChecked() ? colorIdentity.concat("1") : colorIdentity.concat("0");
 
-                    Calendar c = Calendar.getInstance();
-                    String date = Constants.MONTH[c.get(Calendar.MONTH)]
-                            + " " + String.valueOf(c.get(Calendar.DAY_OF_MONTH))
-                            + ", " + String.valueOf(c.get(Calendar.YEAR));
-
-                    if (decksDB.addDeck(new Deck(mPlayerName, tempName, new int[]{PlayerActivity.this.getResources().getColor(R.color.primary_color), PlayerActivity.this.getResources().getColor(R.color.secondary_color)}, colorIdentity, date)) != -1) {
+                    if (decksDB.addDeck(new Deck(mPlayerName, tempName, new int[]{ContextCompat.getColor(PlayerActivity.this, R.color.primary_color), ContextCompat.getColor(PlayerActivity.this, R.color.secondary_color)}, colorIdentity, Utils.getCurrentDate())) != -1) {
                         Toast.makeText(view.getContext(), tempName + " added", Toast.LENGTH_SHORT).show();
 
                         //Set card to wrap_content
@@ -471,7 +488,7 @@ public class PlayerActivity extends AppCompatActivity {
 
                         updateLayout();
 
-                        //Update fullSize to expansion
+                        //Update mCardViewFullHeightDeckList to expansion
                         cardViewDeckList.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                             @Override
                             public boolean onPreDraw() {
@@ -710,18 +727,22 @@ public class PlayerActivity extends AppCompatActivity {
             iconIndicatorPlayerInfo.setColorFilter(ContextCompat.getColor(this, R.color.secondary_text));
         }
 
+        List<Deck> allDecks = decksDB.getAllDeckByPlayerName(mPlayerName);
+
+        List<Record> allRecords = recordsDB.getAllRecordsByPlayerName(mPlayerName);
+        List<Record> allFirstRecords = recordsDB.getRecordsByPosition(mPlayerName, 1);
+
+        Player currentPlayer = playersDB.getPlayer(mPlayerName);
+
         //TODO Most played general
         textViewMostPlayedDeckPlayerInfo.setText("TODO");
         //TODO Most played general - tines
         textViewTimePlayedDeckPlayerInfo.setText("TODO");
-        //TODO Creation Date
-        textViewCreationDate.setText("TODO");
-        //TODO Total games
-        textViewTotalGames.setText("TODO");
-        //TODO Wins
-        textViewWins.setText("TODO");
-        //TODO Total decks
-        textViewTotalDecksPlayerInfo.setText("TODO");
+
+        textViewCreationDate.setText(currentPlayer.getPlayerDate());
+        textViewTotalGames.setText("" + allRecords.size());
+        textViewWins.setText("" + allFirstRecords.size());
+        textViewTotalDecksPlayerInfo.setText("" + allDecks.size());
 
         //Card deckList
         if (deckList == null)
@@ -729,10 +750,9 @@ public class PlayerActivity extends AppCompatActivity {
         else
             deckList.clear();
 
-        List<Deck> aux = decksDB.getAllDeckByPlayerName(mPlayerName);
-        for (int i = 0; i < aux.size(); i++) {
-            String imagePath = "image_" + mPlayerName + "_" + aux.get(i).getDeckName() + ".png";
-            String title = aux.get(i).getDeckName();
+        for (int i = 0; i < allDecks.size(); i++) {
+            String imagePath = "image_" + mPlayerName + "_" + allDecks.get(i).getDeckName() + ".png";
+            String title = allDecks.get(i).getDeckName();
             String subTitle = "TODO";
             deckList.add(new String[]{imagePath, title, subTitle});
         }
@@ -751,7 +771,6 @@ public class PlayerActivity extends AppCompatActivity {
         }
 
         //Card last game player
-        List<Record> allRecords = recordsDB.getAllRecordsByPlayerName(mPlayerName);
         cardViewRecordCard.setVisibility(View.GONE);
         if (allRecords.size() != 0) {
             cardViewRecordCard.setVisibility(View.VISIBLE);
@@ -968,10 +987,5 @@ public class PlayerActivity extends AppCompatActivity {
             }
             donutChart4.updateDonutChart(new int[]{firstIn4, secondIn4, thirdIn4, fourthIn4});
         }
-
-        //Deck info - Total Games
-        textViewTotalGames.setText("" + (total2 + total3 + total4));
-        //Deck info - Wins
-        textViewWins.setText("" + (firstIn2 + firstIn3 + firstIn4));
     }
 }

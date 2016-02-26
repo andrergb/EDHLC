@@ -919,7 +919,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void handleSpinners(Spinner spinnerName, Spinner spinnerDeck) {
-        final ArrayList<String> players = (ArrayList<String>) mPlayersDB.getAllPlayers();
+        final ArrayList<String> players = (ArrayList<String>) mPlayersDB.getAllPlayersName();
         players.add(0, this.getString(R.string.edh_spinner_player_hint));
 
         final ArrayList<String> decks;

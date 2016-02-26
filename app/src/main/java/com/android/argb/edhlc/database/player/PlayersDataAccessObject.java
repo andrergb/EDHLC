@@ -6,6 +6,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.android.argb.edhlc.objects.Player;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,10 +23,11 @@ public class PlayersDataAccessObject {
         playersDBHelper = new PlayersDbHelper(context);
     }
 
-    public long addPlayer(String playerName) {
+    public long addPlayer(String playerName, String creationDate) {
         if (!isPlayerAdded(playerName)) {
             ContentValues values = new ContentValues();
             values.put(PlayersContract.PlayersEntry.COLUMN_PLAYER_NAME, playerName);
+            values.put(PlayersContract.PlayersEntry.COLUMN_PLAYER_DATE, creationDate);
             return database.insert(PlayersContract.PlayersEntry.TABLE_NAME, null, values);
         } else {
             return -1;
@@ -43,7 +46,21 @@ public class PlayersDataAccessObject {
         );
     }
 
-    public List<String> getAllPlayers() {
+    public List<Player> getAllPlayers() {
+        List<Player> playerList = new ArrayList<>();
+        Cursor cursor = database.query(PlayersContract.PlayersEntry.TABLE_NAME, null, null, null, null, null, null);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            playerList.add(new Player(cursor.getString(cursor.getColumnIndexOrThrow(PlayersContract.PlayersEntry.COLUMN_PLAYER_NAME)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(PlayersContract.PlayersEntry.COLUMN_PLAYER_DATE))));
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return playerList;
+    }
+
+    public List<String> getAllPlayersName() {
         List<String> playerList = new ArrayList<>();
         Cursor cursor = database.query(PlayersContract.PlayersEntry.TABLE_NAME, null, null, null, null, null, null);
 
@@ -52,6 +69,25 @@ public class PlayersDataAccessObject {
             playerList.add(cursor.getString(cursor.getColumnIndexOrThrow(PlayersContract.PlayersEntry.COLUMN_PLAYER_NAME)));
             cursor.moveToNext();
         }
+        cursor.close();
+        return playerList;
+    }
+
+    public Player getPlayer(String playerName) {
+        Player playerList = null;
+        Cursor cursor = database.query(
+                PlayersContract.PlayersEntry.TABLE_NAME,
+                null,
+                PlayersContract.PlayersEntry.COLUMN_PLAYER_NAME + " LIKE ?",
+                new String[]{playerName},
+                null,
+                null,
+                null
+        );
+
+        cursor.moveToFirst();
+        playerList = new Player(cursor.getString(cursor.getColumnIndexOrThrow(PlayersContract.PlayersEntry.COLUMN_PLAYER_NAME)),
+                cursor.getString(cursor.getColumnIndexOrThrow(PlayersContract.PlayersEntry.COLUMN_PLAYER_DATE)));
         cursor.close();
         return playerList;
     }
@@ -75,10 +111,6 @@ public class PlayersDataAccessObject {
 
     public void open() {
         database = playersDBHelper.getWritableDatabase();
-    }
-
-    // TODO
-    public void updateDeckByPlayerName() {
     }
 
     public long updatePlayer(String oldName, String newName) {

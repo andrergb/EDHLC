@@ -395,7 +395,7 @@ public class PlayerListActivity extends AppCompatActivity {
             listDataChild.clear();
 
 
-        List<String> auxAllPlayers = new ArrayList<>(playersDB.getAllPlayers());
+        List<String> auxAllPlayers = new ArrayList<>(playersDB.getAllPlayersName());
         for (int i = 0; i < auxAllPlayers.size(); i++) {
             String playerName = auxAllPlayers.get(i);
             int totalGames = recordsDB.getAllRecordsByPlayerName(playerName).size();

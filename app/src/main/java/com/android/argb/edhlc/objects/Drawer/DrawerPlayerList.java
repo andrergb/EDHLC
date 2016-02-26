@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.android.argb.edhlc.Constants;
 import com.android.argb.edhlc.R;
+import com.android.argb.edhlc.Utils;
 import com.android.argb.edhlc.activities.RecordsActivity;
 import com.android.argb.edhlc.activities.SettingsActivity;
 import com.android.argb.edhlc.database.deck.DecksDataAccessObject;
@@ -134,7 +135,7 @@ public class DrawerPlayerList {
                 String tempName = userInput.getText().toString();
                 if (!tempName.equalsIgnoreCase("")) {
                     playersDB.open();
-                    long result = playersDB.addPlayer(tempName);
+                    long result = playersDB.addPlayer(tempName, Utils.getCurrentDate());
                     playersDB.close();
                     if (result != -1) {
                         Toast.makeText(view.getContext(), tempName + " added", Toast.LENGTH_SHORT).show();
@@ -152,7 +153,7 @@ public class DrawerPlayerList {
 
     private void createEditPlayerDialog(final View view) {
         playersDB.open();
-        List<String> allPlayers = playersDB.getAllPlayers();
+        List<String> allPlayers = playersDB.getAllPlayersName();
         allPlayers.add(0, parentActivity.getString(R.string.edh_spinner_player_hint));
         playersDB.close();
 
@@ -270,7 +271,7 @@ public class DrawerPlayerList {
 
     private void createRemovePlayerDialog(final View view) {
         playersDB.open();
-        List<String> allPlayers = playersDB.getAllPlayers();
+        List<String> allPlayers = playersDB.getAllPlayersName();
         allPlayers.add(0, parentActivity.getString(R.string.edh_spinner_player_hint));
         playersDB.close();
 
