@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,7 +21,10 @@ public class DeckListAdapter extends BaseAdapter {
 
     private static LayoutInflater inflater = null;
     Context context;
-    List<String[]> data;
+    List<String[]> data; // 0 imagePath - 1 title - 2 subTitle - 3 identity - 4 selection
+    private boolean isInEditMode = false;
+
+    private CheckBox checkBox;
 
     public DeckListAdapter(Context context, List<String[]> data) {
         this.context = context;
@@ -27,9 +32,31 @@ public class DeckListAdapter extends BaseAdapter {
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
+    public void checkBoxClearAllSelections() {
+        for (int i = 0; i < data.size(); i++) {
+            data.set(i, new String[]{data.get(i)[0], data.get(i)[1], data.get(i)[2], data.get(i)[3], "false"});
+        }
+    }
+
+    public boolean checkBoxGetSelection(int position) {
+        return getDataChecked().get(position).equalsIgnoreCase("true");
+    }
+
+    public void checkBoxSetSelection(int position, String mode) {
+        data.set(position, new String[]{data.get(position)[0], data.get(position)[1], data.get(position)[2], data.get(position)[3], mode});
+    }
+
     @Override
     public int getCount() {
         return data.size();
+    }
+
+    public List<String> getDataChecked() {
+        ArrayList<String> dataChecked = new ArrayList<>();
+        for (int i = 0; i < data.size(); i++)
+            dataChecked.add(data.get(i)[4]);
+
+        return dataChecked;
     }
 
     @Override
@@ -42,12 +69,22 @@ public class DeckListAdapter extends BaseAdapter {
         return position;
     }
 
+    public int getTotalDataChecked() {
+        int total = 0;
+        for (int i = 0; i < data.size(); i++)
+            if (data.get(i)[4].equalsIgnoreCase("true"))
+                total++;
+        return total;
+    }
+
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         View vi = convertView;
         if (vi == null)
             vi = inflater.inflate(R.layout.row_deck_list, null);
 
+
+        //Avatar
         ImageView imageViewAvatarDeckListCard = (ImageView) vi.findViewById(R.id.imageViewAvatarDeckListCard);
         File croppedImageFile = new File(context.getFilesDir(), data.get(position)[0]);
         Bitmap bitmap;
@@ -55,14 +92,27 @@ public class DeckListAdapter extends BaseAdapter {
             bitmap = BitmapFactory.decodeFile(croppedImageFile.getAbsolutePath());
         else
             bitmap = BitmapFactory.decodeResource(vi.getResources(), R.drawable.avatar_holder);
-
         RoundedAvatarDrawable roundedImage = new RoundedAvatarDrawable(Utils.getSquareBitmap(bitmap));
         roundedImage.setAntiAlias(true);
         imageViewAvatarDeckListCard.setImageDrawable(roundedImage);
+        imageViewAvatarDeckListCard.setVisibility(isInEditMode() ? View.GONE : View.VISIBLE);
 
+        //Avatar checkbox
+        checkBox = (CheckBox) vi.findViewById(R.id.checkboxAvatarDeckListCard);
+        checkBox.setVisibility(isInEditMode() ? View.VISIBLE : View.GONE);
+        checkBox.setChecked(checkBoxGetSelection(position));
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                checkBoxSetSelection(position, isChecked ? "true" : "false");
+            }
+        });
+
+        //Deck name
         TextView textViewDeckNameDeckListCard = (TextView) vi.findViewById(R.id.textViewDeckNameDeckListCard);
         textViewDeckNameDeckListCard.setText(data.get(position)[1]);
 
+        //Deck description
         TextView textViewDeckDescriptionDeckListCard = (TextView) vi.findViewById(R.id.textViewDeckDescriptionDeckListCard);
         textViewDeckDescriptionDeckListCard.setText(data.get(position)[2]);
 
@@ -122,5 +172,13 @@ public class DeckListAdapter extends BaseAdapter {
         }
 
         return vi;
+    }
+
+    public boolean isInEditMode() {
+        return isInEditMode;
+    }
+
+    public void setIsInEditMode(boolean isInEditMode) {
+        this.isInEditMode = isInEditMode;
     }
 }

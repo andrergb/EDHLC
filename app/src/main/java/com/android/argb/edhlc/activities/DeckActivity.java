@@ -223,8 +223,6 @@ public class DeckActivity extends AppCompatActivity {
             mDeckDrawerLayout.closeDrawers();
         else {
             super.onBackPressed();
-            Intent intent = new Intent(DeckActivity.this, PlayerListActivity.class);
-            startActivity(intent);
             this.finish();
         }
     }
@@ -425,9 +423,9 @@ public class DeckActivity extends AppCompatActivity {
         mDeckDrawerLayout.setDrawerListener(mDrawerToggle);
 
         Intent intent = getIntent();
-        mPlayerName = intent.getStringExtra("PLAYERNAME");
-        mDeckName = intent.getStringExtra("DECKNAME");
-        mDeckIdentity = intent.getStringExtra("DECKIDENTITY");
+        mPlayerName = intent.getStringExtra("PLAYER_NAME");
+        mDeckName = intent.getStringExtra("DECK_NAME");
+        mDeckIdentity = intent.getStringExtra("DECK_IDENTITY");
 
         decksDB = new DecksDataAccessObject(this);
         recordsDB = new RecordsDataAccessObject(this);
@@ -756,7 +754,6 @@ public class DeckActivity extends AppCompatActivity {
                         long result = decksDB.removeDeck(mCurrentDeck);
                         if (result != 0) {
                             dialog.cancel();
-                            //TODO confirm flux
                             DeckActivity.this.finish();
                         } else {
                             Toast.makeText(DeckActivity.this, "Fail", Toast.LENGTH_SHORT).show();

@@ -6,21 +6,37 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
-    <!-- Circle icon -->
-    <ImageView
-        android:id="@+id/imageViewAvatarDeckListCard"
+    <RelativeLayout
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center"
+        android:layout_centerInParent="true"
         android:layout_marginBottom="16dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="16dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/avatar_holder">
-    </ImageView>
+        android:layout_marginTop="16dp">
+
+        <!-- Circle icon -->
+        <ImageView
+            android:id="@+id/imageViewAvatarDeckListCard"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop"
+            android:src="@drawable/avatar_holder">
+        </ImageView>
+
+        <!--Checkbox edit/delete-->
+        <CheckBox
+            android:id="@+id/checkboxAvatarDeckListCard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:onClick="onClickCheckBoxEditDeckList"
+            android:visibility="gone"/>
+    </RelativeLayout>
 
     <!-- Row text -->
     <LinearLayout

@@ -12,6 +12,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -27,6 +28,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -42,6 +44,8 @@ import com.android.argb.edhlc.DeckListAdapter;
 import com.android.argb.edhlc.R;
 import com.android.argb.edhlc.Utils;
 import com.android.argb.edhlc.chart.DonutChart;
+import com.android.argb.edhlc.colorpicker.ColorPickerDialog;
+import com.android.argb.edhlc.colorpicker.ColorPickerSwatch;
 import com.android.argb.edhlc.database.deck.DecksDataAccessObject;
 import com.android.argb.edhlc.database.player.PlayersDataAccessObject;
 import com.android.argb.edhlc.database.record.RecordsDataAccessObject;
@@ -52,6 +56,7 @@ import com.android.argb.edhlc.objects.Record;
 import org.achartengine.model.MultipleCategorySeries;
 import org.achartengine.renderer.DefaultRenderer;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,7 +89,7 @@ public class PlayerActivity extends AppCompatActivity {
     private TextView textTitleDeckListCard;
     private ImageView indicatorDeckListCard;
     private ListView listDeckListCard;
-    private List<String[]> deckList;
+    private List<String[]> deckList;  // 0 imagePath - 1 title - 2 subTitle - 3 identity - 4 selection
     private DeckListAdapter mDeckListAdapter;
 
     //Card - Chart deck history 2 - 1v1
@@ -169,6 +174,10 @@ public class PlayerActivity extends AppCompatActivity {
     private LinearLayout fabContentDelete;
     private View fabDismissView;
 
+    private boolean mIsInEditMode;
+    private ActionBar mActionBar;
+    private Menu optionMenu;
+
     public void animateFAB() {
         if (isFabOpen) {
             Animation fab_close = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
@@ -220,12 +229,10 @@ public class PlayerActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (mPlayerDrawerLayout.isDrawerOpen(mPlayerDrawer))
             mPlayerDrawerLayout.closeDrawers();
-        else {
+        else if (mIsInEditMode) {
+            closeEditMode();
+        } else {
             super.onBackPressed();
-            //TODO FLUX
-//            Intent intent = new Intent(PlayerActivity.this, PlayerListActivity.class);
-//            startActivity(intent);
-//            this.finish();
         }
     }
 
@@ -258,7 +265,10 @@ public class PlayerActivity extends AppCompatActivity {
         }
     }
 
-    //TODO to be used in all activities
+    public void onClickCheckBoxEditDeckList(View view) {
+        optionMenu.findItem(R.id.action_edit_deck).setVisible(mDeckListAdapter.getTotalDataChecked() < 2);
+    }
+
     public void onClickDrawerItem(View view) {
         switch (view.getId()) {
             case R.id.drawerItemHome:
@@ -306,19 +316,18 @@ public class PlayerActivity extends AppCompatActivity {
     public void onClickFabButton(View view) {
         switch (view.getId()) {
             case R.id.fabAdd:
-                //TODO
-                createAddDeckDialog(view);
+                dialogAddDeck(view);
                 animateFAB();
                 break;
             case R.id.fabMain:
                 animateFAB();
                 break;
             case R.id.fabEdit:
-                createEditPlayerDialog();
+                dialogEditPlayer(view);
                 animateFAB();
                 break;
             case R.id.fabDelete:
-                createRemovePlayerDialog();
+                dialogRemovePlayer(view);
                 animateFAB();
                 break;
         }
@@ -343,13 +352,30 @@ public class PlayerActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
+        this.optionMenu = menu;
+        getMenuInflater().inflate(R.menu.menu_player_activity, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
+        //Option menu
+        switch (item.getItemId()) {
+            case R.id.action_edit_deck:
+                for (int i = 0; i < deckList.size(); i++)
+                    if (deckList.get(i)[4].equalsIgnoreCase("true"))
+                        dialogEditDeck(decksDB.getDeck(mPlayerName, deckList.get(i)[1]));
+                return true;
+            case R.id.action_delete_deck:
+                dialogRemoveDeck();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -434,79 +460,10 @@ public class PlayerActivity extends AppCompatActivity {
         outState.putSerializable("current_renderer4", mDoughnutRender4);
     }
 
-    private void createAddDeckDialog(final View view) {
-        View playerNameView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_add_deck, null);
-        final EditText userInput = (EditText) playerNameView.findViewById(R.id.editTextEditDeckName);
-        checkBoxManaWhite = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_white);
-        checkBoxManaBlue = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_blue);
-        checkBoxManaBlack = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_black);
-        checkBoxManaRed = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_red);
-        checkBoxManaGreen = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_green);
-        checkBoxManaColorless = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_colorless);
-
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
-        alertDialogBuilder.setView(playerNameView);
-        alertDialogBuilder.setTitle("Add new Deck for " + mPlayerName);
-        alertDialogBuilder.setPositiveButton("ADD",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                    }
-                });
-        alertDialogBuilder.setNegativeButton("CANCEL",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-        final AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-        alertDialog.show();
-
-        //Override POSITIVE button
-        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String tempName = userInput.getText().toString();
-                if (!tempName.equalsIgnoreCase("")) {
-
-                    String colorIdentity = "";
-                    colorIdentity = checkBoxManaWhite.isChecked() ? colorIdentity.concat("1") : colorIdentity.concat("0");
-                    colorIdentity = checkBoxManaBlue.isChecked() ? colorIdentity.concat("1") : colorIdentity.concat("0");
-                    colorIdentity = checkBoxManaBlack.isChecked() ? colorIdentity.concat("1") : colorIdentity.concat("0");
-                    colorIdentity = checkBoxManaRed.isChecked() ? colorIdentity.concat("1") : colorIdentity.concat("0");
-                    colorIdentity = checkBoxManaGreen.isChecked() ? colorIdentity.concat("1") : colorIdentity.concat("0");
-                    colorIdentity = checkBoxManaColorless.isChecked() ? colorIdentity.concat("1") : colorIdentity.concat("0");
-
-                    if (decksDB.addDeck(new Deck(mPlayerName, tempName, new int[]{ContextCompat.getColor(PlayerActivity.this, R.color.primary_color), ContextCompat.getColor(PlayerActivity.this, R.color.secondary_color)}, colorIdentity, Utils.getCurrentDate())) != -1) {
-                        Toast.makeText(view.getContext(), tempName + " added", Toast.LENGTH_SHORT).show();
-
-                        //Set card to wrap_content
-                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                        int pixel6dp = (int) Utils.convertDpToPixel((float) 6, getApplicationContext());
-                        layoutParams.setMargins(pixel6dp, pixel6dp, pixel6dp, pixel6dp);
-                        cardViewDeckList.setLayoutParams(layoutParams);
-
-                        updateLayout();
-
-                        //Update mCardViewFullHeightDeckList to expansion
-                        cardViewDeckList.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                            @Override
-                            public boolean onPreDraw() {
-                                cardViewDeckList.getViewTreeObserver().removeOnPreDrawListener(this);
-                                mCardViewFullHeightDeckList = cardViewDeckList.getHeight();
-                                return true;
-                            }
-                        });
-
-                        alertDialog.dismiss();
-                    } else {
-                        Toast.makeText(view.getContext(), "Fail: Deck " + tempName + " already exists", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(view.getContext(), "Insert a name", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+    private void closeEditMode() {
+        mIsInEditMode = false;
+        mDeckListAdapter.checkBoxClearAllSelections();
+        handleDeckListEditMode();
     }
 
     private void createDrawer() {
@@ -532,10 +489,6 @@ public class PlayerActivity extends AppCompatActivity {
         drawerItemPlayers.setBackgroundColor(ContextCompat.getColor(this, R.color.gray200));
         drawerItemIconPlayers.setColorFilter(ContextCompat.getColor(this, R.color.accent_color));
         drawerItemTextPlayers.setTextColor(ContextCompat.getColor(this, R.color.accent_color));
-    }
-
-    private void createEditPlayerDialog() {
-        //TODO
     }
 
     private void createLayout() {
@@ -603,6 +556,31 @@ public class PlayerActivity extends AppCompatActivity {
         textTitleDeckListCard = (TextView) findViewById(R.id.textTitleDeckListCard);
         indicatorDeckListCard = (ImageView) findViewById(R.id.iconIndicatorDeckListCard);
         listDeckListCard = (ListView) findViewById(R.id.listDeckListCard);
+        listDeckListCard.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (!mIsInEditMode) {
+                    Intent intent = new Intent(PlayerActivity.this, DeckActivity.class);
+                    intent.putExtra("PLAYER_NAME", mPlayerName);
+                    intent.putExtra("DECK_NAME", deckList.get(position)[1]);
+                    intent.putExtra("DECK_IDENTITY", deckList.get(position)[3]);
+                    startActivity(intent);
+                } else {
+                    mDeckListAdapter.checkBoxSetSelection(position, mDeckListAdapter.checkBoxGetSelection(position) ? "false" : "true");
+                    optionMenu.findItem(R.id.action_edit_deck).setVisible(mDeckListAdapter.getTotalDataChecked() < 2);
+                    mDeckListAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+        listDeckListCard.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                mIsInEditMode = true;
+                mDeckListAdapter.checkBoxSetSelection(position, "true");
+                handleDeckListEditMode();
+                return true;
+            }
+        });
 
         deckList = new ArrayList<>();
         mDeckListAdapter = new DeckListAdapter(this, deckList);
@@ -660,26 +638,6 @@ public class PlayerActivity extends AppCompatActivity {
         textFourthDeckRecordCard = (TextView) findViewById(R.id.textFourthDeckRecordCard);
     }
 
-    private void createRemovePlayerDialog() {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PlayerActivity.this);
-        alertDialogBuilder.setTitle("Delete deck");
-        alertDialogBuilder.setMessage("Are you sure to delete this player?");
-        alertDialogBuilder.setPositiveButton("Delete",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        //TODO
-                    }
-                });
-        alertDialogBuilder.setNegativeButton("Cancel",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-        final AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
-    }
-
     private void createStatusBar() {
         View statusBarBackground = findViewById(R.id.statusBarBackground);
         ViewGroup.LayoutParams params = statusBarBackground.getLayoutParams();
@@ -699,13 +657,334 @@ public class PlayerActivity extends AppCompatActivity {
         assert getSupportActionBar() != null;
         final Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setTitle(mPlayerName);
+        mActionBar = getSupportActionBar();
+        mActionBar.setDisplayShowTitleEnabled(true);
+        mActionBar.setDisplayHomeAsUpEnabled(true);
+        mActionBar.setHomeButtonEnabled(true);
+        mActionBar.setTitle(mPlayerName);
+    }
+
+    private void dialogAddDeck(final View view) {
+        View playerNameView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_add_deck, null);
+        final EditText userInput = (EditText) playerNameView.findViewById(R.id.editTextEditDeckName);
+        checkBoxManaWhite = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_white);
+        checkBoxManaBlue = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_blue);
+        checkBoxManaBlack = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_black);
+        checkBoxManaRed = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_red);
+        checkBoxManaGreen = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_green);
+        checkBoxManaColorless = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_colorless);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
+        alertDialogBuilder.setView(playerNameView);
+        alertDialogBuilder.setTitle("Add new Deck for " + mPlayerName);
+        alertDialogBuilder.setPositiveButton("ADD",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                });
+        alertDialogBuilder.setNegativeButton("CANCEL",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        alertDialog.show();
+
+        //Override POSITIVE button
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String tempName = userInput.getText().toString();
+                if (!tempName.equalsIgnoreCase("")) {
+
+                    String colorIdentity = "";
+                    colorIdentity = checkBoxManaWhite.isChecked() ? colorIdentity.concat("1") : colorIdentity.concat("0");
+                    colorIdentity = checkBoxManaBlue.isChecked() ? colorIdentity.concat("1") : colorIdentity.concat("0");
+                    colorIdentity = checkBoxManaBlack.isChecked() ? colorIdentity.concat("1") : colorIdentity.concat("0");
+                    colorIdentity = checkBoxManaRed.isChecked() ? colorIdentity.concat("1") : colorIdentity.concat("0");
+                    colorIdentity = checkBoxManaGreen.isChecked() ? colorIdentity.concat("1") : colorIdentity.concat("0");
+                    colorIdentity = checkBoxManaColorless.isChecked() ? colorIdentity.concat("1") : colorIdentity.concat("0");
+
+                    if (decksDB.addDeck(new Deck(mPlayerName, tempName, new int[]{ContextCompat.getColor(PlayerActivity.this, R.color.primary_color), ContextCompat.getColor(PlayerActivity.this, R.color.secondary_color)}, colorIdentity, Utils.getCurrentDate())) != -1) {
+                        Toast.makeText(view.getContext(), tempName + " added", Toast.LENGTH_SHORT).show();
+
+                        //Set card to wrap_content
+                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                        int pixel6dp = (int) Utils.convertDpToPixel((float) 6, getApplicationContext());
+                        layoutParams.setMargins(pixel6dp, pixel6dp, pixel6dp, pixel6dp);
+                        cardViewDeckList.setLayoutParams(layoutParams);
+
+                        updateLayout();
+
+                        //Update mCardViewFullHeightDeckList to expansion
+                        cardViewDeckList.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                            @Override
+                            public boolean onPreDraw() {
+                                cardViewDeckList.getViewTreeObserver().removeOnPreDrawListener(this);
+                                mCardViewFullHeightDeckList = cardViewDeckList.getHeight();
+                                return true;
+                            }
+                        });
+
+                        alertDialog.dismiss();
+                    } else {
+                        Toast.makeText(view.getContext(), "Deck " + tempName + " already exists", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(view.getContext(), "Insert a name", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void dialogEditDeck(final Deck mCurrentDeck) {
+        View dialogDeckView = LayoutInflater.from(PlayerActivity.this).inflate(R.layout.dialog_deck, null);
+        final EditText userInput = (EditText) dialogDeckView.findViewById(R.id.editTextEditDeckName);
+        final ImageView shieldColor = (ImageView) dialogDeckView.findViewById(R.id.imageViewEditShieldColor);
+        final LinearLayout linearEditShieldColor = (LinearLayout) dialogDeckView.findViewById(R.id.linearEditShieldColor);
+        checkBoxManaWhite = (CheckBox) dialogDeckView.findViewById(R.id.checkbox_mana_white);
+        checkBoxManaBlue = (CheckBox) dialogDeckView.findViewById(R.id.checkbox_mana_blue);
+        checkBoxManaBlack = (CheckBox) dialogDeckView.findViewById(R.id.checkbox_mana_black);
+        checkBoxManaRed = (CheckBox) dialogDeckView.findViewById(R.id.checkbox_mana_red);
+        checkBoxManaGreen = (CheckBox) dialogDeckView.findViewById(R.id.checkbox_mana_green);
+        checkBoxManaColorless = (CheckBox) dialogDeckView.findViewById(R.id.checkbox_mana_colorless);
+
+        final int[] editShieldColor = new int[]{mCurrentDeck.getDeckShieldColor()[0], mCurrentDeck.getDeckShieldColor()[1]};
+
+        userInput.setText(mCurrentDeck.getDeckName());
+        shieldColor.setColorFilter(mCurrentDeck.getDeckShieldColor()[0]);
+        linearEditShieldColor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final int[] mColor = getResources().getIntArray(R.array.edh_shield_colors);
+                final int[] mColor_dark = getResources().getIntArray(R.array.edh_shield_colors_dark);
+                ColorPickerDialog colorCalendar = ColorPickerDialog.newInstance(R.string.color_picker_default_title, mColor, editShieldColor[0], 5, ColorPickerDialog.SIZE_SMALL);
+                colorCalendar.setOnColorSelectedListener(new ColorPickerSwatch.OnColorSelectedListener() {
+                    @Override
+                    public void onColorSelected(int color) {
+                        int color_dark = color;
+                        for (int i = 0; i < mColor.length; i++)
+                            if (mColor[i] == color)
+                                color_dark = mColor_dark[i];
+
+                        editShieldColor[0] = color;
+                        editShieldColor[1] = color_dark;
+
+                        shieldColor.setColorFilter(color);
+                    }
+                });
+                colorCalendar.show(getFragmentManager(), "cal");
+            }
+        });
+
+        final String currentColorIdentity = mCurrentDeck.getDeckIdentity();
+        checkBoxManaWhite.setChecked(currentColorIdentity.length() >= 0 && currentColorIdentity.charAt(0) == '1');
+        checkBoxManaBlue.setChecked(currentColorIdentity.length() >= 1 && currentColorIdentity.charAt(1) == '1');
+        checkBoxManaBlack.setChecked(currentColorIdentity.length() >= 2 && currentColorIdentity.charAt(2) == '1');
+        checkBoxManaRed.setChecked(currentColorIdentity.length() >= 3 && currentColorIdentity.charAt(3) == '1');
+        checkBoxManaGreen.setChecked(currentColorIdentity.length() >= 4 && currentColorIdentity.charAt(4) == '1');
+        checkBoxManaColorless.setChecked(currentColorIdentity.length() >= 5 && currentColorIdentity.charAt(5) == '1');
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PlayerActivity.this);
+        alertDialogBuilder.setView(dialogDeckView);
+        alertDialogBuilder.setTitle("Edit deck");
+        alertDialogBuilder.setPositiveButton("EDIT",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                });
+        alertDialogBuilder.setNegativeButton("CANCEL",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        alertDialog.show();
+
+        //Override POSITIVE button
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String newDeckName = userInput.getText().toString();
+                if (!newDeckName.equalsIgnoreCase("")) {
+                    String colorIdentity = "";
+                    colorIdentity = checkBoxManaWhite.isChecked() ? colorIdentity.concat("1") : colorIdentity.concat("0");
+                    colorIdentity = checkBoxManaBlue.isChecked() ? colorIdentity.concat("1") : colorIdentity.concat("0");
+                    colorIdentity = checkBoxManaBlack.isChecked() ? colorIdentity.concat("1") : colorIdentity.concat("0");
+                    colorIdentity = checkBoxManaRed.isChecked() ? colorIdentity.concat("1") : colorIdentity.concat("0");
+                    colorIdentity = checkBoxManaGreen.isChecked() ? colorIdentity.concat("1") : colorIdentity.concat("0");
+                    colorIdentity = checkBoxManaColorless.isChecked() ? colorIdentity.concat("1") : colorIdentity.concat("0");
+
+                    //Deck identity
+                    if (!colorIdentity.equalsIgnoreCase(currentColorIdentity)) {
+                        decksDB.updateDeckIdentity(mCurrentDeck, colorIdentity);
+                        updateLayout();
+                    }
+
+                    //Shield color
+                    if (editShieldColor[0] != mCurrentDeck.getDeckShieldColor()[0] && editShieldColor[1] != mCurrentDeck.getDeckShieldColor()[1]) {
+                        decksDB.updateDeckShieldColor(mCurrentDeck, editShieldColor);
+                    }
+
+                    //Deck name
+                    if (!newDeckName.equalsIgnoreCase(mCurrentDeck.getDeckName())) {
+                        if (decksDB.updateDeckName(mCurrentDeck, newDeckName) != -1) {
+                            //Records
+                            recordsDB.updateDeckNameRecord(mCurrentDeck, newDeckName);
+
+                            //Banner image
+                            File oldFile = new File(getFilesDir(), "image_" + mPlayerName + "_" + mCurrentDeck.getDeckName() + ".png");
+                            File newFile = new File(getFilesDir(), "image_" + mPlayerName + "_" + newDeckName + ".png");
+                            if (oldFile.renameTo(newFile))
+                                Toast.makeText(PlayerActivity.this, "Successfully edited ", Toast.LENGTH_SHORT).show();
+
+                            updateLayout();
+                        } else {
+                            Toast.makeText(PlayerActivity.this, "Fail: Deck " + newDeckName + " already exists", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    closeEditMode();
+
+                    alertDialog.dismiss();
+                } else {
+                    Toast.makeText(PlayerActivity.this, "Insert a name", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void dialogEditPlayer(final View view) {
+        View playerNameView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_player_name, null);
+        final EditText userInput = (EditText) playerNameView.findViewById(R.id.editTextPlayerName);
+        userInput.setText(mPlayerName);
+        userInput.setSelection(userInput.getText().length());
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
+        alertDialogBuilder.setView(playerNameView);
+        alertDialogBuilder.setTitle("Edit " + mPlayerName);
+        alertDialogBuilder.setPositiveButton("EDIT",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //Overridden at 'alertDialog.getButton' to avoid dismiss every time
+                    }
+                });
+        alertDialogBuilder.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        alertDialog.show();
+
+        //Override POSITIVE button
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String newName = userInput.getText().toString();
+                if (!newName.equalsIgnoreCase("")) {
+                    long result = playersDB.updatePlayer(mPlayerName, newName);
+                    if (result != -1) {
+                        decksDB.updateDeckOwner(mPlayerName, newName);
+                        recordsDB.updateRecord(mPlayerName, newName);
+                        mPlayerName = newName;
+                        updateLayout();
+                        Toast.makeText(view.getContext(), mPlayerName + " edited", Toast.LENGTH_SHORT).show();
+                        alertDialog.dismiss();
+                    } else {
+                        Toast.makeText(view.getContext(), "Player " + newName + " already exists", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(view.getContext(), "Insert a name", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void dialogRemoveDeck() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PlayerActivity.this);
+        alertDialogBuilder.setTitle("Delete deck");
+        alertDialogBuilder.setMessage("Are you sure to delete these deck?");
+        alertDialogBuilder.setPositiveButton("Delete",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        for (int i = 0; i < deckList.size(); i++)
+                            if (deckList.get(i)[4].equalsIgnoreCase("true"))
+                                decksDB.removeDeck(new Deck(mPlayerName, deckList.get(i)[1]));
+
+                        //Set card to wrap_content
+                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                        int pixel6dp = (int) Utils.convertDpToPixel((float) 6, getApplicationContext());
+                        layoutParams.setMargins(pixel6dp, pixel6dp, pixel6dp, pixel6dp);
+                        cardViewDeckList.setLayoutParams(layoutParams);
+
+                        updateLayout();
+
+                        //Update mCardViewFullHeightDeckList to expansion
+                        cardViewDeckList.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                            @Override
+                            public boolean onPreDraw() {
+                                cardViewDeckList.getViewTreeObserver().removeOnPreDrawListener(this);
+                                mCardViewFullHeightDeckList = cardViewDeckList.getHeight();
+                                return true;
+                            }
+                        });
+
+                        closeEditMode();
+
+                        dialog.cancel();
+                    }
+                });
+        alertDialogBuilder.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
+    private void dialogRemovePlayer(final View view) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PlayerActivity.this);
+        alertDialogBuilder.setTitle("Delete deck");
+        alertDialogBuilder.setMessage("Are you sure to delete this player?");
+        alertDialogBuilder.setPositiveButton("Delete",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        if (playersDB.deletePlayer(mPlayerName) != 0) {
+                            Toast.makeText(view.getContext(), mPlayerName + " removed", Toast.LENGTH_SHORT).show();
+                            PlayerActivity.this.finish();
+                        } else {
+                            Toast.makeText(view.getContext(), "ERROR", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+        alertDialogBuilder.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
+    private void handleDeckListEditMode() {
+        optionMenu.findItem(R.id.action_edit_deck).setVisible(mIsInEditMode);
+        optionMenu.findItem(R.id.action_delete_deck).setVisible(mIsInEditMode);
+        mDeckListAdapter.setIsInEditMode(mIsInEditMode);
+        mDeckListAdapter.notifyDataSetChanged();
     }
 
     private void updateLayout() {
+        mActionBar.setTitle(mPlayerName);
+
         //Deck info - Card
         if (mCardViewFullHeightPlayerInfo == 0) {
             cardViewPlayerInfo.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
@@ -755,7 +1034,7 @@ public class PlayerActivity extends AppCompatActivity {
             String title = allDecks.get(i).getDeckName();
             String subTitle = "TODO";
             String identity = allDecks.get(i).getDeckIdentity();
-            deckList.add(new String[]{imagePath, title, subTitle, identity});
+            deckList.add(new String[]{imagePath, title, subTitle, identity, "false"});
         }
         mDeckListAdapter.notifyDataSetChanged();
         Utils.justifyListViewHeightBasedOnChildren(listDeckListCard);
@@ -766,6 +1045,10 @@ public class PlayerActivity extends AppCompatActivity {
                 public boolean onPreDraw() {
                     cardViewDeckList.getViewTreeObserver().removeOnPreDrawListener(this);
                     mCardViewFullHeightDeckList = cardViewDeckList.getHeight();
+
+                    ViewGroup.LayoutParams layoutParams = cardViewDeckList.getLayoutParams();
+                    layoutParams.height = relativeTitleDeckListCard.getHeight();
+                    cardViewDeckList.setLayoutParams(layoutParams);
                     return true;
                 }
             });
