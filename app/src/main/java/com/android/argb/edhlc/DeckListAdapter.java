@@ -11,6 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.File;
@@ -59,6 +60,10 @@ public class DeckListAdapter extends BaseAdapter {
         return dataChecked;
     }
 
+    public boolean getDataChecked(int pos) {
+        return getDataChecked().get(pos).equalsIgnoreCase("true");
+    }
+
     @Override
     public Object getItem(int position) {
         return data.get(position);
@@ -83,6 +88,11 @@ public class DeckListAdapter extends BaseAdapter {
         if (vi == null)
             vi = inflater.inflate(R.layout.row_deck_list, null);
 
+        //Line
+        LinearLayout deckListLine = (LinearLayout) vi.findViewById(R.id.deckListLine);
+        deckListLine.setBackgroundColor(ContextCompat.getColor(context, android.R.color.transparent));
+        if (getDataChecked(position))
+            deckListLine.setBackgroundColor(ContextCompat.getColor(context, R.color.gray300));
 
         //Avatar
         ImageView imageViewAvatarDeckListCard = (ImageView) vi.findViewById(R.id.imageViewAvatarDeckListCard);
@@ -95,7 +105,6 @@ public class DeckListAdapter extends BaseAdapter {
         RoundedAvatarDrawable roundedImage = new RoundedAvatarDrawable(Utils.getSquareBitmap(bitmap));
         roundedImage.setAntiAlias(true);
         imageViewAvatarDeckListCard.setImageDrawable(roundedImage);
-        imageViewAvatarDeckListCard.setVisibility(isInEditMode() ? View.GONE : View.VISIBLE);
 
         //Avatar checkbox
         checkBox = (CheckBox) vi.findViewById(R.id.checkboxAvatarDeckListCard);

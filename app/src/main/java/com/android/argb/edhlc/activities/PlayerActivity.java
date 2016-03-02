@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -92,7 +93,7 @@ public class PlayerActivity extends AppCompatActivity {
     private List<String[]> deckList;  // 0 imagePath - 1 title - 2 subTitle - 3 identity - 4 selection
     private DeckListAdapter mDeckListAdapter;
 
-    //Card - Chart deck history 2 - 1v1
+    //Card - Chart player history 2 - 1v1
     private CardView cardViewChart2Slots;
     private int mCardViewFullHeightDeckHistory2 = 0;
     private RelativeLayout relativeTitleChart2Slots;
@@ -102,7 +103,7 @@ public class PlayerActivity extends AppCompatActivity {
     private MultipleCategorySeries mMultipleCategorySeriesDataSet2;
     private DonutChart donutChart2;
 
-    //Card - Chart deck history 3 - 1v1v1
+    //Card - Chart player history 3 - 1v1v1
     private CardView cardViewChart3Slots;
     private int mCardViewFullHeightDeckHistory3 = 0;
     private RelativeLayout relativeTitleChart3Slots;
@@ -112,7 +113,7 @@ public class PlayerActivity extends AppCompatActivity {
     private MultipleCategorySeries mMultipleCategorySeriesDataSet3;
     private DonutChart donutChart3;
 
-    //Card - Chart deck history 4 - 1v1v1v1
+    //Card - Chart player history 4 - 1v1v1v1
     private CardView cardViewChart4Slots;
     private int mCardViewFullHeightDeckHistory4 = 0;
     private RelativeLayout relativeTitleChart4Slots;
@@ -177,6 +178,7 @@ public class PlayerActivity extends AppCompatActivity {
     private boolean mIsInEditMode;
     private ActionBar mActionBar;
     private Menu optionMenu;
+    private View statusBarBackground;
 
     public void animateFAB() {
         if (isFabOpen) {
@@ -230,7 +232,8 @@ public class PlayerActivity extends AppCompatActivity {
         if (mPlayerDrawerLayout.isDrawerOpen(mPlayerDrawer))
             mPlayerDrawerLayout.closeDrawers();
         else if (mIsInEditMode) {
-            closeEditMode();
+            mIsInEditMode = false;
+            updateEditMode();
         } else {
             super.onBackPressed();
         }
@@ -244,6 +247,11 @@ public class PlayerActivity extends AppCompatActivity {
                 break;
 
             case R.id.relativeCardTitleDeckList:
+                if (mIsInEditMode) {
+                    mIsInEditMode = false;
+                    updateEditMode();
+                }
+
                 Utils.toggleCardExpansion(this, cardViewDeckList, textTitleDeckListCard, indicatorDeckListCard, relativeTitleDeckListCard.getHeight(), mCardViewFullHeightDeckList);
                 break;
 
@@ -267,6 +275,7 @@ public class PlayerActivity extends AppCompatActivity {
 
     public void onClickCheckBoxEditDeckList(View view) {
         optionMenu.findItem(R.id.action_edit_deck).setVisible(mDeckListAdapter.getTotalDataChecked() < 2);
+        mDeckListAdapter.notifyDataSetChanged();
     }
 
     public void onClickDrawerItem(View view) {
@@ -411,6 +420,11 @@ public class PlayerActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
+        if (mIsInEditMode) {
+            mIsInEditMode = false;
+            updateEditMode();
+        }
+
         super.onPause();
     }
 
@@ -458,12 +472,6 @@ public class PlayerActivity extends AppCompatActivity {
 
         outState.putSerializable("current_series4", mMultipleCategorySeriesDataSet4);
         outState.putSerializable("current_renderer4", mDoughnutRender4);
-    }
-
-    private void closeEditMode() {
-        mIsInEditMode = false;
-        mDeckListAdapter.checkBoxClearAllSelections();
-        handleDeckListEditMode();
     }
 
     private void createDrawer() {
@@ -575,9 +583,9 @@ public class PlayerActivity extends AppCompatActivity {
         listDeckListCard.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                mIsInEditMode = true;
                 mDeckListAdapter.checkBoxSetSelection(position, "true");
-                handleDeckListEditMode();
+                mIsInEditMode = true;
+                updateEditMode();
                 return true;
             }
         });
@@ -590,6 +598,7 @@ public class PlayerActivity extends AppCompatActivity {
         cardViewChart2Slots = (CardView) findViewById(R.id.cardViewChart2Slots);
         relativeTitleChart2Slots = (RelativeLayout) findViewById(R.id.relativeCardTitleChart2Slots);
         textTitleChart2Slots = (TextView) findViewById(R.id.textTitleChart2Slots);
+        textTitleChart2Slots.setText("Player History - 2 players");
         indicatorChart2Slots = (ImageView) findViewById(R.id.indicatorChart2Slots);
         donutChart2 = new DonutChart(this, mDoughnutRender2, mMultipleCategorySeriesDataSet2);
 
@@ -597,6 +606,7 @@ public class PlayerActivity extends AppCompatActivity {
         cardViewChart3Slots = (CardView) findViewById(R.id.cardViewChart3Slots);
         relativeTitleChart3Slots = (RelativeLayout) findViewById(R.id.relativeCardTitleChart3Slots);
         textTitleChart3Slots = (TextView) findViewById(R.id.textTitleChart3Slots);
+        textTitleChart3Slots.setText("Player History - 2 players");
         indicatorChart3Slots = (ImageView) findViewById(R.id.indicatorChart3Slots);
         donutChart3 = new DonutChart(this, mDoughnutRender3, mMultipleCategorySeriesDataSet3);
 
@@ -604,6 +614,7 @@ public class PlayerActivity extends AppCompatActivity {
         cardViewChart4Slots = (CardView) findViewById(R.id.cardViewChart4Slots);
         relativeTitleChart4Slots = (RelativeLayout) findViewById(R.id.relativeCardTitleChart4Slots);
         textTitleChart4Slots = (TextView) findViewById(R.id.textTitleChart4Slots);
+        textTitleChart4Slots.setText("Player History - 2 players");
         indicatorChart4Slots = (ImageView) findViewById(R.id.indicatorChart4Slots);
         donutChart4 = new DonutChart(this, mDoughnutRender4, mMultipleCategorySeriesDataSet4);
 
@@ -639,7 +650,7 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     private void createStatusBar() {
-        View statusBarBackground = findViewById(R.id.statusBarBackground);
+        statusBarBackground = findViewById(R.id.statusBarBackground);
         ViewGroup.LayoutParams params = statusBarBackground.getLayoutParams();
         params.height = Utils.getStatusBarHeight(this);
         statusBarBackground.setLayoutParams(params);
@@ -655,9 +666,10 @@ public class PlayerActivity extends AppCompatActivity {
 
     private void createToolbar() {
         assert getSupportActionBar() != null;
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
         mActionBar = getSupportActionBar();
+        mActionBar.setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(this, R.color.primary_color)));
         mActionBar.setDisplayShowTitleEnabled(true);
         mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setHomeButtonEnabled(true);
@@ -847,7 +859,8 @@ public class PlayerActivity extends AppCompatActivity {
                             Toast.makeText(PlayerActivity.this, "Fail: Deck " + newDeckName + " already exists", Toast.LENGTH_SHORT).show();
                         }
                     }
-                    closeEditMode();
+                    mIsInEditMode = false;
+                    updateEditMode();
 
                     alertDialog.dismiss();
                 } else {
@@ -935,7 +948,8 @@ public class PlayerActivity extends AppCompatActivity {
                             }
                         });
 
-                        closeEditMode();
+                        mIsInEditMode = false;
+                        updateEditMode();
 
                         dialog.cancel();
                     }
@@ -975,9 +989,17 @@ public class PlayerActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    private void handleDeckListEditMode() {
+    private void updateEditMode() {
+        int color = mIsInEditMode ? ContextCompat.getColor(this, R.color.divider) : ContextCompat.getColor(this, R.color.primary_color);
+
+        statusBarBackground.setBackgroundColor(color);
+        mActionBar.setBackgroundDrawable(new ColorDrawable(color));
+
         optionMenu.findItem(R.id.action_edit_deck).setVisible(mIsInEditMode);
         optionMenu.findItem(R.id.action_delete_deck).setVisible(mIsInEditMode);
+
+        if (!mIsInEditMode)
+            mDeckListAdapter.checkBoxClearAllSelections();
         mDeckListAdapter.setIsInEditMode(mIsInEditMode);
         mDeckListAdapter.notifyDataSetChanged();
     }
@@ -1010,13 +1032,21 @@ public class PlayerActivity extends AppCompatActivity {
 
         List<Record> allRecords = recordsDB.getAllRecordsByPlayerName(mPlayerName);
         List<Record> allFirstRecords = recordsDB.getRecordsByPosition(mPlayerName, 1);
+        List<Deck> mostUsedDecks = recordsDB.getMostUsedDecks(allDecks);
+        int timesUsedMostPlayedDeck = recordsDB.getAllRecordsByDeck(mostUsedDecks.get(0)).size();
 
         Player currentPlayer = playersDB.getPlayer(mPlayerName);
 
-        //TODO Most played general
-        textViewMostPlayedDeckPlayerInfo.setText("TODO");
-        //TODO Most played general - tines
-        textViewTimePlayedDeckPlayerInfo.setText("TODO");
+        String auxMostPlayedDeck = mostUsedDecks.get(0).getDeckName();
+        int totalMostUsedDecks = mostUsedDecks.size() - 1;
+        if (totalMostUsedDecks == 1)
+            auxMostPlayedDeck = auxMostPlayedDeck + " and " + totalMostUsedDecks + " other";
+        else if (totalMostUsedDecks > 1)
+            auxMostPlayedDeck = auxMostPlayedDeck + " and " + totalMostUsedDecks + " others";
+
+
+        textViewMostPlayedDeckPlayerInfo.setText(auxMostPlayedDeck);
+        textViewTimePlayedDeckPlayerInfo.setText("" + timesUsedMostPlayedDeck);
 
         textViewCreationDate.setText(currentPlayer.getPlayerDate());
         textViewTotalGames.setText("" + allRecords.size());
@@ -1030,10 +1060,20 @@ public class PlayerActivity extends AppCompatActivity {
             deckList.clear();
 
         for (int i = 0; i < allDecks.size(); i++) {
+            Deck auxDeck = new Deck(mPlayerName, allDecks.get(i).getDeckName());
+
             String imagePath = "image_" + mPlayerName + "_" + allDecks.get(i).getDeckName() + ".png";
-            String title = allDecks.get(i).getDeckName();
-            String subTitle = "TODO";
+
+            String title = auxDeck.getDeckName();
+
+            int auxTotalVictories = 0;
+            auxTotalVictories = auxTotalVictories + recordsDB.getRecordsByPosition(auxDeck, 1, 2).size();
+            auxTotalVictories = auxTotalVictories + recordsDB.getRecordsByPosition(auxDeck, 1, 3).size();
+            auxTotalVictories = auxTotalVictories + recordsDB.getRecordsByPosition(auxDeck, 1, 4).size();
+            String subTitle = recordsDB.getAllRecordsByDeck(auxDeck).size() + " games and " + auxTotalVictories + (auxTotalVictories <= 1 ? " victory" : " victories");
+
             String identity = allDecks.get(i).getDeckIdentity();
+
             deckList.add(new String[]{imagePath, title, subTitle, identity, "false"});
         }
         mDeckListAdapter.notifyDataSetChanged();

@@ -216,6 +216,22 @@ public class RecordsDataAccessObject {
         return recordList;
     }
 
+    public List<Deck> getMostUsedDecks(List<Deck> decks) {
+        int max = 0;
+        List<Deck> mostUsedDecks = new ArrayList<>();
+        for (int i = 0; i < decks.size(); i++) {
+            int aux = getAllRecordsByDeck(decks.get(i)).size();
+            if (aux > max)
+                mostUsedDecks.clear();
+            if (aux >= max) {
+                mostUsedDecks.add(decks.get(i));
+                max = aux;
+            }
+        }
+
+        return mostUsedDecks;
+    }
+
     public List<Record> getRecordsByPosition(Deck deck, int position, int totalPlayers) {
         String selection = "";
         switch (position) {
@@ -421,28 +437,6 @@ public class RecordsDataAccessObject {
         database = recordsDBHelper.getWritableDatabase();
     }
 
-    public long updateRecord(String oldPlayerName, String newPlayerName) {
-        long totalUpdate = 0;
-
-        ContentValues values1 = new ContentValues();
-        values1.put(RecordsContract.RecordsEntry.COLUMN_FIRST_PLAYER_NAME, newPlayerName);
-        totalUpdate += database.update(RecordsContract.RecordsEntry.TABLE_NAME, values1, RecordsContract.RecordsEntry.COLUMN_FIRST_PLAYER_NAME + "=?", new String[]{oldPlayerName});
-
-        ContentValues values2 = new ContentValues();
-        values2.put(RecordsContract.RecordsEntry.COLUMN_SECOND_PLAYER_NAME, newPlayerName);
-        totalUpdate += database.update(RecordsContract.RecordsEntry.TABLE_NAME, values2, RecordsContract.RecordsEntry.COLUMN_SECOND_PLAYER_NAME + "=?", new String[]{oldPlayerName});
-
-        ContentValues values3 = new ContentValues();
-        values3.put(RecordsContract.RecordsEntry.COLUMN_THIRD_PLAYER_NAME, newPlayerName);
-        totalUpdate += database.update(RecordsContract.RecordsEntry.TABLE_NAME, values3, RecordsContract.RecordsEntry.COLUMN_THIRD_PLAYER_NAME + "=?", new String[]{oldPlayerName});
-
-        ContentValues values4 = new ContentValues();
-        values4.put(RecordsContract.RecordsEntry.COLUMN_FOURTH_PLAYER_NAME, newPlayerName);
-        totalUpdate += database.update(RecordsContract.RecordsEntry.TABLE_NAME, values4, RecordsContract.RecordsEntry.COLUMN_FOURTH_PLAYER_NAME + "=?", new String[]{oldPlayerName});
-
-        return totalUpdate;
-    }
-
     public long updateDeckNameRecord(Deck deck, String newDeckName) {
         long totalUpdate = 0;
 
@@ -481,6 +475,28 @@ public class RecordsDataAccessObject {
                 RecordsContract.RecordsEntry.COLUMN_FOURTH_PLAYER_NAME + "=? AND " + RecordsContract.RecordsEntry.COLUMN_FOURTH_PLAYER_DECK + "=?",
                 new String[]{deck.getDeckOwnerName(), deck.getDeckName()}
         );
+
+        return totalUpdate;
+    }
+
+    public long updateRecord(String oldPlayerName, String newPlayerName) {
+        long totalUpdate = 0;
+
+        ContentValues values1 = new ContentValues();
+        values1.put(RecordsContract.RecordsEntry.COLUMN_FIRST_PLAYER_NAME, newPlayerName);
+        totalUpdate += database.update(RecordsContract.RecordsEntry.TABLE_NAME, values1, RecordsContract.RecordsEntry.COLUMN_FIRST_PLAYER_NAME + "=?", new String[]{oldPlayerName});
+
+        ContentValues values2 = new ContentValues();
+        values2.put(RecordsContract.RecordsEntry.COLUMN_SECOND_PLAYER_NAME, newPlayerName);
+        totalUpdate += database.update(RecordsContract.RecordsEntry.TABLE_NAME, values2, RecordsContract.RecordsEntry.COLUMN_SECOND_PLAYER_NAME + "=?", new String[]{oldPlayerName});
+
+        ContentValues values3 = new ContentValues();
+        values3.put(RecordsContract.RecordsEntry.COLUMN_THIRD_PLAYER_NAME, newPlayerName);
+        totalUpdate += database.update(RecordsContract.RecordsEntry.TABLE_NAME, values3, RecordsContract.RecordsEntry.COLUMN_THIRD_PLAYER_NAME + "=?", new String[]{oldPlayerName});
+
+        ContentValues values4 = new ContentValues();
+        values4.put(RecordsContract.RecordsEntry.COLUMN_FOURTH_PLAYER_NAME, newPlayerName);
+        totalUpdate += database.update(RecordsContract.RecordsEntry.TABLE_NAME, values4, RecordsContract.RecordsEntry.COLUMN_FOURTH_PLAYER_NAME + "=?", new String[]{oldPlayerName});
 
         return totalUpdate;
     }

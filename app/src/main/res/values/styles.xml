@@ -6,15 +6,23 @@
 
     <!-- ActionBar styles -->
     <style name="MyActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="background">@android:color/transparent</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/white</item>
+    </style>
+
+    <!-- ActionBar for Deck activity-->
+    <style name="MyActionBarDeck" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
         <item name="android:background">@color/primary_color</item>
         <item name="background">@color/primary_color</item>
-        <item name="android:textColorPrimary">#FFFFFF</item>
-        <item name="android:textColorSecondary">#FFFFFF</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/white</item>
     </style>
 
     <!-- ActionBar Parallax styles -->
     <style name="MyActionBarParallax" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
-        <item name="android:textColorSecondary">#FFFFFF</item>
+        <item name="android:textColorSecondary">@color/white</item>
     </style>
 
     <style name="CollapsedAppBarExpanded" parent="@android:style/Widget.Material.Toolbar">
