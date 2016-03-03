@@ -77,6 +77,7 @@ public class PlayerActivity extends AppCompatActivity {
     private TextView textTitlePlayerInfo;
     private ImageView iconIndicatorPlayerInfo;
     private TextView textViewMostPlayedDeckPlayerInfo;
+    private TextView textViewOthersMostPlayedDeckPlayerInfo;
     private TextView textViewTimePlayedDeckPlayerInfo;
     private TextView textViewWins;
     private TextView textViewTotalGames;
@@ -547,6 +548,8 @@ public class PlayerActivity extends AppCompatActivity {
         iconIndicatorPlayerInfo = (ImageView) findViewById(R.id.iconIndicatorPlayerInfo);
         //Most played general
         textViewMostPlayedDeckPlayerInfo = (TextView) findViewById(R.id.textViewMostPlayedDeckPlayerInfo);
+        //Most played general "view more"
+        textViewOthersMostPlayedDeckPlayerInfo = (TextView) findViewById(R.id.textViewOthersMostPlayedDeckPlayerInfo);
         //Most played general - tines
         textViewTimePlayedDeckPlayerInfo = (TextView) findViewById(R.id.textViewTimePlayedDeckPlayerInfo);
         //Creation Date
@@ -989,6 +992,57 @@ public class PlayerActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
+    private void handleTiedMostPlayedDecks(final List<Deck> tiedDecks) {
+        textViewOthersMostPlayedDeckPlayerInfo.setText("more decks");
+        textViewOthersMostPlayedDeckPlayerInfo.setTextColor(ContextCompat.getColor(this, R.color.primary_color));
+        textViewOthersMostPlayedDeckPlayerInfo.setClickable(true);
+        textViewOthersMostPlayedDeckPlayerInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (textViewOthersMostPlayedDeckPlayerInfo.isActivated()) {
+                    textViewOthersMostPlayedDeckPlayerInfo.setText("more decks");
+                    textViewMostPlayedDeckPlayerInfo.setText(tiedDecks.get(0).getDeckName());
+
+                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    int pixel6dp = (int) Utils.convertDpToPixel((float) 6, getApplicationContext());
+                    layoutParams.setMargins(pixel6dp, pixel6dp, pixel6dp, pixel6dp);
+                    cardViewPlayerInfo.setLayoutParams(layoutParams);
+                    cardViewPlayerInfo.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                        @Override
+                        public boolean onPreDraw() {
+                            cardViewPlayerInfo.getViewTreeObserver().removeOnPreDrawListener(this);
+                            mCardViewFullHeightPlayerInfo = cardViewPlayerInfo.getHeight();
+                            return true;
+                        }
+                    });
+                } else {
+                    textViewOthersMostPlayedDeckPlayerInfo.setText("hide decks");
+                    String decks = "";
+                    for (int i = 0; i < tiedDecks.size(); i++) {
+                        decks = decks + tiedDecks.get(i).getDeckName();
+                        if (i < tiedDecks.size() - 1)
+                            decks = decks + System.getProperty("line.separator");
+                    }
+                    textViewMostPlayedDeckPlayerInfo.setText(decks);
+
+                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    int pixel6dp = (int) Utils.convertDpToPixel((float) 6, getApplicationContext());
+                    layoutParams.setMargins(pixel6dp, pixel6dp, pixel6dp, pixel6dp);
+                    cardViewPlayerInfo.setLayoutParams(layoutParams);
+                    cardViewPlayerInfo.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                        @Override
+                        public boolean onPreDraw() {
+                            cardViewPlayerInfo.getViewTreeObserver().removeOnPreDrawListener(this);
+                            mCardViewFullHeightPlayerInfo = cardViewPlayerInfo.getHeight();
+                            return true;
+                        }
+                    });
+                }
+                textViewOthersMostPlayedDeckPlayerInfo.setActivated(!textViewOthersMostPlayedDeckPlayerInfo.isActivated());
+            }
+        });
+    }
+
     private void updateEditMode() {
         int color = mIsInEditMode ? ContextCompat.getColor(this, R.color.divider) : ContextCompat.getColor(this, R.color.primary_color);
 
@@ -1029,23 +1083,23 @@ public class PlayerActivity extends AppCompatActivity {
         }
 
         List<Deck> allDecks = decksDB.getAllDeckByPlayerName(mPlayerName);
-
         List<Record> allRecords = recordsDB.getAllRecordsByPlayerName(mPlayerName);
         List<Record> allFirstRecords = recordsDB.getRecordsByPosition(mPlayerName, 1);
-        List<Deck> mostUsedDecks = recordsDB.getMostUsedDecks(allDecks);
-        int timesUsedMostPlayedDeck = recordsDB.getAllRecordsByDeck(mostUsedDecks.get(0)).size();
-
+        final List<Deck> mostUsedDecks = recordsDB.getMostUsedDecks(allDecks);
+        final int timesUsedMostPlayedDeck = recordsDB.getAllRecordsByDeck(mostUsedDecks.get(0)).size();
         Player currentPlayer = playersDB.getPlayer(mPlayerName);
 
-        String auxMostPlayedDeck = mostUsedDecks.get(0).getDeckName();
-        int totalMostUsedDecks = mostUsedDecks.size() - 1;
+        //Most played deck
+        textViewMostPlayedDeckPlayerInfo.setText(mostUsedDecks.get(0).getDeckName());
+
+        //Handle tied decks
+        int totalMostUsedDecks = mostUsedDecks.size();
         if (totalMostUsedDecks == 1)
-            auxMostPlayedDeck = auxMostPlayedDeck + " and " + totalMostUsedDecks + " other";
-        else if (totalMostUsedDecks > 1)
-            auxMostPlayedDeck = auxMostPlayedDeck + " and " + totalMostUsedDecks + " others";
+            textViewOthersMostPlayedDeckPlayerInfo.setText("");
+        else
+            handleTiedMostPlayedDecks(mostUsedDecks);
 
-
-        textViewMostPlayedDeckPlayerInfo.setText(auxMostPlayedDeck);
+        //TIMES most played deck
         textViewTimePlayedDeckPlayerInfo.setText("" + timesUsedMostPlayedDeck);
 
         textViewCreationDate.setText(currentPlayer.getPlayerDate());
