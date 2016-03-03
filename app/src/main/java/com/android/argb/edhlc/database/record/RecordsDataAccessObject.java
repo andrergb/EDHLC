@@ -216,6 +216,22 @@ public class RecordsDataAccessObject {
         return recordList;
     }
 
+    public List<Deck> getLeastUsedDecks(List<Deck> decks) {
+        int min = Integer.MAX_VALUE;
+        List<Deck> leastUsedDecks = new ArrayList<>();
+        for (int i = 0; i < decks.size(); i++) {
+            int aux = getAllRecordsByDeck(decks.get(i)).size();
+            if (aux < min)
+                leastUsedDecks.clear();
+            if (aux <= min) {
+                leastUsedDecks.add(decks.get(i));
+                min = aux;
+            }
+        }
+
+        return leastUsedDecks;
+    }
+
     public List<Deck> getMostUsedDecks(List<Deck> decks) {
         int max = 0;
         List<Deck> mostUsedDecks = new ArrayList<>();
