@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.android.argb.edhlc.activities.PlayerListActivity;
+import com.android.argb.edhlc.activities.PlayerListActivityOLD;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -188,8 +188,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         buttonMore1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mContext instanceof PlayerListActivity) {
-                    ((PlayerListActivity) mContext).onClickButtonMoreHeader(headerText, groupPosition);
+                if (mContext instanceof PlayerListActivityOLD) {
+                    ((PlayerListActivityOLD) mContext).onClickButtonMoreHeader(headerText, groupPosition);
                 }
             }
         });
@@ -200,8 +200,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         buttonMore2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mContext instanceof PlayerListActivity) {
-                    ((PlayerListActivity) mContext).onClickButtonMoreHeader(headerText, groupPosition);
+                if (mContext instanceof PlayerListActivityOLD) {
+                    ((PlayerListActivityOLD) mContext).onClickButtonMoreHeader(headerText, groupPosition);
                 }
             }
         });

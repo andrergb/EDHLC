@@ -30,7 +30,7 @@
             android:label="@string/activity_history_label"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".activities.PlayerListActivity"
+            android:name=".activities.PlayerListActivityOLD"
             android:label="@string/activity_player_list_label"
             android:screenOrientation="portrait"/>
         <activity
@@ -45,6 +45,12 @@
             android:name=".activities.TurnActivity"
             android:label="@string/activity_turn_label"
             android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".activities.PlayerListActivity"
+            android:label="@string/activity_player_list_label"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
 
         <activity
             android:name=".activities.PlayerActivity"

@@ -368,7 +368,7 @@ public class DrawerPlayerList {
                     break;
                 case 1: //Players
                     mDrawerLayout.closeDrawers();
-                    // parentActivity.startActivity(new Intent(parentActivity, PlayerListActivity.class));
+                    // parentActivity.startActivity(new Intent(parentActivity, PlayerListActivityOLD.class));
                     break;
                 case 2: //All Records
                     mDrawerLayout.closeDrawers();

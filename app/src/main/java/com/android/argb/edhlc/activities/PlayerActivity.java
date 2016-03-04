@@ -292,7 +292,7 @@ public class PlayerActivity extends AppCompatActivity {
 
             case R.id.drawerItemPlayers:
                 mPlayerDrawerLayout.closeDrawers();
-                startActivity(new Intent(this, PlayerListActivity.class));
+                startActivity(new Intent(this, PlayerListActivityOLD.class));
                 finish();
                 break;
 
@@ -397,7 +397,7 @@ public class PlayerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_player);
 
         Intent intent = getIntent();
-        mPlayerName = intent.getStringExtra("PLAYERNAME");
+        mPlayerName = intent.getStringExtra("PLAYER_NAME");
 
         decksDB = new DecksDataAccessObject(this);
         decksDB.open();
@@ -420,6 +420,7 @@ public class PlayerActivity extends AppCompatActivity {
 
         decksDB.close();
         recordsDB.close();
+        playersDB.close();
     }
 
     @Override
@@ -1104,7 +1105,7 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     private void updateEditMode() {
-        int color = mIsInEditMode ? ContextCompat.getColor(this, R.color.divider) : ContextCompat.getColor(this, R.color.primary_color);
+        int color = mIsInEditMode ? ContextCompat.getColor(this, R.color.secondary_text) : ContextCompat.getColor(this, R.color.primary_color);
 
         statusBarBackground.setBackgroundColor(color);
         mActionBar.setBackgroundDrawable(new ColorDrawable(color));

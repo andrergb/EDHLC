@@ -262,7 +262,7 @@ public class DeckActivity extends AppCompatActivity {
 
             case R.id.drawerItemPlayers:
                 mDeckDrawerLayout.closeDrawers();
-                startActivity(new Intent(this, PlayerListActivity.class));
+                startActivity(new Intent(this, PlayerListActivityOLD.class));
                 finish();
                 break;
 

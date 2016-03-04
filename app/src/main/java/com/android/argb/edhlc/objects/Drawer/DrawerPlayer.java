@@ -22,7 +22,7 @@ import android.widget.Toast;
 
 import com.android.argb.edhlc.Constants;
 import com.android.argb.edhlc.R;
-import com.android.argb.edhlc.activities.PlayerListActivity;
+import com.android.argb.edhlc.activities.PlayerListActivityOLD;
 import com.android.argb.edhlc.activities.RecordsActivity;
 import com.android.argb.edhlc.activities.SettingsActivity;
 import com.android.argb.edhlc.database.deck.DecksDataAccessObject;
@@ -388,7 +388,7 @@ public class DrawerPlayer {
                     break;
                 case 1: //Players
                     mDrawerLayout.closeDrawers();
-                    parentActivity.startActivity(new Intent(parentActivity, PlayerListActivity.class));
+                    parentActivity.startActivity(new Intent(parentActivity, PlayerListActivityOLD.class));
                     parentActivity.finish();
                     break;
                 case 2: //All Records

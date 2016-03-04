@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/playerListLine"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp">
+
+        <CheckBox
+            android:id="@+id/checkboxPlayerList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:focusable="false"
+            android:theme="@style/CheckboxStyle"
+            android:focusableInTouchMode="false"
+            android:gravity="center"
+            android:onClick="onClickCheckBoxEditDeckList"
+            android:padding="5dp"/>
+
+        <!-- Row text -->
+        <LinearLayout
+            android:id="@+id/row"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:layout_gravity="center_vertical"
+            android:layout_toLeftOf="@+id/arrow"
+            android:layout_toRightOf="@+id/checkboxPlayerList"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <!-- Player name -->
+            <TextView
+                android:id="@+id/textViewPlayerNamePlayerList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/linearIdentity"
+                android:layout_toStartOf="@+id/linearIdentity"
+                android:singleLine="true"
+                android:text="Decks name"
+                android:textColor="@color/primary_text"
+                android:textSize="16sp"/>
+
+            <!-- Player description -->
+            <TextView
+                android:id="@+id/textViewPlayerDescriptionPlayerList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5 games, 2 wins"
+                android:textColor="@color/secondary_text"
+                android:textSize="12sp"/>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/arrow"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/arrow_right"
+            android:tint="@color/secondary_text"/>
+    </RelativeLayout>
+</LinearLayout>
