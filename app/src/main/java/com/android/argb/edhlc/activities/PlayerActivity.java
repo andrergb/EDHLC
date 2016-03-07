@@ -935,7 +935,7 @@ public class PlayerActivity extends AppCompatActivity {
     private void dialogRemoveDeck() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PlayerActivity.this);
         alertDialogBuilder.setTitle("Delete deck");
-        alertDialogBuilder.setMessage("Are you sure to delete these deck?");
+        alertDialogBuilder.setMessage("Are you sure to delete these decks?");
         alertDialogBuilder.setPositiveButton("Delete",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {

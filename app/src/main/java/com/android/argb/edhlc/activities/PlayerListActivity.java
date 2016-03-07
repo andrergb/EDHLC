@@ -1,11 +1,12 @@
 package com.android.argb.edhlc.activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.NestedScrollView;
@@ -13,6 +14,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,11 +22,13 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.argb.edhlc.Constants;
 import com.android.argb.edhlc.PlayerListAdapter;
@@ -133,7 +137,7 @@ public class PlayerListActivity extends AppCompatActivity {
     public void onClickFabButton(View view) {
         switch (view.getId()) {
             case R.id.fabAddPlayerToList:
-                //TODO add player
+                dialogAddPlayer();
                 break;
         }
     }
@@ -160,10 +164,12 @@ public class PlayerListActivity extends AppCompatActivity {
         //Option menu
         switch (item.getItemId()) {
             case R.id.action_edit_player:
-                //TODO
+                for (int i = 0; i < playerList.size(); i++)
+                    if (playerList.get(i)[2].equalsIgnoreCase("true"))
+                        dialogEditPlayer(playerList.get(i)[0]);
                 return true;
             case R.id.action_delete_player:
-                //TODO
+                dialogRemovePlayer();
                 return true;
         }
 
@@ -245,7 +251,6 @@ public class PlayerListActivity extends AppCompatActivity {
         };
         mPlayerDrawerLayout.setDrawerListener(mDrawerToggle);
 
-        //TODO selected item on drawer - temp local
         LinearLayout drawerItemPlayers = (LinearLayout) findViewById(R.id.drawerItemPlayers);
         ImageView drawerItemIconPlayers = (ImageView) findViewById(R.id.drawerItemIconPlayers);
         TextView drawerItemTextPlayers = (TextView) findViewById(R.id.drawerItemTextPlayers);
@@ -274,7 +279,7 @@ public class PlayerListActivity extends AppCompatActivity {
         });
 
         //FloatingActionButton
-        FloatingActionButton fabAddPlayerToList = (FloatingActionButton) findViewById(R.id.fabAddPlayerToList);
+        //FloatingActionButton fabAddPlayerToList = (FloatingActionButton) findViewById(R.id.fabAddPlayerToList);
 
         //Card playerList
         listPlayer = (ListView) findViewById(R.id.listPlayer);
@@ -332,6 +337,128 @@ public class PlayerListActivity extends AppCompatActivity {
         mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setHomeButtonEnabled(true);
         mActionBar.setTitle("Player list");
+    }
+
+    private void dialogAddPlayer() {
+        View playerNameView = LayoutInflater.from(PlayerListActivity.this).inflate(R.layout.dialog_player_name, null);
+        final EditText userInput = (EditText) playerNameView.findViewById(R.id.editTextPlayerName);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PlayerListActivity.this);
+        alertDialogBuilder.setView(playerNameView);
+        alertDialogBuilder.setTitle("Add new Player");
+        alertDialogBuilder.setMessage("Player name:");
+        alertDialogBuilder.setPositiveButton("ADD",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                });
+        alertDialogBuilder.setNegativeButton("CANCEL",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        alertDialog.show();
+
+        //Override POSITIVE button
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String tempName = userInput.getText().toString();
+                if (!tempName.equalsIgnoreCase("")) {
+                    if (playersDB.addPlayer(tempName, Utils.getCurrentDate()) != -1) {
+                        Toast.makeText(PlayerListActivity.this, tempName + " added", Toast.LENGTH_SHORT).show();
+                        updateLayout();
+                        alertDialog.dismiss();
+                    } else {
+                        Toast.makeText(PlayerListActivity.this, "Fail: Player " + tempName + " already exists", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(PlayerListActivity.this, "Insert a name", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void dialogEditPlayer(final String mPlayerName) {
+        View playerNameView = LayoutInflater.from(PlayerListActivity.this).inflate(R.layout.dialog_player_name, null);
+        final EditText userInput = (EditText) playerNameView.findViewById(R.id.editTextPlayerName);
+        userInput.setText(mPlayerName);
+        userInput.setSelection(userInput.getText().length());
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PlayerListActivity.this);
+        alertDialogBuilder.setView(playerNameView);
+        alertDialogBuilder.setTitle("Edit " + mPlayerName);
+        alertDialogBuilder.setPositiveButton("EDIT",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //Overridden at 'alertDialog.getButton' to avoid dismiss every time
+                    }
+                });
+        alertDialogBuilder.setNegativeButton("CANCEL",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        alertDialog.show();
+
+        //Override POSITIVE button
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String newName = userInput.getText().toString();
+                if (!newName.equalsIgnoreCase("")) {
+                    long result = playersDB.updatePlayer(mPlayerName, newName);
+                    if (result != -1) {
+                        decksDB.updateDeckOwner(mPlayerName, newName);
+                        recordsDB.updateRecord(mPlayerName, newName);
+                        updateLayout();
+
+                        mIsInEditMode = false;
+                        updateEditMode();
+
+                        Toast.makeText(PlayerListActivity.this, newName + " edited", Toast.LENGTH_SHORT).show();
+                        alertDialog.dismiss();
+                    } else {
+                        Toast.makeText(PlayerListActivity.this, "Player " + newName + " already exists", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(PlayerListActivity.this, "Insert a name", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void dialogRemovePlayer() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PlayerListActivity.this);
+        alertDialogBuilder.setTitle("Delete player");
+        alertDialogBuilder.setMessage("Are you sure to delete these players?");
+        alertDialogBuilder.setPositiveButton("DELETE",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        for (int i = 0; i < playerList.size(); i++)
+                            if (playerList.get(i)[2].equalsIgnoreCase("true"))
+                                playersDB.deletePlayer(playerList.get(i)[0]);
+
+                        updateLayout();
+                        mIsInEditMode = false;
+                        updateEditMode();
+
+                        dialog.cancel();
+                    }
+                });
+        alertDialogBuilder.setNegativeButton("CANCEL",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
     private void updateEditMode() {
