@@ -308,6 +308,7 @@ public class PlayerListActivity extends AppCompatActivity {
                     Intent intent = new Intent(PlayerListActivity.this, PlayerActivity.class);
                     intent.putExtra("PLAYER_NAME", playerList.get(position)[0]);
                     startActivity(intent);
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 } else {
                     mPlayerListAdapter.checkBoxSetSelection(position, mPlayerListAdapter.checkBoxGetSelection(position) ? "false" : "true");
                     optionMenu.findItem(R.id.action_edit_player).setVisible(mPlayerListAdapter.getTotalDataChecked() < 2);

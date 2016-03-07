@@ -240,6 +240,7 @@ public class PlayerActivity extends AppCompatActivity {
             updateEditMode();
         } else {
             super.onBackPressed();
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         }
     }
 
@@ -587,6 +588,7 @@ public class PlayerActivity extends AppCompatActivity {
                     intent.putExtra("DECK_NAME", deckList.get(position)[1]);
                     intent.putExtra("DECK_IDENTITY", deckList.get(position)[3]);
                     startActivity(intent);
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 } else {
                     mDeckListAdapter.checkBoxSetSelection(position, mDeckListAdapter.checkBoxGetSelection(position) ? "false" : "true");
                     optionMenu.findItem(R.id.action_edit_deck).setVisible(mDeckListAdapter.getTotalDataChecked() < 2);
@@ -1215,9 +1217,11 @@ public class PlayerActivity extends AppCompatActivity {
                     cardViewDeckList.getViewTreeObserver().removeOnPreDrawListener(this);
                     mCardViewFullHeightDeckList = cardViewDeckList.getHeight();
 
-                    ViewGroup.LayoutParams layoutParams = cardViewDeckList.getLayoutParams();
-                    layoutParams.height = relativeTitleDeckListCard.getHeight();
-                    cardViewDeckList.setLayoutParams(layoutParams);
+                    textTitleDeckListCard.setTextColor(ContextCompat.getColor(PlayerActivity.this, R.color.secondary_color));
+                    indicatorDeckListCard.setImageDrawable(ContextCompat.getDrawable(PlayerActivity.this, R.drawable.arrow_up));
+                    indicatorDeckListCard.setRotation(0);
+                    indicatorDeckListCard.startAnimation(AnimationUtils.loadAnimation(PlayerActivity.this, R.anim.rotate_180_anticlockwise));
+                    indicatorDeckListCard.setColorFilter(ContextCompat.getColor(PlayerActivity.this, R.color.secondary_color));
                     return true;
                 }
             });

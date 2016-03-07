@@ -223,7 +223,7 @@ public class DeckActivity extends AppCompatActivity {
             mDeckDrawerLayout.closeDrawers();
         else {
             super.onBackPressed();
-            this.finish();
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         }
     }
 
