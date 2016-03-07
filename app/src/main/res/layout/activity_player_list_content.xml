@@ -23,10 +23,10 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <!-- Card1: general info -->
-                <!--<include-->
-                <!--layout="@layout/card_player_list_info">-->
-                <!--</include>-->
+                <!-- Card1: overview info -->
+                <include
+                    layout="@layout/card_player_list_overview">
+                </include>
 
                 <!-- Card2: players -->
                 <include

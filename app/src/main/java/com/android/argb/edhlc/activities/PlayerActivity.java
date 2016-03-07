@@ -325,6 +325,9 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     public void onClickFabButton(View view) {
+        mIsInEditMode = false;
+        updateEditMode();
+
         switch (view.getId()) {
             case R.id.fabAdd:
                 dialogAddDeck(view);

@@ -13,12 +13,14 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -26,6 +28,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,6 +50,16 @@ public class PlayerListActivity extends AppCompatActivity {
     private DecksDataAccessObject decksDB;
     private RecordsDataAccessObject recordsDB;
     private PlayersDataAccessObject playersDB;
+
+    //Card - Overview
+    private CardView cardViewPlayerListOverview;
+    private int mCardViewFullHeightOverview;
+    private RelativeLayout relativeTitlePlayerListOverview;
+    private TextView textTitlePlayerListOverview;
+    private ImageView iconIndicatorPlayerListOverview;
+    private TextView textViewTotalPlayer;
+    private TextView textViewTotalDecks;
+    private TextView textViewTotalGames;
 
     //Card - Deck list
     private ListView listPlayer;
@@ -78,11 +91,11 @@ public class PlayerListActivity extends AppCompatActivity {
 
     //TODO card general info
     public void onClickCardExpansion(View v) {
-//        switch (v.getId()) {
-//            case R.id.relativeCardTitlePlayerInfo:
-//                Utils.toggleCardExpansion(this, cardViewPlayerInfo, textTitlePlayerInfo, iconIndicatorPlayerInfo, relativeTitlePlayerInfo.getHeight(), mCardViewFullHeightPlayerInfo);
-//                break;
-//        }
+        switch (v.getId()) {
+            case R.id.relativeTitlePlayerListOverview:
+                Utils.toggleCardExpansion(this, cardViewPlayerListOverview, textTitlePlayerListOverview, iconIndicatorPlayerListOverview, relativeTitlePlayerListOverview.getHeight(), mCardViewFullHeightOverview);
+                break;
+        }
     }
 
     public void onClickCheckBoxEditDeckList(View view) {
@@ -132,6 +145,9 @@ public class PlayerListActivity extends AppCompatActivity {
     }
 
     public void onClickFabButton(View view) {
+        mIsInEditMode = false;
+        updateEditMode();
+
         switch (view.getId()) {
             case R.id.fabAddPlayerToList:
                 dialogAddPlayer();
@@ -275,8 +291,13 @@ public class PlayerListActivity extends AppCompatActivity {
             }
         });
 
-        //FloatingActionButton
-        //FloatingActionButton fabAddPlayerToList = (FloatingActionButton) findViewById(R.id.fabAddPlayerToList);
+        cardViewPlayerListOverview = (CardView) findViewById(R.id.cardViewPlayerListOverview);
+        relativeTitlePlayerListOverview = (RelativeLayout) findViewById(R.id.relativeTitlePlayerListOverview);
+        textTitlePlayerListOverview = (TextView) findViewById(R.id.textTitlePlayerListOverview);
+        iconIndicatorPlayerListOverview = (ImageView) findViewById(R.id.iconIndicatorPlayerListOverview);
+        textViewTotalPlayer = (TextView) findViewById(R.id.textViewTotalPlayer);
+        textViewTotalDecks = (TextView) findViewById(R.id.textViewTotalDecks);
+        textViewTotalGames = (TextView) findViewById(R.id.textViewTotalGames);
 
         //Card playerList
         listPlayer = (ListView) findViewById(R.id.listPlayer);
@@ -474,10 +495,27 @@ public class PlayerListActivity extends AppCompatActivity {
     }
 
     private void updateLayout() {
+        //Card Overview
+        if (mCardViewFullHeightOverview == 0) {
+            cardViewPlayerListOverview.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                @Override
+                public boolean onPreDraw() {
+                    cardViewPlayerListOverview.getViewTreeObserver().removeOnPreDrawListener(this);
+                    mCardViewFullHeightOverview = cardViewPlayerListOverview.getHeight();
+
+                    ViewGroup.LayoutParams layoutParams = cardViewPlayerListOverview.getLayoutParams();
+                    layoutParams.height = relativeTitlePlayerListOverview.getHeight();
+                    cardViewPlayerListOverview.setLayoutParams(layoutParams);
+                    return true;
+                }
+            });
+        }
+        textViewTotalPlayer.setText("" + playersDB.getAllPlayers().size());
+        textViewTotalDecks.setText("" + decksDB.getAllDecks().size());
+        textViewTotalGames.setText("" + recordsDB.getAllRecords().size());
 
         //Card playerList
         List<Player> allPlayers = playersDB.getAllPlayers();
-
         if (playerList == null)
             playerList = new ArrayList<>();
         else
