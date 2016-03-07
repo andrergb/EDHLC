@@ -99,9 +99,6 @@ public class PlayerListActivity extends AppCompatActivity {
                 break;
 
             case R.id.drawerItemPlayers:
-                mPlayerDrawerLayout.closeDrawers();
-                startActivity(new Intent(this, PlayerListActivityOLD.class));
-                finish();
                 break;
 
             case R.id.drawerItemRecords:

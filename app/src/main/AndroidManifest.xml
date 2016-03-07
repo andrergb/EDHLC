@@ -30,10 +30,6 @@
             android:label="@string/activity_history_label"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".activities.PlayerListActivityOLD"
-            android:label="@string/activity_player_list_label"
-            android:screenOrientation="portrait"/>
-        <activity
             android:name=".activities.RecordsActivity"
             android:label="@string/activity_records_label"
             android:screenOrientation="portrait"/>
