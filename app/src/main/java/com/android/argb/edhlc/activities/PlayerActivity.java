@@ -749,6 +749,8 @@ public class PlayerActivity extends AppCompatActivity {
                             public boolean onPreDraw() {
                                 cardViewDeckList.getViewTreeObserver().removeOnPreDrawListener(this);
                                 mCardViewFullHeightDeckList = cardViewDeckList.getHeight();
+
+                                Utils.expand(PlayerActivity.this, cardViewDeckList, textTitleDeckListCard, indicatorDeckListCard, mCardViewFullHeightDeckList);
                                 return true;
                             }
                         });

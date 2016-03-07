@@ -55,13 +55,13 @@ public class Utils {
 
     public static void toggleCardExpansion(Context context, final CardView card, TextView title, ImageView selector, int minHeight, int maxHeight) {
         if (card.getHeight() == minHeight) {
-            expand(context, card, title, selector, minHeight, maxHeight);
+            expand(context, card, title, selector, maxHeight);
         } else {
-            collapse(context, card, title, selector, minHeight, maxHeight);
+            collapse(context, card, title, selector, minHeight);
         }
     }
 
-    private static void collapse(Context context, final CardView card, TextView title, ImageView selector, int minHeight, int maxHeight) {
+    public static void collapse(Context context, final CardView card, TextView title, ImageView selector, int minHeight) {
         title.setTextColor(ContextCompat.getColor(context, R.color.secondary_text));
 
         Animation rotation = AnimationUtils.loadAnimation(context, R.anim.rotate_180_clockwise);
@@ -107,7 +107,7 @@ public class Utils {
         }
     }
 
-    public static void expand(Context context, final CardView card, TextView title, ImageView selector, int minHeight, int maxHeight) {
+    public static void expand(Context context, final CardView card, TextView title, ImageView selector, int maxHeight) {
         title.setTextColor(ContextCompat.getColor(context, R.color.secondary_color));
 
         Animation rotation = AnimationUtils.loadAnimation(context, R.anim.rotate_180_anticlockwise);
