@@ -1,88 +1,141 @@
 package com.android.argb.edhlc.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
-import android.view.LayoutInflater;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.NestedScrollView;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.BaseAdapter;
-import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.android.argb.edhlc.Constants;
 import com.android.argb.edhlc.R;
+import com.android.argb.edhlc.Record2ListAdapter;
+import com.android.argb.edhlc.Utils;
 import com.android.argb.edhlc.database.record.RecordsDataAccessObject;
-import com.android.argb.edhlc.objects.Deck;
-import com.android.argb.edhlc.objects.Drawer.DrawerRecords;
-import com.android.argb.edhlc.objects.Record;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class RecordsActivity extends ActionBarActivity {
+public class RecordsActivity extends AppCompatActivity {
+    private RecordsDataAccessObject recordsDB;
 
-    private static CheckBox mCheckBoxKeepScreenOn;
-    private ListView mListViewRecords;
+    //Card - Overview
+    private CardView cardViewPlayerListOverview;
+    private int mCardViewFullHeightOverview;
+    private RelativeLayout relativeTitlePlayerListOverview;
+    private TextView textTitlePlayerListOverview;
+    private ImageView iconIndicatorPlayerListOverview;
 
-    private DrawerRecords mDrawerRecords;
-    private String mPlayerName;
-    private String mDeckName;
+    ///Drawer
+    private DrawerLayout mDrawerLayout;
+    private LinearLayout mDrawer;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private Switch switchScreen;
 
-    public void createLayout(View view) {
-        if (view != null) {
-            mCheckBoxKeepScreenOn = (CheckBox) findViewById(R.id.checkBoxKeepScreenOn);
-            mListViewRecords = (ListView) findViewById(R.id.listViewRecords);
-        }
-    }
+    private ActionBar mActionBar;
+    private Menu optionMenu;
+    private View statusBarBackground;
+
+    private Record2ListAdapter mRecord2ListAdapter;
+    private ArrayList<String[]> listRecords2Content;
+    private ListView listViewRecords2;
 
     @Override
     public void onBackPressed() {
-        if (mDrawerRecords.isDrawerOpen())
-            mDrawerRecords.dismiss();
-        else
+        if (mDrawerLayout.isDrawerOpen(mDrawer)) {
+            mDrawerLayout.closeDrawers();
+        } else {
             super.onBackPressed();
+        }
     }
 
-    public void onClickKeepScreenOn(View view) {
-        if (!mCheckBoxKeepScreenOn.isChecked()) {
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-            getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 0).commit();
-        } else {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-            getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 1).commit();
+    //TODO card general info
+    public void onClickCardExpansion(View v) {
+        switch (v.getId()) {
+//            case R.id.relativeTitlePlayerListOverview:
+//                Utils.toggleCardExpansion(this, cardViewPlayerListOverview, textTitlePlayerListOverview, iconIndicatorPlayerListOverview, relativeTitlePlayerListOverview.getHeight(), mCardViewFullHeightOverview);
+//                break;
+        }
+    }
+
+    public void onClickDrawerItem(View view) {
+        switch (view.getId()) {
+            case R.id.drawerItemHome:
+                mDrawerLayout.closeDrawers();
+                Intent intentHome = new Intent(this, MainActivity.class);
+                intentHome.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intentHome);
+                this.finish();
+                break;
+
+            case R.id.drawerItemPlayers:
+                mDrawerLayout.closeDrawers();
+                Intent intentPlayers = new Intent(this, MainActivity.class);
+                intentPlayers.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intentPlayers);
+                this.finish();
+                break;
+
+            case R.id.drawerItemRecords:
+                mDrawerLayout.closeDrawers();
+                break;
+
+            case R.id.drawerItemScreen:
+                switchScreen.setChecked(!switchScreen.isChecked());
+                if (!switchScreen.isChecked()) {
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 0).commit();
+                } else {
+                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 1).commit();
+                }
+                break;
+
+            case R.id.drawerItemSettings:
+                mDrawerLayout.closeDrawers();
+                startActivity(new Intent(this, SettingsActivity.class));
+                finish();
+                break;
+
+            case R.id.drawerItemAbout:
+                mDrawerLayout.closeDrawers();
+                break;
         }
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        mDrawerRecords.getDrawerToggle().onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
+        this.optionMenu = menu;
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        //DrawerMain menu
-        if (mDrawerRecords.getDrawerToggle().onOptionsItemSelected(item))
-            return true;
-
-        return super.onOptionsItemSelected(item);
+        return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -90,28 +143,20 @@ public class RecordsActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_records);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = this.getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(this.getResources().getColor(R.color.secondary_color));
-        }
+        recordsDB = new RecordsDataAccessObject(this);
+        recordsDB.open();
 
-        //DrawerMain menu
-        List<String[]> drawerLists = new ArrayList<>();
-        drawerLists.add(getResources().getStringArray(R.array.string_menu_records_1));
-        drawerLists.add(getResources().getStringArray(R.array.string_menu_records_2));
+        createStatusBar();
+        createToolbar();
+        createDrawer();
+        createLayout();
+    }
 
-        assert getSupportActionBar() != null;
-        mDrawerRecords = new DrawerRecords(this, drawerLists);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
 
-        Intent intent = getIntent();
-        mPlayerName = intent.getStringExtra("RECORDS_PLAYER_NAME");
-        mDeckName = intent.getStringExtra("RECORDS_DECK_NAME");
-
-        createLayout(this.findViewById(android.R.id.content));
+        recordsDB.close();
     }
 
     @Override
@@ -122,165 +167,112 @@ public class RecordsActivity extends ActionBarActivity {
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        mDrawerRecords.getDrawerToggle().syncState();
+        mDrawerToggle.syncState();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt(Constants.SCREEN_ON, 0) == 1)
+        if (getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt(Constants.SCREEN_ON, 0) == 1) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        else
+            switchScreen.setChecked(true);
+        } else {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            switchScreen.setChecked(false);
+        }
 
         updateLayout();
     }
 
-    private void updateLayout() {
-        if (getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt(Constants.SCREEN_ON, 0) == 1) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-            mCheckBoxKeepScreenOn.setChecked(true);
-        } else {
-            mCheckBoxKeepScreenOn.setChecked(false);
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        }
+    private void createDrawer() {
+        mDrawer = (LinearLayout) findViewById(R.id.records_drawer);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.records_drawer_layout);
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.app_name, R.string.app_name) {
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+                invalidateOptionsMenu();
+            }
 
-        RecordsDataAccessObject recordsDb = new RecordsDataAccessObject(this);
-        recordsDb.open();
-        List<Record> records;
-        if (mPlayerName != null && mDeckName != null)
-            records = recordsDb.getAllRecordsByDeck(new Deck(mPlayerName, mDeckName));
-        else
-            records = recordsDb.getAllRecords();
-        recordsDb.close();
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                invalidateOptionsMenu();
+            }
+        };
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-        mListViewRecords.setAdapter(new CustomDeckListViewAdapter(this.getBaseContext(), records));
+        LinearLayout drawerItemPlayers = (LinearLayout) findViewById(R.id.drawerItemRecords);
+        ImageView drawerItemIconPlayers = (ImageView) findViewById(R.id.drawerItemIconRecords);
+        TextView drawerItemTextPlayers = (TextView) findViewById(R.id.drawerItemTextRecords);
+        drawerItemPlayers.setBackgroundColor(ContextCompat.getColor(this, R.color.gray200));
+        drawerItemIconPlayers.setColorFilter(ContextCompat.getColor(this, R.color.accent_color));
+        drawerItemTextPlayers.setTextColor(ContextCompat.getColor(this, R.color.accent_color));
     }
 
-    class CustomDeckListViewAdapter extends BaseAdapter {
-        Context context;
-        List<Record> dataRecords;
-        private LayoutInflater inflater = null;
+    private void createLayout() {
+        NestedScrollView nestedScrollView = (NestedScrollView) findViewById(R.id.nestedScrollView);
+        nestedScrollView.smoothScrollBy(0, 0);
 
-        public CustomDeckListViewAdapter(Context context, List<Record> dataRecords) {
-            this.context = context;
-            this.dataRecords = dataRecords;
-            inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        }
-
-        @Override
-        public int getCount() {
-            return dataRecords.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return dataRecords.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View vi = convertView;
-            if (vi == null)
-                vi = inflater.inflate(R.layout.row_records, null);
-
-            LinearLayout linearLayoutFirstPlace = (LinearLayout) vi.findViewById(R.id.linearLayoutFirstPlace);
-            LinearLayout linearLayoutSecondPlace = (LinearLayout) vi.findViewById(R.id.linearLayoutSecondPlace);
-            LinearLayout linearLayoutThirdPlace = (LinearLayout) vi.findViewById(R.id.linearLayoutThirdPlace);
-            LinearLayout linearLayoutFourthPlace = (LinearLayout) vi.findViewById(R.id.linearLayoutFourthPlace);
-            switch (dataRecords.get(position).size()) {
-                case 1:
-                    linearLayoutFirstPlace.setVisibility(View.VISIBLE);
-                    linearLayoutSecondPlace.setVisibility(View.VISIBLE);
-                    linearLayoutThirdPlace.setVisibility(View.GONE);
-                    linearLayoutFourthPlace.setVisibility(View.GONE);
-                    break;
-                case 2:
-                    linearLayoutFirstPlace.setVisibility(View.VISIBLE);
-                    linearLayoutSecondPlace.setVisibility(View.VISIBLE);
-                    linearLayoutThirdPlace.setVisibility(View.GONE);
-                    linearLayoutFourthPlace.setVisibility(View.GONE);
-                    break;
-                case 3:
-                    linearLayoutFirstPlace.setVisibility(View.VISIBLE);
-                    linearLayoutSecondPlace.setVisibility(View.VISIBLE);
-                    linearLayoutThirdPlace.setVisibility(View.VISIBLE);
-                    linearLayoutFourthPlace.setVisibility(View.GONE);
-                    break;
-                case 4:
-                    linearLayoutFirstPlace.setVisibility(View.VISIBLE);
-                    linearLayoutSecondPlace.setVisibility(View.VISIBLE);
-                    linearLayoutThirdPlace.setVisibility(View.VISIBLE);
-                    linearLayoutFourthPlace.setVisibility(View.VISIBLE);
-                    break;
+        //Drawer
+        switchScreen = (Switch) findViewById(R.id.switchScreen);
+        switchScreen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!switchScreen.isChecked()) {
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 0).commit();
+                } else {
+                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 1).commit();
+                }
             }
+        });
 
-            TextView textViewFirstPlayerName = (TextView) vi.findViewById(R.id.textViewFirstPlayerName);
-            textViewFirstPlayerName.setText(dataRecords.get(position).getFirstPlace().getDeckOwnerName());
-            TextView textViewFirstPlayerDeck = (TextView) vi.findViewById(R.id.textViewFirstPlayerDeck);
-            textViewFirstPlayerDeck.setText(dataRecords.get(position).getFirstPlace().getDeckName());
-            textViewFirstPlayerName.setTypeface(null, Typeface.NORMAL);
-            textViewFirstPlayerDeck.setTypeface(null, Typeface.NORMAL);
-            if (dataRecords.get(position).getFirstPlace().getDeckOwnerName().equalsIgnoreCase(mPlayerName) &&
-                    dataRecords.get(position).getFirstPlace().getDeckName().equalsIgnoreCase(mDeckName)) {
-                textViewFirstPlayerName.setTypeface(null, Typeface.BOLD);
-                textViewFirstPlayerDeck.setTypeface(null, Typeface.BOLD);
-            } else {
-                textViewFirstPlayerName.setTypeface(null, Typeface.NORMAL);
-                textViewFirstPlayerDeck.setTypeface(null, Typeface.NORMAL);
-            }
+        //TODO estrutura de dados
+        listRecords2Content = new ArrayList<>();
+        listRecords2Content.add(new String[]{"A1", "A2"}); //< 1 record: Deve ter de 4 a 8 elementos, mais a data > Passar record!
+        listRecords2Content.add(new String[]{"B1", "B2"});
+        listRecords2Content.add(new String[]{"C1", "C2"});
+        listRecords2Content.add(new String[]{"D1", "D2"});
 
-            TextView textViewSecondPlayerName = (TextView) vi.findViewById(R.id.textViewSecondPlayerName);
-            textViewSecondPlayerName.setText(dataRecords.get(position).getSecondPlace().getDeckOwnerName());
-            TextView textViewSecondPlayerDeck = (TextView) vi.findViewById(R.id.textViewSecondPlayerDeck);
-            textViewSecondPlayerDeck.setText(dataRecords.get(position).getSecondPlace().getDeckName());
-            textViewSecondPlayerName.setTypeface(null, Typeface.NORMAL);
-            textViewSecondPlayerDeck.setTypeface(null, Typeface.NORMAL);
-            if (dataRecords.get(position).getSecondPlace().getDeckOwnerName().equalsIgnoreCase(mPlayerName) &&
-                    dataRecords.get(position).getSecondPlace().getDeckName().equalsIgnoreCase(mDeckName)) {
-                textViewSecondPlayerName.setTypeface(null, Typeface.BOLD);
-                textViewSecondPlayerDeck.setTypeface(null, Typeface.BOLD);
-            } else {
-                textViewSecondPlayerName.setTypeface(null, Typeface.NORMAL);
-                textViewSecondPlayerDeck.setTypeface(null, Typeface.NORMAL);
-            }
+        mRecord2ListAdapter = new Record2ListAdapter(this, listRecords2Content);
+        listViewRecords2 = (ListView) findViewById(R.id.listRecords2);
+        listViewRecords2.setAdapter(mRecord2ListAdapter);
+        Utils.justifyListViewHeightBasedOnChildren(listViewRecords2);
 
-            TextView textViewThirdPlayerName = (TextView) vi.findViewById(R.id.textViewThirdPlayerName);
-            textViewThirdPlayerName.setText(dataRecords.get(position).getThirdPlace().getDeckOwnerName());
-            TextView textViewThirdPlayerDeck = (TextView) vi.findViewById(R.id.textViewThirdPlayerDeck);
-            textViewThirdPlayerDeck.setText(dataRecords.get(position).getThirdPlace().getDeckName());
-            textViewThirdPlayerName.setTypeface(null, Typeface.NORMAL);
-            textViewThirdPlayerDeck.setTypeface(null, Typeface.NORMAL);
-            if (dataRecords.get(position).getThirdPlace().getDeckOwnerName().equalsIgnoreCase(mPlayerName) &&
-                    dataRecords.get(position).getThirdPlace().getDeckName().equalsIgnoreCase(mDeckName)) {
-                textViewThirdPlayerName.setTypeface(null, Typeface.BOLD);
-                textViewThirdPlayerDeck.setTypeface(null, Typeface.BOLD);
-            } else {
-                textViewThirdPlayerName.setTypeface(null, Typeface.NORMAL);
-                textViewThirdPlayerDeck.setTypeface(null, Typeface.NORMAL);
-            }
+//        cardViewPlayerListOverview = (CardView) findViewById(R.id.cardViewPlayerListOverview);
+//        relativeTitlePlayerListOverview = (RelativeLayout) findViewById(R.id.relativeTitlePlayerListOverview);
+//        textTitlePlayerListOverview = (TextView) findViewById(R.id.textTitlePlayerListOverview);
+//        iconIndicatorPlayerListOverview = (ImageView) findViewById(R.id.iconIndicatorPlayerListOverview);
+    }
 
-            TextView textViewFourthPlayerName = (TextView) vi.findViewById(R.id.textViewFourthPlayerName);
-            textViewFourthPlayerName.setText(dataRecords.get(position).getFourthPlace().getDeckOwnerName());
-            TextView textViewFourthPlayerDeck = (TextView) vi.findViewById(R.id.textViewFourthPlayerDeck);
-            textViewFourthPlayerDeck.setText(dataRecords.get(position).getFourthPlace().getDeckName());
-            textViewFourthPlayerName.setTypeface(null, Typeface.NORMAL);
-            textViewFourthPlayerDeck.setTypeface(null, Typeface.NORMAL);
-            if (dataRecords.get(position).getFourthPlace().getDeckOwnerName().equalsIgnoreCase(mPlayerName) &&
-                    dataRecords.get(position).getFourthPlace().getDeckName().equalsIgnoreCase(mDeckName)) {
-                textViewFourthPlayerName.setTypeface(null, Typeface.BOLD);
-                textViewFourthPlayerDeck.setTypeface(null, Typeface.BOLD);
-            } else {
-                textViewFourthPlayerName.setTypeface(null, Typeface.NORMAL);
-                textViewFourthPlayerDeck.setTypeface(null, Typeface.NORMAL);
-            }
+    private void createStatusBar() {
+        statusBarBackground = findViewById(R.id.statusBarBackground);
+        ViewGroup.LayoutParams params = statusBarBackground.getLayoutParams();
+        params.height = Utils.getStatusBarHeight(this);
+        statusBarBackground.setLayoutParams(params);
+        statusBarBackground.setBackgroundColor(ContextCompat.getColor(this, R.color.primary_color));
 
-            return vi;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = this.getWindow();
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(ContextCompat.getColor(this, R.color.black_transparent));
         }
+    }
+
+    private void createToolbar() {
+        assert getSupportActionBar() != null;
+        Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        setSupportActionBar(toolbar);
+        mActionBar = getSupportActionBar();
+        mActionBar.setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(this, R.color.primary_color)));
+        mActionBar.setDisplayShowTitleEnabled(true);
+        mActionBar.setDisplayHomeAsUpEnabled(true);
+        mActionBar.setHomeButtonEnabled(true);
+        mActionBar.setTitle("Player list");
+    }
+
+
+    private void updateLayout() {
     }
 }

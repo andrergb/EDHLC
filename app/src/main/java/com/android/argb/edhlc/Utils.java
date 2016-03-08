@@ -112,7 +112,7 @@ public class Utils {
         }
     }
 
-    public static void highlightRecord(Activity parent, Record lastRecord, String playerName) {
+    public static void createRecordListElement(Activity parent, Record currentRecord, String highlightedPlayerName) {
         TextView textDateRecordCard = (TextView) parent.findViewById(R.id.textDateRecordCard);
         LinearLayout linearFirstLineRecordCard = (LinearLayout) parent.findViewById(R.id.linearFirstLineRecordCard);
         TextView textFirstIndicatorRecordCard = (TextView) parent.findViewById(R.id.textFirstIndicatorRecordCard);
@@ -145,9 +145,9 @@ public class Utils {
         int colorAccent = ContextCompat.getColor(parent, R.color.accent_color);
         int colorSecondary = ContextCompat.getColor(parent, R.color.secondary_text);
 
-        textDateRecordCard.setText("Played on " + lastRecord.getDate());
+        textDateRecordCard.setText("Played on " + currentRecord.getDate());
 
-        switch (lastRecord.getTotalPlayers()) {
+        switch (currentRecord.getTotalPlayers()) {
             case 2:
                 linearFirstLineRecordCard.setVisibility(View.VISIBLE);
                 linearSecondLineRecordCard.setVisibility(View.VISIBLE);
@@ -158,19 +158,23 @@ public class Utils {
                 divider2RecordCard.setVisibility(View.GONE);
                 divider3RecordCard.setVisibility(View.GONE);
 
-                textFirstDeckRecordCard.setText(lastRecord.getFirstPlace().getDeckName());
-                textFirstDeckRecordCard.setTypeface(playerName.equalsIgnoreCase(lastRecord.getFirstPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
-                textFirstPlayerRecordCard.setText(lastRecord.getFirstPlace().getDeckOwnerName());
-                textFirstPlayerRecordCard.setTypeface(playerName.equalsIgnoreCase(lastRecord.getFirstPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
-                textFirstIndicatorRecordCard.setTextColor(playerName.equalsIgnoreCase(lastRecord.getFirstPlace().getDeckOwnerName()) ? colorAccent : colorSecondary);
-                textFirstIndicatorRecordCard.setTypeface(playerName.equalsIgnoreCase(lastRecord.getFirstPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
+                textFirstDeckRecordCard.setText(currentRecord.getFirstPlace().getDeckName());
+                textFirstPlayerRecordCard.setText(currentRecord.getFirstPlace().getDeckOwnerName());
 
-                textSecondDeckRecordCard.setText(lastRecord.getSecondPlace().getDeckName());
-                textSecondDeckRecordCard.setTypeface(playerName.equalsIgnoreCase(lastRecord.getSecondPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
-                textSecondPlayerRecordCard.setText(lastRecord.getSecondPlace().getDeckOwnerName());
-                textSecondPlayerRecordCard.setTypeface(playerName.equalsIgnoreCase(lastRecord.getSecondPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
-                textSecondIndicatorRecordCard.setTextColor(playerName.equalsIgnoreCase(lastRecord.getSecondPlace().getDeckOwnerName()) ? colorAccent : colorSecondary);
-                textSecondIndicatorRecordCard.setTypeface(playerName.equalsIgnoreCase(lastRecord.getSecondPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
+                textSecondDeckRecordCard.setText(currentRecord.getSecondPlace().getDeckName());
+                textSecondPlayerRecordCard.setText(currentRecord.getSecondPlace().getDeckOwnerName());
+
+                if (highlightedPlayerName != null) {
+                    textFirstDeckRecordCard.setTypeface(highlightedPlayerName.equalsIgnoreCase(currentRecord.getFirstPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
+                    textFirstPlayerRecordCard.setTypeface(highlightedPlayerName.equalsIgnoreCase(currentRecord.getFirstPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
+                    textFirstIndicatorRecordCard.setTextColor(highlightedPlayerName.equalsIgnoreCase(currentRecord.getFirstPlace().getDeckOwnerName()) ? colorAccent : colorSecondary);
+                    textFirstIndicatorRecordCard.setTypeface(highlightedPlayerName.equalsIgnoreCase(currentRecord.getFirstPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
+
+                    textSecondDeckRecordCard.setTypeface(highlightedPlayerName.equalsIgnoreCase(currentRecord.getSecondPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
+                    textSecondPlayerRecordCard.setTypeface(highlightedPlayerName.equalsIgnoreCase(currentRecord.getSecondPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
+                    textSecondIndicatorRecordCard.setTextColor(highlightedPlayerName.equalsIgnoreCase(currentRecord.getSecondPlace().getDeckOwnerName()) ? colorAccent : colorSecondary);
+                    textSecondIndicatorRecordCard.setTypeface(highlightedPlayerName.equalsIgnoreCase(currentRecord.getSecondPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
+                }
                 break;
 
             case 3:
@@ -183,26 +187,32 @@ public class Utils {
                 divider2RecordCard.setVisibility(View.VISIBLE);
                 divider3RecordCard.setVisibility(View.GONE);
 
-                textFirstDeckRecordCard.setText(lastRecord.getFirstPlace().getDeckName());
-                textFirstDeckRecordCard.setTypeface(playerName.equalsIgnoreCase(lastRecord.getFirstPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
-                textFirstPlayerRecordCard.setText(lastRecord.getFirstPlace().getDeckOwnerName());
-                textFirstPlayerRecordCard.setTypeface(playerName.equalsIgnoreCase(lastRecord.getFirstPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
-                textFirstIndicatorRecordCard.setTextColor(playerName.equalsIgnoreCase(lastRecord.getFirstPlace().getDeckOwnerName()) ? colorAccent : colorSecondary);
-                textFirstIndicatorRecordCard.setTypeface(playerName.equalsIgnoreCase(lastRecord.getFirstPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
+                textFirstDeckRecordCard.setText(currentRecord.getFirstPlace().getDeckName());
+                textFirstPlayerRecordCard.setText(currentRecord.getFirstPlace().getDeckOwnerName());
 
-                textSecondDeckRecordCard.setText(lastRecord.getSecondPlace().getDeckName());
-                textSecondDeckRecordCard.setTypeface(playerName.equalsIgnoreCase(lastRecord.getSecondPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
-                textSecondPlayerRecordCard.setText(lastRecord.getSecondPlace().getDeckOwnerName());
-                textSecondPlayerRecordCard.setTypeface(playerName.equalsIgnoreCase(lastRecord.getSecondPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
-                textSecondIndicatorRecordCard.setTextColor(playerName.equalsIgnoreCase(lastRecord.getSecondPlace().getDeckOwnerName()) ? colorAccent : colorSecondary);
-                textSecondIndicatorRecordCard.setTypeface(playerName.equalsIgnoreCase(lastRecord.getSecondPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
+                textSecondDeckRecordCard.setText(currentRecord.getSecondPlace().getDeckName());
+                textSecondPlayerRecordCard.setText(currentRecord.getSecondPlace().getDeckOwnerName());
 
-                textThirdDeckRecordCard.setText(lastRecord.getThirdPlace().getDeckName());
-                textThirdDeckRecordCard.setTypeface(playerName.equalsIgnoreCase(lastRecord.getThirdPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
-                textThirdPlayerRecordCard.setText(lastRecord.getThirdPlace().getDeckOwnerName());
-                textThirdPlayerRecordCard.setTypeface(playerName.equalsIgnoreCase(lastRecord.getThirdPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
-                textThirdIndicatorRecordCard.setTextColor(playerName.equalsIgnoreCase(lastRecord.getThirdPlace().getDeckOwnerName()) ? colorAccent : colorSecondary);
-                textThirdIndicatorRecordCard.setTypeface(playerName.equalsIgnoreCase(lastRecord.getThirdPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
+                textThirdDeckRecordCard.setText(currentRecord.getThirdPlace().getDeckName());
+                textThirdPlayerRecordCard.setText(currentRecord.getThirdPlace().getDeckOwnerName());
+
+                if (highlightedPlayerName != null) {
+                    textFirstDeckRecordCard.setTypeface(highlightedPlayerName.equalsIgnoreCase(currentRecord.getFirstPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
+                    textFirstPlayerRecordCard.setTypeface(highlightedPlayerName.equalsIgnoreCase(currentRecord.getFirstPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
+                    textFirstIndicatorRecordCard.setTextColor(highlightedPlayerName.equalsIgnoreCase(currentRecord.getFirstPlace().getDeckOwnerName()) ? colorAccent : colorSecondary);
+                    textFirstIndicatorRecordCard.setTypeface(highlightedPlayerName.equalsIgnoreCase(currentRecord.getFirstPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
+
+
+                    textSecondDeckRecordCard.setTypeface(highlightedPlayerName.equalsIgnoreCase(currentRecord.getSecondPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
+                    textSecondPlayerRecordCard.setTypeface(highlightedPlayerName.equalsIgnoreCase(currentRecord.getSecondPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
+                    textSecondIndicatorRecordCard.setTextColor(highlightedPlayerName.equalsIgnoreCase(currentRecord.getSecondPlace().getDeckOwnerName()) ? colorAccent : colorSecondary);
+                    textSecondIndicatorRecordCard.setTypeface(highlightedPlayerName.equalsIgnoreCase(currentRecord.getSecondPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
+
+                    textThirdDeckRecordCard.setTypeface(highlightedPlayerName.equalsIgnoreCase(currentRecord.getThirdPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
+                    textThirdPlayerRecordCard.setTypeface(highlightedPlayerName.equalsIgnoreCase(currentRecord.getThirdPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
+                    textThirdIndicatorRecordCard.setTextColor(highlightedPlayerName.equalsIgnoreCase(currentRecord.getThirdPlace().getDeckOwnerName()) ? colorAccent : colorSecondary);
+                    textThirdIndicatorRecordCard.setTypeface(highlightedPlayerName.equalsIgnoreCase(currentRecord.getThirdPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
+                }
                 break;
 
             case 4:
@@ -215,33 +225,39 @@ public class Utils {
                 divider2RecordCard.setVisibility(View.VISIBLE);
                 divider3RecordCard.setVisibility(View.VISIBLE);
 
-                textFirstDeckRecordCard.setText(lastRecord.getFirstPlace().getDeckName());
-                textFirstDeckRecordCard.setTypeface(playerName.equalsIgnoreCase(lastRecord.getFirstPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
-                textFirstPlayerRecordCard.setText(lastRecord.getFirstPlace().getDeckOwnerName());
-                textFirstPlayerRecordCard.setTypeface(playerName.equalsIgnoreCase(lastRecord.getFirstPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
-                textFirstIndicatorRecordCard.setTextColor(playerName.equalsIgnoreCase(lastRecord.getFirstPlace().getDeckOwnerName()) ? colorAccent : colorSecondary);
-                textFirstIndicatorRecordCard.setTypeface(playerName.equalsIgnoreCase(lastRecord.getFirstPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
+                textFirstDeckRecordCard.setText(currentRecord.getFirstPlace().getDeckName());
+                textFirstPlayerRecordCard.setText(currentRecord.getFirstPlace().getDeckOwnerName());
 
-                textSecondDeckRecordCard.setText(lastRecord.getSecondPlace().getDeckName());
-                textSecondDeckRecordCard.setTypeface(playerName.equalsIgnoreCase(lastRecord.getSecondPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
-                textSecondPlayerRecordCard.setText(lastRecord.getSecondPlace().getDeckOwnerName());
-                textSecondPlayerRecordCard.setTypeface(playerName.equalsIgnoreCase(lastRecord.getSecondPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
-                textSecondIndicatorRecordCard.setTextColor(playerName.equalsIgnoreCase(lastRecord.getSecondPlace().getDeckOwnerName()) ? colorAccent : colorSecondary);
-                textSecondIndicatorRecordCard.setTypeface(playerName.equalsIgnoreCase(lastRecord.getSecondPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
+                textSecondDeckRecordCard.setText(currentRecord.getSecondPlace().getDeckName());
+                textSecondPlayerRecordCard.setText(currentRecord.getSecondPlace().getDeckOwnerName());
 
-                textThirdDeckRecordCard.setText(lastRecord.getThirdPlace().getDeckName());
-                textThirdDeckRecordCard.setTypeface(playerName.equalsIgnoreCase(lastRecord.getThirdPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
-                textThirdPlayerRecordCard.setText(lastRecord.getThirdPlace().getDeckOwnerName());
-                textThirdPlayerRecordCard.setTypeface(playerName.equalsIgnoreCase(lastRecord.getThirdPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
-                textThirdIndicatorRecordCard.setTextColor(playerName.equalsIgnoreCase(lastRecord.getThirdPlace().getDeckOwnerName()) ? colorAccent : colorSecondary);
-                textThirdIndicatorRecordCard.setTypeface(playerName.equalsIgnoreCase(lastRecord.getThirdPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
+                textThirdDeckRecordCard.setText(currentRecord.getThirdPlace().getDeckName());
+                textThirdPlayerRecordCard.setText(currentRecord.getThirdPlace().getDeckOwnerName());
 
-                textFourthDeckRecordCard.setText(lastRecord.getFourthPlace().getDeckName());
-                textFourthDeckRecordCard.setTypeface(playerName.equalsIgnoreCase(lastRecord.getFourthPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
-                textFourthPlayerRecordCard.setText(lastRecord.getFourthPlace().getDeckOwnerName());
-                textFourthPlayerRecordCard.setTypeface(playerName.equalsIgnoreCase(lastRecord.getFourthPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
-                textFourthIndicatorRecordCard.setTextColor(playerName.equalsIgnoreCase(lastRecord.getFourthPlace().getDeckOwnerName()) ? colorAccent : colorSecondary);
-                textFourthIndicatorRecordCard.setTypeface(playerName.equalsIgnoreCase(lastRecord.getFourthPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
+                textFourthDeckRecordCard.setText(currentRecord.getFourthPlace().getDeckName());
+                textFourthPlayerRecordCard.setText(currentRecord.getFourthPlace().getDeckOwnerName());
+
+                if (highlightedPlayerName != null) {
+                    textFirstDeckRecordCard.setTypeface(highlightedPlayerName.equalsIgnoreCase(currentRecord.getFirstPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
+                    textFirstPlayerRecordCard.setTypeface(highlightedPlayerName.equalsIgnoreCase(currentRecord.getFirstPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
+                    textFirstIndicatorRecordCard.setTextColor(highlightedPlayerName.equalsIgnoreCase(currentRecord.getFirstPlace().getDeckOwnerName()) ? colorAccent : colorSecondary);
+                    textFirstIndicatorRecordCard.setTypeface(highlightedPlayerName.equalsIgnoreCase(currentRecord.getFirstPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
+
+                    textSecondDeckRecordCard.setTypeface(highlightedPlayerName.equalsIgnoreCase(currentRecord.getSecondPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
+                    textSecondPlayerRecordCard.setTypeface(highlightedPlayerName.equalsIgnoreCase(currentRecord.getSecondPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
+                    textSecondIndicatorRecordCard.setTextColor(highlightedPlayerName.equalsIgnoreCase(currentRecord.getSecondPlace().getDeckOwnerName()) ? colorAccent : colorSecondary);
+                    textSecondIndicatorRecordCard.setTypeface(highlightedPlayerName.equalsIgnoreCase(currentRecord.getSecondPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
+
+                    textThirdDeckRecordCard.setTypeface(highlightedPlayerName.equalsIgnoreCase(currentRecord.getThirdPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
+                    textThirdPlayerRecordCard.setTypeface(highlightedPlayerName.equalsIgnoreCase(currentRecord.getThirdPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
+                    textThirdIndicatorRecordCard.setTextColor(highlightedPlayerName.equalsIgnoreCase(currentRecord.getThirdPlace().getDeckOwnerName()) ? colorAccent : colorSecondary);
+                    textThirdIndicatorRecordCard.setTypeface(highlightedPlayerName.equalsIgnoreCase(currentRecord.getThirdPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
+
+                    textFourthDeckRecordCard.setTypeface(highlightedPlayerName.equalsIgnoreCase(currentRecord.getFourthPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
+                    textFourthPlayerRecordCard.setTypeface(highlightedPlayerName.equalsIgnoreCase(currentRecord.getFourthPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
+                    textFourthIndicatorRecordCard.setTextColor(highlightedPlayerName.equalsIgnoreCase(currentRecord.getFourthPlace().getDeckOwnerName()) ? colorAccent : colorSecondary);
+                    textFourthIndicatorRecordCard.setTypeface(highlightedPlayerName.equalsIgnoreCase(currentRecord.getFourthPlace().getDeckOwnerName()) ? typefaceMedium : typefaceNormal);
+                }
                 break;
         }
     }

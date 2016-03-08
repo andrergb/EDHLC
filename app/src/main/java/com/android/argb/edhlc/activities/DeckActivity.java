@@ -846,7 +846,7 @@ public class DeckActivity extends AppCompatActivity {
 
             Record lastRecord = allRecords.get(allRecords.size() - 1);
             textTitleRecordCard.setText("Last game played");
-            Utils.highlightRecord(this, lastRecord, mPlayerName);
+            Utils.createRecordListElement(this, lastRecord, mPlayerName);
         }
 
         //Total games and Chart2 1v1
