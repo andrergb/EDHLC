@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -121,26 +120,6 @@ public class DeckActivity extends AppCompatActivity {
     private RelativeLayout relativeTitleRecordCard;
     private TextView textTitleRecordCard;
     private ImageView indicatorRecordCard;
-    private TextView textDateRecordCard;
-    private LinearLayout linearFirstLineRecordCard;
-    private TextView textFirstIndicatorRecordCard;
-    private TextView textFirstPlayerRecordCard;
-    private TextView textFirstDeckRecordCard;
-    private View divider1RecordCard;
-    private LinearLayout linearSecondLineRecordCard;
-    private TextView textSecondIndicatorRecordCard;
-    private TextView textSecondPlayerRecordCard;
-    private TextView textSecondDeckRecordCard;
-    private View divider2RecordCard;
-    private LinearLayout linearThirdLineRecordCard;
-    private TextView textThirdIndicatorRecordCard;
-    private TextView textThirdPlayerRecordCard;
-    private TextView textThirdDeckRecordCard;
-    private View divider3RecordCard;
-    private LinearLayout linearFourthLineRecordCard;
-    private TextView textFourthIndicatorRecordCard;
-    private TextView textFourthPlayerRecordCard;
-    private TextView textFourthDeckRecordCard;
 
     //Toolbar
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
@@ -720,31 +699,6 @@ public class DeckActivity extends AppCompatActivity {
             relativeTitleRecordCard = (RelativeLayout) findViewById(R.id.relativeCardTitleRecord);
             indicatorRecordCard = (ImageView) findViewById(R.id.indicatorRecordCard);
             textTitleRecordCard = (TextView) findViewById(R.id.textTitleRecordCard);
-            textDateRecordCard = (TextView) findViewById(R.id.textDateRecordCard);
-
-            linearFirstLineRecordCard = (LinearLayout) findViewById(R.id.linearFirstLineRecordCard);
-            textFirstIndicatorRecordCard = (TextView) findViewById(R.id.textFirstIndicatorRecordCard);
-            textFirstPlayerRecordCard = (TextView) view.findViewById(R.id.textFirstPlayerRecordCard);
-            textFirstDeckRecordCard = (TextView) view.findViewById(R.id.textFirstDeckRecordCard);
-            divider1RecordCard = findViewById(R.id.divider1RecordCard);
-
-            linearSecondLineRecordCard = (LinearLayout) findViewById(R.id.linearSecondLineRecordCard);
-            textSecondIndicatorRecordCard = (TextView) findViewById(R.id.textSecondIndicatorRecordCard);
-            textSecondPlayerRecordCard = (TextView) view.findViewById(R.id.textSecondPlayerRecordCard);
-            textSecondDeckRecordCard = (TextView) view.findViewById(R.id.textSecondDeckRecordCard);
-            divider2RecordCard = findViewById(R.id.divider2RecordCard);
-
-            linearThirdLineRecordCard = (LinearLayout) findViewById(R.id.linearThirdLineRecordCard);
-            textThirdIndicatorRecordCard = (TextView) findViewById(R.id.textThirdIndicatorRecordCard);
-            textThirdPlayerRecordCard = (TextView) view.findViewById(R.id.textThirdPlayerRecordCard);
-            textThirdDeckRecordCard = (TextView) view.findViewById(R.id.textThirdDeckRecordCard);
-            divider3RecordCard = findViewById(R.id.divider3RecordCard);
-
-            linearFourthLineRecordCard = (LinearLayout) findViewById(R.id.linearFourthLineRecordCard);
-            textFourthIndicatorRecordCard = (TextView) findViewById(R.id.textFourthIndicatorRecordCard);
-            textFourthPlayerRecordCard = (TextView) view.findViewById(R.id.textFourthPlayerRecordCard);
-            textFourthDeckRecordCard = (TextView) view.findViewById(R.id.textFourthDeckRecordCard);
-
         }
     }
 
@@ -890,131 +844,9 @@ public class DeckActivity extends AppCompatActivity {
                 });
             }
 
-            Typeface typefaceMedium = Typeface.create("sans-serif-medium", Typeface.NORMAL);
-            Typeface typefaceNormal = Typeface.create("sans-serif", Typeface.NORMAL);
-            int colorSelected = ContextCompat.getColor(this, R.color.accent_color);
-            int colorPrimary = ContextCompat.getColor(this, R.color.primary_text);
-            int colorSecondary = ContextCompat.getColor(this, R.color.secondary_text);
-
             Record lastRecord = allRecords.get(allRecords.size() - 1);
             textTitleRecordCard.setText("Last game played");
-            textDateRecordCard.setText("Played on " + lastRecord.getDate());
-            switch (lastRecord.getTotalPlayers()) {
-                case 2:
-                    linearFirstLineRecordCard.setVisibility(View.VISIBLE);
-                    linearSecondLineRecordCard.setVisibility(View.VISIBLE);
-                    linearThirdLineRecordCard.setVisibility(View.GONE);
-                    linearFourthLineRecordCard.setVisibility(View.GONE);
-
-                    divider1RecordCard.setVisibility(View.VISIBLE);
-                    divider2RecordCard.setVisibility(View.GONE);
-                    divider3RecordCard.setVisibility(View.GONE);
-
-                    textFirstDeckRecordCard.setText(lastRecord.getFirstPlace().getDeckName());
-                    textFirstDeckRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? colorSelected : colorPrimary);
-                    textFirstDeckRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? typefaceMedium : typefaceNormal);
-                    textFirstPlayerRecordCard.setText(lastRecord.getFirstPlace().getDeckOwnerName());
-                    textFirstPlayerRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? colorSelected : colorSecondary);
-                    textFirstPlayerRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? typefaceMedium : typefaceNormal);
-                    textFirstIndicatorRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? colorSelected : colorSecondary);
-                    textFirstIndicatorRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? typefaceMedium : typefaceNormal);
-
-                    textSecondDeckRecordCard.setText(lastRecord.getSecondPlace().getDeckName());
-                    textSecondDeckRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? colorSelected : colorPrimary);
-                    textSecondDeckRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? typefaceMedium : typefaceNormal);
-                    textSecondPlayerRecordCard.setText(lastRecord.getSecondPlace().getDeckOwnerName());
-                    textSecondPlayerRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? colorSelected : colorSecondary);
-                    textSecondPlayerRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? typefaceMedium : typefaceNormal);
-                    textSecondIndicatorRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? colorSelected : colorSecondary);
-                    textSecondIndicatorRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? typefaceMedium : typefaceNormal);
-
-                    break;
-
-                case 3:
-                    linearFirstLineRecordCard.setVisibility(View.VISIBLE);
-                    linearSecondLineRecordCard.setVisibility(View.VISIBLE);
-                    linearThirdLineRecordCard.setVisibility(View.VISIBLE);
-                    linearFourthLineRecordCard.setVisibility(View.GONE);
-
-                    divider1RecordCard.setVisibility(View.VISIBLE);
-                    divider2RecordCard.setVisibility(View.VISIBLE);
-                    divider3RecordCard.setVisibility(View.GONE);
-
-                    textFirstDeckRecordCard.setText(lastRecord.getFirstPlace().getDeckName());
-                    textFirstDeckRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? colorSelected : colorPrimary);
-                    textFirstDeckRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? typefaceMedium : typefaceNormal);
-                    textFirstPlayerRecordCard.setText(lastRecord.getFirstPlace().getDeckOwnerName());
-                    textFirstPlayerRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? colorSelected : colorSecondary);
-                    textFirstPlayerRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? typefaceMedium : typefaceNormal);
-                    textFirstIndicatorRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? colorSelected : colorSecondary);
-                    textFirstIndicatorRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? typefaceMedium : typefaceNormal);
-
-                    textSecondDeckRecordCard.setText(lastRecord.getSecondPlace().getDeckName());
-                    textSecondDeckRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? colorSelected : colorPrimary);
-                    textSecondDeckRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? typefaceMedium : typefaceNormal);
-                    textSecondPlayerRecordCard.setText(lastRecord.getSecondPlace().getDeckOwnerName());
-                    textSecondPlayerRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? colorSelected : colorSecondary);
-                    textSecondPlayerRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? typefaceMedium : typefaceNormal);
-                    textSecondIndicatorRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? colorSelected : colorSecondary);
-                    textSecondIndicatorRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? typefaceMedium : typefaceNormal);
-
-                    textThirdDeckRecordCard.setText(lastRecord.getThirdPlace().getDeckName());
-                    textThirdDeckRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? colorSelected : colorPrimary);
-                    textThirdDeckRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? typefaceMedium : typefaceNormal);
-                    textThirdPlayerRecordCard.setText(lastRecord.getThirdPlace().getDeckOwnerName());
-                    textThirdPlayerRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? colorSelected : colorSecondary);
-                    textThirdPlayerRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? typefaceMedium : typefaceNormal);
-                    textThirdIndicatorRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? colorSelected : colorSecondary);
-                    textThirdIndicatorRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? typefaceMedium : typefaceNormal);
-                    break;
-
-                case 4:
-                    linearFirstLineRecordCard.setVisibility(View.VISIBLE);
-                    linearSecondLineRecordCard.setVisibility(View.VISIBLE);
-                    linearThirdLineRecordCard.setVisibility(View.VISIBLE);
-                    linearFourthLineRecordCard.setVisibility(View.VISIBLE);
-
-                    divider1RecordCard.setVisibility(View.VISIBLE);
-                    divider2RecordCard.setVisibility(View.VISIBLE);
-                    divider3RecordCard.setVisibility(View.VISIBLE);
-
-                    textFirstDeckRecordCard.setText(lastRecord.getFirstPlace().getDeckName());
-                    textFirstDeckRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? colorSelected : colorPrimary);
-                    textFirstDeckRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? typefaceMedium : typefaceNormal);
-                    textFirstPlayerRecordCard.setText(lastRecord.getFirstPlace().getDeckOwnerName());
-                    textFirstPlayerRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? colorSelected : colorSecondary);
-                    textFirstPlayerRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? typefaceMedium : typefaceNormal);
-                    textFirstIndicatorRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? colorSelected : colorSecondary);
-                    textFirstIndicatorRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFirstPlace()) ? typefaceMedium : typefaceNormal);
-
-                    textSecondDeckRecordCard.setText(lastRecord.getSecondPlace().getDeckName());
-                    textSecondDeckRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? colorSelected : colorPrimary);
-                    textSecondDeckRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? typefaceMedium : typefaceNormal);
-                    textSecondPlayerRecordCard.setText(lastRecord.getSecondPlace().getDeckOwnerName());
-                    textSecondPlayerRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? colorSelected : colorSecondary);
-                    textSecondPlayerRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? typefaceMedium : typefaceNormal);
-                    textSecondIndicatorRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? colorSelected : colorSecondary);
-                    textSecondIndicatorRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getSecondPlace()) ? typefaceMedium : typefaceNormal);
-
-                    textThirdDeckRecordCard.setText(lastRecord.getThirdPlace().getDeckName());
-                    textThirdDeckRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? colorSelected : colorPrimary);
-                    textThirdDeckRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? typefaceMedium : typefaceNormal);
-                    textThirdPlayerRecordCard.setText(lastRecord.getThirdPlace().getDeckOwnerName());
-                    textThirdPlayerRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? colorSelected : colorSecondary);
-                    textThirdPlayerRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? typefaceMedium : typefaceNormal);
-                    textThirdIndicatorRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? colorSelected : colorSecondary);
-                    textThirdIndicatorRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getThirdPlace()) ? typefaceMedium : typefaceNormal);
-
-                    textFourthDeckRecordCard.setText(lastRecord.getFourthPlace().getDeckName());
-                    textFourthDeckRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFourthPlace()) ? colorSelected : colorPrimary);
-                    textFourthDeckRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFourthPlace()) ? typefaceMedium : typefaceNormal);
-                    textFourthPlayerRecordCard.setText(lastRecord.getFourthPlace().getDeckOwnerName());
-                    textFourthPlayerRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFourthPlace()) ? colorSelected : colorSecondary);
-                    textFourthPlayerRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFourthPlace()) ? typefaceMedium : typefaceNormal);
-                    textFourthIndicatorRecordCard.setTextColor(mCurrentDeck.isEqualDeck(lastRecord.getFourthPlace()) ? colorSelected : colorSecondary);
-                    textFourthIndicatorRecordCard.setTypeface(mCurrentDeck.isEqualDeck(lastRecord.getFourthPlace()) ? typefaceMedium : typefaceNormal);
-                    break;
-            }
+            Utils.highlightRecord(this, lastRecord, mPlayerName);
         }
 
         //Total games and Chart2 1v1
