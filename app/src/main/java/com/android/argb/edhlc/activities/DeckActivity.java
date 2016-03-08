@@ -256,12 +256,18 @@ public class DeckActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.drawerItemHome:
                 mDeckDrawerLayout.closeDrawers();
-                startActivity(new Intent(this, MainActivity.class));
-                finish();
+                Intent intentHome = new Intent(this, MainActivity.class);
+                intentHome.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intentHome);
+                this.finish();
                 break;
 
             case R.id.drawerItemPlayers:
-                //TODO
+                mDeckDrawerLayout.closeDrawers();
+                Intent intentPlayerList = new Intent(this, PlayerListActivity.class);
+                intentPlayerList.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intentPlayerList);
+                this.finish();
                 break;
 
             case R.id.drawerItemRecords:

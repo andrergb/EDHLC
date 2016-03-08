@@ -107,11 +107,14 @@ public class PlayerListActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.drawerItemHome:
                 mPlayerDrawerLayout.closeDrawers();
-                startActivity(new Intent(this, MainActivity.class));
-                finish();
+                Intent intentHome = new Intent(this, MainActivity.class);
+                intentHome.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intentHome);
+                this.finish();
                 break;
 
             case R.id.drawerItemPlayers:
+                mPlayerDrawerLayout.closeDrawers();
                 break;
 
             case R.id.drawerItemRecords:
