@@ -80,21 +80,10 @@
                     layout="@layout/card_record">
                 </include>
 
-                <!-- Card3: Chart 2 slots -->
+                <!-- Card3: History charts -->
                 <include
-                    layout="@layout/card_chart_2_slots">
+                    layout="@layout/card_history_charts">
                 </include>
-
-                <!-- Card4: Chart 3 slots -->
-                <include
-                    layout="@layout/card_chart_3_slots">
-                </include>
-
-                <!-- Card5: Chart 4 slots -->
-                <include
-                    layout="@layout/card_chart_4_slots">
-                </include>
-
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
 

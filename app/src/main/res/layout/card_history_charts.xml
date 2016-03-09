@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView
-    android:id="@+id/cardViewCharts"
+    android:id="@+id/cardViewHistoryCharts"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -18,7 +18,7 @@
 
         <!-- Header -->
         <RelativeLayout
-            android:id="@+id/relativeCardTitleCharts"
+            android:id="@+id/relativeTitleHistoryCharts"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?android:attr/selectableItemBackground"
@@ -26,7 +26,7 @@
             android:padding="16dp">
 
             <TextView
-                android:id="@+id/textTitleCharts"
+                android:id="@+id/textTitleHistoryCharts"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -37,7 +37,7 @@
                 android:textSize="16sp"/>
 
             <ImageView
-                android:id="@+id/indicatorCharts"
+                android:id="@+id/indicatorHistoryCharts"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:layout_alignParentEnd="true"
@@ -48,15 +48,12 @@
                 android:tint="@color/secondary_text"/>
         </RelativeLayout>
 
+        <!-- full separator -->
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:alpha="0.5"
             android:background="@color/divider"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="4dp"/>
 
         <!-- Full chart 2 -->
         <LinearLayout
@@ -66,6 +63,7 @@
             android:background="?android:attr/selectableItemBackground"
             android:onClick="onClickFullChart"
             android:orientation="vertical"
+            android:paddingTop="16dp"
             android:weightSum="1">
 
             <!-- Header 2 players -->
@@ -74,16 +72,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:text="2 players"
-                android:textColor="@color/secondary_text"
-                android:textSize="14sp"/>
+                android:text="2 players:"
+                android:textColor="@color/primary_text"
+                android:textSize="16sp"/>
 
             <!-- Full chart 2 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?android:attr/selectableItemBackground"
-                android:onClick="onClickFullChart"
                 android:orientation="horizontal"
                 android:weightSum="1">
 
@@ -186,16 +182,6 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!-- separator 2-3 -->
-        <View
-            android:id="@+id/divider1RecordCard"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginBottom="4dp"
-            android:layout_marginTop="4dp"
-            android:alpha="0.5"
-            android:background="@color/divider"/>
-
         <!-- Full chart 3 -->
         <LinearLayout
             android:id="@+id/linearFullChart3"
@@ -204,6 +190,7 @@
             android:background="?android:attr/selectableItemBackground"
             android:onClick="onClickFullChart"
             android:orientation="vertical"
+            android:paddingTop="16dp"
             android:weightSum="1">
 
             <!-- Header 3 players -->
@@ -212,16 +199,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:text="3 players"
-                android:textColor="@color/secondary_text"
-                android:textSize="14sp"/>
+                android:text="3 players:"
+                android:textColor="@color/primary_text"
+                android:textSize="16sp"/>
 
             <!-- Full chart 3-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?android:attr/selectableItemBackground"
-                android:onClick="onClickFullChart"
                 android:orientation="horizontal"
                 android:weightSum="1">
 
@@ -347,16 +332,6 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!-- separator 3-4 -->
-        <View
-            android:id="@+id/divider1RecordCard"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginBottom="4dp"
-            android:layout_marginTop="4dp"
-            android:alpha="0.5"
-            android:background="@color/divider"/>
-
         <!-- Full chart 4 -->
         <LinearLayout
             android:id="@+id/linearFullChart4"
@@ -365,6 +340,7 @@
             android:background="?android:attr/selectableItemBackground"
             android:onClick="onClickFullChart"
             android:orientation="vertical"
+            android:paddingTop="16dp"
             android:weightSum="1">
 
             <!-- Header 4 players -->
@@ -373,17 +349,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:text="4 players"
-                android:textColor="@color/secondary_text"
-                android:textSize="14sp"/>
+                android:text="4 players:"
+                android:textColor="@color/primary_text"
+                android:textSize="16sp"/>
 
             <!-- Chart 4 -->
             <LinearLayout
-                android:id="@+id/linearFullChart4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?android:attr/selectableItemBackground"
-                android:onClick="onClickFullChart"
                 android:orientation="horizontal"
                 android:weightSum="1">
 
@@ -537,7 +510,28 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="4dp"/>
+            android:layout_height="8dp"/>
+
+        <!-- full separator -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:alpha="0.5"
+            android:background="@color/divider"/>
+
+        <!-- Show all -->
+        <TextView
+            android:id="@+id/showAllRecords"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:gravity="center_horizontal"
+            android:onClick="onClickFullChart"
+            android:padding="16dp"
+            android:text="Show all records"
+            android:textColor="@color/primary_color"
+            android:textSize="16sp"/>
+
     </LinearLayout>
 </android.support.v7.widget.CardView>
 
