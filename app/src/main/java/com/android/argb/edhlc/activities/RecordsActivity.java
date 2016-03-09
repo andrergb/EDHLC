@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -126,6 +127,12 @@ public class RecordsActivity extends AppCompatActivity {
 
             case R.id.drawerItemRecords:
                 mDrawerLayout.closeDrawers();
+                //TODO finish all, except main
+                if (mRecordHighlightName != null || mRecordHighlightDeck != null) {
+                    Intent intentRecords = new Intent(this, RecordsActivity.class);
+                    startActivity(intentRecords);
+                    this.finish();
+                }
                 break;
 
             case R.id.drawerItemScreen:
@@ -142,7 +149,7 @@ public class RecordsActivity extends AppCompatActivity {
             case R.id.drawerItemSettings:
                 mDrawerLayout.closeDrawers();
                 startActivity(new Intent(this, SettingsActivity.class));
-                finish();
+                this.finish();
                 break;
 
             case R.id.drawerItemAbout:
@@ -263,57 +270,51 @@ public class RecordsActivity extends AppCompatActivity {
 
         //Card 2 players
         cardViewRecords2List = (CardView) findViewById(R.id.cardViewRecords2List);
-        if (mRecordSize == 0 || mRecordSize == 2) {
-            relativeCardTitleRecords2List = (RelativeLayout) findViewById(R.id.relativeCardTitleRecords2List);
-            textTitleRecords2List = (TextView) findViewById(R.id.textTitleRecords2List);
-            iconIndicatorRecords2List = (ImageView) findViewById(R.id.iconIndicatorRecords2List);
+        relativeCardTitleRecords2List = (RelativeLayout) findViewById(R.id.relativeCardTitleRecords2List);
+        textTitleRecords2List = (TextView) findViewById(R.id.textTitleRecords2List);
+        iconIndicatorRecords2List = (ImageView) findViewById(R.id.iconIndicatorRecords2List);
 
-            listViewRecords2 = (ListView) findViewById(R.id.listRecords2);
-            if (mRecordHighlightName != null && mRecordHighlightDeck != null)
-                listRecords2Content = new ArrayList<>(recordsDB.getAllRecordsByDeck(new Deck(mRecordHighlightName, mRecordHighlightDeck), 2));
-            else if (mRecordHighlightName != null)
-                listRecords2Content = new ArrayList<>(recordsDB.getAllRecordsByPlayerName(mRecordHighlightName, 2));
-            else
-                listRecords2Content = new ArrayList<>(recordsDB.getAllRecords(2));
-            mRecord2ListAdapter = new RecordListAdapter(this, listRecords2Content, 2, mRecordHighlightName);
-            listViewRecords2.setAdapter(mRecord2ListAdapter);
-        }
+        listViewRecords2 = (ListView) findViewById(R.id.listRecords2);
+        if (mRecordHighlightName != null && mRecordHighlightDeck != null)
+            listRecords2Content = new ArrayList<>(recordsDB.getAllRecordsByDeck(new Deck(mRecordHighlightName, mRecordHighlightDeck), 2));
+        else if (mRecordHighlightName != null)
+            listRecords2Content = new ArrayList<>(recordsDB.getAllRecordsByPlayerName(mRecordHighlightName, 2));
+        else
+            listRecords2Content = new ArrayList<>(recordsDB.getAllRecords(2));
+        mRecord2ListAdapter = new RecordListAdapter(this, listRecords2Content, 2, mRecordHighlightName);
+        listViewRecords2.setAdapter(mRecord2ListAdapter);
 
         //Card 3 players
         cardViewRecords3List = (CardView) findViewById(R.id.cardViewRecords3List);
-        if (mRecordSize == 0 || mRecordSize == 3) {
-            relativeCardTitleRecords3List = (RelativeLayout) findViewById(R.id.relativeCardTitleRecords3List);
-            textTitleRecords3List = (TextView) findViewById(R.id.textTitleRecords3List);
-            iconIndicatorRecords3List = (ImageView) findViewById(R.id.iconIndicatorRecords3List);
+        relativeCardTitleRecords3List = (RelativeLayout) findViewById(R.id.relativeCardTitleRecords3List);
+        textTitleRecords3List = (TextView) findViewById(R.id.textTitleRecords3List);
+        iconIndicatorRecords3List = (ImageView) findViewById(R.id.iconIndicatorRecords3List);
 
-            listViewRecords3 = (ListView) findViewById(R.id.listRecords3);
-            if (mRecordHighlightName != null && mRecordHighlightDeck != null)
-                listRecords3Content = new ArrayList<>(recordsDB.getAllRecordsByDeck(new Deck(mRecordHighlightName, mRecordHighlightDeck), 3));
-            else if (mRecordHighlightName != null)
-                listRecords3Content = new ArrayList<>(recordsDB.getAllRecordsByPlayerName(mRecordHighlightName, 3));
-            else
-                listRecords3Content = new ArrayList<>(recordsDB.getAllRecords(3));
-            mRecord3ListAdapter = new RecordListAdapter(this, listRecords3Content, 3, mRecordHighlightName);
-            listViewRecords3.setAdapter(mRecord3ListAdapter);
-        }
+        listViewRecords3 = (ListView) findViewById(R.id.listRecords3);
+        if (mRecordHighlightName != null && mRecordHighlightDeck != null)
+            listRecords3Content = new ArrayList<>(recordsDB.getAllRecordsByDeck(new Deck(mRecordHighlightName, mRecordHighlightDeck), 3));
+        else if (mRecordHighlightName != null)
+            listRecords3Content = new ArrayList<>(recordsDB.getAllRecordsByPlayerName(mRecordHighlightName, 3));
+        else
+            listRecords3Content = new ArrayList<>(recordsDB.getAllRecords(3));
+        mRecord3ListAdapter = new RecordListAdapter(this, listRecords3Content, 3, mRecordHighlightName);
+        listViewRecords3.setAdapter(mRecord3ListAdapter);
 
         //Card 4 players
         cardViewRecords4List = (CardView) findViewById(R.id.cardViewRecords4List);
-        if (mRecordSize == 0 || mRecordSize == 4) {
-            relativeCardTitleRecords4List = (RelativeLayout) findViewById(R.id.relativeCardTitleRecords4List);
-            textTitleRecords4List = (TextView) findViewById(R.id.textTitleRecords4List);
-            iconIndicatorRecords4List = (ImageView) findViewById(R.id.iconIndicatorRecords4List);
+        relativeCardTitleRecords4List = (RelativeLayout) findViewById(R.id.relativeCardTitleRecords4List);
+        textTitleRecords4List = (TextView) findViewById(R.id.textTitleRecords4List);
+        iconIndicatorRecords4List = (ImageView) findViewById(R.id.iconIndicatorRecords4List);
 
-            listViewRecords4 = (ListView) findViewById(R.id.listRecords4);
-            if (mRecordHighlightName != null && mRecordHighlightDeck != null)
-                listRecords4Content = new ArrayList<>(recordsDB.getAllRecordsByDeck(new Deck(mRecordHighlightName, mRecordHighlightDeck), 4));
-            else if (mRecordHighlightName != null)
-                listRecords4Content = new ArrayList<>(recordsDB.getAllRecordsByPlayerName(mRecordHighlightName, 4));
-            else
-                listRecords4Content = new ArrayList<>(recordsDB.getAllRecords(4));
-            mRecord4ListAdapter = new RecordListAdapter(this, listRecords4Content, 4, mRecordHighlightName);
-            listViewRecords4.setAdapter(mRecord4ListAdapter);
-        }
+        listViewRecords4 = (ListView) findViewById(R.id.listRecords4);
+        if (mRecordHighlightName != null && mRecordHighlightDeck != null)
+            listRecords4Content = new ArrayList<>(recordsDB.getAllRecordsByDeck(new Deck(mRecordHighlightName, mRecordHighlightDeck), 4));
+        else if (mRecordHighlightName != null)
+            listRecords4Content = new ArrayList<>(recordsDB.getAllRecordsByPlayerName(mRecordHighlightName, 4));
+        else
+            listRecords4Content = new ArrayList<>(recordsDB.getAllRecords(4));
+        mRecord4ListAdapter = new RecordListAdapter(this, listRecords4Content, 4, mRecordHighlightName);
+        listViewRecords4.setAdapter(mRecord4ListAdapter);
     }
 
     private void createStatusBar() {
@@ -340,66 +341,99 @@ public class RecordsActivity extends AppCompatActivity {
         mActionBar.setDisplayShowTitleEnabled(true);
         mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setHomeButtonEnabled(true);
-        mActionBar.setTitle("Player list");
+        mActionBar.setTitle("Records" +
+                (mRecordHighlightDeck != null ? " - " + mRecordHighlightDeck :
+                        (mRecordHighlightName != null ? " - " + mRecordHighlightName : "")));
     }
 
 
     private void updateLayout() {
         //Card 2 players
         cardViewRecords2List.setVisibility(View.GONE);
-        if (mRecordSize == 0 || mRecordSize == 2) {
-            Utils.justifyListViewHeightBasedOnChildren(listViewRecords2);
-            if (listRecords2Content.size() > 0) {
-                cardViewRecords2List.setVisibility(View.VISIBLE);
-                if (mCardViewFullHeightRecords2 == 0) {
-                    cardViewRecords2List.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                        @Override
-                        public boolean onPreDraw() {
-                            cardViewRecords2List.getViewTreeObserver().removeOnPreDrawListener(this);
-                            mCardViewFullHeightRecords2 = cardViewRecords2List.getHeight();
-                            return true;
+        Utils.justifyListViewHeightBasedOnChildren(listViewRecords2);
+        if (listRecords2Content.size() > 0) {
+            cardViewRecords2List.setVisibility(View.VISIBLE);
+            if (mCardViewFullHeightRecords2 == 0) {
+                cardViewRecords2List.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                    @Override
+                    public boolean onPreDraw() {
+                        cardViewRecords2List.getViewTreeObserver().removeOnPreDrawListener(this);
+                        mCardViewFullHeightRecords2 = cardViewRecords2List.getHeight();
+
+                        if (mRecordSize != 0 && mRecordSize != 2) {
+                            ViewGroup.LayoutParams layoutParams = cardViewRecords2List.getLayoutParams();
+                            layoutParams.height = relativeCardTitleRecords2List.getHeight();
+                            cardViewRecords2List.setLayoutParams(layoutParams);
+                        } else {
+                            textTitleRecords2List.setTextColor(ContextCompat.getColor(RecordsActivity.this, R.color.secondary_color));
+                            iconIndicatorRecords2List.setImageDrawable(ContextCompat.getDrawable(RecordsActivity.this, R.drawable.arrow_up));
+                            iconIndicatorRecords2List.setRotation(0);
+                            iconIndicatorRecords2List.startAnimation(AnimationUtils.loadAnimation(RecordsActivity.this, R.anim.rotate_180_anticlockwise_instant));
+                            iconIndicatorRecords2List.setColorFilter(ContextCompat.getColor(RecordsActivity.this, R.color.secondary_color));
                         }
-                    });
-                }
+                        return true;
+                    }
+                });
             }
         }
 
         //Card 3 players
         cardViewRecords3List.setVisibility(View.GONE);
-        if (mRecordSize == 0 || mRecordSize == 3) {
-            Utils.justifyListViewHeightBasedOnChildren(listViewRecords3);
-            if (listRecords3Content.size() > 0) {
-                cardViewRecords3List.setVisibility(View.VISIBLE);
-                if (mCardViewFullHeightRecords3 == 0) {
-                    cardViewRecords3List.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                        @Override
-                        public boolean onPreDraw() {
-                            cardViewRecords3List.getViewTreeObserver().removeOnPreDrawListener(this);
-                            mCardViewFullHeightRecords3 = cardViewRecords3List.getHeight();
-                            return true;
+        Utils.justifyListViewHeightBasedOnChildren(listViewRecords3);
+        if (listRecords3Content.size() > 0) {
+            cardViewRecords3List.setVisibility(View.VISIBLE);
+            if (mCardViewFullHeightRecords3 == 0) {
+                cardViewRecords3List.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                    @Override
+                    public boolean onPreDraw() {
+                        cardViewRecords3List.getViewTreeObserver().removeOnPreDrawListener(this);
+                        mCardViewFullHeightRecords3 = cardViewRecords3List.getHeight();
+
+                        if (mRecordSize != 0 && mRecordSize != 3) {
+                            ViewGroup.LayoutParams layoutParams = cardViewRecords3List.getLayoutParams();
+                            layoutParams.height = relativeCardTitleRecords3List.getHeight();
+                            cardViewRecords3List.setLayoutParams(layoutParams);
+                        } else {
+                            textTitleRecords3List.setTextColor(ContextCompat.getColor(RecordsActivity.this, R.color.secondary_color));
+                            iconIndicatorRecords3List.setImageDrawable(ContextCompat.getDrawable(RecordsActivity.this, R.drawable.arrow_up));
+                            iconIndicatorRecords3List.setRotation(0);
+                            iconIndicatorRecords3List.startAnimation(AnimationUtils.loadAnimation(RecordsActivity.this, R.anim.rotate_180_anticlockwise_instant));
+                            iconIndicatorRecords3List.setColorFilter(ContextCompat.getColor(RecordsActivity.this, R.color.secondary_color));
                         }
-                    });
-                }
+                        return true;
+                    }
+                });
             }
         }
 
         //Card 4 players
         cardViewRecords4List.setVisibility(View.GONE);
-        if (mRecordSize == 0 || mRecordSize == 4) {
-            Utils.justifyListViewHeightBasedOnChildren(listViewRecords4);
-            if (listRecords4Content.size() > 0) {
-                cardViewRecords4List.setVisibility(View.VISIBLE);
-                if (mCardViewFullHeightRecords4 == 0) {
-                    cardViewRecords4List.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                        @Override
-                        public boolean onPreDraw() {
-                            cardViewRecords4List.getViewTreeObserver().removeOnPreDrawListener(this);
-                            mCardViewFullHeightRecords4 = cardViewRecords4List.getHeight();
-                            return true;
+        Utils.justifyListViewHeightBasedOnChildren(listViewRecords4);
+        if (listRecords4Content.size() > 0) {
+            cardViewRecords4List.setVisibility(View.VISIBLE);
+            if (mCardViewFullHeightRecords4 == 0) {
+                cardViewRecords4List.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                    @Override
+                    public boolean onPreDraw() {
+                        cardViewRecords4List.getViewTreeObserver().removeOnPreDrawListener(this);
+                        mCardViewFullHeightRecords4 = cardViewRecords4List.getHeight();
+
+                        if (mRecordSize != 0 && mRecordSize != 4) {
+                            ViewGroup.LayoutParams layoutParams = cardViewRecords4List.getLayoutParams();
+                            layoutParams.height = relativeCardTitleRecords4List.getHeight();
+                            cardViewRecords4List.setLayoutParams(layoutParams);
+                        } else {
+                            textTitleRecords4List.setTextColor(ContextCompat.getColor(RecordsActivity.this, R.color.secondary_color));
+                            iconIndicatorRecords4List.setImageDrawable(ContextCompat.getDrawable(RecordsActivity.this, R.drawable.arrow_up));
+                            iconIndicatorRecords4List.setRotation(0);
+                            iconIndicatorRecords4List.startAnimation(AnimationUtils.loadAnimation(RecordsActivity.this, R.anim.rotate_180_anticlockwise_instant));
+                            iconIndicatorRecords4List.setColorFilter(ContextCompat.getColor(RecordsActivity.this, R.color.secondary_color));
                         }
-                    });
-                }
+                        return true;
+                    }
+                });
             }
+
         }
     }
 }

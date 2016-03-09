@@ -89,7 +89,6 @@ public class PlayerListActivity extends AppCompatActivity {
         }
     }
 
-    //TODO card general info
     public void onClickCardExpansion(View v) {
         switch (v.getId()) {
             case R.id.relativeTitlePlayerListOverview:

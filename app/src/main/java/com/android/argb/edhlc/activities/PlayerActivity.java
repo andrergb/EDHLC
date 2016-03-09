@@ -1191,7 +1191,7 @@ public class PlayerActivity extends AppCompatActivity {
                         textTitleDeckListCard.setTextColor(ContextCompat.getColor(PlayerActivity.this, R.color.secondary_color));
                         indicatorDeckListCard.setImageDrawable(ContextCompat.getDrawable(PlayerActivity.this, R.drawable.arrow_up));
                         indicatorDeckListCard.setRotation(0);
-                        indicatorDeckListCard.startAnimation(AnimationUtils.loadAnimation(PlayerActivity.this, R.anim.rotate_180_anticlockwise));
+                        indicatorDeckListCard.startAnimation(AnimationUtils.loadAnimation(PlayerActivity.this, R.anim.rotate_180_anticlockwise_instant));
                         indicatorDeckListCard.setColorFilter(ContextCompat.getColor(PlayerActivity.this, R.color.secondary_color));
                         return true;
                     }

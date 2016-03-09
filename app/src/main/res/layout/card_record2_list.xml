@@ -29,7 +29,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:text="Records - 2 players"
-                android:textColor="@color/secondary_color"
+                android:textColor="@color/secondary_text"
                 android:textSize="16sp"/>
 
             <ImageView
@@ -41,7 +41,7 @@
                 android:layout_centerVertical="true"
                 android:clickable="false"
                 android:src="@drawable/arrow_down"
-                android:tint="@color/secondary_color"/>
+                android:tint="@color/secondary_text"/>
         </RelativeLayout>
 
         <!-- separator -->
