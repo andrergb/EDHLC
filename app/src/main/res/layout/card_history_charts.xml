@@ -55,6 +55,10 @@
             android:alpha="0.5"
             android:background="@color/divider"/>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="8dp"/>
+
         <!-- Full chart 2 -->
         <LinearLayout
             android:id="@+id/linearFullChart2"
@@ -63,7 +67,8 @@
             android:background="?android:attr/selectableItemBackground"
             android:onClick="onClickFullChart"
             android:orientation="vertical"
-            android:paddingTop="16dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
             android:weightSum="1">
 
             <!-- Header 2 players -->
@@ -73,7 +78,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:text="2 players:"
-                android:textColor="@color/primary_text"
+                android:textColor="@color/secondary_text"
                 android:textSize="16sp"/>
 
             <!-- Full chart 2 -->
@@ -190,7 +195,8 @@
             android:background="?android:attr/selectableItemBackground"
             android:onClick="onClickFullChart"
             android:orientation="vertical"
-            android:paddingTop="16dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
             android:weightSum="1">
 
             <!-- Header 3 players -->
@@ -200,7 +206,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:text="3 players:"
-                android:textColor="@color/primary_text"
+                android:textColor="@color/secondary_text"
                 android:textSize="16sp"/>
 
             <!-- Full chart 3-->
@@ -340,7 +346,8 @@
             android:background="?android:attr/selectableItemBackground"
             android:onClick="onClickFullChart"
             android:orientation="vertical"
-            android:paddingTop="16dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
             android:weightSum="1">
 
             <!-- Header 4 players -->
@@ -350,7 +357,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:text="4 players:"
-                android:textColor="@color/primary_text"
+                android:textColor="@color/secondary_text"
                 android:textSize="16sp"/>
 
             <!-- Chart 4 -->
