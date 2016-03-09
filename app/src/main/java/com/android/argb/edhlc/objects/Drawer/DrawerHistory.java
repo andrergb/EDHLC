@@ -14,7 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.android.argb.edhlc.R;
-import com.android.argb.edhlc.activities.RecordsActivity;
 import com.android.argb.edhlc.activities.SettingsActivity;
 
 import java.util.List;
@@ -109,9 +108,9 @@ public class DrawerHistory {
                 case 1: //Players
                     break;
                 case 2: //All Records
-                    mDrawerLayout.closeDrawers();
-                    parentActivity.startActivity(new Intent(parentActivity, RecordsActivity.class));
-                    parentActivity.finish();
+//                    mDrawerLayout.closeDrawers();
+//                    parentActivity.startActivity(new Intent(parentActivity, RecordsActivity.class));
+//                    parentActivity.finish();
                     break;
                 case 3: //Settings
                     mDrawerLayout.closeDrawers();

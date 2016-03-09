@@ -53,6 +53,11 @@
                     layout="@layout/card_chart_4_slots">
                 </include>
 
+                <!--<include-->
+                <!--layout="@layout/card_charts">-->
+                <!--</include>-->
+
+
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
 

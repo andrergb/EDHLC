@@ -3,7 +3,6 @@ package com.android.argb.edhlc.objects.Drawer;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -14,7 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.android.argb.edhlc.R;
-import com.android.argb.edhlc.activities.RecordsActivity;
 
 import java.util.List;
 
@@ -89,9 +87,9 @@ public class DrawerSettings {
 
                     break;
                 case 2: //All Records
-                    mDrawerLayout.closeDrawers();
-                    parentActivity.startActivity(new Intent(parentActivity, RecordsActivity.class));
-                    parentActivity.finish();
+//                    mDrawerLayout.closeDrawers();
+//                    parentActivity.startActivity(new Intent(parentActivity, RecordsActivity.class));
+//                    parentActivity.finish();
                     break;
                 case 3: //Settings
                     mDrawerLayout.closeDrawers();

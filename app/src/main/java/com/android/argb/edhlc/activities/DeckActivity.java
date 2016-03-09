@@ -295,6 +295,27 @@ public class DeckActivity extends AppCompatActivity {
         }
     }
 
+    public void onClickFullChart(View view) {
+        int size = 0;
+        switch (view.getId()) {
+            case R.id.linearFullChart2:
+                size = 2;
+                break;
+            case R.id.linearFullChart3:
+                size = 3;
+                break;
+            case R.id.linearFullChart4:
+                size = 4;
+                break;
+        }
+
+        Intent intent = new Intent(this, RecordsActivity.class);
+        intent.putExtra("RECORD_HIGHLIGHT_NAME", mPlayerName);
+        intent.putExtra("RECORD_HIGHLIGHT_DECK", mDeckName);
+        intent.putExtra("RECORD_SIZE", size);
+        startActivity(intent);
+    }
+
     public void onClickImageBanner(View view) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(DeckActivity.this);
         alertDialogBuilder.setTitle("Pick image");

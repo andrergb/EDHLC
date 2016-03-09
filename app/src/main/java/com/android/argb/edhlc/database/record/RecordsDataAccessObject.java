@@ -141,6 +141,53 @@ public class RecordsDataAccessObject {
         return recordList;
     }
 
+
+    public List<Record> getAllRecordsByDeck(Deck deck, int totalPlayers) {
+        List<Record> recordList = new ArrayList<>();
+
+        if (deck.getDeckName().equalsIgnoreCase("") && deck.getDeckOwnerName().equalsIgnoreCase("")) {
+            recordList = getAllRecords();
+        } else {
+            Cursor cursor = database.query(
+                    RecordsContract.RecordsEntry.TABLE_NAME,
+                    null,
+                    "(" +
+                            "(" + RecordsContract.RecordsEntry.COLUMN_FIRST_PLAYER_NAME + " LIKE ? AND "
+                            + RecordsContract.RecordsEntry.COLUMN_FIRST_PLAYER_DECK + " LIKE ?"
+                            + ") OR ("
+                            + RecordsContract.RecordsEntry.COLUMN_SECOND_PLAYER_NAME + " LIKE ? AND "
+                            + RecordsContract.RecordsEntry.COLUMN_SECOND_PLAYER_DECK + " LIKE ?"
+                            + ") OR ("
+                            + RecordsContract.RecordsEntry.COLUMN_THIRD_PLAYER_NAME + " LIKE ? AND "
+                            + RecordsContract.RecordsEntry.COLUMN_THIRD_PLAYER_DECK + " LIKE ?"
+                            + ") OR ("
+                            + RecordsContract.RecordsEntry.COLUMN_FOURTH_PLAYER_NAME + " LIKE ? AND "
+                            + RecordsContract.RecordsEntry.COLUMN_FOURTH_PLAYER_DECK + " LIKE ?)"
+                            + ") AND "
+                            + RecordsContract.RecordsEntry.COLUMN_TOTAL_PLAYERS + " LIKE ?",
+                    new String[]{deck.getDeckOwnerName(),
+                            deck.getDeckName(),
+                            deck.getDeckOwnerName(),
+                            deck.getDeckName(),
+                            deck.getDeckOwnerName(),
+                            deck.getDeckName(),
+                            deck.getDeckOwnerName(),
+                            deck.getDeckName(),
+                            String.valueOf(totalPlayers)},
+                    null,
+                    null,
+                    null
+            );
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                recordList.add(cursorToRecord(cursor));
+                cursor.moveToNext();
+            }
+            cursor.close();
+        }
+        return recordList;
+    }
+
     public List<Record> getAllRecordsByPlayerName(String playerName) {
         List<Record> recordList = new ArrayList<>();
         Cursor cursor = database.query(
@@ -151,6 +198,31 @@ public class RecordsDataAccessObject {
                         + RecordsContract.RecordsEntry.COLUMN_THIRD_PLAYER_NAME + " LIKE ? OR "
                         + RecordsContract.RecordsEntry.COLUMN_FOURTH_PLAYER_NAME + " LIKE ?",
                 new String[]{playerName, playerName, playerName, playerName},
+                null,
+                null,
+                null
+        );
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            recordList.add(cursorToRecord(cursor));
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return recordList;
+    }
+
+    public List<Record> getAllRecordsByPlayerName(String playerName, int totalPlayers) {
+        List<Record> recordList = new ArrayList<>();
+        Cursor cursor = database.query(
+                RecordsContract.RecordsEntry.TABLE_NAME,
+                null,
+                "(" + RecordsContract.RecordsEntry.COLUMN_FIRST_PLAYER_NAME + " LIKE ? OR "
+                        + RecordsContract.RecordsEntry.COLUMN_SECOND_PLAYER_NAME + " LIKE ? OR "
+                        + RecordsContract.RecordsEntry.COLUMN_THIRD_PLAYER_NAME + " LIKE ? OR "
+                        + RecordsContract.RecordsEntry.COLUMN_FOURTH_PLAYER_NAME + " LIKE ?)"
+                        + " AND " + RecordsContract.RecordsEntry.COLUMN_TOTAL_PLAYERS + " LIKE ?",
+                new String[]{playerName, playerName, playerName, playerName, String.valueOf(totalPlayers)},
                 null,
                 null,
                 null

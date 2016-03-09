@@ -5,8 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.android.argb.edhlc.objects.Record;
 
@@ -18,12 +16,13 @@ public class RecordListAdapter extends BaseAdapter {
     private Context context;
     private List<Record> data;
     private int total;
+    private String highlightedValue;
 
-
-    public RecordListAdapter(Context context, List<Record> data, int total) {
+    public RecordListAdapter(Context context, List<Record> data, int total, String highlightedValue) {
         this.context = context;
         this.data = data;
         this.total = total;
+        this.highlightedValue = highlightedValue;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -48,49 +47,8 @@ public class RecordListAdapter extends BaseAdapter {
         if (vi == null)
             vi = inflater.inflate(R.layout.list_element_record, null);
 
-        TextView textDateRecordCard = (TextView) vi.findViewById(R.id.textDateRecordCard);
-        TextView textFirstDeckRecordCard = (TextView) vi.findViewById(R.id.textFirstDeckRecordCard);
-        TextView textFirstPlayerRecordCard = (TextView) vi.findViewById(R.id.textFirstPlayerRecordCard);
-        TextView textSecondDeckRecordCard = (TextView) vi.findViewById(R.id.textSecondDeckRecordCard);
-        TextView textSecondPlayerRecordCard = (TextView) vi.findViewById(R.id.textSecondPlayerRecordCard);
-        TextView textThirdDeckRecordCard = (TextView) vi.findViewById(R.id.textThirdDeckRecordCard);
-        TextView textThirdPlayerRecordCard = (TextView) vi.findViewById(R.id.textThirdPlayerRecordCard);
-        TextView textFourthDeckRecordCard = (TextView) vi.findViewById(R.id.textFourthDeckRecordCard);
-        TextView textFourthPlayerRecordCard = (TextView) vi.findViewById(R.id.textFourthPlayerRecordCard);
-        LinearLayout linearThirdLineRecordCard = (LinearLayout) vi.findViewById(R.id.linearThirdLineRecordCard);
-        LinearLayout linearFourthLineRecordCard = (LinearLayout) vi.findViewById(R.id.linearFourthLineRecordCard);
-        View divider2RecordCard = vi.findViewById(R.id.divider2RecordCard);
-        View divider3RecordCard = vi.findViewById(R.id.divider3RecordCard);
+        Utils.createRecordListElement(vi, data.get(position), highlightedValue);
 
-        textDateRecordCard.setText("Played on " + data.get(position).getDate());
-
-        textFirstDeckRecordCard.setText(data.get(position).getFirstPlace().getDeckName());
-        textFirstPlayerRecordCard.setText(data.get(position).getFirstPlace().getDeckOwnerName());
-
-        textSecondDeckRecordCard.setText(data.get(position).getSecondPlace().getDeckName());
-        textSecondPlayerRecordCard.setText(data.get(position).getSecondPlace().getDeckOwnerName());
-
-        switch (total) {
-            case 2:
-                linearThirdLineRecordCard.setVisibility(View.GONE);
-                linearFourthLineRecordCard.setVisibility(View.GONE);
-                divider2RecordCard.setVisibility(View.GONE);
-                divider3RecordCard.setVisibility(View.GONE);
-                break;
-            case 3:
-                textThirdDeckRecordCard.setText(data.get(position).getThirdPlace().getDeckName());
-                textThirdPlayerRecordCard.setText(data.get(position).getThirdPlace().getDeckOwnerName());
-
-                linearFourthLineRecordCard.setVisibility(View.GONE);
-                divider3RecordCard.setVisibility(View.GONE);
-                break;
-            case 4:
-                textThirdDeckRecordCard.setText(data.get(position).getThirdPlace().getDeckName());
-                textThirdPlayerRecordCard.setText(data.get(position).getThirdPlace().getDeckOwnerName());
-                textFourthDeckRecordCard.setText(data.get(position).getFourthPlace().getDeckName());
-                textFourthPlayerRecordCard.setText(data.get(position).getFourthPlace().getDeckOwnerName());
-                break;
-        }
         return vi;
     }
 }

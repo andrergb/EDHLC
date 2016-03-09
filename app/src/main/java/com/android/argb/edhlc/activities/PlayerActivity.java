@@ -60,7 +60,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-//Crop: https://github.com/lvillani/android-cropimage
 public class PlayerActivity extends AppCompatActivity {
 
     private String mPlayerName;
@@ -333,6 +332,26 @@ public class PlayerActivity extends AppCompatActivity {
         }
     }
 
+    public void onClickFullChart(View view) {
+        int size = 0;
+        switch (view.getId()) {
+            case R.id.linearFullChart2:
+                size = 2;
+                break;
+            case R.id.linearFullChart3:
+                size = 3;
+                break;
+            case R.id.linearFullChart4:
+                size = 4;
+                break;
+        }
+
+        Intent intent = new Intent(this, RecordsActivity.class);
+        intent.putExtra("RECORD_HIGHLIGHT_NAME", mPlayerName);
+        intent.putExtra("RECORD_SIZE", size);
+        startActivity(intent);
+    }
+
     public void onClickManaCheckBox(View view) {
         if (checkBoxManaWhite.isChecked() ||
                 checkBoxManaBlue.isChecked() ||
@@ -599,7 +618,6 @@ public class PlayerActivity extends AppCompatActivity {
         cardViewChart2Slots = (CardView) findViewById(R.id.cardViewChart2Slots);
         relativeTitleChart2Slots = (RelativeLayout) findViewById(R.id.relativeCardTitleChart2Slots);
         textTitleChart2Slots = (TextView) findViewById(R.id.textTitleChart2Slots);
-        textTitleChart2Slots.setText("Player History - 2 players");
         indicatorChart2Slots = (ImageView) findViewById(R.id.indicatorChart2Slots);
         donutChart2 = new DonutChart(this, mDoughnutRender2, mMultipleCategorySeriesDataSet2);
 
@@ -607,7 +625,6 @@ public class PlayerActivity extends AppCompatActivity {
         cardViewChart3Slots = (CardView) findViewById(R.id.cardViewChart3Slots);
         relativeTitleChart3Slots = (RelativeLayout) findViewById(R.id.relativeCardTitleChart3Slots);
         textTitleChart3Slots = (TextView) findViewById(R.id.textTitleChart3Slots);
-        textTitleChart3Slots.setText("Player History - 2 players");
         indicatorChart3Slots = (ImageView) findViewById(R.id.indicatorChart3Slots);
         donutChart3 = new DonutChart(this, mDoughnutRender3, mMultipleCategorySeriesDataSet3);
 
@@ -615,7 +632,6 @@ public class PlayerActivity extends AppCompatActivity {
         cardViewChart4Slots = (CardView) findViewById(R.id.cardViewChart4Slots);
         relativeTitleChart4Slots = (RelativeLayout) findViewById(R.id.relativeCardTitleChart4Slots);
         textTitleChart4Slots = (TextView) findViewById(R.id.textTitleChart4Slots);
-        textTitleChart4Slots.setText("Player History - 2 players");
         indicatorChart4Slots = (ImageView) findViewById(R.id.indicatorChart4Slots);
         donutChart4 = new DonutChart(this, mDoughnutRender4, mMultipleCategorySeriesDataSet4);
 

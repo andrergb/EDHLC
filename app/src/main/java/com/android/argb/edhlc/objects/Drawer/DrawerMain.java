@@ -739,10 +739,7 @@ public class DrawerMain {
                     break;
                 case 2: //All Records
                     mDrawerLayout.closeDrawers();
-                    Intent intent = new Intent(parentActivity, RecordsActivity.class);
-                    intent.putExtra("RECORDS_PLAYER_NAME", "");
-                    intent.putExtra("RECORDS_DECK_NAME", "");
-                    parentActivity.startActivity(intent);
+                    parentActivity.startActivity(new Intent(parentActivity, RecordsActivity.class));
                     break;
                 case 3: //Settings
                     mDrawerLayout.closeDrawers();
