@@ -715,7 +715,7 @@ public class PlayerActivity extends AppCompatActivity {
                                 cardViewDeckList.getViewTreeObserver().removeOnPreDrawListener(this);
                                 mCardViewFullHeightDeckList = cardViewDeckList.getHeight();
 
-                                Utils.expand(PlayerActivity.this, cardViewDeckList, textTitleDeckListCard, indicatorDeckListCard, mCardViewFullHeightDeckList);
+                                Utils.expand(PlayerActivity.this, cardViewDeckList, textTitleDeckListCard, indicatorDeckListCard, relativeTitleDeckListCard.getHeight(), mCardViewFullHeightDeckList);
                                 return true;
                             }
                         });
@@ -1114,33 +1114,47 @@ public class PlayerActivity extends AppCompatActivity {
         List<Record> allRecords = recordsDB.getAllRecordsByPlayerName(mPlayerName);
         List<Record> allFirstRecords = recordsDB.getRecordsByPosition(mPlayerName, 1);
         final List<Deck> mostUsedDecks = recordsDB.getMostUsedDecks(allDecks);
-        final int timesUsedMostPlayedDeck = recordsDB.getAllRecordsByDeck(mostUsedDecks.get(0)).size();
         final List<Deck> leastUsedDecks = recordsDB.getLeastUsedDecks(allDecks);
-        final int timesUsedLeastPlayedDeck = recordsDB.getAllRecordsByDeck(leastUsedDecks.get(0)).size();
+
+        LinearLayout mostUsedDeck = (LinearLayout) findViewById(R.id.mostUsedDeck);
+        View dividerMostUsedDeck = findViewById(R.id.dividerMostUsedDeck);
+        if (mostUsedDecks.size() == 0) {
+            mostUsedDeck.setVisibility(View.GONE);
+            dividerMostUsedDeck.setVisibility(View.GONE);
+        } else {
+            mostUsedDeck.setVisibility(View.VISIBLE);
+            dividerMostUsedDeck.setVisibility(View.VISIBLE);
+            //Most played deck
+            textViewMostPlayedDeckPlayerInfo.setText(mostUsedDecks.get(0).getDeckName());
+            //Handle tied decks
+            if (mostUsedDecks.size() == 1)
+                textViewOthersMostPlayedDeckPlayerInfo.setText("");
+            else
+                handleTiedMostPlayedDecks(mostUsedDecks);
+            //TIMES most played deck
+            textViewMostTimePlayedDeckPlayerInfo.setText("" + recordsDB.getAllRecordsByDeck(mostUsedDecks.get(0)).size());
+        }
+
+        LinearLayout leastUsedDeck = (LinearLayout) findViewById(R.id.leastUsedDeck);
+        View divideLeastUsedDeck = findViewById(R.id.dividerLeastUsedDeck);
+        if (leastUsedDecks.size() == 0) {
+            leastUsedDeck.setVisibility(View.GONE);
+            divideLeastUsedDeck.setVisibility(View.GONE);
+        } else {
+            leastUsedDeck.setVisibility(View.VISIBLE);
+            divideLeastUsedDeck.setVisibility(View.VISIBLE);
+            //Least played deck
+            textViewLeastPlayedDeckPlayerInfo.setText(leastUsedDecks.get(0).getDeckName());
+            //Handle Least tied decks
+            if (leastUsedDecks.size() == 1)
+                textViewOthersLeastPlayedDeckPlayerInfo.setText("");
+            else
+                handleTiedLeastPlayedDecks(leastUsedDecks);
+            //TIMES Least played deck
+            textViewLeastTimePlayedDeckPlayerInfo.setText("" + recordsDB.getAllRecordsByDeck(leastUsedDecks.get(0)).size());
+        }
+
         Player currentPlayer = playersDB.getPlayer(mPlayerName);
-
-        //Most played deck
-        textViewMostPlayedDeckPlayerInfo.setText(mostUsedDecks.get(0).getDeckName());
-        //Handle tied decks
-        int totalMostUsedDecks = mostUsedDecks.size();
-        if (totalMostUsedDecks == 1)
-            textViewOthersMostPlayedDeckPlayerInfo.setText("");
-        else
-            handleTiedMostPlayedDecks(mostUsedDecks);
-        //TIMES most played deck
-        textViewMostTimePlayedDeckPlayerInfo.setText("" + timesUsedMostPlayedDeck);
-
-        //Least played deck
-        textViewLeastPlayedDeckPlayerInfo.setText(leastUsedDecks.get(0).getDeckName());
-        //Handle Least tied decks
-        int totalLeastUsedDecks = leastUsedDecks.size();
-        if (totalLeastUsedDecks == 1)
-            textViewOthersLeastPlayedDeckPlayerInfo.setText("");
-        else
-            handleTiedLeastPlayedDecks(leastUsedDecks);
-        //TIMES Least played deck
-        textViewLeastTimePlayedDeckPlayerInfo.setText("" + timesUsedLeastPlayedDeck);
-
         textViewCreationDate.setText(currentPlayer.getPlayerDate());
         textViewTotalGames.setText("" + allRecords.size());
         textViewWins.setText("" + allFirstRecords.size());
@@ -1172,21 +1186,25 @@ public class PlayerActivity extends AppCompatActivity {
         mDeckListAdapter.notifyDataSetChanged();
         Utils.justifyListViewHeightBasedOnChildren(listDeckListCard);
 
-        if (mCardViewFullHeightDeckList == 0) {
-            cardViewDeckList.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                @Override
-                public boolean onPreDraw() {
-                    cardViewDeckList.getViewTreeObserver().removeOnPreDrawListener(this);
-                    mCardViewFullHeightDeckList = cardViewDeckList.getHeight();
+        cardViewDeckList.setVisibility(View.GONE);
+        if (deckList.size() > 0) {
+            cardViewDeckList.setVisibility(View.VISIBLE);
+            if (mCardViewFullHeightDeckList == 0) {
+                cardViewDeckList.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                    @Override
+                    public boolean onPreDraw() {
+                        cardViewDeckList.getViewTreeObserver().removeOnPreDrawListener(this);
+                        mCardViewFullHeightDeckList = cardViewDeckList.getHeight();
 
-                    textTitleDeckListCard.setTextColor(ContextCompat.getColor(PlayerActivity.this, R.color.secondary_color));
-                    indicatorDeckListCard.setImageDrawable(ContextCompat.getDrawable(PlayerActivity.this, R.drawable.arrow_up));
-                    indicatorDeckListCard.setRotation(0);
-                    indicatorDeckListCard.startAnimation(AnimationUtils.loadAnimation(PlayerActivity.this, R.anim.rotate_180_anticlockwise));
-                    indicatorDeckListCard.setColorFilter(ContextCompat.getColor(PlayerActivity.this, R.color.secondary_color));
-                    return true;
-                }
-            });
+                        textTitleDeckListCard.setTextColor(ContextCompat.getColor(PlayerActivity.this, R.color.secondary_color));
+                        indicatorDeckListCard.setImageDrawable(ContextCompat.getDrawable(PlayerActivity.this, R.drawable.arrow_up));
+                        indicatorDeckListCard.setRotation(0);
+                        indicatorDeckListCard.startAnimation(AnimationUtils.loadAnimation(PlayerActivity.this, R.anim.rotate_180_anticlockwise));
+                        indicatorDeckListCard.setColorFilter(ContextCompat.getColor(PlayerActivity.this, R.color.secondary_color));
+                        return true;
+                    }
+                });
+            }
         }
 
         //Card last game player

@@ -86,69 +86,18 @@ public class RecordsDataAccessObject {
         return recordList;
     }
 
-//    public List<Record> getAllFirstPlaceRecordsByPlayerName(String deckOwnerName) {
-//        List<Record> recordList = new ArrayList<>();
-//        Cursor cursor = database.query(
-//                RecordsContract.RecordsEntry.TABLE_NAME,
-//                null,
-//                RecordsContract.RecordsEntry.COLUMN_FIRST_PLAYER_NAME + " LIKE ?",
-//                new String[]{deckOwnerName},
-//                null,
-//                null,
-//                null
-//        );
-//
-//        cursor.moveToFirst();
-//        while (!cursor.isAfterLast()) {
-//            recordList.add(cursorToRecord(cursor));
-//            cursor.moveToNext();
-//        }
-//        cursor.close();
-//        return recordList;
-//    }
-//
-//    public List<Record> getAllFourthPlaceRecordsByDeck(Deck deck) {
-//        List<Record> recordList = new ArrayList<>();
-//        Cursor cursor = database.query(
-//                RecordsContract.RecordsEntry.TABLE_NAME,
-//                null,
-//                RecordsContract.RecordsEntry.COLUMN_FOURTH_PLAYER_NAME + " LIKE ? AND "
-//                        + RecordsContract.RecordsEntry.COLUMN_FOURTH_PLAYER_DECK + " LIKE ?",
-//                new String[]{deck.getDeckOwnerName(), deck.getDeckName()},
-//                null,
-//                null,
-//                null
-//        );
-//
-//        cursor.moveToFirst();
-//        while (!cursor.isAfterLast()) {
-//            recordList.add(cursorToRecord(cursor));
-//            cursor.moveToNext();
-//        }
-//        cursor.close();
-//        return recordList;
-//    }
-//
-//    public List<Record> getAllFourthPlaceRecordsByPlayerName(String deckOwnerName) {
-//        List<Record> recordList = new ArrayList<>();
-//        Cursor cursor = database.query(
-//                RecordsContract.RecordsEntry.TABLE_NAME,
-//                null,
-//                RecordsContract.RecordsEntry.COLUMN_FOURTH_PLAYER_NAME + " LIKE ?",
-//                new String[]{deckOwnerName},
-//                null,
-//                null,
-//                null
-//        );
-//
-//        cursor.moveToFirst();
-//        while (!cursor.isAfterLast()) {
-//            recordList.add(cursorToRecord(cursor));
-//            cursor.moveToNext();
-//        }
-//        cursor.close();
-//        return recordList;
-//    }
+    public List<Record> getAllRecords(int totalPlayers) {
+        List<Record> recordList = new ArrayList<>();
+        Cursor cursor = database.query(RecordsContract.RecordsEntry.TABLE_NAME, null, RecordsContract.RecordsEntry.COLUMN_TOTAL_PLAYERS + " LIKE ?", new String[]{String.valueOf(totalPlayers)}, null, null, null);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            recordList.add(cursorToRecord(cursor));
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return recordList;
+    }
 
     public List<Record> getAllRecordsByDeck(Deck deck) {
         List<Record> recordList = new ArrayList<>();

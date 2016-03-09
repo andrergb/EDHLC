@@ -60,20 +60,20 @@ public class Utils {
 
     public static void toggleCardExpansion(Context context, final CardView card, TextView title, ImageView selector, int minHeight, int maxHeight) {
         if (card.getHeight() == minHeight) {
-            expand(context, card, title, selector, maxHeight);
+            expand(context, card, title, selector, minHeight, maxHeight);
         } else {
-            collapse(context, card, title, selector, minHeight);
+            collapse(context, card, title, selector, minHeight, maxHeight);
         }
     }
 
-    public static void collapse(Context context, final CardView card, TextView title, ImageView selector, int minHeight) {
+    public static void collapse(Context context, final CardView card, TextView title, ImageView selector, int minHeight, int maxHeight) {
         title.setTextColor(ContextCompat.getColor(context, R.color.secondary_text));
 
         Animation rotation = AnimationUtils.loadAnimation(context, R.anim.rotate_180_clockwise);
         selector.startAnimation(rotation);
         selector.setColorFilter(ContextCompat.getColor(context, R.color.secondary_text));
 
-        ValueAnimator anim = ValueAnimator.ofInt(card.getMeasuredHeightAndState(), minHeight);
+        ValueAnimator anim = ValueAnimator.ofInt(maxHeight, minHeight);
         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
@@ -262,7 +262,7 @@ public class Utils {
         }
     }
 
-    public static void expand(Context context, final CardView card, TextView title, ImageView selector, int maxHeight) {
+    public static void expand(Context context, final CardView card, TextView title, ImageView selector, int minHeight, int maxHeight) {
         title.setTextColor(ContextCompat.getColor(context, R.color.secondary_color));
 
         Animation rotation = AnimationUtils.loadAnimation(context, R.anim.rotate_180_anticlockwise);
@@ -271,7 +271,7 @@ public class Utils {
         selector.startAnimation(rotation);
         selector.setColorFilter(ContextCompat.getColor(context, R.color.secondary_color));
 
-        ValueAnimator anim = ValueAnimator.ofInt(card.getMeasuredHeightAndState(), maxHeight);
+        ValueAnimator anim = ValueAnimator.ofInt(minHeight, maxHeight);
         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {

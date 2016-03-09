@@ -27,8 +27,16 @@
                 <include
                     layout="@layout/card_record2_list">
                 </include>
+
                 <!-- Card2 -->
+                <include
+                    layout="@layout/card_record3_list">
+                </include>
+
                 <!-- Card3 -->
+                <include
+                    layout="@layout/card_record4_list">
+                </include>
 
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
