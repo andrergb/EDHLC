@@ -5,24 +5,28 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-public class MainFragmentPagerAdapter extends FragmentPagerAdapter {
-    final int PAGE_COUNT = 4;
+import java.util.List;
+
+//http://stackoverflow.com/questions/7263291/viewpager-pageradapter-not-updating-the-view
+public class MainPagerAdapter extends FragmentPagerAdapter {
     private String tabTitles[] = new String[]{"Tab1", "Tab2", "Tab3", "Tab4"};
     private Context context;
+    private List<MainFragment> fragments;
 
-    public MainFragmentPagerAdapter(FragmentManager fm, Context context) {
+    public MainPagerAdapter(FragmentManager fm, Context context, List<MainFragment> fragments) {
         super(fm);
         this.context = context;
+        this.fragments = fragments;
     }
 
     @Override
     public int getCount() {
-        return PAGE_COUNT;
+        return this.fragments.size();
     }
 
     @Override
     public Fragment getItem(int position) {
-        return MainFragment.newInstance(position + 1);
+        return this.fragments.get(position);
     }
 
     @Override

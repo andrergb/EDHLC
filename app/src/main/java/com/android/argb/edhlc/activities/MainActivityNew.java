@@ -25,6 +25,11 @@ import android.widget.Switch;
 import com.android.argb.edhlc.Constants;
 import com.android.argb.edhlc.R;
 import com.android.argb.edhlc.Utils;
+import com.android.argb.edhlc.objects.ActivePlayerNew;
+import com.android.argb.edhlc.objects.Deck;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivityNew extends AppCompatActivity {
 
@@ -38,14 +43,23 @@ public class MainActivityNew extends AppCompatActivity {
     private Menu optionMenu;
     private View statusBarBackground;
 
+    private MainPagerAdapter mPagerAdapter;
+    private ViewPager viewPager;
+    private List<MainFragment> fragments;
+
+    //Players
+    private ActivePlayerNew activePlayer1;
+    private ActivePlayerNew activePlayer2;
+    private ActivePlayerNew activePlayer3;
+    private ActivePlayerNew activePlayer4;
+
+
     @Override
     public void onBackPressed() {
         if (mPlayerDrawerLayout.isDrawerOpen(mPlayerDrawer))
             mPlayerDrawerLayout.closeDrawers();
-        else {
+        else
             super.onBackPressed();
-            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-        }
     }
 
     public void onClickDrawerItem(View view) {
@@ -127,8 +141,20 @@ public class MainActivityNew extends AppCompatActivity {
         createDrawer();
         createLayout();
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewPagerMain);
-        viewPager.setAdapter(new MainFragmentPagerAdapter(getSupportFragmentManager(), MainActivityNew.this));
+        activePlayer1 = null;
+        activePlayer2 = null;
+        activePlayer3 = null;
+        activePlayer4 = null;
+
+        fragments = new ArrayList<>();
+        fragments.add(MainFragment.newInstance(activePlayer1));
+        fragments.add(MainFragment.newInstance(activePlayer2));
+        fragments.add(MainFragment.newInstance(activePlayer3));
+        fragments.add(MainFragment.newInstance(activePlayer4));
+        mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager(), MainActivityNew.this, fragments);
+
+        viewPager = (ViewPager) findViewById(R.id.viewPagerMain);
+        viewPager.setAdapter(mPagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
@@ -151,7 +177,6 @@ public class MainActivityNew extends AppCompatActivity {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             switchScreen.setChecked(false);
         }
-
     }
 
     private void createDrawer() {
@@ -221,4 +246,15 @@ public class MainActivityNew extends AppCompatActivity {
         mActionBar.setHomeButtonEnabled(true);
         mActionBar.setTitle("a");
     }
+
+    //TODO test method :)
+    public void onClickInfo(View view) {
+        getCurrentFragment().updateFragmentData(
+                new ActivePlayerNew(new Deck("PlayerName " + viewPager.getCurrentItem(), "DeckName " + viewPager.getCurrentItem()), true, 40, 0, 0, 0, 0, 1));
+    }
+
+    private MainFragment getCurrentFragment(){
+       return fragments.get(viewPager.getCurrentItem());
+    }
+
 }
