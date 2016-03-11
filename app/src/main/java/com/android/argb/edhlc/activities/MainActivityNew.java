@@ -31,7 +31,7 @@ import com.android.argb.edhlc.objects.Deck;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivityNew extends AppCompatActivity {
+public class MainActivityNew extends AppCompatActivity implements MainFragment.OnUpdateData {
 
     ///Drawer
     private DrawerLayout mPlayerDrawerLayout;
@@ -43,16 +43,16 @@ public class MainActivityNew extends AppCompatActivity {
     private Menu optionMenu;
     private View statusBarBackground;
 
-    private MainPagerAdapter mPagerAdapter;
     private ViewPager viewPager;
+    private TabLayout tabLayout;
     private List<MainFragment> fragments;
+    private MainPagerAdapter mPagerAdapter;
 
     //Players
     private ActivePlayerNew activePlayer1;
     private ActivePlayerNew activePlayer2;
     private ActivePlayerNew activePlayer3;
     private ActivePlayerNew activePlayer4;
-
 
     @Override
     public void onBackPressed() {
@@ -132,6 +132,30 @@ public class MainActivityNew extends AppCompatActivity {
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("TAB_POSITION", tabLayout.getSelectedTabPosition());
+    }
+
+    @Override
+    public void iUpdateActivePlayer(ActivePlayerNew activePlayer) {
+        switch (activePlayer.getPlayerTag()) {
+            case 1:
+                activePlayer1 = activePlayer;
+                break;
+            case 2:
+                activePlayer2 = activePlayer;
+                break;
+            case 3:
+                activePlayer3 = activePlayer;
+                break;
+            case 4:
+                activePlayer4 = activePlayer;
+                break;
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_new);
@@ -141,10 +165,11 @@ public class MainActivityNew extends AppCompatActivity {
         createDrawer();
         createLayout();
 
-        activePlayer1 = null;
-        activePlayer2 = null;
-        activePlayer3 = null;
-        activePlayer4 = null;
+        //(Deck deck, boolean playerIsAlive, int life, int edh1, int edh2, int edh3, int edh4, int playerTag)
+        activePlayer1 = new ActivePlayerNew(new Deck("player1", "deck1"), true, 40, 0, 0, 0, 0, 1);
+        activePlayer2 = new ActivePlayerNew(new Deck("player2", "deck2"), true, 40, 0, 0, 0, 0, 2);
+        activePlayer3 = new ActivePlayerNew(new Deck("player3", "deck3"), true, 40, 0, 0, 0, 0, 3);
+        activePlayer4 = new ActivePlayerNew(new Deck("player4", "deck4"), true, 40, 0, 0, 0, 0, 4);
 
         fragments = new ArrayList<>();
         fragments.add(MainFragment.newInstance(activePlayer1));
@@ -156,15 +181,20 @@ public class MainActivityNew extends AppCompatActivity {
         viewPager = (ViewPager) findViewById(R.id.viewPagerMain);
         viewPager.setAdapter(mPagerAdapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
     }
-
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         mDrawerToggle.syncState();
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        viewPager.setCurrentItem(savedInstanceState.getInt("TAB_POSITION"));
     }
 
     @Override
@@ -246,15 +276,4 @@ public class MainActivityNew extends AppCompatActivity {
         mActionBar.setHomeButtonEnabled(true);
         mActionBar.setTitle("a");
     }
-
-    //TODO test method :)
-    public void onClickInfo(View view) {
-        getCurrentFragment().updateFragmentData(
-                new ActivePlayerNew(new Deck("PlayerName " + viewPager.getCurrentItem(), "DeckName " + viewPager.getCurrentItem()), true, 40, 0, 0, 0, 0, 1));
-    }
-
-    private MainFragment getCurrentFragment(){
-       return fragments.get(viewPager.getCurrentItem());
-    }
-
 }
