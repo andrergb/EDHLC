@@ -55,6 +55,24 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
     private ActivePlayerNew activePlayer4;
 
     @Override
+    public void iUpdateActivePlayer(ActivePlayerNew activePlayer) {
+        switch (activePlayer.getPlayerTag()) {
+            case 1:
+                activePlayer1 = activePlayer;
+                break;
+            case 2:
+                activePlayer2 = activePlayer;
+                break;
+            case 3:
+                activePlayer3 = activePlayer;
+                break;
+            case 4:
+                activePlayer4 = activePlayer;
+                break;
+        }
+    }
+
+    @Override
     public void onBackPressed() {
         if (mPlayerDrawerLayout.isDrawerOpen(mPlayerDrawer))
             mPlayerDrawerLayout.closeDrawers();
@@ -138,24 +156,6 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
     }
 
     @Override
-    public void iUpdateActivePlayer(ActivePlayerNew activePlayer) {
-        switch (activePlayer.getPlayerTag()) {
-            case 1:
-                activePlayer1 = activePlayer;
-                break;
-            case 2:
-                activePlayer2 = activePlayer;
-                break;
-            case 3:
-                activePlayer3 = activePlayer;
-                break;
-            case 4:
-                activePlayer4 = activePlayer;
-                break;
-        }
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_new);
@@ -166,10 +166,10 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
         createLayout();
 
         //(Deck deck, boolean playerIsAlive, int life, int edh1, int edh2, int edh3, int edh4, int playerTag)
-        activePlayer1 = new ActivePlayerNew(new Deck("player1", "deck1"), true, 40, 0, 0, 0, 0, 1);
-        activePlayer2 = new ActivePlayerNew(new Deck("player2", "deck2"), true, 40, 0, 0, 0, 0, 2);
-        activePlayer3 = new ActivePlayerNew(new Deck("player3", "deck3"), true, 40, 0, 0, 0, 0, 3);
-        activePlayer4 = new ActivePlayerNew(new Deck("player4", "deck4"), true, 40, 0, 0, 0, 0, 4);
+        activePlayer1 = new ActivePlayerNew(new Deck("player1", "deck1", new int[]{0xFFFF0000}), true, 40, 0, 0, 0, 0, 1);
+        activePlayer2 = new ActivePlayerNew(new Deck("player2", "deck2", new int[]{0xFF00FF00}), true, 40, 0, 0, 0, 0, 2);
+        activePlayer3 = new ActivePlayerNew(new Deck("player3", "deck3", new int[]{0xFF0000FF}), true, 40, 0, 0, 0, 0, 3);
+        activePlayer4 = new ActivePlayerNew(new Deck("player4", "deck4", new int[]{0xFFFF00FF}), true, 40, 0, 0, 0, 0, 4);
 
         fragments = new ArrayList<>();
         fragments.add(MainFragment.newInstance(activePlayer1));
@@ -180,6 +180,7 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
 
         viewPager = (ViewPager) findViewById(R.id.viewPagerMain);
         viewPager.setAdapter(mPagerAdapter);
+        viewPager.setOffscreenPageLimit(fragments.size());
 
         tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
@@ -274,6 +275,5 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
         mActionBar.setDisplayShowTitleEnabled(true);
         mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setHomeButtonEnabled(true);
-        mActionBar.setTitle("a");
     }
 }
