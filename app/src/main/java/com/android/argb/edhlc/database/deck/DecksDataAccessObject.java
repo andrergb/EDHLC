@@ -97,6 +97,19 @@ public class DecksDataAccessObject {
         return deckList.get(0);
     }
 
+
+    public boolean hasDeck(Deck deck) {
+        return database.query(
+                DecksContract.DecksEntry.TABLE_NAME,
+                null,
+                DecksContract.DecksEntry.COLUMN_PLAYER_NAME + " LIKE ? AND " + DecksContract.DecksEntry.COLUMN_DECK_NAME + " LIKE ?",
+                new String[]{deck.getDeckOwnerName(), deck.getDeckName()},
+                null,
+                null,
+                null
+        ).getCount() > 0;
+    }
+
     public boolean isDeckAdded(Deck deck) {
         Cursor cursor = database.query(
                 DecksContract.DecksEntry.TABLE_NAME,

@@ -23,17 +23,20 @@ public class Constants {
     public static String CURRENT_PAGE = "CURRENT_PAGE";
     public static String CURRENT_PAGE_TURN = "CURRENT_PAGE_TURN";
     public static String PREFERENCE_NAME = "PREF_EDH_LC";
-    public static String PLAYER_NAME = "PLAYER_NAME";
-    public static String PLAYER_DECK = "PLAYER_DECK";
-    public static String PLAYER_IS_ALIVE = "PLAYER_IS_ALIVE";
-    public static String PLAYER_LIFE = "PLAYER_LIFE";
+
     public static String PLAYER_HISTORY_LIFE = "PLAYER_HISTORY_LIFE";
     public static String PLAYER_EDH_PREFIX = "PLAYER_EDH";
-    public static String PLAYER_EDH1 = "PLAYER_EDH1";
-    public static String PLAYER_EDH2 = "PLAYER_EDH2";
-    public static String PLAYER_EDH3 = "PLAYER_EDH3";
-    public static String PLAYER_EDH4 = "PLAYER_EDH4";
-    public static String PLAYER_COLOR1 = "PLAYER_COLOR1";
+
+    public static String CURRENT_GAME_TOTAL_PLAYERS = "CURRENT_GAME_TOTAL_PLAYERS";
+    public static String CURRENT_GAME_PLAYER_NAME = "CURRENT_GAME_PLAYER_NAME";
+    public static String CURRENT_GAME_PLAYER_DECK = "CURRENT_GAME_PLAYER_DECK";
+    public static String CURRENT_GAME_PLAYER_IS_ALIVE = "CURRENT_GAME_PLAYER_IS_ALIVE";
+    public static String CURRENT_GAME_PLAYER_LIFE = "CURRENT_GAME_PLAYER_LIFE";
+    public static String CURRENT_GAME_PLAYER_EDH1 = "CURRENT_GAME_PLAYER_EDH1";
+    public static String CURRENT_GAME_PLAYER_EDH2 = "CURRENT_GAME_PLAYER_EDH2";
+    public static String CURRENT_GAME_PLAYER_EDH3 = "CURRENT_GAME_PLAYER_EDH3";
+    public static String CURRENT_GAME_PLAYER_EDH4 = "CURRENT_GAME_PLAYER_EDH4";
+    public static String CURRENT_GAME_PLAYER_COLOR1 = "CURRENT_GAME_PLAYER_COLOR1";
     public static String PLAYER_COLOR2 = "PLAYER_COLOR2";
 
     public static String BROADCAST_INTENT = "broadcast_intent_filter_new_game";

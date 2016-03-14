@@ -1,10 +1,13 @@
 package com.android.argb.edhlc.activities;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -20,12 +23,16 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
 
 import com.android.argb.edhlc.Constants;
 import com.android.argb.edhlc.R;
 import com.android.argb.edhlc.Utils;
+import com.android.argb.edhlc.database.deck.DecksDataAccessObject;
+import com.android.argb.edhlc.database.player.PlayersDataAccessObject;
 import com.android.argb.edhlc.objects.ActivePlayerNew;
+import com.android.argb.edhlc.objects.Deck;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +55,7 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
     private MainPagerAdapter mPagerAdapter;
 
     //Players
+    private int totalPlayers;
     private ActivePlayerNew activePlayer1;
     private ActivePlayerNew activePlayer2;
     private ActivePlayerNew activePlayer3;
@@ -92,7 +100,6 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
                 Intent intentHome = new Intent(this, MainActivity.class);
                 intentHome.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intentHome);
-                this.finish();
                 break;
 
             case R.id.drawerItemPlayers:
@@ -100,13 +107,11 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
                 Intent intentPlayerList = new Intent(this, PlayerListActivity.class);
                 intentPlayerList.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intentPlayerList);
-                this.finish();
                 break;
 
             case R.id.drawerItemRecords:
                 mPlayerDrawerLayout.closeDrawers();
                 startActivity(new Intent(this, RecordsActivity.class));
-                finish();
                 break;
 
             case R.id.drawerItemScreen:
@@ -123,7 +128,6 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
             case R.id.drawerItemSettings:
                 mPlayerDrawerLayout.closeDrawers();
                 startActivity(new Intent(this, SettingsActivity.class));
-                finish();
                 break;
 
             case R.id.drawerItemAbout:
@@ -157,7 +161,8 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt("TAB_POSITION", tabLayout.getSelectedTabPosition());
+        if (tabLayout != null)
+            outState.putInt("TAB_POSITION", tabLayout.getSelectedTabPosition());
     }
 
     @Override
@@ -170,30 +175,8 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
         createDrawer();
         createLayout();
 
-//        activePlayer1 = new ActivePlayerNew(new Deck("player1", "deck1", new int[]{0xFFFF0000}), true, 41, 0, 0, 0, 0, 0);
-//        activePlayer2 = new ActivePlayerNew(new Deck("player2", "deck2", new int[]{0xFF00FF00}), true, 42, 0, 0, 0, 0, 1);
-//        activePlayer3 = new ActivePlayerNew(new Deck("player3", "deck3", new int[]{0xFF0000FF}), true, 43, 0, 0, 0, 0, 2);
-//        activePlayer4 = new ActivePlayerNew(new Deck("player4", "deck4", new int[]{0xFFFF00FF}), true, 44, 0, 0, 0, 0, 3);
-
-        //TODO check if all loaded players exists in DB. if not, call new game activity.
-        activePlayer1 = Utils.loadPlayerFromSharedPreferences(this, 0);
-        activePlayer2 = Utils.loadPlayerFromSharedPreferences(this, 1);
-        activePlayer3 = Utils.loadPlayerFromSharedPreferences(this, 2);
-        activePlayer4 = Utils.loadPlayerFromSharedPreferences(this, 3);
-
-        fragments = new ArrayList<>();
-        fragments.add(MainFragment.newInstance(activePlayer1, 4));
-        fragments.add(MainFragment.newInstance(activePlayer2, 4));
-        fragments.add(MainFragment.newInstance(activePlayer3, 4));
-        fragments.add(MainFragment.newInstance(activePlayer4, 4));
-        mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager(), MainActivityNew.this, fragments);
-
-        viewPager = (ViewPager) findViewById(R.id.viewPagerMain);
-        viewPager.setAdapter(mPagerAdapter);
-        viewPager.setOffscreenPageLimit(fragments.size());
-
-        tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
-        tabLayout.setupWithViewPager(viewPager);
+        SharedPreferences mSharedPreferences = getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE);
+        totalPlayers = mSharedPreferences.getInt(Constants.CURRENT_GAME_TOTAL_PLAYERS, 4);
     }
 
     @Override
@@ -203,9 +186,10 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        viewPager.setCurrentItem(savedInstanceState.getInt("TAB_POSITION"));
+        if (viewPager != null)
+            viewPager.setCurrentItem(savedInstanceState.getInt("TAB_POSITION"));
     }
 
     @Override
@@ -219,20 +203,87 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
             switchScreen.setChecked(false);
         }
 
-        //TODO check if all loaded players exists in DB. if not, call new game activity.
-//        activePlayer1 = new ActivePlayerNew(new Deck("player1", "deck1", new int[]{0xFFFF0000}), true, 1, 0, 0, 0, 0, 0);
-//        activePlayer2 = new ActivePlayerNew(new Deck("player2", "deck2", new int[]{0xFF00FF00}), true, 2, 0, 0, 0, 0, 1);
-//        activePlayer3 = new ActivePlayerNew(new Deck("player3", "deck3", new int[]{0xFF0000FF}), true, 3, 0, 0, 0, 0, 2);
-//        activePlayer4 = new ActivePlayerNew(new Deck("player4", "deck4", new int[]{0xFFFF00FF}), true, 4, 0, 0, 0, 0, 3);
-        //mPagerAdapter.notifyDataSetChanged();
+        //TODO enhance layout
+        RelativeLayout viewPagerMainNewGame = (RelativeLayout) findViewById(R.id.viewPagerMainNewGame);
+
+        viewPager = (ViewPager) findViewById(R.id.viewPagerMain);
+
+        tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+
+        if (!isValidGame()) {
+            viewPagerMainNewGame.setVisibility(View.VISIBLE);
+            viewPager.setVisibility(View.GONE);
+            tabLayout.setVisibility(View.GONE);
+        } else {
+            viewPagerMainNewGame.setVisibility(View.GONE);
+
+            activePlayer1 = Utils.loadPlayerFromSharedPreferences(this, 0);
+            activePlayer2 = Utils.loadPlayerFromSharedPreferences(this, 1);
+            if (totalPlayers >= 3)
+                activePlayer3 = Utils.loadPlayerFromSharedPreferences(this, 2);
+            if (totalPlayers >= 4)
+                activePlayer4 = Utils.loadPlayerFromSharedPreferences(this, 3);
+
+            fragments = new ArrayList<>();
+            fragments.add(MainFragment.newInstance(activePlayer1, totalPlayers));
+            fragments.add(MainFragment.newInstance(activePlayer2, totalPlayers));
+            if (totalPlayers >= 3)
+                fragments.add(MainFragment.newInstance(activePlayer3, totalPlayers));
+            if (totalPlayers >= 4)
+                fragments.add(MainFragment.newInstance(activePlayer4, totalPlayers));
+            mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager(), MainActivityNew.this, fragments);
+
+            viewPager.setVisibility(View.VISIBLE);
+            viewPager.setAdapter(mPagerAdapter);
+            viewPager.setOffscreenPageLimit(fragments.size());
+
+            tabLayout.setVisibility(View.VISIBLE);
+            tabLayout.setupWithViewPager(viewPager);
+        }
+    }
+
+    public void onClickNewGame(View view) {
+        //TODO just for test -> populate shared on new game activity
+        Utils.savePlayerInSharedPreferences(this, new ActivePlayerNew(new Deck("Player 0", "Deck 0", new int[]{0xFFFF0000}), true, 41, 0, 0, 0, 0, 0));
+        Utils.savePlayerInSharedPreferences(this, new ActivePlayerNew(new Deck("Player 1", "Deck 1", new int[]{0xFFFF0000}), true, 41, 0, 0, 0, 0, 1));
+        Utils.savePlayerInSharedPreferences(this, new ActivePlayerNew(new Deck("Player 2", "Deck 2", new int[]{0xFFFF0000}), true, 41, 0, 0, 0, 0, 2));
+        Utils.savePlayerInSharedPreferences(this, new ActivePlayerNew(new Deck("Player 3", "Deck 3", new int[]{0xFFFF0000}), true, 41, 0, 0, 0, 0, 3));
+
+        //TODO new game activity
+        startActivity(new Intent(this, MainActivityNew.class));
+        this.finish();
+    }
+
+    public boolean isValidGame() {
+        boolean isValid = true;
+        DecksDataAccessObject deckDb = new DecksDataAccessObject(this);
+        PlayersDataAccessObject playersDB = new PlayersDataAccessObject(this);
+
+        deckDb.open();
+        playersDB.open();
+
+        for (int i = 0; i < totalPlayers; i++) {
+            ActivePlayerNew auxPlayer = Utils.loadPlayerFromSharedPreferences(this, i);
+            if (!deckDb.hasDeck(auxPlayer.getPlayerDeck()) || !playersDB.hasPlayer(auxPlayer.getPlayerDeck().getDeckOwnerName())) {
+                isValid = false;
+            }
+        }
+
+        playersDB.close();
+        deckDb.close();
+        return isValid;
     }
 
     @Override
     protected void onStop() {
-        Utils.savePlayerInSharedPreferences(this, activePlayer1);
-        Utils.savePlayerInSharedPreferences(this, activePlayer2);
-        Utils.savePlayerInSharedPreferences(this, activePlayer3);
-        Utils.savePlayerInSharedPreferences(this, activePlayer4);
+        if (activePlayer1 != null)
+            Utils.savePlayerInSharedPreferences(this, activePlayer1);
+        if (activePlayer2 != null)
+            Utils.savePlayerInSharedPreferences(this, activePlayer2);
+        if (totalPlayers >= 3 && activePlayer3 != null)
+            Utils.savePlayerInSharedPreferences(this, activePlayer3);
+        if (totalPlayers >= 4 && activePlayer4 != null)
+            Utils.savePlayerInSharedPreferences(this, activePlayer4);
 
         super.onStop();
     }
@@ -462,4 +513,5 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
 
         return false;
     }
+
 }

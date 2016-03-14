@@ -92,6 +92,18 @@ public class PlayersDataAccessObject {
         return playerList;
     }
 
+    public boolean hasPlayer(String playerName) {
+        return database.query(
+                PlayersContract.PlayersEntry.TABLE_NAME,
+                null,
+                PlayersContract.PlayersEntry.COLUMN_PLAYER_NAME + " LIKE ?",
+                new String[]{playerName},
+                null,
+                null,
+                null
+        ).getCount() > 0;
+    }
+
     public boolean isPlayerAdded(String playerName) {
         Cursor cursor = database.query(
                 PlayersContract.PlayersEntry.TABLE_NAME,

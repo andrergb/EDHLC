@@ -37,30 +37,30 @@ public class ActivePlayer {
 
     public static void savePlayerSharedPreferences(Activity activity, ActivePlayer activePlayer) {
         SharedPreferences.Editor editor = activity.getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit();
-        editor.putString(activePlayer.getPlayerTag() + Constants.PLAYER_NAME, activePlayer.getPlayerName());
-        editor.putString(activePlayer.getPlayerTag() + Constants.PLAYER_DECK, activePlayer.getPlayerDeck());
-        editor.putBoolean(activePlayer.getPlayerTag() + Constants.PLAYER_IS_ALIVE, activePlayer.getPlayerIsAlive());
-        editor.putInt(activePlayer.getPlayerTag() + Constants.PLAYER_LIFE, activePlayer.getPlayerLife());
-        editor.putInt(activePlayer.getPlayerTag() + Constants.PLAYER_EDH1, activePlayer.getPlayerEDH1());
-        editor.putInt(activePlayer.getPlayerTag() + Constants.PLAYER_EDH2, activePlayer.getPlayerEDH2());
-        editor.putInt(activePlayer.getPlayerTag() + Constants.PLAYER_EDH3, activePlayer.getPlayerEDH3());
-        editor.putInt(activePlayer.getPlayerTag() + Constants.PLAYER_EDH4, activePlayer.getPlayerEDH4());
-        editor.putInt(activePlayer.getPlayerTag() + Constants.PLAYER_COLOR1, activePlayer.getPlayerColor()[0]);
+        editor.putString(activePlayer.getPlayerTag() + Constants.CURRENT_GAME_PLAYER_NAME, activePlayer.getPlayerName());
+        editor.putString(activePlayer.getPlayerTag() + Constants.CURRENT_GAME_PLAYER_DECK, activePlayer.getPlayerDeck());
+        editor.putBoolean(activePlayer.getPlayerTag() + Constants.CURRENT_GAME_PLAYER_IS_ALIVE, activePlayer.getPlayerIsAlive());
+        editor.putInt(activePlayer.getPlayerTag() + Constants.CURRENT_GAME_PLAYER_LIFE, activePlayer.getPlayerLife());
+        editor.putInt(activePlayer.getPlayerTag() + Constants.CURRENT_GAME_PLAYER_EDH1, activePlayer.getPlayerEDH1());
+        editor.putInt(activePlayer.getPlayerTag() + Constants.CURRENT_GAME_PLAYER_EDH2, activePlayer.getPlayerEDH2());
+        editor.putInt(activePlayer.getPlayerTag() + Constants.CURRENT_GAME_PLAYER_EDH3, activePlayer.getPlayerEDH3());
+        editor.putInt(activePlayer.getPlayerTag() + Constants.CURRENT_GAME_PLAYER_EDH4, activePlayer.getPlayerEDH4());
+        editor.putInt(activePlayer.getPlayerTag() + Constants.CURRENT_GAME_PLAYER_COLOR1, activePlayer.getPlayerColor()[0]);
         editor.putInt(activePlayer.getPlayerTag() + Constants.PLAYER_COLOR2, activePlayer.getPlayerColor()[1]);
         editor.commit();
     }
 
     public static ActivePlayer loadPlayerSharedPreferences(Activity activity, int tag) {
         SharedPreferences prefs = activity.getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE);
-        String pName = prefs.getString(tag + Constants.PLAYER_NAME, "ActivePlayer " + tag);
-        String pPlayerDeck = prefs.getString(tag + Constants.PLAYER_DECK, "Deck" + tag);
-        boolean pIsAlive = prefs.getBoolean(tag + Constants.PLAYER_IS_ALIVE, true);
-        int pLife = prefs.getInt(tag + Constants.PLAYER_LIFE, 40);
-        int pEDH1 = prefs.getInt(tag + Constants.PLAYER_EDH1, 0);
-        int pEDH2 = prefs.getInt(tag + Constants.PLAYER_EDH2, 0);
-        int pEDH3 = prefs.getInt(tag + Constants.PLAYER_EDH3, 0);
-        int pEDH4 = prefs.getInt(tag + Constants.PLAYER_EDH4, 0);
-        int[] pColor = {prefs.getInt(tag + Constants.PLAYER_COLOR1, 0), prefs.getInt(tag + Constants.PLAYER_COLOR2, 0)};
+        String pName = prefs.getString(tag + Constants.CURRENT_GAME_PLAYER_NAME, "ActivePlayer " + tag);
+        String pPlayerDeck = prefs.getString(tag + Constants.CURRENT_GAME_PLAYER_DECK, "Deck" + tag);
+        boolean pIsAlive = prefs.getBoolean(tag + Constants.CURRENT_GAME_PLAYER_IS_ALIVE, true);
+        int pLife = prefs.getInt(tag + Constants.CURRENT_GAME_PLAYER_LIFE, 40);
+        int pEDH1 = prefs.getInt(tag + Constants.CURRENT_GAME_PLAYER_EDH1, 0);
+        int pEDH2 = prefs.getInt(tag + Constants.CURRENT_GAME_PLAYER_EDH2, 0);
+        int pEDH3 = prefs.getInt(tag + Constants.CURRENT_GAME_PLAYER_EDH3, 0);
+        int pEDH4 = prefs.getInt(tag + Constants.CURRENT_GAME_PLAYER_EDH4, 0);
+        int[] pColor = {prefs.getInt(tag + Constants.CURRENT_GAME_PLAYER_COLOR1, 0), prefs.getInt(tag + Constants.PLAYER_COLOR2, 0)};
 
         return new ActivePlayer(pName, pPlayerDeck, pIsAlive, pLife, pEDH1, pEDH2, pEDH3, pEDH4, pColor, tag);
     }
