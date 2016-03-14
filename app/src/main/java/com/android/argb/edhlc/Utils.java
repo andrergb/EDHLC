@@ -3,6 +3,7 @@ package com.android.argb.edhlc;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
@@ -21,6 +22,8 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.argb.edhlc.objects.ActivePlayerNew;
+import com.android.argb.edhlc.objects.Deck;
 import com.android.argb.edhlc.objects.Record;
 
 import java.util.Calendar;
@@ -440,6 +443,35 @@ public class Utils {
         DisplayMetrics metrics = resources.getDisplayMetrics();
         float px = dp * (metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
         return px;
+    }
+
+    public static void savePlayerInSharedPreferences(Activity activity, ActivePlayerNew activePlayer) {
+        SharedPreferences.Editor editor = activity.getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit();
+        editor.putString(activePlayer.getPlayerTag() + Constants.PLAYER_NAME, activePlayer.getPlayerDeck().getDeckOwnerName());
+        editor.putString(activePlayer.getPlayerTag() + Constants.PLAYER_DECK, activePlayer.getPlayerDeck().getDeckName());
+        editor.putInt(activePlayer.getPlayerTag() + Constants.PLAYER_COLOR1, activePlayer.getPlayerDeck().getDeckShieldColor()[0]);
+        editor.putBoolean(activePlayer.getPlayerTag() + Constants.PLAYER_IS_ALIVE, activePlayer.getPlayerIsAlive());
+        editor.putInt(activePlayer.getPlayerTag() + Constants.PLAYER_LIFE, activePlayer.getPlayerLife());
+        editor.putInt(activePlayer.getPlayerTag() + Constants.PLAYER_EDH1, activePlayer.getPlayerEDH1());
+        editor.putInt(activePlayer.getPlayerTag() + Constants.PLAYER_EDH2, activePlayer.getPlayerEDH2());
+        editor.putInt(activePlayer.getPlayerTag() + Constants.PLAYER_EDH3, activePlayer.getPlayerEDH3());
+        editor.putInt(activePlayer.getPlayerTag() + Constants.PLAYER_EDH4, activePlayer.getPlayerEDH4());
+        editor.commit();
+    }
+
+    public static ActivePlayerNew loadPlayerFromSharedPreferences(Activity activity, int tag) {
+        SharedPreferences prefs = activity.getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE);
+        String pName = prefs.getString(tag + Constants.PLAYER_NAME, "Player " + tag);
+        String pPlayerDeck = prefs.getString(tag + Constants.PLAYER_DECK, "Deck " + tag);
+        int[] pColor = {prefs.getInt(tag + Constants.PLAYER_COLOR1, ContextCompat.getColor(activity.getApplicationContext(), R.color.primary_color)), prefs.getInt(tag + Constants.PLAYER_COLOR1, ContextCompat.getColor(activity.getApplicationContext(), R.color.primary_color))};
+        boolean pIsAlive = prefs.getBoolean(tag + Constants.PLAYER_IS_ALIVE, true);
+        int pLife = prefs.getInt(tag + Constants.PLAYER_LIFE, 40);
+        int pEDH1 = prefs.getInt(tag + Constants.PLAYER_EDH1, 0);
+        int pEDH2 = prefs.getInt(tag + Constants.PLAYER_EDH2, 0);
+        int pEDH3 = prefs.getInt(tag + Constants.PLAYER_EDH3, 0);
+        int pEDH4 = prefs.getInt(tag + Constants.PLAYER_EDH4, 0);
+
+        return new ActivePlayerNew(new Deck(pName, pPlayerDeck, pColor), pIsAlive, pLife, pEDH1, pEDH2, pEDH3, pEDH4, tag);
     }
 
     public static void makeViewVisible(View view) {

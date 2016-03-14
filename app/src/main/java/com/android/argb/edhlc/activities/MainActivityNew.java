@@ -26,7 +26,6 @@ import com.android.argb.edhlc.Constants;
 import com.android.argb.edhlc.R;
 import com.android.argb.edhlc.Utils;
 import com.android.argb.edhlc.objects.ActivePlayerNew;
-import com.android.argb.edhlc.objects.Deck;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,19 +56,25 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
     @Override
     public void iUpdateActivePlayer(ActivePlayerNew activePlayer) {
         switch (activePlayer.getPlayerTag()) {
-            case 1:
+            case 0:
                 activePlayer1 = activePlayer;
                 break;
-            case 2:
+            case 1:
                 activePlayer2 = activePlayer;
                 break;
-            case 3:
+            case 2:
                 activePlayer3 = activePlayer;
                 break;
-            case 4:
+            case 3:
                 activePlayer4 = activePlayer;
                 break;
         }
+    }
+
+    @Override
+    public void iUpdateDethrone() {
+        for (int i = 0; i < fragments.size(); i++)
+            fragments.get(i).updateFragmentDethrone(isPlayerOnThrone(i));
     }
 
     @Override
@@ -165,17 +170,22 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
         createDrawer();
         createLayout();
 
-        //(Deck deck, boolean playerIsAlive, int life, int edh1, int edh2, int edh3, int edh4, int playerTag)
-        activePlayer1 = new ActivePlayerNew(new Deck("player1", "deck1", new int[]{0xFFFF0000}), true, 40, 0, 0, 0, 0, 1);
-        activePlayer2 = new ActivePlayerNew(new Deck("player2", "deck2", new int[]{0xFF00FF00}), true, 40, 0, 0, 0, 0, 2);
-        activePlayer3 = new ActivePlayerNew(new Deck("player3", "deck3", new int[]{0xFF0000FF}), true, 40, 0, 0, 0, 0, 3);
-        activePlayer4 = new ActivePlayerNew(new Deck("player4", "deck4", new int[]{0xFFFF00FF}), true, 40, 0, 0, 0, 0, 4);
+//        activePlayer1 = new ActivePlayerNew(new Deck("player1", "deck1", new int[]{0xFFFF0000}), true, 41, 0, 0, 0, 0, 0);
+//        activePlayer2 = new ActivePlayerNew(new Deck("player2", "deck2", new int[]{0xFF00FF00}), true, 42, 0, 0, 0, 0, 1);
+//        activePlayer3 = new ActivePlayerNew(new Deck("player3", "deck3", new int[]{0xFF0000FF}), true, 43, 0, 0, 0, 0, 2);
+//        activePlayer4 = new ActivePlayerNew(new Deck("player4", "deck4", new int[]{0xFFFF00FF}), true, 44, 0, 0, 0, 0, 3);
+
+        //TODO check if all loaded players exists in DB. if not, call new game activity.
+        activePlayer1 = Utils.loadPlayerFromSharedPreferences(this, 0);
+        activePlayer2 = Utils.loadPlayerFromSharedPreferences(this, 1);
+        activePlayer3 = Utils.loadPlayerFromSharedPreferences(this, 2);
+        activePlayer4 = Utils.loadPlayerFromSharedPreferences(this, 3);
 
         fragments = new ArrayList<>();
-        fragments.add(MainFragment.newInstance(activePlayer1));
-        fragments.add(MainFragment.newInstance(activePlayer2));
-        fragments.add(MainFragment.newInstance(activePlayer3));
-        fragments.add(MainFragment.newInstance(activePlayer4));
+        fragments.add(MainFragment.newInstance(activePlayer1, 4));
+        fragments.add(MainFragment.newInstance(activePlayer2, 4));
+        fragments.add(MainFragment.newInstance(activePlayer3, 4));
+        fragments.add(MainFragment.newInstance(activePlayer4, 4));
         mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager(), MainActivityNew.this, fragments);
 
         viewPager = (ViewPager) findViewById(R.id.viewPagerMain);
@@ -208,6 +218,23 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             switchScreen.setChecked(false);
         }
+
+        //TODO check if all loaded players exists in DB. if not, call new game activity.
+//        activePlayer1 = new ActivePlayerNew(new Deck("player1", "deck1", new int[]{0xFFFF0000}), true, 1, 0, 0, 0, 0, 0);
+//        activePlayer2 = new ActivePlayerNew(new Deck("player2", "deck2", new int[]{0xFF00FF00}), true, 2, 0, 0, 0, 0, 1);
+//        activePlayer3 = new ActivePlayerNew(new Deck("player3", "deck3", new int[]{0xFF0000FF}), true, 3, 0, 0, 0, 0, 2);
+//        activePlayer4 = new ActivePlayerNew(new Deck("player4", "deck4", new int[]{0xFFFF00FF}), true, 4, 0, 0, 0, 0, 3);
+        //mPagerAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onStop() {
+        Utils.savePlayerInSharedPreferences(this, activePlayer1);
+        Utils.savePlayerInSharedPreferences(this, activePlayer2);
+        Utils.savePlayerInSharedPreferences(this, activePlayer3);
+        Utils.savePlayerInSharedPreferences(this, activePlayer4);
+
+        super.onStop();
     }
 
     private void createDrawer() {
@@ -275,5 +302,164 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
         mActionBar.setDisplayShowTitleEnabled(true);
         mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setHomeButtonEnabled(true);
+    }
+
+    private boolean isPlayerActiveAndAlive(int i) {
+        if (fragments.size() < i)
+            return false;
+        else {
+            switch (i) {
+                case 1:
+                    return activePlayer1.getPlayerIsAlive();
+                case 2:
+                    return activePlayer2.getPlayerIsAlive();
+                case 3:
+                    return activePlayer3.getPlayerIsAlive();
+                case 4:
+                    return activePlayer4.getPlayerIsAlive();
+                default:
+                    return true;
+            }
+        }
+    }
+
+    private boolean isPlayerOnThrone(int playerTag) {
+        ActivePlayerNew auxPlayer = new ActivePlayerNew();
+        switch (playerTag) {
+            case 0:
+                auxPlayer = activePlayer1;
+                break;
+            case 1:
+                auxPlayer = activePlayer2;
+                break;
+            case 2:
+                auxPlayer = activePlayer3;
+                break;
+            case 3:
+                auxPlayer = activePlayer4;
+                break;
+        }
+
+        //P1
+        if (isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3) && !isPlayerActiveAndAlive(4))
+            if (auxPlayer.getPlayerTag() == 0)
+                return true;
+
+        //P2
+        if (!isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3) && !isPlayerActiveAndAlive(4))
+            if (auxPlayer.getPlayerTag() == 1)
+                return true;
+
+        //P3
+        if (!isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3) && !isPlayerActiveAndAlive(4))
+            if (auxPlayer.getPlayerTag() == 2)
+                return true;
+
+        //P4
+        if (!isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3) && isPlayerActiveAndAlive(4))
+            if (auxPlayer.getPlayerTag() == 3)
+                return true;
+
+        //P1 and P2
+        if (isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3) && !isPlayerActiveAndAlive(4)) {
+            if (auxPlayer.getPlayerTag() == 0 && activePlayer1.getPlayerLife() >= activePlayer2.getPlayerLife())
+                return true;
+            if (auxPlayer.getPlayerTag() == 1 && activePlayer2.getPlayerLife() >= activePlayer1.getPlayerLife())
+                return true;
+        }
+
+        //P1 and P3
+        if (isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3) && !isPlayerActiveAndAlive(4)) {
+            if (auxPlayer.getPlayerTag() == 0 && activePlayer1.getPlayerLife() >= activePlayer3.getPlayerLife())
+                return true;
+            if (auxPlayer.getPlayerTag() == 2 && activePlayer3.getPlayerLife() >= activePlayer1.getPlayerLife())
+                return true;
+        }
+
+        //P1 and P4
+        if (isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3) && isPlayerActiveAndAlive(4)) {
+            if (auxPlayer.getPlayerTag() == 0 && activePlayer1.getPlayerLife() >= activePlayer4.getPlayerLife())
+                return true;
+            if (auxPlayer.getPlayerTag() == 3 && activePlayer4.getPlayerLife() >= activePlayer1.getPlayerLife())
+                return true;
+        }
+
+        //P2 and P3
+        if (!isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3) && !isPlayerActiveAndAlive(4)) {
+            if (auxPlayer.getPlayerTag() == 1 && activePlayer2.getPlayerLife() >= activePlayer3.getPlayerLife())
+                return true;
+            if (auxPlayer.getPlayerTag() == 2 && activePlayer3.getPlayerLife() >= activePlayer2.getPlayerLife())
+                return true;
+        }
+
+        //P2 and P4
+        if (!isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3) && isPlayerActiveAndAlive(4)) {
+            if (auxPlayer.getPlayerTag() == 1 && activePlayer2.getPlayerLife() >= activePlayer4.getPlayerLife())
+                return true;
+            if (auxPlayer.getPlayerTag() == 3 && activePlayer4.getPlayerLife() >= activePlayer2.getPlayerLife())
+                return true;
+        }
+
+        //P3 and P4
+        if (!isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3) && isPlayerActiveAndAlive(4)) {
+            if (auxPlayer.getPlayerTag() == 2 && activePlayer3.getPlayerLife() >= activePlayer4.getPlayerLife())
+                return true;
+            if (auxPlayer.getPlayerTag() == 3 && activePlayer4.getPlayerLife() >= activePlayer3.getPlayerLife())
+                return true;
+        }
+
+        //P1, P2 and P3
+        if (isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3) && !isPlayerActiveAndAlive(4)) {
+            if (auxPlayer.getPlayerTag() == 0 && activePlayer1.getPlayerLife() >= activePlayer2.getPlayerLife() && activePlayer1.getPlayerLife() >= activePlayer3.getPlayerLife())
+                return true;
+            if (auxPlayer.getPlayerTag() == 1 && activePlayer2.getPlayerLife() >= activePlayer1.getPlayerLife() && activePlayer2.getPlayerLife() >= activePlayer3.getPlayerLife())
+                return true;
+            if (auxPlayer.getPlayerTag() == 2 && activePlayer3.getPlayerLife() >= activePlayer1.getPlayerLife() && activePlayer3.getPlayerLife() >= activePlayer2.getPlayerLife())
+                return true;
+        }
+
+        //P1, P2 and P4
+        if (isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3) && isPlayerActiveAndAlive(4)) {
+            if (auxPlayer.getPlayerTag() == 0 && activePlayer1.getPlayerLife() >= activePlayer2.getPlayerLife() && activePlayer1.getPlayerLife() >= activePlayer4.getPlayerLife())
+                return true;
+            if (auxPlayer.getPlayerTag() == 1 && activePlayer2.getPlayerLife() >= activePlayer1.getPlayerLife() && activePlayer2.getPlayerLife() >= activePlayer4.getPlayerLife())
+                return true;
+            if (auxPlayer.getPlayerTag() == 3 && activePlayer4.getPlayerLife() >= activePlayer1.getPlayerLife() && activePlayer4.getPlayerLife() >= activePlayer2.getPlayerLife())
+                return true;
+        }
+
+        //P1, P3 and P4
+        if (isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3) && isPlayerActiveAndAlive(4)) {
+            if (auxPlayer.getPlayerTag() == 0 && activePlayer1.getPlayerLife() >= activePlayer3.getPlayerLife() && activePlayer1.getPlayerLife() >= activePlayer4.getPlayerLife())
+                return true;
+            if (auxPlayer.getPlayerTag() == 2 && activePlayer3.getPlayerLife() >= activePlayer1.getPlayerLife() && activePlayer3.getPlayerLife() >= activePlayer4.getPlayerLife())
+                return true;
+            if (auxPlayer.getPlayerTag() == 3 && activePlayer4.getPlayerLife() >= activePlayer1.getPlayerLife() && activePlayer4.getPlayerLife() >= activePlayer3.getPlayerLife())
+                return true;
+        }
+
+        //P2, P3 and P4
+        if (!isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3) && isPlayerActiveAndAlive(4)) {
+            if (auxPlayer.getPlayerTag() == 1 && activePlayer2.getPlayerLife() >= activePlayer3.getPlayerLife() && activePlayer2.getPlayerLife() >= activePlayer4.getPlayerLife())
+                return true;
+            if (auxPlayer.getPlayerTag() == 2 && activePlayer3.getPlayerLife() >= activePlayer2.getPlayerLife() && activePlayer3.getPlayerLife() >= activePlayer4.getPlayerLife())
+                return true;
+            if (auxPlayer.getPlayerTag() == 3 && activePlayer4.getPlayerLife() >= activePlayer3.getPlayerLife() && activePlayer4.getPlayerLife() >= activePlayer2.getPlayerLife())
+                return true;
+        }
+
+        //P1, P2, P3 and P4
+        if (isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3) && isPlayerActiveAndAlive(4)) {
+            if (auxPlayer.getPlayerTag() == 0 && activePlayer1.getPlayerLife() >= activePlayer2.getPlayerLife() && activePlayer1.getPlayerLife() >= activePlayer3.getPlayerLife() && activePlayer1.getPlayerLife() >= activePlayer4.getPlayerLife())
+                return true;
+            if (auxPlayer.getPlayerTag() == 1 && activePlayer2.getPlayerLife() >= activePlayer1.getPlayerLife() && activePlayer2.getPlayerLife() >= activePlayer3.getPlayerLife() && activePlayer2.getPlayerLife() >= activePlayer4.getPlayerLife())
+                return true;
+            if (auxPlayer.getPlayerTag() == 2 && activePlayer3.getPlayerLife() >= activePlayer1.getPlayerLife() && activePlayer3.getPlayerLife() >= activePlayer2.getPlayerLife() && activePlayer3.getPlayerLife() >= activePlayer4.getPlayerLife())
+                return true;
+            if (auxPlayer.getPlayerTag() == 3 && activePlayer4.getPlayerLife() >= activePlayer1.getPlayerLife() && activePlayer4.getPlayerLife() >= activePlayer2.getPlayerLife() && activePlayer4.getPlayerLife() >= activePlayer3.getPlayerLife())
+                return true;
+        }
+
+        return false;
     }
 }

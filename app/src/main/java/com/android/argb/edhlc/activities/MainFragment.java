@@ -1,6 +1,5 @@
 package com.android.argb.edhlc.activities;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -10,7 +9,6 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -32,13 +30,11 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     private static final String ARG_EDH3 = "ARG_EDH3";
     private static final String ARG_EDH4 = "ARG_EDH4";
     private static final String ARG_TAG = "ARG_TAG";
-
-    //Layout
-    private TextView messageTextView;
-    private Button buttonPlus;
+    private static final String ARG_TOTAL_PLAYERS = "ARG_TOTAL_PLAYERS";
 
     //Interface
     private OnUpdateData onUpdateDataInterface;
+    private ImageView imageViewThrone;
 
     //Layout
     private TextView headerPlayerName;
@@ -48,27 +44,23 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     private ImageView lifePositive;
     private ImageView lifeNegative;
 
-    private LinearLayout mainEDH1;
     private TextView valueEDH1;
     private ImageView positiveEDH1;
     private ImageView negativeEDH1;
 
-    private LinearLayout mainEDH2;
     private TextView valueEDH2;
     private ImageView positiveEDH2;
     private ImageView negativeEDH2;
 
-    private LinearLayout mainEDH3;
     private TextView valueEDH3;
     private ImageView positiveEDH3;
     private ImageView negativeEDH3;
 
-    private LinearLayout mainEDH4;
     private TextView valueEDH4;
     private ImageView positiveEDH4;
     private ImageView negativeEDH4;
 
-    public static MainFragment newInstance(ActivePlayerNew activePlayer) {
+    public static MainFragment newInstance(ActivePlayerNew activePlayer, int totalPlayers) {
         Bundle args = new Bundle();
         if (activePlayer != null) {
             args.putString(ARG_PLAYER_NAME, activePlayer.getPlayerDeck().getDeckOwnerName());
@@ -81,6 +73,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             args.putInt(ARG_EDH3, activePlayer.getPlayerEDH3());
             args.putInt(ARG_EDH4, activePlayer.getPlayerEDH4());
             args.putInt(ARG_TAG, activePlayer.getPlayerTag());
+
+            args.putInt(ARG_TOTAL_PLAYERS, totalPlayers);
         }
 
         MainFragment fragment = new MainFragment();
@@ -114,15 +108,15 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        if (activity instanceof OnUpdateData) {
-            onUpdateDataInterface = (OnUpdateData) activity;
-        } else {
-            throw new RuntimeException(activity.toString());
-        }
-    }
+//    @Override
+//    public void onAttach(Activity activity) {
+//        super.onAttach(activity);
+//        if (activity instanceof OnUpdateData) {
+//            onUpdateDataInterface = (OnUpdateData) activity;
+//        } else {
+//            throw new RuntimeException(activity.toString());
+//        }
+//    }
 
     @Override
     public void onClick(View v) {
@@ -139,7 +133,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
             case R.id.positiveEDH1:
                 if (getArguments().getInt(ARG_EDH1) < 21) {
-                    getArguments().putInt(ARG_LIFE, getArguments().getInt(ARG_LIFE) + 1);
+                    getArguments().putInt(ARG_LIFE, getArguments().getInt(ARG_LIFE) - 1);
                     getArguments().putInt(ARG_EDH1, getArguments().getInt(ARG_EDH1) + 1);
                     setLife(getArguments().getInt(ARG_LIFE));
                     setEDH(1, getArguments().getInt(ARG_EDH1));
@@ -148,7 +142,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
             case R.id.negativeEDH1:
                 if (getArguments().getInt(ARG_EDH1) > 0) {
-                    getArguments().putInt(ARG_LIFE, getArguments().getInt(ARG_LIFE) - 1);
+                    getArguments().putInt(ARG_LIFE, getArguments().getInt(ARG_LIFE) + 1);
                     getArguments().putInt(ARG_EDH1, getArguments().getInt(ARG_EDH1) - 1);
                     setLife(getArguments().getInt(ARG_LIFE));
                     setEDH(1, getArguments().getInt(ARG_EDH1));
@@ -157,7 +151,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
             case R.id.positiveEDH2:
                 if (getArguments().getInt(ARG_EDH2) < 21) {
-                    getArguments().putInt(ARG_LIFE, getArguments().getInt(ARG_LIFE) + 1);
+                    getArguments().putInt(ARG_LIFE, getArguments().getInt(ARG_LIFE) - 1);
                     getArguments().putInt(ARG_EDH2, getArguments().getInt(ARG_EDH2) + 1);
                     setLife(getArguments().getInt(ARG_LIFE));
                     setEDH(2, getArguments().getInt(ARG_EDH2));
@@ -166,7 +160,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
             case R.id.negativeEDH2:
                 if (getArguments().getInt(ARG_EDH2) > 0) {
-                    getArguments().putInt(ARG_LIFE, getArguments().getInt(ARG_LIFE) - 1);
+                    getArguments().putInt(ARG_LIFE, getArguments().getInt(ARG_LIFE) + 1);
                     getArguments().putInt(ARG_EDH2, getArguments().getInt(ARG_EDH2) - 1);
                     setLife(getArguments().getInt(ARG_LIFE));
                     setEDH(2, getArguments().getInt(ARG_EDH2));
@@ -175,7 +169,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
             case R.id.positiveEDH3:
                 if (getArguments().getInt(ARG_EDH3) < 21) {
-                    getArguments().putInt(ARG_LIFE, getArguments().getInt(ARG_LIFE) + 1);
+                    getArguments().putInt(ARG_LIFE, getArguments().getInt(ARG_LIFE) - 1);
                     getArguments().putInt(ARG_EDH3, getArguments().getInt(ARG_EDH3) + 1);
                     setLife(getArguments().getInt(ARG_LIFE));
                     setEDH(3, getArguments().getInt(ARG_EDH3));
@@ -184,7 +178,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
             case R.id.negativeEDH3:
                 if (getArguments().getInt(ARG_EDH3) > 0) {
-                    getArguments().putInt(ARG_LIFE, getArguments().getInt(ARG_LIFE) - 1);
+                    getArguments().putInt(ARG_LIFE, getArguments().getInt(ARG_LIFE) + 1);
                     getArguments().putInt(ARG_EDH3, getArguments().getInt(ARG_EDH3) - 1);
                     setLife(getArguments().getInt(ARG_LIFE));
                     setEDH(3, getArguments().getInt(ARG_EDH3));
@@ -193,7 +187,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
             case R.id.positiveEDH4:
                 if (getArguments().getInt(ARG_EDH4) < 21) {
-                    getArguments().putInt(ARG_LIFE, getArguments().getInt(ARG_LIFE) + 1);
+                    getArguments().putInt(ARG_LIFE, getArguments().getInt(ARG_LIFE) - 1);
                     getArguments().putInt(ARG_EDH4, getArguments().getInt(ARG_EDH4) + 1);
                     setLife(getArguments().getInt(ARG_LIFE));
                     setEDH(4, getArguments().getInt(ARG_EDH4));
@@ -202,7 +196,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
             case R.id.negativeEDH4:
                 if (getArguments().getInt(ARG_EDH4) > 0) {
-                    getArguments().putInt(ARG_LIFE, getArguments().getInt(ARG_LIFE) - 1);
+                    getArguments().putInt(ARG_LIFE, getArguments().getInt(ARG_LIFE) + 1);
                     getArguments().putInt(ARG_EDH4, getArguments().getInt(ARG_EDH4) - 1);
                     setLife(getArguments().getInt(ARG_LIFE));
                     setEDH(4, getArguments().getInt(ARG_EDH4));
@@ -210,6 +204,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 break;
         }
         onUpdateDataInterface.iUpdateActivePlayer(argsToPlayer(getArguments()));
+
+        onUpdateDataInterface.iUpdateDethrone();
     }
 
     @Override
@@ -218,38 +214,39 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
         createLayout(view);
 
-        updateLayout(view);
+        updateLayout();
 
         return view;
     }
 
+    public void updateFragmentDethrone(boolean isOnThrone) {
+        if (imageViewThrone != null)
+            imageViewThrone.setVisibility(isOnThrone ? View.VISIBLE : View.GONE);
+    }
+
     private void createLayout(View view) {
+        LinearLayout mainEDH = (LinearLayout) view.findViewById(R.id.mainEDH);
+        mainEDH.setWeightSum(getTotalPlayers());
+
         headerPlayerName = (TextView) view.findViewById(R.id.headerPlayerName);
         headerDeckName = (TextView) view.findViewById(R.id.headerDeckName);
+        imageViewThrone = (ImageView) view.findViewById(R.id.imageViewThrone);
 
         lifeValue = (TextView) view.findViewById(R.id.lifeValue);
         lifePositive = (ImageView) view.findViewById(R.id.lifePositive);
         lifeNegative = (ImageView) view.findViewById(R.id.lifeNegative);
 
-        mainEDH1 = (LinearLayout) view.findViewById(R.id.mainEDH1);
-        mainEDH2 = (LinearLayout) view.findViewById(R.id.mainEDH2);
-        mainEDH3 = (LinearLayout) view.findViewById(R.id.mainEDH3);
-        mainEDH4 = (LinearLayout) view.findViewById(R.id.mainEDH4);
+        LinearLayout mainEDH3 = (LinearLayout) view.findViewById(R.id.mainEDH3);
+        LinearLayout mainEDH4 = (LinearLayout) view.findViewById(R.id.mainEDH4);
 
         valueEDH1 = (TextView) view.findViewById(R.id.valueEDH1);
         valueEDH2 = (TextView) view.findViewById(R.id.valueEDH2);
-        valueEDH3 = (TextView) view.findViewById(R.id.valueEDH3);
-        valueEDH4 = (TextView) view.findViewById(R.id.valueEDH4);
 
         positiveEDH1 = (ImageView) view.findViewById(R.id.positiveEDH1);
         positiveEDH2 = (ImageView) view.findViewById(R.id.positiveEDH2);
-        positiveEDH3 = (ImageView) view.findViewById(R.id.positiveEDH3);
-        positiveEDH4 = (ImageView) view.findViewById(R.id.positiveEDH4);
 
         negativeEDH1 = (ImageView) view.findViewById(R.id.negativeEDH1);
         negativeEDH2 = (ImageView) view.findViewById(R.id.negativeEDH2);
-        negativeEDH3 = (ImageView) view.findViewById(R.id.negativeEDH3);
-        negativeEDH4 = (ImageView) view.findViewById(R.id.negativeEDH4);
 
         lifePositive.setOnClickListener(this);
         lifeNegative.setOnClickListener(this);
@@ -257,10 +254,32 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         negativeEDH1.setOnClickListener(this);
         positiveEDH2.setOnClickListener(this);
         negativeEDH2.setOnClickListener(this);
-        positiveEDH3.setOnClickListener(this);
-        negativeEDH3.setOnClickListener(this);
-        positiveEDH4.setOnClickListener(this);
-        negativeEDH4.setOnClickListener(this);
+
+        if (getTotalPlayers() >= 3) {
+            mainEDH3.setVisibility(View.VISIBLE);
+            valueEDH3 = (TextView) view.findViewById(R.id.valueEDH3);
+            positiveEDH3 = (ImageView) view.findViewById(R.id.positiveEDH3);
+            negativeEDH3 = (ImageView) view.findViewById(R.id.negativeEDH3);
+            positiveEDH3.setOnClickListener(this);
+            negativeEDH3.setOnClickListener(this);
+        } else {
+            mainEDH3.setVisibility(View.GONE);
+        }
+
+        if (getTotalPlayers() >= 4) {
+            mainEDH4.setVisibility(View.VISIBLE);
+            valueEDH4 = (TextView) view.findViewById(R.id.valueEDH4);
+            positiveEDH4 = (ImageView) view.findViewById(R.id.positiveEDH4);
+            negativeEDH4 = (ImageView) view.findViewById(R.id.negativeEDH4);
+            positiveEDH4.setOnClickListener(this);
+            negativeEDH4.setOnClickListener(this);
+        } else {
+            mainEDH4.setVisibility(View.GONE);
+        }
+    }
+
+    private int getTotalPlayers() {
+        return getArguments().getInt(ARG_TOTAL_PLAYERS);
     }
 
     private void setEDH(int which, int edhValue) {
@@ -288,23 +307,43 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         lifeValue.setText("" + life);
     }
 
-    private void updateLayout(View view) {
+    private void updateLayout() {
         boolean isAlive = getArguments().getBoolean(ARG_IS_ALIVE);
         int color = getArguments().getInt(ARG_DECK_COLOR);
 
+        onUpdateDataInterface.iUpdateDethrone();
+
+        headerPlayerName.setText(getArguments().getString(ARG_PLAYER_NAME));
+        headerDeckName.setText(getArguments().getString(ARG_DECK_NAME));
+
+        setLife(getArguments().getInt(ARG_LIFE));
+        setEDH(1, getArguments().getInt(ARG_EDH1));
+        setEDH(2, getArguments().getInt(ARG_EDH2));
+
         lifePositive.setColorFilter(isAlive ? color : Color.LTGRAY, PorterDuff.Mode.SRC_IN);
         lifeNegative.setColorFilter(isAlive ? color : Color.LTGRAY, PorterDuff.Mode.SRC_IN);
+
         positiveEDH1.setColorFilter(isAlive ? color : Color.LTGRAY, PorterDuff.Mode.SRC_IN);
         negativeEDH1.setColorFilter(isAlive ? color : Color.LTGRAY, PorterDuff.Mode.SRC_IN);
         positiveEDH2.setColorFilter(isAlive ? color : Color.LTGRAY, PorterDuff.Mode.SRC_IN);
         negativeEDH2.setColorFilter(isAlive ? color : Color.LTGRAY, PorterDuff.Mode.SRC_IN);
-        positiveEDH3.setColorFilter(isAlive ? color : Color.LTGRAY, PorterDuff.Mode.SRC_IN);
-        negativeEDH3.setColorFilter(isAlive ? color : Color.LTGRAY, PorterDuff.Mode.SRC_IN);
-        positiveEDH4.setColorFilter(isAlive ? color : Color.LTGRAY, PorterDuff.Mode.SRC_IN);
-        negativeEDH4.setColorFilter(isAlive ? color : Color.LTGRAY, PorterDuff.Mode.SRC_IN);
+
+        if (getTotalPlayers() >= 3) {
+            setEDH(3, getArguments().getInt(ARG_EDH3));
+            positiveEDH3.setColorFilter(isAlive ? color : Color.LTGRAY, PorterDuff.Mode.SRC_IN);
+            negativeEDH3.setColorFilter(isAlive ? color : Color.LTGRAY, PorterDuff.Mode.SRC_IN);
+        }
+
+        if (getTotalPlayers() >= 4) {
+            setEDH(4, getArguments().getInt(ARG_EDH4));
+            positiveEDH4.setColorFilter(isAlive ? color : Color.LTGRAY, PorterDuff.Mode.SRC_IN);
+            negativeEDH4.setColorFilter(isAlive ? color : Color.LTGRAY, PorterDuff.Mode.SRC_IN);
+        }
     }
 
     public interface OnUpdateData {
         void iUpdateActivePlayer(ActivePlayerNew activePlayer);
+
+        void iUpdateDethrone();
     }
 }
