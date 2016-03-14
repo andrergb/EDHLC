@@ -51,6 +51,7 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
 
     private ViewPager viewPager;
     private TabLayout tabLayout;
+    private RelativeLayout viewNewGame;
     private List<MainFragment> fragments;
     private MainPagerAdapter mPagerAdapter;
 
@@ -177,6 +178,43 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
 
         SharedPreferences mSharedPreferences = getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE);
         totalPlayers = mSharedPreferences.getInt(Constants.CURRENT_GAME_TOTAL_PLAYERS, 4);
+
+        //TODO enhance layout
+        viewNewGame = (RelativeLayout) findViewById(R.id.viewPagerMainNewGame);
+        viewNewGame.setVisibility(View.VISIBLE);
+
+        viewPager = (ViewPager) findViewById(R.id.viewPagerMain);
+        viewPager.setVisibility(View.GONE);
+
+        tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        tabLayout.setVisibility(View.GONE);
+
+        if (isValidGame()) {
+            viewNewGame.setVisibility(View.GONE);
+            viewPager.setVisibility(View.VISIBLE);
+            tabLayout.setVisibility(View.VISIBLE);
+
+            activePlayer1 = Utils.loadPlayerFromSharedPreferences(this, 0);
+            activePlayer2 = Utils.loadPlayerFromSharedPreferences(this, 1);
+            if (totalPlayers >= 3)
+                activePlayer3 = Utils.loadPlayerFromSharedPreferences(this, 2);
+            if (totalPlayers >= 4)
+                activePlayer4 = Utils.loadPlayerFromSharedPreferences(this, 3);
+
+            fragments = new ArrayList<>();
+            fragments.add(MainFragment.newInstance(activePlayer1, totalPlayers));
+            fragments.add(MainFragment.newInstance(activePlayer2, totalPlayers));
+            if (totalPlayers >= 3)
+                fragments.add(MainFragment.newInstance(activePlayer3, totalPlayers));
+            if (totalPlayers >= 4)
+                fragments.add(MainFragment.newInstance(activePlayer4, totalPlayers));
+            mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager(), MainActivityNew.this, fragments);
+
+            viewPager.setAdapter(mPagerAdapter);
+            viewPager.setOffscreenPageLimit(fragments.size());
+
+            tabLayout.setupWithViewPager(viewPager);
+        }
     }
 
     @Override
@@ -203,42 +241,10 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
             switchScreen.setChecked(false);
         }
 
-        //TODO enhance layout
-        RelativeLayout viewPagerMainNewGame = (RelativeLayout) findViewById(R.id.viewPagerMainNewGame);
-
-        viewPager = (ViewPager) findViewById(R.id.viewPagerMain);
-
-        tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
-
         if (!isValidGame()) {
-            viewPagerMainNewGame.setVisibility(View.VISIBLE);
+            viewNewGame.setVisibility(View.VISIBLE);
             viewPager.setVisibility(View.GONE);
             tabLayout.setVisibility(View.GONE);
-        } else {
-            viewPagerMainNewGame.setVisibility(View.GONE);
-
-            activePlayer1 = Utils.loadPlayerFromSharedPreferences(this, 0);
-            activePlayer2 = Utils.loadPlayerFromSharedPreferences(this, 1);
-            if (totalPlayers >= 3)
-                activePlayer3 = Utils.loadPlayerFromSharedPreferences(this, 2);
-            if (totalPlayers >= 4)
-                activePlayer4 = Utils.loadPlayerFromSharedPreferences(this, 3);
-
-            fragments = new ArrayList<>();
-            fragments.add(MainFragment.newInstance(activePlayer1, totalPlayers));
-            fragments.add(MainFragment.newInstance(activePlayer2, totalPlayers));
-            if (totalPlayers >= 3)
-                fragments.add(MainFragment.newInstance(activePlayer3, totalPlayers));
-            if (totalPlayers >= 4)
-                fragments.add(MainFragment.newInstance(activePlayer4, totalPlayers));
-            mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager(), MainActivityNew.this, fragments);
-
-            viewPager.setVisibility(View.VISIBLE);
-            viewPager.setAdapter(mPagerAdapter);
-            viewPager.setOffscreenPageLimit(fragments.size());
-
-            tabLayout.setVisibility(View.VISIBLE);
-            tabLayout.setupWithViewPager(viewPager);
         }
     }
 
