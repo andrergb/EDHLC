@@ -179,16 +179,6 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
         SharedPreferences mSharedPreferences = getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE);
         totalPlayers = mSharedPreferences.getInt(Constants.CURRENT_GAME_TOTAL_PLAYERS, 4);
 
-        //TODO enhance layout
-        viewNewGame = (RelativeLayout) findViewById(R.id.viewPagerMainNewGame);
-        viewNewGame.setVisibility(View.VISIBLE);
-
-        viewPager = (ViewPager) findViewById(R.id.viewPagerMain);
-        viewPager.setVisibility(View.GONE);
-
-        tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
-        tabLayout.setVisibility(View.GONE);
-
         if (isValidGame()) {
             viewNewGame.setVisibility(View.GONE);
             viewPager.setVisibility(View.VISIBLE);
@@ -282,15 +272,16 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
 
     @Override
     protected void onStop() {
-        if (activePlayer1 != null)
-            Utils.savePlayerInSharedPreferences(this, activePlayer1);
-        if (activePlayer2 != null)
-            Utils.savePlayerInSharedPreferences(this, activePlayer2);
-        if (totalPlayers >= 3 && activePlayer3 != null)
-            Utils.savePlayerInSharedPreferences(this, activePlayer3);
-        if (totalPlayers >= 4 && activePlayer4 != null)
-            Utils.savePlayerInSharedPreferences(this, activePlayer4);
-
+        if (!isValidGame()) {
+            if (activePlayer1 != null)
+                Utils.savePlayerInSharedPreferences(this, activePlayer1);
+            if (activePlayer2 != null)
+                Utils.savePlayerInSharedPreferences(this, activePlayer2);
+            if (totalPlayers >= 3 && activePlayer3 != null)
+                Utils.savePlayerInSharedPreferences(this, activePlayer3);
+            if (totalPlayers >= 4 && activePlayer4 != null)
+                Utils.savePlayerInSharedPreferences(this, activePlayer4);
+        }
         super.onStop();
     }
 
@@ -319,6 +310,11 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
     }
 
     private void createLayout() {
+        //TODO enhance layout
+        viewNewGame = (RelativeLayout) findViewById(R.id.viewPagerMainNewGame);
+        viewPager = (ViewPager) findViewById(R.id.viewPagerMain);
+        tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+
         //Drawer
         switchScreen = (Switch) findViewById(R.id.switchScreen);
         switchScreen.setOnClickListener(new View.OnClickListener() {
@@ -361,18 +357,18 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
         mActionBar.setHomeButtonEnabled(true);
     }
 
-    private boolean isPlayerActiveAndAlive(int i) {
-        if (fragments.size() < i)
+    private boolean isPlayerActiveAndAlive(int playerTag) {
+        if (totalPlayers < playerTag)
             return false;
         else {
-            switch (i) {
-                case 1:
+            switch (playerTag) {
+                case 0:
                     return activePlayer1.getPlayerIsAlive();
-                case 2:
+                case 1:
                     return activePlayer2.getPlayerIsAlive();
-                case 3:
+                case 2:
                     return activePlayer3.getPlayerIsAlive();
-                case 4:
+                case 3:
                     return activePlayer4.getPlayerIsAlive();
                 default:
                     return true;
@@ -398,27 +394,27 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
         }
 
         //P1
-        if (isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3) && !isPlayerActiveAndAlive(4))
+        if (isPlayerActiveAndAlive(0) && !isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3))
             if (auxPlayer.getPlayerTag() == 0)
                 return true;
 
         //P2
-        if (!isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3) && !isPlayerActiveAndAlive(4))
+        if (!isPlayerActiveAndAlive(0) && isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3))
             if (auxPlayer.getPlayerTag() == 1)
                 return true;
 
         //P3
-        if (!isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3) && !isPlayerActiveAndAlive(4))
+        if (!isPlayerActiveAndAlive(0) && !isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3))
             if (auxPlayer.getPlayerTag() == 2)
                 return true;
 
         //P4
-        if (!isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3) && isPlayerActiveAndAlive(4))
+        if (!isPlayerActiveAndAlive(0) && !isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3))
             if (auxPlayer.getPlayerTag() == 3)
                 return true;
 
         //P1 and P2
-        if (isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3) && !isPlayerActiveAndAlive(4)) {
+        if (isPlayerActiveAndAlive(0) && isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3)) {
             if (auxPlayer.getPlayerTag() == 0 && activePlayer1.getPlayerLife() >= activePlayer2.getPlayerLife())
                 return true;
             if (auxPlayer.getPlayerTag() == 1 && activePlayer2.getPlayerLife() >= activePlayer1.getPlayerLife())
@@ -426,7 +422,7 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
         }
 
         //P1 and P3
-        if (isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3) && !isPlayerActiveAndAlive(4)) {
+        if (isPlayerActiveAndAlive(0) && !isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3)) {
             if (auxPlayer.getPlayerTag() == 0 && activePlayer1.getPlayerLife() >= activePlayer3.getPlayerLife())
                 return true;
             if (auxPlayer.getPlayerTag() == 2 && activePlayer3.getPlayerLife() >= activePlayer1.getPlayerLife())
@@ -434,7 +430,7 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
         }
 
         //P1 and P4
-        if (isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3) && isPlayerActiveAndAlive(4)) {
+        if (isPlayerActiveAndAlive(0) && !isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3)) {
             if (auxPlayer.getPlayerTag() == 0 && activePlayer1.getPlayerLife() >= activePlayer4.getPlayerLife())
                 return true;
             if (auxPlayer.getPlayerTag() == 3 && activePlayer4.getPlayerLife() >= activePlayer1.getPlayerLife())
@@ -442,7 +438,7 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
         }
 
         //P2 and P3
-        if (!isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3) && !isPlayerActiveAndAlive(4)) {
+        if (!isPlayerActiveAndAlive(0) && isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3)) {
             if (auxPlayer.getPlayerTag() == 1 && activePlayer2.getPlayerLife() >= activePlayer3.getPlayerLife())
                 return true;
             if (auxPlayer.getPlayerTag() == 2 && activePlayer3.getPlayerLife() >= activePlayer2.getPlayerLife())
@@ -450,7 +446,7 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
         }
 
         //P2 and P4
-        if (!isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3) && isPlayerActiveAndAlive(4)) {
+        if (!isPlayerActiveAndAlive(0) && isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3)) {
             if (auxPlayer.getPlayerTag() == 1 && activePlayer2.getPlayerLife() >= activePlayer4.getPlayerLife())
                 return true;
             if (auxPlayer.getPlayerTag() == 3 && activePlayer4.getPlayerLife() >= activePlayer2.getPlayerLife())
@@ -458,7 +454,7 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
         }
 
         //P3 and P4
-        if (!isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3) && isPlayerActiveAndAlive(4)) {
+        if (!isPlayerActiveAndAlive(0) && !isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3)) {
             if (auxPlayer.getPlayerTag() == 2 && activePlayer3.getPlayerLife() >= activePlayer4.getPlayerLife())
                 return true;
             if (auxPlayer.getPlayerTag() == 3 && activePlayer4.getPlayerLife() >= activePlayer3.getPlayerLife())
@@ -466,7 +462,7 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
         }
 
         //P1, P2 and P3
-        if (isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3) && !isPlayerActiveAndAlive(4)) {
+        if (isPlayerActiveAndAlive(0) && isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3)) {
             if (auxPlayer.getPlayerTag() == 0 && activePlayer1.getPlayerLife() >= activePlayer2.getPlayerLife() && activePlayer1.getPlayerLife() >= activePlayer3.getPlayerLife())
                 return true;
             if (auxPlayer.getPlayerTag() == 1 && activePlayer2.getPlayerLife() >= activePlayer1.getPlayerLife() && activePlayer2.getPlayerLife() >= activePlayer3.getPlayerLife())
@@ -476,7 +472,7 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
         }
 
         //P1, P2 and P4
-        if (isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3) && isPlayerActiveAndAlive(4)) {
+        if (isPlayerActiveAndAlive(0) && isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3)) {
             if (auxPlayer.getPlayerTag() == 0 && activePlayer1.getPlayerLife() >= activePlayer2.getPlayerLife() && activePlayer1.getPlayerLife() >= activePlayer4.getPlayerLife())
                 return true;
             if (auxPlayer.getPlayerTag() == 1 && activePlayer2.getPlayerLife() >= activePlayer1.getPlayerLife() && activePlayer2.getPlayerLife() >= activePlayer4.getPlayerLife())
@@ -486,7 +482,7 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
         }
 
         //P1, P3 and P4
-        if (isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3) && isPlayerActiveAndAlive(4)) {
+        if (isPlayerActiveAndAlive(0) && !isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3)) {
             if (auxPlayer.getPlayerTag() == 0 && activePlayer1.getPlayerLife() >= activePlayer3.getPlayerLife() && activePlayer1.getPlayerLife() >= activePlayer4.getPlayerLife())
                 return true;
             if (auxPlayer.getPlayerTag() == 2 && activePlayer3.getPlayerLife() >= activePlayer1.getPlayerLife() && activePlayer3.getPlayerLife() >= activePlayer4.getPlayerLife())
@@ -496,7 +492,7 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
         }
 
         //P2, P3 and P4
-        if (!isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3) && isPlayerActiveAndAlive(4)) {
+        if (!isPlayerActiveAndAlive(0) && isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3)) {
             if (auxPlayer.getPlayerTag() == 1 && activePlayer2.getPlayerLife() >= activePlayer3.getPlayerLife() && activePlayer2.getPlayerLife() >= activePlayer4.getPlayerLife())
                 return true;
             if (auxPlayer.getPlayerTag() == 2 && activePlayer3.getPlayerLife() >= activePlayer2.getPlayerLife() && activePlayer3.getPlayerLife() >= activePlayer4.getPlayerLife())
@@ -506,7 +502,7 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
         }
 
         //P1, P2, P3 and P4
-        if (isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3) && isPlayerActiveAndAlive(4)) {
+        if (isPlayerActiveAndAlive(0) && isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3)) {
             if (auxPlayer.getPlayerTag() == 0 && activePlayer1.getPlayerLife() >= activePlayer2.getPlayerLife() && activePlayer1.getPlayerLife() >= activePlayer3.getPlayerLife() && activePlayer1.getPlayerLife() >= activePlayer4.getPlayerLife())
                 return true;
             if (auxPlayer.getPlayerTag() == 1 && activePlayer2.getPlayerLife() >= activePlayer1.getPlayerLife() && activePlayer2.getPlayerLife() >= activePlayer3.getPlayerLife() && activePlayer2.getPlayerLife() >= activePlayer4.getPlayerLife())

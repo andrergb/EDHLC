@@ -460,8 +460,8 @@ public class Utils {
 
     public static ActivePlayerNew loadPlayerFromSharedPreferences(Activity activity, int tag) {
         SharedPreferences prefs = activity.getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE);
-        String pName = prefs.getString(tag + Constants.CURRENT_GAME_PLAYER_NAME, "Player " + tag);
-        String pPlayerDeck = prefs.getString(tag + Constants.CURRENT_GAME_PLAYER_DECK, "Deck " + tag);
+        String pName = prefs.getString(tag + Constants.CURRENT_GAME_PLAYER_NAME, "");
+        String pPlayerDeck = prefs.getString(tag + Constants.CURRENT_GAME_PLAYER_DECK, "");
         int[] pColor = {prefs.getInt(tag + Constants.CURRENT_GAME_PLAYER_COLOR1, ContextCompat.getColor(activity.getApplicationContext(), R.color.primary_color)), prefs.getInt(tag + Constants.CURRENT_GAME_PLAYER_COLOR1, ContextCompat.getColor(activity.getApplicationContext(), R.color.primary_color))};
         boolean pIsAlive = prefs.getBoolean(tag + Constants.CURRENT_GAME_PLAYER_IS_ALIVE, true);
         int pLife = prefs.getInt(tag + Constants.CURRENT_GAME_PLAYER_LIFE, 40);
