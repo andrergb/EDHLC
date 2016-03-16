@@ -45,6 +45,12 @@
             android:screenOrientation="portrait"/>
 
         <activity
+            android:name=".activities.NewGameActivity"
+            android:label="@string/activity_new_game"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+
+        <activity
             android:name=".activities.RecordsActivity"
             android:label="@string/activity_records_label"
             android:screenOrientation="portrait"

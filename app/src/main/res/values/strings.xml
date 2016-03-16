@@ -8,6 +8,7 @@
     <string name="activity_settings_label">EDHLC: Settings</string>
     <string name="activity_turn_label">EDHLC: Turn Phases</string>
     <string name="activity_turn_deck">EDHLC: Deck</string>
+    <string name="activity_new_game">EDHLC: New Game</string>
 
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>

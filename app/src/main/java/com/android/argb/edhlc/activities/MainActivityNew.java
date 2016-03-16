@@ -246,7 +246,7 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
         Utils.savePlayerInSharedPreferences(this, new ActivePlayerNew(new Deck("Player 3", "Deck 3", new int[]{0xFFFF0000}), true, 41, 0, 0, 0, 0, 3));
 
         //TODO new game activity
-        startActivity(new Intent(this, MainActivityNew.class));
+        startActivity(new Intent(this, NewGameActivity.class));
         this.finish();
     }
 
