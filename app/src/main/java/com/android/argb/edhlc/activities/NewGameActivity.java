@@ -214,6 +214,12 @@ public class NewGameActivity extends AppCompatActivity {
         playersList.add(new String[]{"deck", "olivia", "FALSE"});
         playersList.add(new String[]{"deck", "olivia2", "FALSE"});
         playersList.add(new String[]{"deck", "olivia3", "FALSE"});
+        playersList.add(new String[]{"PLAYER", "a1", "FALSE"});
+        playersList.add(new String[]{"deck", "a2", "FALSE"});
+        playersList.add(new String[]{"PLAYER", "v2", "FALSE"});
+        playersList.add(new String[]{"deck", "b2", "FALSE"});
+        playersList.add(new String[]{"PLAYER", "d2", "FALSE"});
+        playersList.add(new String[]{"deck", "g2", "FALSE"});
 
         mPlayersAdapter = new NewGameAdapter(this, playersList);
         listViewNewGame = (ListView) findViewById(R.id.new_game_list);
@@ -225,17 +231,30 @@ public class NewGameActivity extends AppCompatActivity {
 
                     String currentSelection = playersList.get(position)[2];
 
-                    if (getCurrentTotalPlayers() < 4 && !isPlayerSelected(position))
+                    if (getCurrentTotalPlayers() < 4) {
                         setPlayerSelected(position, currentSelection.equalsIgnoreCase("TRUE") ? "FALSE" : "TRUE");
-                    else if (currentSelection.equalsIgnoreCase("TRUE"))
+                        mActionBar.setTitle("New Game - " + getCurrentTotalPlayers());
+                    } else if (isPlayerSelected(position)) {
+                        setPlayerSelected(position, currentSelection.equalsIgnoreCase("TRUE") ? "FALSE" : "TRUE");
+                        mActionBar.setTitle("New Game - " + getCurrentTotalPlayers());
+                    } else if (currentSelection.equalsIgnoreCase("TRUE")) {
                         playersList.get(position)[2] = "FALSE";
-                    else
+                    } else {
                         Log.d("dezao", "limit reached - 4 players");
+                    }
 
                     mPlayersAdapter.notifyDataSetChanged();
                 }
             }
         });
+    }
+
+
+    private boolean isPlayerSelected(int position) {
+        for (int i = position; i >= 0; i--)
+            if (mPlayersAdapter.isPlayer(i))
+                return playersList.get(i)[2].equalsIgnoreCase("TRUE");
+        return false;
     }
 
     private void createStatusBar() {
@@ -274,19 +293,33 @@ public class NewGameActivity extends AppCompatActivity {
         return ret;
     }
 
-    private boolean isPlayerSelected(int position) {
-        for (int i = position; i >= 0; i--)
-            if (mPlayersAdapter.isPlayer(i))
-                return playersList.get(i)[0].equalsIgnoreCase("TRUE");
-        return false;
-    }
-
     private void setPlayerSelected(int position, String state) {
+        if (state.equalsIgnoreCase("TRUE")) {
+            for (int i = position - 1; i >= 0; i--) {
+                if (mPlayersAdapter.isDeck(i)) {
+                    if (mPlayersAdapter.isSelected(i)) {
+                        playersList.get(i)[2] = "FALSE";
+                    }
+                } else {
+                    break;
+                }
+            }
+            for (int i = position + 1; i < playersList.size(); i++) {
+                if (mPlayersAdapter.isDeck(i)) {
+                    if (mPlayersAdapter.isSelected(i)) {
+                        playersList.get(i)[2] = "FALSE";
+                    }
+                } else {
+                    break;
+                }
+            }
+        }
+
         playersList.get(position)[2] = state;
 
         for (int i = position; i >= 0; i--) {
             if (mPlayersAdapter.isPlayer(i)) {
-                playersList.get(i)[0] = state;
+                playersList.get(i)[2] = state;
                 return;
             }
         }

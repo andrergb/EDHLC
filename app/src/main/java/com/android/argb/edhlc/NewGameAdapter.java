@@ -73,4 +73,8 @@ public class NewGameAdapter extends BaseAdapter {
     public boolean isPlayer(int position) {
         return data.get(position)[0].equalsIgnoreCase("PLAYER");
     }
+
+    public boolean isSelected(int position) {
+        return data.get(position)[2].equalsIgnoreCase("TRUE");
+    }
 }
