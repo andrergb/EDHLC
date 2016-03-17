@@ -252,10 +252,14 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
 
         for (int i = 0; i < totalPlayers; i++) {
             ActivePlayerNew auxPlayer = Utils.loadPlayerFromSharedPreferences(this, i);
-            if (!deckDb.hasDeck(auxPlayer.getPlayerDeck()) || !playersDB.hasPlayer(auxPlayer.getPlayerDeck().getDeckOwnerName())) {
+            if (!deckDb.hasDeck(auxPlayer.getPlayerDeck()) || !playersDB.hasPlayer(auxPlayer.getPlayerDeck().getDeckOwnerName()))
                 isValid = false;
-            }
+            if (auxPlayer.getPlayerDeck().getDeckOwnerName().equalsIgnoreCase("") || auxPlayer.getPlayerDeck().getDeckName().equalsIgnoreCase(""))
+                isValid = false;
         }
+
+        if (totalPlayers < 2)
+            isValid = false;
 
         playersDB.close();
         deckDb.close();
@@ -350,7 +354,7 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
     }
 
     private boolean isPlayerActiveAndAlive(int playerTag) {
-        if (totalPlayers < playerTag)
+        if (totalPlayers <= playerTag)
             return false;
         else {
             switch (playerTag) {

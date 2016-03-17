@@ -37,7 +37,6 @@ import com.android.argb.edhlc.objects.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-//Crop: https://github.com/lvillani/android-cropimage
 public class NewGameActivity extends AppCompatActivity {
 
     ///Drawer
@@ -54,6 +53,7 @@ public class NewGameActivity extends AppCompatActivity {
 
     private ArrayList<String[]> playersList; // 0: type - 1: item
     private NewGameAdapter mPlayersAdapter;
+
     private DecksDataAccessObject decksDb;
     private PlayersDataAccessObject playersDb;
 
@@ -133,9 +133,9 @@ public class NewGameActivity extends AppCompatActivity {
             case R.id.actions_start_game:
 
                 int index = -1;
+                String player = "";
+                String deck = "";
                 for (int i = 0; i < playersList.size(); i++) {
-                    String player = "";
-                    String deck = "";
 
                     if (mPlayersAdapter.isSelected(i) && mPlayersAdapter.isPlayer(i))
                         player = playersList.get(i)[1];
@@ -145,6 +145,8 @@ public class NewGameActivity extends AppCompatActivity {
                     if (!player.equalsIgnoreCase("") && !deck.equalsIgnoreCase("")) {
                         index++;
                         Utils.savePlayerInSharedPreferences(this, new ActivePlayerNew(decksDb.getDeck(player, deck), true, 40, 0, 0, 0, 0, index));
+                        player = "";
+                        deck = "";
                     }
                 }
                 //Total players
@@ -251,17 +253,8 @@ public class NewGameActivity extends AppCompatActivity {
         });
 
         playersList = new ArrayList<>();
-
-        List<Player> allPlayers = playersDb.getAllPlayers();
-        for (int i = 0; i < allPlayers.size(); i++) {
-            playersList.add(new String[]{"PLAYER", allPlayers.get(i).getPlayerName(), "FALSE"});
-            List<Deck> allDeckCurrentPlayer = decksDb.getAllDeckByPlayerName(allPlayers.get(i).getPlayerName());
-            for (int j = 0; j < allDeckCurrentPlayer.size(); j++) {
-                playersList.add(new String[]{"DECK", allDeckCurrentPlayer.get(j).getDeckName(), "FALSE"});
-            }
-        }
-
         mPlayersAdapter = new NewGameAdapter(this, playersList);
+
         listViewNewGame = (ListView) findViewById(R.id.new_game_list);
         listViewNewGame.setAdapter(mPlayersAdapter);
         listViewNewGame.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -280,6 +273,7 @@ public class NewGameActivity extends AppCompatActivity {
                     } else if (currentSelection.equalsIgnoreCase("TRUE")) {
                         playersList.get(position)[2] = "FALSE";
                     } else {
+                        //TODO snack
                         Log.d("dezao", "limit reached - 4 players");
                     }
 
@@ -370,6 +364,14 @@ public class NewGameActivity extends AppCompatActivity {
     }
 
     private void updateLayout() {
-        //TODO
+        List<Player> allPlayers = playersDb.getAllPlayers();
+        for (int i = 0; i < allPlayers.size(); i++) {
+            playersList.add(new String[]{"PLAYER", allPlayers.get(i).getPlayerName(), "FALSE"});
+            List<Deck> allDeckCurrentPlayer = decksDb.getAllDeckByPlayerName(allPlayers.get(i).getPlayerName());
+            for (int j = 0; j < allDeckCurrentPlayer.size(); j++) {
+                playersList.add(new String[]{"DECK", allDeckCurrentPlayer.get(j).getDeckName(), "FALSE"});
+            }
+        }
+        mPlayersAdapter.notifyDataSetChanged();
     }
 }

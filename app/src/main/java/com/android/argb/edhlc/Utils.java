@@ -446,10 +446,6 @@ public class Utils {
     }
 
     public static void savePlayerInSharedPreferences(Activity activity, ActivePlayerNew activePlayer) {
-
-        Log.d("dezao", "salvando");
-        Log.d("dezao", activePlayer.getPlayerDeck().getDeckOwnerName());
-        Log.d("dezao", activePlayer.getPlayerDeck().getDeckName());
         SharedPreferences.Editor editor = activity.getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit();
         editor.putString(activePlayer.getPlayerTag() + Constants.CURRENT_GAME_PLAYER_NAME, activePlayer.getPlayerDeck().getDeckOwnerName());
         editor.putString(activePlayer.getPlayerTag() + Constants.CURRENT_GAME_PLAYER_DECK, activePlayer.getPlayerDeck().getDeckName());
@@ -474,10 +470,6 @@ public class Utils {
         int pEDH2 = prefs.getInt(tag + Constants.CURRENT_GAME_PLAYER_EDH2, 0);
         int pEDH3 = prefs.getInt(tag + Constants.CURRENT_GAME_PLAYER_EDH3, 0);
         int pEDH4 = prefs.getInt(tag + Constants.CURRENT_GAME_PLAYER_EDH4, 0);
-
-        Log.d("dezao", "carregando");
-        Log.d("dezao", pName);
-        Log.d("dezao", pPlayerDeck);
 
         return new ActivePlayerNew(new Deck(pName, pPlayerDeck, pColor), pIsAlive, pLife, pEDH1, pEDH2, pEDH3, pEDH4, tag);
     }
