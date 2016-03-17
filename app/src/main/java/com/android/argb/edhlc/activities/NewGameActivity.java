@@ -1,5 +1,6 @@
 package com.android.argb.edhlc.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
@@ -27,8 +28,14 @@ import com.android.argb.edhlc.Constants;
 import com.android.argb.edhlc.NewGameAdapter;
 import com.android.argb.edhlc.R;
 import com.android.argb.edhlc.Utils;
+import com.android.argb.edhlc.database.deck.DecksDataAccessObject;
+import com.android.argb.edhlc.database.player.PlayersDataAccessObject;
+import com.android.argb.edhlc.objects.ActivePlayerNew;
+import com.android.argb.edhlc.objects.Deck;
+import com.android.argb.edhlc.objects.Player;
 
 import java.util.ArrayList;
+import java.util.List;
 
 //Crop: https://github.com/lvillani/android-cropimage
 public class NewGameActivity extends AppCompatActivity {
@@ -47,6 +54,8 @@ public class NewGameActivity extends AppCompatActivity {
 
     private ArrayList<String[]> playersList; // 0: type - 1: item
     private NewGameAdapter mPlayersAdapter;
+    private DecksDataAccessObject decksDb;
+    private PlayersDataAccessObject playersDb;
 
     @Override
     public void onBackPressed() {
@@ -109,7 +118,8 @@ public class NewGameActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         this.optionMenu = menu;
-        getMenuInflater().inflate(R.menu.menu, menu);
+        getMenuInflater().inflate(R.menu.menu_new_game, menu);
+        optionMenu.getItem(0).setEnabled(false);
         return true;
     }
 
@@ -118,6 +128,34 @@ public class NewGameActivity extends AppCompatActivity {
         if (mDrawerToggle.onOptionsItemSelected(item))
             return true;
 
+        //Option menu
+        switch (item.getItemId()) {
+            case R.id.actions_start_game:
+
+                int index = -1;
+                for (int i = 0; i < playersList.size(); i++) {
+                    String player = "";
+                    String deck = "";
+
+                    if (mPlayersAdapter.isSelected(i) && mPlayersAdapter.isPlayer(i))
+                        player = playersList.get(i)[1];
+                    else if (mPlayersAdapter.isSelected(i) && mPlayersAdapter.isDeck(i))
+                        deck = playersList.get(i)[1];
+
+                    if (!player.equalsIgnoreCase("") && !deck.equalsIgnoreCase("")) {
+                        index++;
+                        Utils.savePlayerInSharedPreferences(this, new ActivePlayerNew(decksDb.getDeck(player, deck), true, 40, 0, 0, 0, 0, index));
+                    }
+                }
+                //Total players
+                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_GAME_TOTAL_PLAYERS, index + 1).apply();
+
+                startActivity(new Intent(this, MainActivityNew.class));
+                this.finish();
+
+                return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -125,6 +163,12 @@ public class NewGameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_game);
+
+
+        playersDb = new PlayersDataAccessObject(this);
+        decksDb = new DecksDataAccessObject(this);
+        playersDb.open();
+        decksDb.open();
 
         createStatusBar();
         createToolbar();
@@ -135,6 +179,9 @@ public class NewGameActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        decksDb.close();
+        playersDb.close();
     }
 
     @Override
@@ -203,23 +250,16 @@ public class NewGameActivity extends AppCompatActivity {
             }
         });
 
-
-        //TODO
         playersList = new ArrayList<>();
-        playersList.add(new String[]{"PLAYER", "Dezao", "FALSE"});
-        playersList.add(new String[]{"deck", "animar", "TRUE"});
-        playersList.add(new String[]{"deck", "zur", "FALSE"});
-        playersList.add(new String[]{"PLAYER", "Monkey", "FALSE"});
-        playersList.add(new String[]{"deck", "zurgo", "FALSE"});
-        playersList.add(new String[]{"deck", "olivia", "FALSE"});
-        playersList.add(new String[]{"deck", "olivia2", "FALSE"});
-        playersList.add(new String[]{"deck", "olivia3", "FALSE"});
-        playersList.add(new String[]{"PLAYER", "a1", "FALSE"});
-        playersList.add(new String[]{"deck", "a2", "FALSE"});
-        playersList.add(new String[]{"PLAYER", "v2", "FALSE"});
-        playersList.add(new String[]{"deck", "b2", "FALSE"});
-        playersList.add(new String[]{"PLAYER", "d2", "FALSE"});
-        playersList.add(new String[]{"deck", "g2", "FALSE"});
+
+        List<Player> allPlayers = playersDb.getAllPlayers();
+        for (int i = 0; i < allPlayers.size(); i++) {
+            playersList.add(new String[]{"PLAYER", allPlayers.get(i).getPlayerName(), "FALSE"});
+            List<Deck> allDeckCurrentPlayer = decksDb.getAllDeckByPlayerName(allPlayers.get(i).getPlayerName());
+            for (int j = 0; j < allDeckCurrentPlayer.size(); j++) {
+                playersList.add(new String[]{"DECK", allDeckCurrentPlayer.get(j).getDeckName(), "FALSE"});
+            }
+        }
 
         mPlayersAdapter = new NewGameAdapter(this, playersList);
         listViewNewGame = (ListView) findViewById(R.id.new_game_list);
@@ -244,17 +284,14 @@ public class NewGameActivity extends AppCompatActivity {
                     }
 
                     mPlayersAdapter.notifyDataSetChanged();
+
+                    if (getCurrentTotalPlayers() >= 2)
+                        optionMenu.getItem(0).setEnabled(true);
+                    else
+                        optionMenu.getItem(0).setEnabled(false);
                 }
             }
         });
-    }
-
-
-    private boolean isPlayerSelected(int position) {
-        for (int i = position; i >= 0; i--)
-            if (mPlayersAdapter.isPlayer(i))
-                return playersList.get(i)[2].equalsIgnoreCase("TRUE");
-        return false;
     }
 
     private void createStatusBar() {
@@ -291,6 +328,13 @@ public class NewGameActivity extends AppCompatActivity {
                 if (playersList.get(i)[2].equalsIgnoreCase("TRUE"))
                     ret++;
         return ret;
+    }
+
+    private boolean isPlayerSelected(int position) {
+        for (int i = position; i >= 0; i--)
+            if (mPlayersAdapter.isPlayer(i))
+                return playersList.get(i)[2].equalsIgnoreCase("TRUE");
+        return false;
     }
 
     private void setPlayerSelected(int position, String state) {

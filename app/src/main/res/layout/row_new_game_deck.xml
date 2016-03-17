@@ -8,7 +8,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp">
 
@@ -18,16 +18,17 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
+            android:clickable="false"
             android:focusable="false"
-            android:theme="@style/CheckboxStyle"
             android:focusableInTouchMode="false"
             android:gravity="center"
-            android:padding="5dp"/>
+            android:padding="5dp"
+            android:theme="@style/CheckboxStyle"/>
 
         <!-- Row text -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:layout_toLeftOf="@+id/arrow"
             android:layout_toRightOf="@id/checkboxDeckNewGame"
@@ -42,7 +43,7 @@
                 android:layout_centerVertical="true"
                 android:singleLine="true"
                 android:text="Decks name"
-                android:textColor="@color/primary_text"
+                android:textColor="@color/secondary_text"
                 android:textSize="16sp"/>
         </LinearLayout>
     </RelativeLayout>

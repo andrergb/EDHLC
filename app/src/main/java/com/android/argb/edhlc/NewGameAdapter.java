@@ -1,6 +1,7 @@
 package com.android.argb.edhlc;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,20 +45,19 @@ public class NewGameAdapter extends BaseAdapter {
         View vi = convertView;
 
         if (isPlayer(position)) {
-            if (vi == null) {
-                vi = inflater.inflate(R.layout.row_new_game_player, null);
-            }
+            vi = inflater.inflate(R.layout.row_new_game_player, null);
 
-            TextView textViewDeckDescriptionDeckListCard = (TextView) vi.findViewById(R.id.text1);
-            textViewDeckDescriptionDeckListCard.setText(data.get(position)[1]);
+            TextView textViewPlayerNewGame = (TextView) vi.findViewById(R.id.textViewPlayerNewGame);
+            textViewPlayerNewGame.setText(data.get(position)[1]);
+            textViewPlayerNewGame.setTypeface(null, isSelected(position) ? Typeface.BOLD : Typeface.NORMAL);
+
 
         } else if (isDeck(position)) {
-            if (vi == null) {
-                vi = inflater.inflate(R.layout.row_new_game_deck, null);
-            }
+            vi = inflater.inflate(R.layout.row_new_game_deck, null);
 
-            TextView textViewDeckDescriptionDeckListCard = (TextView) vi.findViewById(R.id.textViewDeckNewGame);
-            textViewDeckDescriptionDeckListCard.setText(data.get(position)[1]);
+            TextView textViewDeckNewGame = (TextView) vi.findViewById(R.id.textViewDeckNewGame);
+            textViewDeckNewGame.setText(data.get(position)[1]);
+            textViewDeckNewGame.setTypeface(null, isSelected(position) ? Typeface.BOLD : Typeface.NORMAL);
 
             CheckBox checkBox = (CheckBox) vi.findViewById(R.id.checkboxDeckNewGame);
             checkBox.setChecked(data.get(position)[2].equalsIgnoreCase("TRUE"));

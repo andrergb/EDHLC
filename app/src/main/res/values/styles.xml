@@ -4,12 +4,15 @@
     <style name="AppTheme" parent="@style/Base.Theme.AppCompat.Light.DarkActionBar">
     </style>
 
+
     <!-- ActionBar styles -->
     <style name="MyActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
         <item name="android:background">@android:color/transparent</item>
         <item name="background">@android:color/transparent</item>
         <item name="android:textColorPrimary">@color/white</item>
         <item name="android:textColorSecondary">@color/white</item>
+        <item name="actionMenuTextColor">@drawable/white_checked</item>
+        <item name="android:actionMenuTextColor">@drawable/white_checked</item>
     </style>
 
     <!-- ActionBar for Deck activity-->

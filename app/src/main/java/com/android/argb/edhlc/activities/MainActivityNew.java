@@ -32,7 +32,6 @@ import com.android.argb.edhlc.Utils;
 import com.android.argb.edhlc.database.deck.DecksDataAccessObject;
 import com.android.argb.edhlc.database.player.PlayersDataAccessObject;
 import com.android.argb.edhlc.objects.ActivePlayerNew;
-import com.android.argb.edhlc.objects.Deck;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -239,13 +238,6 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
     }
 
     public void onClickNewGame(View view) {
-        //TODO just for test -> populate shared on new game activity
-        Utils.savePlayerInSharedPreferences(this, new ActivePlayerNew(new Deck("Player 0", "Deck 0", new int[]{0xFFFF0000}), true, 41, 0, 0, 0, 0, 0));
-        Utils.savePlayerInSharedPreferences(this, new ActivePlayerNew(new Deck("Player 1", "Deck 1", new int[]{0xFFFF0000}), true, 41, 0, 0, 0, 0, 1));
-        Utils.savePlayerInSharedPreferences(this, new ActivePlayerNew(new Deck("Player 2", "Deck 2", new int[]{0xFFFF0000}), true, 41, 0, 0, 0, 0, 2));
-        Utils.savePlayerInSharedPreferences(this, new ActivePlayerNew(new Deck("Player 3", "Deck 3", new int[]{0xFFFF0000}), true, 41, 0, 0, 0, 0, 3));
-
-        //TODO new game activity
         startActivity(new Intent(this, NewGameActivity.class));
         this.finish();
     }

@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context=".activities.MainActivity">
+
+    <item
+        android:id="@+id/actions_start_game"
+        android:orderInCategory="0"
+        android:title="@string/actions_start_game"
+        app:showAsAction="always"/>
+</menu>

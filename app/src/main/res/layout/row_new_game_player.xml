@@ -4,13 +4,15 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/gray300"
     android:orientation="horizontal">
 
     <TextView
-        android:id="@+id/text1"
+        android:id="@+id/textViewPlayerNewGame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
         android:text="player name"
-        android:textColor="@color/secondary_text"
-        android:textSize="16sp"/>
+        android:textColor="@color/primary_text"
+        android:textSize="18sp"/>
 </LinearLayout>
