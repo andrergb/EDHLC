@@ -649,12 +649,33 @@ public class PlayerActivity extends AppCompatActivity {
     private void dialogAddDeck(final View view) {
         View playerNameView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_add_deck, null);
         final EditText userInput = (EditText) playerNameView.findViewById(R.id.editTextEditDeckName);
+        final ImageView imageViewAddShieldColor = (ImageView) playerNameView.findViewById(R.id.imageViewAddShieldColor);
+        final LinearLayout linearAddShieldColor = (LinearLayout) playerNameView.findViewById(R.id.linearAddShieldColor);
         checkBoxManaWhite = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_white);
         checkBoxManaBlue = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_blue);
         checkBoxManaBlack = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_black);
         checkBoxManaRed = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_red);
         checkBoxManaGreen = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_green);
         checkBoxManaColorless = (CheckBox) playerNameView.findViewById(R.id.checkbox_mana_colorless);
+
+        final int[] editShieldColor = new int[]{ContextCompat.getColor(PlayerActivity.this, R.color.primary_color), ContextCompat.getColor(PlayerActivity.this, R.color.primary_color)};
+
+        imageViewAddShieldColor.setColorFilter(ContextCompat.getColor(PlayerActivity.this, R.color.primary_color));
+        linearAddShieldColor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final int[] mColor = getResources().getIntArray(R.array.edh_shield_colors);
+                ColorPickerDialog colorCalendar = ColorPickerDialog.newInstance(R.string.color_picker_default_title, mColor, editShieldColor[0], 5, ColorPickerDialog.SIZE_SMALL);
+                colorCalendar.setOnColorSelectedListener(new ColorPickerSwatch.OnColorSelectedListener() {
+                    @Override
+                    public void onColorSelected(int color) {
+                        editShieldColor[0] = color;
+                        imageViewAddShieldColor.setColorFilter(color);
+                    }
+                });
+                colorCalendar.show(getFragmentManager(), "cal");
+            }
+        });
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
         alertDialogBuilder.setView(playerNameView);
@@ -689,7 +710,7 @@ public class PlayerActivity extends AppCompatActivity {
                     colorIdentity = checkBoxManaGreen.isChecked() ? colorIdentity.concat("1") : colorIdentity.concat("0");
                     colorIdentity = checkBoxManaColorless.isChecked() ? colorIdentity.concat("1") : colorIdentity.concat("0");
 
-                    if (decksDB.addDeck(new Deck(mPlayerName, tempName, new int[]{ContextCompat.getColor(PlayerActivity.this, R.color.primary_color), ContextCompat.getColor(PlayerActivity.this, R.color.secondary_color)}, colorIdentity, Utils.getCurrentDate())) != -1) {
+                    if (decksDB.addDeck(new Deck(mPlayerName, tempName, editShieldColor, colorIdentity, Utils.getCurrentDate())) != -1) {
                         Toast.makeText(view.getContext(), tempName + " added", Toast.LENGTH_SHORT).show();
 
                         //Set card to wrap_content

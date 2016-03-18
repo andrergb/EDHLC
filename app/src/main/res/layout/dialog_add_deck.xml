@@ -8,6 +8,43 @@
         android:layout_width="match_parent"
         android:layout_height="10dp"/>
 
+    <!-- Shield color -->
+    <LinearLayout
+        android:id="@+id/linearAddShieldColor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Shield color:"
+            android:textColor="@color/primary_text"
+            android:textSize="16sp"/>
+
+        <View
+            android:layout_width="10dp"
+            android:layout_height="match_parent"/>
+
+        <ImageView
+            android:id="@+id/imageViewAddShieldColor"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:src="@drawable/icon_circle"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="5dp"/>
+
     <!-- Identity -->
     <LinearLayout
         android:layout_width="match_parent"
