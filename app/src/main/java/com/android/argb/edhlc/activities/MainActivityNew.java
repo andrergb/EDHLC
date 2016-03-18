@@ -101,6 +101,9 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
                 isValid = false;
             if (auxPlayer.getPlayerDeck().getDeckOwnerName().equalsIgnoreCase("") || auxPlayer.getPlayerDeck().getDeckName().equalsIgnoreCase(""))
                 isValid = false;
+            if (auxPlayer.getPlayerDeck().getDeckShieldColor()[0] !=
+                    deckDb.getDeck(auxPlayer.getPlayerDeck().getDeckOwnerName(), auxPlayer.getPlayerDeck().getDeckName()).getDeckShieldColor()[0])
+                isValid = false;
         }
 
         if (totalPlayers < 2)
@@ -186,7 +189,6 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
             return true;
         }
 
-
         //Option menu
         int id = item.getItemId();
         if (id == R.id.action_overview) {
@@ -266,7 +268,7 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
                 fragments.add(MainFragment.newInstance(activePlayer3, totalPlayers));
                 tabTitles.add(activePlayer3.getPlayerDeck().getDeckOwnerName());
             }
-            if (totalPlayers >= 4){
+            if (totalPlayers >= 4) {
                 fragments.add(MainFragment.newInstance(activePlayer4, totalPlayers));
                 tabTitles.add(activePlayer4.getPlayerDeck().getDeckOwnerName());
             }
@@ -304,9 +306,15 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
         }
 
         if (!isValidGame()) {
+            setActionBarColor(getResources().getIntArray(R.array.edh_default)[0]);
             viewNewGame.setVisibility(View.VISIBLE);
             viewPager.setVisibility(View.GONE);
             tabLayout.setVisibility(View.GONE);
+        } else {
+            int color = getActivePlayer(0).getPlayerDeck().getDeckShieldColor()[0];
+            if (color == 0)
+                color = getResources().getIntArray(R.array.edh_default)[0];
+            setActionBarColor(color);
         }
     }
 
@@ -353,6 +361,24 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
         //TODO enhance layout
         viewNewGame = (RelativeLayout) findViewById(R.id.viewPagerMainNewGame);
         viewPager = (ViewPager) findViewById(R.id.viewPagerMain);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                int color = getActivePlayer(position).getPlayerDeck().getDeckShieldColor()[0];
+                if (color == 0)
+                    color = getResources().getIntArray(R.array.edh_default)[0];
+                setActionBarColor(color);
+            }
+        });
+
         tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
 
         //Drawer
@@ -395,6 +421,21 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
         mActionBar.setDisplayShowTitleEnabled(true);
         mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setHomeButtonEnabled(true);
+    }
+
+    private ActivePlayerNew getActivePlayer(int position) {
+        switch (position) {
+            case 0:
+                return activePlayer1;
+            case 1:
+                return activePlayer2;
+            case 2:
+                return activePlayer3;
+            case 3:
+                return activePlayer4;
+            default:
+                return new ActivePlayerNew();
+        }
     }
 
     private boolean isPlayerActiveAndAlive(int playerTag) {
@@ -556,4 +597,8 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
         return false;
     }
 
+    private void setActionBarColor(int color) {
+        mActionBar.setBackgroundDrawable(new ColorDrawable(color));
+        statusBarBackground.setBackgroundColor(color);
+    }
 }
