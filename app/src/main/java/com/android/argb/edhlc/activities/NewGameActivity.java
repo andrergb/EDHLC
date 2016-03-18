@@ -285,15 +285,15 @@ public class NewGameActivity extends AppCompatActivity {
 
                 if (currentPlayer.equalsIgnoreCase(player1))
                     playerCheck = "TRUE";
-                else if (currentPlayer.equalsIgnoreCase(player2))
+                if (currentPlayer.equalsIgnoreCase(player2))
                     playerCheck = "TRUE";
-                else if (totalPlayers >= 3) {
+                if (totalPlayers >= 3)
                     if (currentPlayer.equalsIgnoreCase(player3))
                         playerCheck = "TRUE";
-                } else if (totalPlayers >= 4) {
+                if (totalPlayers >= 4)
                     if (currentPlayer.equalsIgnoreCase(player4))
                         playerCheck = "TRUE";
-                }
+
             }
 
             playersList.add(new String[]{"PLAYER", currentPlayer, playerCheck});
@@ -314,15 +314,15 @@ public class NewGameActivity extends AppCompatActivity {
 
                     if (currentDeck.equalsIgnoreCase(deck1))
                         deckCheck = "TRUE";
-                    else if (currentDeck.equalsIgnoreCase(deck2))
+                    if (currentDeck.equalsIgnoreCase(deck2))
                         deckCheck = "TRUE";
-                    else if (totalPlayers >= 3) {
+                    if (totalPlayers >= 3)
                         if (currentDeck.equalsIgnoreCase(deck3))
                             deckCheck = "TRUE";
-                    } else if (totalPlayers >= 4) {
+                    if (totalPlayers >= 4)
                         if (currentDeck.equalsIgnoreCase(deck4))
                             deckCheck = "TRUE";
-                    }
+
                 }
 
                 playersList.add(new String[]{"DECK", currentDeck, deckCheck});

@@ -9,14 +9,15 @@ import java.util.List;
 
 //http://stackoverflow.com/questions/7263291/viewpager-pageradapter-not-updating-the-view
 public class MainPagerAdapter extends FragmentPagerAdapter {
-    private String tabTitles[] = new String[]{"Tab1", "Tab2", "Tab3", "Tab4"};
+    private List<String> tabTitles;
     private Context context;
     private List<MainFragment> fragments;
 
-    public MainPagerAdapter(FragmentManager fm, Context context, List<MainFragment> fragments) {
+    public MainPagerAdapter(FragmentManager fm, Context context, List<MainFragment> fragments, List<String> tabTitles) {
         super(fm);
         this.context = context;
         this.fragments = fragments;
+        this.tabTitles = tabTitles;
     }
 
     @Override
@@ -31,6 +32,6 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return tabTitles[position];
+        return tabTitles.get(position);
     }
 }

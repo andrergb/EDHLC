@@ -47,7 +47,7 @@
                 android:background="@color/white"
                 android:scrollIndicators="bottom"
                 app:tabGravity="fill"
-                app:tabIndicatorColor="#3eff0000"
+                app:tabIndicatorColor="@color/tab_selection_color"
                 app:tabIndicatorHeight="32dp"
                 app:tabMode="fixed"/>
         </LinearLayout>

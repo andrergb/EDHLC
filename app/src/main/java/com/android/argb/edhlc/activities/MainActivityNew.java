@@ -256,14 +256,21 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
             if (totalPlayers >= 4)
                 activePlayer4 = Utils.loadPlayerFromSharedPreferences(this, 3);
 
+            List<String> tabTitles = new ArrayList<>();
             fragments = new ArrayList<>();
             fragments.add(MainFragment.newInstance(activePlayer1, totalPlayers));
+            tabTitles.add(activePlayer1.getPlayerDeck().getDeckOwnerName());
             fragments.add(MainFragment.newInstance(activePlayer2, totalPlayers));
-            if (totalPlayers >= 3)
+            tabTitles.add(activePlayer2.getPlayerDeck().getDeckOwnerName());
+            if (totalPlayers >= 3) {
                 fragments.add(MainFragment.newInstance(activePlayer3, totalPlayers));
-            if (totalPlayers >= 4)
+                tabTitles.add(activePlayer3.getPlayerDeck().getDeckOwnerName());
+            }
+            if (totalPlayers >= 4){
                 fragments.add(MainFragment.newInstance(activePlayer4, totalPlayers));
-            mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager(), MainActivityNew.this, fragments);
+                tabTitles.add(activePlayer4.getPlayerDeck().getDeckOwnerName());
+            }
+            mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager(), MainActivityNew.this, fragments, tabTitles);
 
             viewPager.setAdapter(mPagerAdapter);
             viewPager.setOffscreenPageLimit(fragments.size());
