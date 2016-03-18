@@ -31,6 +31,7 @@
                 android:id="@+id/main_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                app:popupTheme="@style/MyPopupBar"
                 app:theme="@style/MyActionBar"/>
 
             <!-- Main content -->

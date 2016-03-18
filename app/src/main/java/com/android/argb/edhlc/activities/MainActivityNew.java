@@ -22,9 +22,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import com.android.argb.edhlc.Constants;
 import com.android.argb.edhlc.R;
@@ -332,12 +334,12 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
         };
         mPlayerDrawerLayout.setDrawerListener(mDrawerToggle);
 
-//        LinearLayout drawerItemPlayers = (LinearLayout) findViewById(R.id.drawerItemPlayers);
-//        ImageView drawerItemIconPlayers = (ImageView) findViewById(R.id.drawerItemIconPlayers);
-//        TextView drawerItemTextPlayers = (TextView) findViewById(R.id.drawerItemTextPlayers);
-//        drawerItemPlayers.setBackgroundColor(ContextCompat.getColor(this, R.color.gray200));
-//        drawerItemIconPlayers.setColorFilter(ContextCompat.getColor(this, R.color.accent_color));
-//        drawerItemTextPlayers.setTextColor(ContextCompat.getColor(this, R.color.accent_color));
+        LinearLayout drawerItemHome = (LinearLayout) findViewById(R.id.drawerItemHome);
+        ImageView drawerItemIconHome = (ImageView) findViewById(R.id.drawerItemIconHome);
+        TextView drawerItemTextHome = (TextView) findViewById(R.id.drawerItemTextHome);
+        drawerItemHome.setBackgroundColor(ContextCompat.getColor(this, R.color.gray200));
+        drawerItemIconHome.setColorFilter(ContextCompat.getColor(this, R.color.accent_color));
+        drawerItemTextHome.setTextColor(ContextCompat.getColor(this, R.color.accent_color));
     }
 
     private void createLayout() {

@@ -20,7 +20,24 @@
     <item
         android:id="@+id/actions_new_game"
         android:orderInCategory="3"
-        android:icon="@drawable/icon_new_game"
         android:title="@string/actions_new_game"
-        app:showAsAction="always"/>
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/actions_log_game"
+        android:orderInCategory="4"
+        android:title="@string/actions_log_game"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/actions_roll_dice"
+        android:orderInCategory="5"
+        android:title="@string/actions_roll_dice"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/actions_random_player"
+        android:orderInCategory="6"
+        android:title="@string/actions_random_player"
+        app:showAsAction="never"/>
 </menu>

@@ -25,6 +25,9 @@
     <string name="actions_overview">Overview</string>
     <string name="actions_start_game">Start game</string>
     <string name="actions_new_game">New game</string>
+    <string name="actions_log_game">Log game</string>
+    <string name="actions_roll_dice">Roll a dice</string>
+    <string name="actions_random_player">Random player</string>
     <string name="action_edit_deck">Edit deck</string>
     <string name="action_delete_deck">Delete deck</string>
     <string name="actions_history">History</string>
