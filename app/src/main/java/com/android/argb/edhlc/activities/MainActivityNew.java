@@ -85,6 +85,30 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
             fragments.get(i).updateFragmentDethrone(isPlayerOnThrone(i));
     }
 
+    public boolean isValidGame() {
+        boolean isValid = true;
+        DecksDataAccessObject deckDb = new DecksDataAccessObject(this);
+        PlayersDataAccessObject playersDB = new PlayersDataAccessObject(this);
+
+        deckDb.open();
+        playersDB.open();
+
+        for (int i = 0; i < totalPlayers; i++) {
+            ActivePlayerNew auxPlayer = Utils.loadPlayerFromSharedPreferences(this, i);
+            if (!deckDb.hasDeck(auxPlayer.getPlayerDeck()) || !playersDB.hasPlayer(auxPlayer.getPlayerDeck().getDeckOwnerName()))
+                isValid = false;
+            if (auxPlayer.getPlayerDeck().getDeckOwnerName().equalsIgnoreCase("") || auxPlayer.getPlayerDeck().getDeckName().equalsIgnoreCase(""))
+                isValid = false;
+        }
+
+        if (totalPlayers < 2)
+            isValid = false;
+
+        playersDB.close();
+        deckDb.close();
+        return isValid;
+    }
+
     @Override
     public void onBackPressed() {
         if (mPlayerDrawerLayout.isDrawerOpen(mPlayerDrawer))
@@ -136,6 +160,11 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
         }
     }
 
+    public void onClickNewGame(View view) {
+        startActivity(new Intent(this, NewGameActivity.class));
+        this.finish();
+    }
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -145,7 +174,7 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         this.optionMenu = menu;
-        getMenuInflater().inflate(R.menu.menu_player_activity, menu);
+        getMenuInflater().inflate(R.menu.menu_main_new, menu);
         return true;
     }
 
@@ -153,6 +182,41 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
     public boolean onOptionsItemSelected(MenuItem item) {
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
+        }
+
+
+        //Option menu
+        int id = item.getItemId();
+        if (id == R.id.action_overview) {
+            startActivity(new Intent(this, OverviewActivity.class));
+        } else if (id == R.id.action_history) {
+            startActivity(new Intent(this, HistoryActivity.class));
+        } else if (id == R.id.actions_new_game) {
+
+            Intent intent = new Intent(this, NewGameActivity.class);
+            intent.putExtra("NEW_GAME_IS_VALID", isValidGame());
+
+            if (isValidGame()) {
+                intent.putExtra("NEW_GAME_TOTAL_PLAYER", totalPlayers);
+
+                intent.putExtra("NEW_GAME_PLAYER_1", activePlayer1.getPlayerDeck().getDeckOwnerName());
+                intent.putExtra("NEW_GAME_DECK_1", activePlayer1.getPlayerDeck().getDeckName());
+
+                intent.putExtra("NEW_GAME_PLAYER_2", activePlayer2.getPlayerDeck().getDeckOwnerName());
+                intent.putExtra("NEW_GAME_DECK_2", activePlayer2.getPlayerDeck().getDeckName());
+
+                if (totalPlayers >= 3) {
+                    intent.putExtra("NEW_GAME_PLAYER_3", activePlayer3.getPlayerDeck().getDeckOwnerName());
+                    intent.putExtra("NEW_GAME_DECK_3", activePlayer3.getPlayerDeck().getDeckName());
+                }
+                if (totalPlayers >= 4) {
+                    intent.putExtra("NEW_GAME_PLAYER_4", activePlayer4.getPlayerDeck().getDeckOwnerName());
+                    intent.putExtra("NEW_GAME_DECK_4", activePlayer4.getPlayerDeck().getDeckName());
+                }
+            }
+
+            startActivity(intent);
+            this.finish();
         }
 
         return super.onOptionsItemSelected(item);
@@ -235,35 +299,6 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
             viewPager.setVisibility(View.GONE);
             tabLayout.setVisibility(View.GONE);
         }
-    }
-
-    public void onClickNewGame(View view) {
-        startActivity(new Intent(this, NewGameActivity.class));
-        this.finish();
-    }
-
-    public boolean isValidGame() {
-        boolean isValid = true;
-        DecksDataAccessObject deckDb = new DecksDataAccessObject(this);
-        PlayersDataAccessObject playersDB = new PlayersDataAccessObject(this);
-
-        deckDb.open();
-        playersDB.open();
-
-        for (int i = 0; i < totalPlayers; i++) {
-            ActivePlayerNew auxPlayer = Utils.loadPlayerFromSharedPreferences(this, i);
-            if (!deckDb.hasDeck(auxPlayer.getPlayerDeck()) || !playersDB.hasPlayer(auxPlayer.getPlayerDeck().getDeckOwnerName()))
-                isValid = false;
-            if (auxPlayer.getPlayerDeck().getDeckOwnerName().equalsIgnoreCase("") || auxPlayer.getPlayerDeck().getDeckName().equalsIgnoreCase(""))
-                isValid = false;
-        }
-
-        if (totalPlayers < 2)
-            isValid = false;
-
-        playersDB.close();
-        deckDb.close();
-        return isValid;
     }
 
     @Override

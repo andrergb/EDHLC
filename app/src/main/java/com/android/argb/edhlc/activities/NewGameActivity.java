@@ -62,6 +62,11 @@ public class NewGameActivity extends AppCompatActivity {
         if (mDrawerLayout.isDrawerOpen(mDrawer))
             mDrawerLayout.closeDrawers();
 
+        Intent intentHome = new Intent(this, MainActivityNew.class);
+        intentHome.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intentHome);
+        this.finish();
+
         super.onBackPressed();
     }
 
@@ -119,7 +124,10 @@ public class NewGameActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         this.optionMenu = menu;
         getMenuInflater().inflate(R.menu.menu_new_game, menu);
-        optionMenu.getItem(0).setEnabled(false);
+        if (getCurrentTotalPlayers() >= 2)
+            optionMenu.getItem(0).setEnabled(true);
+        else
+            optionMenu.getItem(0).setEnabled(false);
         return true;
     }
 
@@ -152,7 +160,9 @@ public class NewGameActivity extends AppCompatActivity {
                 //Total players
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_GAME_TOTAL_PLAYERS, index + 1).apply();
 
-                startActivity(new Intent(this, MainActivityNew.class));
+                Intent intentHome = new Intent(this, MainActivityNew.class);
+                intentHome.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intentHome);
                 this.finish();
 
                 return true;
@@ -312,15 +322,19 @@ public class NewGameActivity extends AppCompatActivity {
         mActionBar.setDisplayShowTitleEnabled(true);
         mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setHomeButtonEnabled(true);
-        mActionBar.setTitle("New Game");
+        mActionBar.setTitle("New Game - " + getCurrentTotalPlayers());
     }
 
     private int getCurrentTotalPlayers() {
         int ret = 0;
+        if (playersList == null)
+            return ret;
+
         for (int i = 0; i < playersList.size(); i++)
             if (playersList.get(i)[0].equalsIgnoreCase("DECK"))
                 if (playersList.get(i)[2].equalsIgnoreCase("TRUE"))
                     ret++;
+
         return ret;
     }
 
@@ -366,10 +380,63 @@ public class NewGameActivity extends AppCompatActivity {
     private void updateLayout() {
         List<Player> allPlayers = playersDb.getAllPlayers();
         for (int i = 0; i < allPlayers.size(); i++) {
-            playersList.add(new String[]{"PLAYER", allPlayers.get(i).getPlayerName(), "FALSE"});
+            String currentPlayer = allPlayers.get(i).getPlayerName();
+            String playerCheck = "FALSE";
+
+            Intent intent = getIntent();
+            boolean isValid = intent.getBooleanExtra("NEW_GAME_IS_VALID", false);
+
+            if (isValid) {
+                int totalPlayers = intent.getIntExtra("NEW_GAME_TOTAL_PLAYER", 0);
+
+                String player1 = intent.getStringExtra("NEW_GAME_PLAYER_1");
+                String player2 = intent.getStringExtra("NEW_GAME_PLAYER_2");
+                String player3 = totalPlayers >= 3 ? intent.getStringExtra("NEW_GAME_PLAYER_3") : "";
+                String player4 = totalPlayers >= 4 ? intent.getStringExtra("NEW_GAME_PLAYER_4") : "";
+
+                if (currentPlayer.equalsIgnoreCase(player1))
+                    playerCheck = "TRUE";
+                else if (currentPlayer.equalsIgnoreCase(player2))
+                    playerCheck = "TRUE";
+                else if (totalPlayers >= 3) {
+                    if (currentPlayer.equalsIgnoreCase(player3))
+                        playerCheck = "TRUE";
+                } else if (totalPlayers >= 4) {
+                    if (currentPlayer.equalsIgnoreCase(player4))
+                        playerCheck = "TRUE";
+                }
+            }
+
+            playersList.add(new String[]{"PLAYER", currentPlayer, playerCheck});
+
             List<Deck> allDeckCurrentPlayer = decksDb.getAllDeckByPlayerName(allPlayers.get(i).getPlayerName());
             for (int j = 0; j < allDeckCurrentPlayer.size(); j++) {
-                playersList.add(new String[]{"DECK", allDeckCurrentPlayer.get(j).getDeckName(), "FALSE"});
+
+                String currentDeck = allDeckCurrentPlayer.get(j).getDeckName();
+                String deckCheck = "FALSE";
+
+                if (isValid) {
+                    int totalPlayers = intent.getIntExtra("NEW_GAME_TOTAL_PLAYER", 0);
+
+                    String deck1 = intent.getStringExtra("NEW_GAME_DECK_1");
+                    String deck2 = intent.getStringExtra("NEW_GAME_DECK_2");
+                    String deck3 = totalPlayers >= 3 ? intent.getStringExtra("NEW_GAME_DECK_3") : "";
+                    String deck4 = totalPlayers >= 4 ? intent.getStringExtra("NEW_GAME_DECK_4") : "";
+
+                    if (currentDeck.equalsIgnoreCase(deck1))
+                        deckCheck = "TRUE";
+                    else if (currentDeck.equalsIgnoreCase(deck2))
+                        deckCheck = "TRUE";
+                    else if (totalPlayers >= 3) {
+                        if (currentDeck.equalsIgnoreCase(deck3))
+                            deckCheck = "TRUE";
+                    } else if (totalPlayers >= 4) {
+                        if (currentDeck.equalsIgnoreCase(deck4))
+                            deckCheck = "TRUE";
+                    }
+                }
+
+                playersList.add(new String[]{"DECK", currentDeck, deckCheck});
             }
         }
         mPlayersAdapter.notifyDataSetChanged();
