@@ -244,7 +244,7 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
         createLayout();
 
         SharedPreferences mSharedPreferences = getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE);
-        totalPlayers = mSharedPreferences.getInt(Constants.CURRENT_GAME_TOTAL_PLAYERS, 4);
+        totalPlayers = mSharedPreferences.getInt(Constants.CURRENT_GAME_TOTAL_PLAYERS, 0);
 
         if (isValidGame()) {
             viewNewGame.setVisibility(View.GONE);
