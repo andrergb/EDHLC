@@ -1,6 +1,8 @@
 package com.android.argb.edhlc.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -16,6 +18,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,6 +27,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -35,8 +39,10 @@ import com.android.argb.edhlc.database.deck.DecksDataAccessObject;
 import com.android.argb.edhlc.database.player.PlayersDataAccessObject;
 import com.android.argb.edhlc.objects.ActivePlayerNew;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class MainActivityNew extends AppCompatActivity implements MainFragment.OnUpdateData {
 
@@ -190,39 +196,50 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
         }
 
         //Option menu
-        int id = item.getItemId();
-        if (id == R.id.action_overview) {
-            startActivity(new Intent(this, OverviewActivity.class));
-        } else if (id == R.id.action_history) {
-            startActivity(new Intent(this, HistoryActivity.class));
-        } else if (id == R.id.actions_new_game) {
+        switch (item.getItemId()) {
+            case R.id.action_overview:
+                startActivity(new Intent(this, OverviewActivity.class));
+                break;
 
-            Intent intent = new Intent(this, NewGameActivity.class);
-            intent.putExtra("NEW_GAME_IS_VALID", isValidGame());
+            case R.id.action_history:
+                startActivity(new Intent(this, HistoryActivity.class));
+                break;
 
-            if (isValidGame()) {
-                intent.putExtra("NEW_GAME_TOTAL_PLAYER", totalPlayers);
+            case R.id.actions_new_game:
+                Intent intent = new Intent(this, NewGameActivity.class);
+                intent.putExtra("NEW_GAME_IS_VALID", isValidGame());
 
-                intent.putExtra("NEW_GAME_PLAYER_1", activePlayer1.getPlayerDeck().getDeckOwnerName());
-                intent.putExtra("NEW_GAME_DECK_1", activePlayer1.getPlayerDeck().getDeckName());
+                if (isValidGame()) {
+                    intent.putExtra("NEW_GAME_TOTAL_PLAYER", totalPlayers);
 
-                intent.putExtra("NEW_GAME_PLAYER_2", activePlayer2.getPlayerDeck().getDeckOwnerName());
-                intent.putExtra("NEW_GAME_DECK_2", activePlayer2.getPlayerDeck().getDeckName());
+                    intent.putExtra("NEW_GAME_PLAYER_1", activePlayer1.getPlayerDeck().getDeckOwnerName());
+                    intent.putExtra("NEW_GAME_DECK_1", activePlayer1.getPlayerDeck().getDeckName());
 
-                if (totalPlayers >= 3) {
-                    intent.putExtra("NEW_GAME_PLAYER_3", activePlayer3.getPlayerDeck().getDeckOwnerName());
-                    intent.putExtra("NEW_GAME_DECK_3", activePlayer3.getPlayerDeck().getDeckName());
+                    intent.putExtra("NEW_GAME_PLAYER_2", activePlayer2.getPlayerDeck().getDeckOwnerName());
+                    intent.putExtra("NEW_GAME_DECK_2", activePlayer2.getPlayerDeck().getDeckName());
+
+                    if (totalPlayers >= 3) {
+                        intent.putExtra("NEW_GAME_PLAYER_3", activePlayer3.getPlayerDeck().getDeckOwnerName());
+                        intent.putExtra("NEW_GAME_DECK_3", activePlayer3.getPlayerDeck().getDeckName());
+                    }
+                    if (totalPlayers >= 4) {
+                        intent.putExtra("NEW_GAME_PLAYER_4", activePlayer4.getPlayerDeck().getDeckOwnerName());
+                        intent.putExtra("NEW_GAME_DECK_4", activePlayer4.getPlayerDeck().getDeckName());
+                    }
                 }
-                if (totalPlayers >= 4) {
-                    intent.putExtra("NEW_GAME_PLAYER_4", activePlayer4.getPlayerDeck().getDeckOwnerName());
-                    intent.putExtra("NEW_GAME_DECK_4", activePlayer4.getPlayerDeck().getDeckName());
-                }
-            }
 
-            startActivity(intent);
-            this.finish();
+                startActivity(intent);
+                this.finish();
+                break;
+
+            case R.id.actions_roll_dice:
+                showDiceDialog();
+                break;
+
+            case R.id.actions_random_player:
+                showRandomPlayerDialog();
+                break;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -311,7 +328,7 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
             viewPager.setVisibility(View.GONE);
             tabLayout.setVisibility(View.GONE);
         } else {
-            int color = getActivePlayer(0).getPlayerDeck().getDeckShieldColor()[0];
+            int color = getActivePlayer(tabLayout.getSelectedTabPosition()).getPlayerDeck().getDeckShieldColor()[0];
             if (color == 0)
                 color = getResources().getIntArray(R.array.edh_default)[0];
             setActionBarColor(color);
@@ -600,5 +617,134 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
     private void setActionBarColor(int color) {
         mActionBar.setBackgroundDrawable(new ColorDrawable(color));
         statusBarBackground.setBackgroundColor(color);
+    }
+
+    private void showDiceDialog() {
+        View logView = LayoutInflater.from(this).inflate(R.layout.dialog_roll_a_dice, null);
+
+        TextView dummyView = (TextView) logView.findViewById(R.id.dummyView);
+        dummyView.requestFocus();
+
+        final NumberPicker mNumberPicker1 = (NumberPicker) logView.findViewById(R.id.numberPicker1);
+        mNumberPicker1.setMinValue(0);
+        mNumberPicker1.setMaxValue(99);
+        mNumberPicker1.clearFocus();
+
+        final NumberPicker mNumberPicker2 = (NumberPicker) logView.findViewById(R.id.numberPicker2);
+        mNumberPicker2.setMinValue(0);
+        mNumberPicker2.setMaxValue(99);
+        mNumberPicker2.setValue(99);
+        mNumberPicker2.clearFocus();
+
+        dummyView.requestFocus();
+
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setView(logView);
+        alertDialogBuilder.setTitle("Roll a dice");
+        alertDialogBuilder.setMessage("Choose the limits: ");
+        alertDialogBuilder.setPositiveButton("ROLL",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                        final int minValue;
+                        final int maxValue;
+
+                        if (mNumberPicker1.getValue() <= mNumberPicker2.getValue()) {
+                            minValue = mNumberPicker1.getValue();
+                            maxValue = mNumberPicker2.getValue();
+                        } else {
+                            minValue = mNumberPicker2.getValue();
+                            maxValue = mNumberPicker1.getValue();
+                        }
+
+                        final Random r = new Random();
+                        final int[] dice = {r.nextInt(maxValue - minValue + 1) + minValue};
+
+                        View logView = LayoutInflater.from(MainActivityNew.this).inflate(R.layout.dialog_roll_a_dice_result, null);
+                        final TextView textViewDiceResult = (TextView) logView.findViewById(R.id.textViewDiceResult);
+                        textViewDiceResult.setText(MessageFormat.format("{0}", dice[0]));
+
+                        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivityNew.this);
+                        alertDialogBuilder.setView(logView);
+                        alertDialogBuilder.setTitle("Roll a dice");
+                        alertDialogBuilder.setMessage("Dice result [" + minValue + ", " + maxValue + "]:");
+                        alertDialogBuilder.setPositiveButton("OK",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+
+                        alertDialogBuilder.setNegativeButton("BACK",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        showDiceDialog();
+                                    }
+                                });
+
+                        alertDialogBuilder.setNeutralButton("REPEAT",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                    }
+                                });
+
+                        final AlertDialog alertDialog = alertDialogBuilder.create();
+                        alertDialog.show();
+
+                        alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dice[0] = r.nextInt((maxValue - minValue) + 1) + minValue;
+                                textViewDiceResult.setText(MessageFormat.format("{0}", dice[0]));
+                            }
+                        });
+                    }
+                });
+        alertDialogBuilder.setNegativeButton("CANCEL",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
+    private void showRandomPlayerDialog() {
+        final int minValue = 0;
+        final int maxValue = totalPlayers - 1;
+        final Random r = new Random();
+        final int[] randomResult = {r.nextInt(maxValue - minValue + 1) + minValue};
+
+        View logView = LayoutInflater.from(this).inflate(R.layout.dialog_roll_a_dice_result, null);
+        final TextView textViewResult = (TextView) logView.findViewById(R.id.textViewDiceResult);
+        textViewResult.setTextSize(42);
+        textViewResult.setText(MessageFormat.format("{0}", getActivePlayer(randomResult[0]).getPlayerDeck().getDeckOwnerName()));
+
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setView(logView);
+        alertDialogBuilder.setTitle("Random Player:");
+        alertDialogBuilder.setPositiveButton("OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        alertDialogBuilder.setNeutralButton("REPEAT",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //Overridden at 'alertDialog.getButton' to avoid dismiss every time
+                    }
+                });
+        final AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+
+        alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                randomResult[0] = r.nextInt(maxValue - minValue + 1) + minValue;
+                textViewResult.setText(MessageFormat.format("{0}", getActivePlayer(randomResult[0]).getPlayerDeck().getDeckOwnerName()));
+            }
+        });
     }
 }
