@@ -3,8 +3,8 @@
     <solid
         android:color="@color/background_floating_material_light"/>
     <corners
-        android:radius="10dp"/>
+        android:radius="0dp"/>
     <stroke
-        android:width="2dp"
+        android:width="1dp"
         android:color="@color/secondary_color"/>
 </shape>

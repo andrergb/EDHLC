@@ -198,6 +198,15 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
         //Option menu
         switch (item.getItemId()) {
             case R.id.action_overview:
+                if (activePlayer1 != null)
+                    Utils.savePlayerInSharedPreferences(this, activePlayer1);
+                if (activePlayer2 != null)
+                    Utils.savePlayerInSharedPreferences(this, activePlayer2);
+                if (totalPlayers >= 3 && activePlayer3 != null)
+                    Utils.savePlayerInSharedPreferences(this, activePlayer3);
+                if (totalPlayers >= 4 && activePlayer4 != null)
+                    Utils.savePlayerInSharedPreferences(this, activePlayer4);
+                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.TOTAL_PLAYERS, totalPlayers).apply();
                 startActivity(new Intent(this, OverviewActivity.class));
                 break;
 
