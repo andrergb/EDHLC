@@ -82,6 +82,7 @@
                             android:layout_centerVertical="true"
                             android:singleLine="true"
                             android:text="40"
+                            android:textColor="@color/primary_text"
                             android:textSize="100sp"/>
 
                         <!--LIFE VALUE-->
@@ -159,6 +160,7 @@
                             android:layout_weight="1"
                             android:gravity="center"
                             android:text="@string/default_edh_21"
+                            android:textColor="@color/secondary_text"
                             android:textSize="22sp"/>
 
                         <TextView
@@ -169,6 +171,7 @@
                             android:layout_weight="1"
                             android:gravity="center"
                             android:text="@string/default_edh_21"
+                            android:textColor="@color/secondary_text"
                             android:textSize="22sp"/>
                     </LinearLayout>
                 </LinearLayout>
@@ -237,6 +240,7 @@
                             android:layout_centerVertical="true"
                             android:singleLine="true"
                             android:text="40"
+                            android:textColor="@color/primary_text"
                             android:textSize="100sp"/>
 
                         <!--LIFE VALUE-->
@@ -315,6 +319,7 @@
                             android:layout_weight="1"
                             android:gravity="center"
                             android:text="@string/default_edh_21"
+                            android:textColor="@color/secondary_text"
                             android:textSize="22sp"/>
 
                         <TextView
@@ -325,6 +330,7 @@
                             android:layout_weight="1"
                             android:gravity="center"
                             android:text="@string/default_edh_21"
+                            android:textColor="@color/secondary_text"
                             android:textSize="22sp"/>
                     </LinearLayout>
                 </LinearLayout>

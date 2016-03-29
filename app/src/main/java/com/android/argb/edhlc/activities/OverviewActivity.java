@@ -203,8 +203,10 @@ public class OverviewActivity extends AppCompatActivity {
         totalPlayers = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt(Constants.TOTAL_PLAYERS, 4);
         if (totalPlayers == 2)
             setContentView(R.layout.activity_overview_new_2p);
+        else if (totalPlayers == 3)
+            setContentView(R.layout.activity_overview_new_3p);
         else
-            setContentView(R.layout.activity_overview_new);
+            setContentView(R.layout.activity_overview_new_4p);
 
 
         createStatusBar();
@@ -413,25 +415,25 @@ public class OverviewActivity extends AppCompatActivity {
         mTextViewP1Name.setEnabled(mActivePlayer1.getPlayerIsAlive());
         mTextViewP1Name.setTextColor(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer1.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
         mTextViewP1Life.setText(String.valueOf(mActivePlayer1.getPlayerLife()));
-        mTextViewP1Life.setTextColor(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer1.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
         mTextViewP1Life.setEnabled(mActivePlayer1.getPlayerIsAlive());
+//        mTextViewP1Life.setTextColor(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer1.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
         lifePositiveP1.setColorFilter(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer1.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
         lifeNegativeP1.setColorFilter(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer1.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
         mTextViewP1EDH1.setText(String.valueOf(mActivePlayer1.getPlayerEDH1()));
         mTextViewP1EDH1.setEnabled(mActivePlayer1.getPlayerIsAlive());
-        mTextViewP1EDH1.setTextColor(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer1.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
+//        mTextViewP1EDH1.setTextColor(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer1.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
         mTextViewP1EDH2.setText(String.valueOf(mActivePlayer1.getPlayerEDH2()));
         mTextViewP1EDH2.setEnabled(mActivePlayer1.getPlayerIsAlive());
-        mTextViewP1EDH2.setTextColor(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer1.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
+//        mTextViewP1EDH2.setTextColor(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer1.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
         if (totalPlayers >= 3) {
             mTextViewP1EDH3.setText(String.valueOf(mActivePlayer1.getPlayerEDH3()));
             mTextViewP1EDH3.setEnabled(mActivePlayer1.getPlayerIsAlive());
-            mTextViewP1EDH3.setTextColor(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer1.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
+//            mTextViewP1EDH3.setTextColor(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer1.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
         }
         if (totalPlayers >= 4) {
             mTextViewP1EDH4.setText(String.valueOf(mActivePlayer1.getPlayerEDH4()));
             mTextViewP1EDH4.setEnabled(mActivePlayer1.getPlayerIsAlive());
-            mTextViewP1EDH4.setTextColor(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer1.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
+//            mTextViewP1EDH4.setTextColor(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer1.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
         }
 
         mTextViewP2Name.setText(mActivePlayer2.getPlayerDeck().getDeckOwnerName());
@@ -439,24 +441,24 @@ public class OverviewActivity extends AppCompatActivity {
         mTextViewP2Name.setTextColor(mActivePlayer2.getPlayerIsAlive() ? mActivePlayer2.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
         mTextViewP2Life.setText(String.valueOf(mActivePlayer2.getPlayerLife()));
         mTextViewP2Life.setEnabled(mActivePlayer2.getPlayerIsAlive());
-        mTextViewP2Life.setTextColor(mActivePlayer2.getPlayerIsAlive() ? mActivePlayer2.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
+//        mTextViewP2Life.setTextColor(mActivePlayer2.getPlayerIsAlive() ? mActivePlayer2.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
         lifePositiveP2.setColorFilter(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer2.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
         lifeNegativeP2.setColorFilter(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer2.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
         mTextViewP2EDH1.setText(String.valueOf(mActivePlayer2.getPlayerEDH1()));
         mTextViewP2EDH1.setEnabled(mActivePlayer2.getPlayerIsAlive());
-        mTextViewP2EDH1.setTextColor(mActivePlayer2.getPlayerIsAlive() ? mActivePlayer2.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
+//        mTextViewP2EDH1.setTextColor(mActivePlayer2.getPlayerIsAlive() ? mActivePlayer2.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
         mTextViewP2EDH2.setText(String.valueOf(mActivePlayer2.getPlayerEDH2()));
         mTextViewP2EDH2.setEnabled(mActivePlayer2.getPlayerIsAlive());
-        mTextViewP2EDH2.setTextColor(mActivePlayer2.getPlayerIsAlive() ? mActivePlayer2.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
+//        mTextViewP2EDH2.setTextColor(mActivePlayer2.getPlayerIsAlive() ? mActivePlayer2.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
         if (totalPlayers >= 3) {
             mTextViewP2EDH3.setText(String.valueOf(mActivePlayer2.getPlayerEDH3()));
             mTextViewP2EDH3.setEnabled(mActivePlayer2.getPlayerIsAlive());
-            mTextViewP2EDH3.setTextColor(mActivePlayer2.getPlayerIsAlive() ? mActivePlayer2.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
+//            mTextViewP2EDH3.setTextColor(mActivePlayer2.getPlayerIsAlive() ? mActivePlayer2.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
         }
         if (totalPlayers >= 4) {
             mTextViewP2EDH4.setText(String.valueOf(mActivePlayer2.getPlayerEDH4()));
             mTextViewP2EDH4.setEnabled(mActivePlayer2.getPlayerIsAlive());
-            mTextViewP2EDH4.setTextColor(mActivePlayer2.getPlayerIsAlive() ? mActivePlayer2.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
+//            mTextViewP2EDH4.setTextColor(mActivePlayer2.getPlayerIsAlive() ? mActivePlayer2.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
         }
 
         if (totalPlayers >= 3) {
@@ -465,22 +467,22 @@ public class OverviewActivity extends AppCompatActivity {
             mTextViewP3Name.setTextColor(mActivePlayer3.getPlayerIsAlive() ? mActivePlayer3.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
             mTextViewP3Life.setText(String.valueOf(mActivePlayer3.getPlayerLife()));
             mTextViewP3Life.setEnabled(mActivePlayer3.getPlayerIsAlive());
-            mTextViewP3Life.setTextColor(mActivePlayer3.getPlayerIsAlive() ? mActivePlayer3.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
+//            mTextViewP3Life.setTextColor(mActivePlayer3.getPlayerIsAlive() ? mActivePlayer3.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
             lifePositiveP3.setColorFilter(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer3.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
             lifeNegativeP3.setColorFilter(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer3.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
             mTextViewP3EDH1.setText(String.valueOf(mActivePlayer3.getPlayerEDH1()));
             mTextViewP3EDH1.setEnabled(mActivePlayer3.getPlayerIsAlive());
-            mTextViewP3EDH1.setTextColor(mActivePlayer3.getPlayerIsAlive() ? mActivePlayer3.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
+//            mTextViewP3EDH1.setTextColor(mActivePlayer3.getPlayerIsAlive() ? mActivePlayer3.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
             mTextViewP3EDH2.setText(String.valueOf(mActivePlayer3.getPlayerEDH2()));
             mTextViewP3EDH2.setEnabled(mActivePlayer3.getPlayerIsAlive());
-            mTextViewP3EDH2.setTextColor(mActivePlayer3.getPlayerIsAlive() ? mActivePlayer3.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
+//            mTextViewP3EDH2.setTextColor(mActivePlayer3.getPlayerIsAlive() ? mActivePlayer3.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
             mTextViewP3EDH3.setText(String.valueOf(mActivePlayer3.getPlayerEDH3()));
             mTextViewP3EDH3.setEnabled(mActivePlayer3.getPlayerIsAlive());
-            mTextViewP3EDH3.setTextColor(mActivePlayer3.getPlayerIsAlive() ? mActivePlayer3.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
+//            mTextViewP3EDH3.setTextColor(mActivePlayer3.getPlayerIsAlive() ? mActivePlayer3.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
             if (totalPlayers >= 4) {
                 mTextViewP3EDH4.setText(String.valueOf(mActivePlayer3.getPlayerEDH4()));
                 mTextViewP3EDH4.setEnabled(mActivePlayer3.getPlayerIsAlive());
-                mTextViewP3EDH4.setTextColor(mActivePlayer3.getPlayerIsAlive() ? mActivePlayer3.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
+//                mTextViewP3EDH4.setTextColor(mActivePlayer3.getPlayerIsAlive() ? mActivePlayer3.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
             }
         }
 
@@ -490,21 +492,21 @@ public class OverviewActivity extends AppCompatActivity {
             mTextViewP4Name.setTextColor(mActivePlayer4.getPlayerIsAlive() ? mActivePlayer4.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
             mTextViewP4Life.setText(String.valueOf(mActivePlayer4.getPlayerLife()));
             mTextViewP4Life.setEnabled(mActivePlayer4.getPlayerIsAlive());
-            mTextViewP4Life.setTextColor(mActivePlayer4.getPlayerIsAlive() ? mActivePlayer4.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
+//            mTextViewP4Life.setTextColor(mActivePlayer4.getPlayerIsAlive() ? mActivePlayer4.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
             lifePositiveP4.setColorFilter(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer4.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
             lifeNegativeP4.setColorFilter(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer4.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
             mTextViewP4EDH1.setText(String.valueOf(mActivePlayer4.getPlayerEDH1()));
             mTextViewP4EDH1.setEnabled(mActivePlayer4.getPlayerIsAlive());
-            mTextViewP4EDH1.setTextColor(mActivePlayer4.getPlayerIsAlive() ? mActivePlayer4.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
+//            mTextViewP4EDH1.setTextColor(mActivePlayer4.getPlayerIsAlive() ? mActivePlayer4.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
             mTextViewP4EDH2.setText(String.valueOf(mActivePlayer4.getPlayerEDH2()));
             mTextViewP4EDH2.setEnabled(mActivePlayer4.getPlayerIsAlive());
-            mTextViewP4EDH2.setTextColor(mActivePlayer4.getPlayerIsAlive() ? mActivePlayer4.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
-            mTextViewP4EDH3.setTextColor(mActivePlayer4.getPlayerIsAlive() ? mActivePlayer4.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
+//            mTextViewP4EDH2.setTextColor(mActivePlayer4.getPlayerIsAlive() ? mActivePlayer4.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
             mTextViewP4EDH3.setText(String.valueOf(mActivePlayer4.getPlayerEDH3()));
             mTextViewP4EDH3.setEnabled(mActivePlayer4.getPlayerIsAlive());
-            mTextViewP4EDH4.setTextColor(mActivePlayer4.getPlayerIsAlive() ? mActivePlayer4.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
+//            mTextViewP4EDH3.setTextColor(mActivePlayer4.getPlayerIsAlive() ? mActivePlayer4.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
             mTextViewP4EDH4.setText(String.valueOf(mActivePlayer4.getPlayerEDH4()));
             mTextViewP4EDH4.setEnabled(mActivePlayer4.getPlayerIsAlive());
+//            mTextViewP4EDH4.setTextColor(mActivePlayer4.getPlayerIsAlive() ? mActivePlayer4.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
         }
     }
 }
