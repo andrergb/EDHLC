@@ -229,13 +229,13 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
                 break;
             case R.id.lifePositiveP1:
                 activePlayer1.setPlayerLife(activePlayer1.getPlayerLife() + 1);
-                updateOverviewLayout();
-                fragments.get(0).updateLife(activePlayer1.getPlayerLife());
+                overview_TextViewP1Life.setText(String.valueOf(activePlayer1.getPlayerLife()));
+                updateOverviewDethroneIcon();
                 break;
             case R.id.lifeNegativeP1:
                 activePlayer1.setPlayerLife(activePlayer1.getPlayerLife() - 1);
-                updateOverviewLayout();
-                fragments.get(0).updateLife(activePlayer1.getPlayerLife());
+                overview_TextViewP1Life.setText(String.valueOf(activePlayer1.getPlayerLife()));
+                updateOverviewDethroneIcon();
                 break;
 
             case R.id.nameP2:
@@ -243,8 +243,14 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
             case R.id.textViewOverviewP2Life:
                 break;
             case R.id.lifePositiveP2:
+                activePlayer2.setPlayerLife(activePlayer2.getPlayerLife() + 1);
+                overview_TextViewP2Life.setText(String.valueOf(activePlayer2.getPlayerLife()));
+                updateOverviewDethroneIcon();
                 break;
             case R.id.lifeNegativeP2:
+                activePlayer2.setPlayerLife(activePlayer2.getPlayerLife() - 1);
+                overview_TextViewP2Life.setText(String.valueOf(activePlayer2.getPlayerLife()));
+                updateOverviewDethroneIcon();
                 break;
 
             case R.id.nameP3:
@@ -252,8 +258,14 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
             case R.id.textViewOverviewP3Life:
                 break;
             case R.id.lifePositiveP3:
+                activePlayer3.setPlayerLife(activePlayer3.getPlayerLife() + 1);
+                overview_TextViewP3Life.setText(String.valueOf(activePlayer3.getPlayerLife()));
+                updateOverviewDethroneIcon();
                 break;
             case R.id.lifeNegativeP3:
+                activePlayer3.setPlayerLife(activePlayer3.getPlayerLife() - 1);
+                overview_TextViewP3Life.setText(String.valueOf(activePlayer3.getPlayerLife()));
+                updateOverviewDethroneIcon();
                 break;
 
             case R.id.nameP4:
@@ -261,8 +273,14 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
             case R.id.textViewOverviewP4Life:
                 break;
             case R.id.lifePositiveP4:
+                activePlayer4.setPlayerLife(activePlayer4.getPlayerLife() + 1);
+                overview_TextViewP4Life.setText(String.valueOf(activePlayer4.getPlayerLife()));
+                updateOverviewDethroneIcon();
                 break;
             case R.id.lifeNegativeP4:
+                activePlayer4.setPlayerLife(activePlayer4.getPlayerLife() - 1);
+                overview_TextViewP4Life.setText(String.valueOf(activePlayer4.getPlayerLife()));
+                updateOverviewDethroneIcon();
                 break;
         }
     }
@@ -289,21 +307,8 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
         //Option menu
         switch (item.getItemId()) {
             case R.id.action_overview:
-//                if (activePlayer1 != null)
-//                    Utils.savePlayerInSharedPreferences(this, activePlayer1);
-//                if (activePlayer2 != null)
-//                    Utils.savePlayerInSharedPreferences(this, activePlayer2);
-//                if (totalPlayers >= 3 && activePlayer3 != null)
-//                    Utils.savePlayerInSharedPreferences(this, activePlayer3);
-//                if (totalPlayers >= 4 && activePlayer4 != null)
-//                    Utils.savePlayerInSharedPreferences(this, activePlayer4);
-//                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.TOTAL_PLAYERS, totalPlayers).apply();
-//                startActivity(new Intent(this, OverviewActivity.class));
-//                overridePendingTransition(R.anim.slide_in_top, R.anim.slide_out_bottom);
-//                this.finish();
-
-                //TODO
-                setMode(MODE_OVERVIEW);
+                if (getCurrentMode() != MODE_NEW_GAME)
+                    setMode(MODE_OVERVIEW);
                 break;
 
             case R.id.action_history:
@@ -371,10 +376,6 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
         createOverviewLayout();
 
         if (isValidGame()) {
-
-
-            setMode(MODE_PLAYING);
-
             activePlayer1 = Utils.loadPlayerFromSharedPreferences(this, 0);
             activePlayer2 = Utils.loadPlayerFromSharedPreferences(this, 1);
             if (totalPlayers >= 3)
@@ -402,6 +403,8 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
             viewPager.setOffscreenPageLimit(fragments.size());
 
             tabLayout.setupWithViewPager(viewPager);
+
+            setMode(MODE_PLAYING);
         }
     }
 
@@ -827,6 +830,17 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
                 break;
 
             case MODE_PLAYING:
+                for (int i = 0; i < fragments.size(); i++) {
+                    if (i == 0)
+                        fragments.get(0).updateLife(activePlayer1.getPlayerLife());
+                    else if (i == 1)
+                        fragments.get(1).updateLife(activePlayer2.getPlayerLife());
+                    else if (i == 2)
+                        fragments.get(2).updateLife(activePlayer3.getPlayerLife());
+                    else if (i == 3)
+                        fragments.get(3).updateLife(activePlayer4.getPlayerLife());
+                }
+
                 viewNewGame.setVisibility(View.GONE);
                 viewOverview.setVisibility(View.GONE);
                 viewPager.setVisibility(View.VISIBLE);

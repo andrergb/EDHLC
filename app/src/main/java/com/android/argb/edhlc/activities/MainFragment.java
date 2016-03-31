@@ -298,8 +298,10 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     }
 
     private void setLife(int life) {
-        lifeValue.setTextSize(TypedValue.COMPLEX_UNIT_SP, (life > 99 || life < -99) ? 120 : 180);
-        lifeValue.setText("" + life);
+        if (lifeValue != null) {
+            lifeValue.setTextSize(TypedValue.COMPLEX_UNIT_SP, (life > 99 || life < -99) ? 120 : 180);
+            lifeValue.setText("" + life);
+        }
     }
 
     private void updateLayout() {
