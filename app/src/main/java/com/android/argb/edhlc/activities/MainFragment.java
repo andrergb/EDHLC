@@ -209,6 +209,11 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
+    public void updateLife(int value) {
+        getArguments().putInt(ARG_LIFE, value);
+        setLife(getArguments().getInt(ARG_LIFE));
+    }
+
     public void updateFragmentDethrone(boolean isOnThrone) {
         if (imageViewThrone != null)
             imageViewThrone.setVisibility(isOnThrone ? View.VISIBLE : View.GONE);

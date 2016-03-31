@@ -49,7 +49,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="0.3"
-                            android:onClick="onClickLayout">
+                            android:onClick="onClickOverview">
 
                             <TextView
                                 android:id="@+id/textViewOverviewP1Name"
@@ -90,7 +90,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_weight="8"
                                 android:gravity="center"
-                                android:onClick="onClickLayout"
+                                android:onClick="onClickOverview"
                                 android:singleLine="true"
                                 android:text="40"
                                 android:textColor="@color/primary_text"
@@ -119,7 +119,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:adjustViewBounds="true"
-                                        android:onClick="onClickLayout"
+                                        android:onClick="onClickOverview"
                                         android:src="@drawable/icon_up1"/>
                                 </LinearLayout>
 
@@ -136,7 +136,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:adjustViewBounds="true"
-                                        android:onClick="onClickLayout"
+                                        android:onClick="onClickOverview"
                                         android:src="@drawable/icon_down1"/>
                                 </LinearLayout>
                             </LinearLayout>
@@ -206,7 +206,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="0.3"
-                            android:onClick="onClickLayout">
+                            android:onClick="onClickOverview">
 
                             <TextView
                                 android:id="@+id/textViewOverviewP2Name"
@@ -246,7 +246,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_weight="8"
                                 android:gravity="center"
-                                android:onClick="onClickLayout"
+                                android:onClick="onClickOverview"
                                 android:singleLine="true"
                                 android:text="40"
                                 android:textColor="@color/primary_text"
@@ -275,7 +275,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:adjustViewBounds="true"
-                                        android:onClick="onClickLayout"
+                                        android:onClick="onClickOverview"
                                         android:src="@drawable/icon_up1"/>
                                 </LinearLayout>
 
@@ -292,7 +292,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:adjustViewBounds="true"
-                                        android:onClick="onClickLayout"
+                                        android:onClick="onClickOverview"
                                         android:src="@drawable/icon_down1"/>
                                 </LinearLayout>
                             </LinearLayout>
@@ -366,7 +366,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="0.4"
-                        android:onClick="onClickLayout">
+                        android:onClick="onClickOverview">
 
                         <ImageView
                             android:id="@+id/imageViewThroneP3"
@@ -403,7 +403,7 @@
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
                             android:layout_centerVertical="true"
-                            android:onClick="onClickLayout"
+                            android:onClick="onClickOverview"
                             android:singleLine="true"
                             android:text="40"
                             android:textColor="@color/primary_text"
@@ -445,7 +445,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:adjustViewBounds="true"
-                                        android:onClick="onClickLayout"
+                                        android:onClick="onClickOverview"
                                         android:src="@drawable/icon_up1"/>
                                 </LinearLayout>
 
@@ -462,7 +462,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:adjustViewBounds="true"
-                                        android:onClick="onClickLayout"
+                                        android:onClick="onClickOverview"
                                         android:src="@drawable/icon_down1"/>
                                 </LinearLayout>
                             </LinearLayout>
