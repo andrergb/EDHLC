@@ -307,8 +307,10 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
         //Option menu
         switch (item.getItemId()) {
             case R.id.action_overview:
-                if (getCurrentMode() != MODE_NEW_GAME)
+                if (getCurrentMode() == MODE_PLAYING)
                     setMode(MODE_OVERVIEW);
+                else if (getCurrentMode() == MODE_OVERVIEW)
+                    setMode(MODE_PLAYING);
                 break;
 
             case R.id.action_history:
@@ -428,16 +430,10 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
             switchScreen.setChecked(false);
         }
 
-        if (!isValidGame()) {
-            setActionBarColor(getResources().getIntArray(R.array.edh_default)[0]);
+        if (!isValidGame())
             setMode(MODE_NEW_GAME);
-        } else {
-            int color = getActivePlayer(tabLayout.getSelectedTabPosition()).getPlayerDeck().getDeckShieldColor()[0];
-            if (color == 0)
-                color = getResources().getIntArray(R.array.edh_default)[0];
-            setActionBarColor(color);
-
-        }
+        else
+            setMode(MODE_PLAYING);
     }
 
     @Override
@@ -815,6 +811,8 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
     private void setMode(int mode) {
         switch (mode) {
             case MODE_NEW_GAME:
+                setActionBarColor(getResources().getIntArray(R.array.edh_default)[0]);
+
                 viewNewGame.setVisibility(View.VISIBLE);
                 viewOverview.setVisibility(View.GONE);
                 viewPager.setVisibility(View.GONE);
@@ -822,6 +820,8 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
                 break;
 
             case MODE_OVERVIEW:
+                setActionBarColor(getResources().getIntArray(R.array.edh_default)[0]);
+
                 updateOverviewLayout();
                 viewNewGame.setVisibility(View.GONE);
                 viewOverview.setVisibility(View.VISIBLE);
@@ -830,6 +830,11 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
                 break;
 
             case MODE_PLAYING:
+                int color = getActivePlayer(tabLayout.getSelectedTabPosition()).getPlayerDeck().getDeckShieldColor()[0];
+                if (color == 0)
+                    color = getResources().getIntArray(R.array.edh_default)[0];
+                setActionBarColor(color);
+
                 for (int i = 0; i < fragments.size(); i++) {
                     if (i == 0)
                         fragments.get(0).updateLife(activePlayer1.getPlayerLife());
