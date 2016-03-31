@@ -34,16 +34,17 @@
                     android:layout_marginLeft="40dp"
                     android:layout_marginRight="40dp"
                     android:layout_marginTop="8dp"
-                    android:onClick="onClickP1"
                     android:orientation="vertical"
                     android:weightSum="2">
 
                     <!-- Header player name -->
                     <RelativeLayout
+                        android:id="@+id/nameP1"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_gravity="center"
-                        android:layout_weight="0.4">
+                        android:layout_weight="0.4"
+                        android:onClick="onClickLayout">
 
                         <ImageView
                             android:id="@+id/imageViewThroneP1"
@@ -80,6 +81,7 @@
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
                             android:layout_centerVertical="true"
+                            android:onClick="onClickLayout"
                             android:singleLine="true"
                             android:text="40"
                             android:textColor="@color/primary_text"
@@ -121,6 +123,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:adjustViewBounds="true"
+                                        android:onClick="onClickLayout"
                                         android:src="@drawable/icon_up1"/>
                                 </LinearLayout>
 
@@ -137,6 +140,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:adjustViewBounds="true"
+                                        android:onClick="onClickLayout"
                                         android:src="@drawable/icon_down1"/>
                                 </LinearLayout>
                             </LinearLayout>
@@ -192,16 +196,17 @@
                     android:layout_marginLeft="40dp"
                     android:layout_marginRight="40dp"
                     android:layout_marginTop="8dp"
-                    android:onClick="onClickP2"
                     android:orientation="vertical"
                     android:padding="0dp"
                     android:weightSum="2">
 
                     <!-- Header player name -->
                     <RelativeLayout
+                        android:id="@+id/nameP2"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="0.4">
+                        android:layout_weight="0.4"
+                        android:onClick="onClickLayout">
 
                         <ImageView
                             android:id="@+id/imageViewThroneP2"
@@ -238,6 +243,7 @@
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
                             android:layout_centerVertical="true"
+                            android:onClick="onClickLayout"
                             android:singleLine="true"
                             android:text="40"
                             android:textColor="@color/primary_text"
@@ -279,6 +285,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:adjustViewBounds="true"
+                                        android:onClick="onClickLayout"
                                         android:src="@drawable/icon_up1"/>
                                 </LinearLayout>
 
@@ -295,6 +302,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:adjustViewBounds="true"
+                                        android:onClick="onClickLayout"
                                         android:src="@drawable/icon_down1"/>
                                 </LinearLayout>
                             </LinearLayout>

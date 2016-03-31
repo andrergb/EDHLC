@@ -8,6 +8,7 @@
     android:elevation="7dp">
 
     <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true">
@@ -65,7 +66,7 @@
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:visibility="gone"
-            app:layout_anchor="@id/nestedScrollView"
+            app:layout_anchor="@id/coordinatorLayout"
             app:layout_anchorGravity="bottom|right|end">
 
             <TextView
@@ -105,7 +106,7 @@
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:visibility="gone"
-            app:layout_anchor="@id/nestedScrollView"
+            app:layout_anchor="@id/coordinatorLayout"
             app:layout_anchorGravity="bottom|right|end">
 
             <TextView
@@ -145,7 +146,7 @@
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:visibility="gone"
-            app:layout_anchor="@id/nestedScrollView"
+            app:layout_anchor="@id/coordinatorLayout"
             app:layout_anchorGravity="bottom|right|end">
 
             <TextView
@@ -185,7 +186,7 @@
             app:backgroundTint="@color/accent_color"
             app:elevation="6dp"
             app:fabSize="normal"
-            app:layout_anchor="@id/nestedScrollView"
+            app:layout_anchor="@id/coordinatorLayout"
             app:layout_anchorGravity="bottom|right|end"
             app:layout_behavior="com.android.argb.edhlc.FABScrollBehavior"
             app:pressedTranslationZ="12dp"/>

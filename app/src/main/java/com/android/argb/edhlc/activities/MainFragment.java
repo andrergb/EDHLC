@@ -108,16 +108,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-//    @Override
-//    public void onAttach(Activity activity) {
-//        super.onAttach(activity);
-//        if (activity instanceof OnUpdateData) {
-//            onUpdateDataInterface = (OnUpdateData) activity;
-//        } else {
-//            throw new RuntimeException(activity.toString());
-//        }
-//    }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {

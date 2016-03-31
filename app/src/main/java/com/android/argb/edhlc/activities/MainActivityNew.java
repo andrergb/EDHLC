@@ -9,7 +9,6 @@ import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -52,16 +51,18 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
     private ActionBarDrawerToggle mDrawerToggle;
     private Switch switchScreen;
 
+    private SharedPreferences mSharedPreferences;
+
     private ActionBar mActionBar;
     private Menu optionMenu;
-    private View statusBarBackground;
 
+    private View statusBarBackground;
     private ViewPager viewPager;
     private TabLayout tabLayout;
     private RelativeLayout viewNewGame;
     private List<MainFragment> fragments;
-    private MainPagerAdapter mPagerAdapter;
 
+    private MainPagerAdapter mPagerAdapter;
     //Players
     private int totalPlayers;
     private ActivePlayerNew activePlayer1;
@@ -208,6 +209,8 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
                     Utils.savePlayerInSharedPreferences(this, activePlayer4);
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.TOTAL_PLAYERS, totalPlayers).apply();
                 startActivity(new Intent(this, OverviewActivity.class));
+                overridePendingTransition(R.anim.slide_in_top, R.anim.slide_out_bottom);
+                this.finish();
                 break;
 
             case R.id.action_history:
@@ -253,10 +256,10 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+    public void onPause() {
+        super.onPause();
         if (tabLayout != null)
-            outState.putInt("TAB_POSITION", tabLayout.getSelectedTabPosition());
+            getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, tabLayout.getSelectedTabPosition()).apply();
     }
 
     @Override
@@ -269,7 +272,7 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
         createDrawer();
         createLayout();
 
-        SharedPreferences mSharedPreferences = getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE);
+        mSharedPreferences = getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE);
         totalPlayers = mSharedPreferences.getInt(Constants.CURRENT_GAME_TOTAL_PLAYERS, 0);
 
         if (isValidGame()) {
@@ -314,15 +317,11 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
     }
 
     @Override
-    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        if (viewPager != null)
-            viewPager.setCurrentItem(savedInstanceState.getInt("TAB_POSITION"));
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
+        if (viewPager != null)
+            viewPager.setCurrentItem(mSharedPreferences.getInt(Constants.CURRENT_VIEW_TAB, 0));
+
         if (getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt(Constants.SCREEN_ON, 0) == 1) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             switchScreen.setChecked(true);
@@ -341,6 +340,7 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
             if (color == 0)
                 color = getResources().getIntArray(R.array.edh_default)[0];
             setActionBarColor(color);
+
         }
     }
 

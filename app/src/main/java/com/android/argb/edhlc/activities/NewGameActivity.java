@@ -101,6 +101,8 @@ public class NewGameActivity extends AppCompatActivity {
                 }
                 //Total players
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_GAME_TOTAL_PLAYERS, index + 1).apply();
+                //INITIAL TAB
+                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 0).apply();
 
                 Intent intentHome = new Intent(this, MainActivityNew.class);
                 intentHome.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

@@ -1,5 +1,6 @@
 package com.android.argb.edhlc.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -10,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -136,43 +138,108 @@ public class OverviewActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        this.finish();
         super.onBackPressed();
+        startActivity(new Intent(this, MainActivityNew.class));
+        this.finish();
     }
 
-    public void onClickP1(View view) {
-        if (totalPlayers >= 1) {
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("TAG", "1");
-            startActivity(intent);
-            this.finish();
-        }
-    }
+    public void onClickLayout(View view) {
+        switch (view.getId()) {
+            case R.id.nameP1:
+                if (totalPlayers >= 1) {
+                    getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 0).apply();
+                    startActivity(new Intent(this, MainActivityNew.class));
+                    overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_top);
+                    this.finish();
+                }
+                break;
+            case R.id.textViewOverviewP1Life:
+                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 0).apply();
+                break;
+            case R.id.lifePositiveP1:
+                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 0).apply();
+                mActivePlayer1.setPlayerLife(mActivePlayer1.getPlayerLife() + 1);
+                mTextViewP1Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (mActivePlayer1.getPlayerLife() > 99 || mActivePlayer1.getPlayerLife() < -99) ? (totalPlayers == 2 ? 100 : 70) : (totalPlayers == 2 ? 120 : 100));
+                mTextViewP1Life.setText("" + mActivePlayer1.getPlayerLife());
+                break;
+            case R.id.lifeNegativeP1:
+                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 0).apply();
+                mActivePlayer1.setPlayerLife(mActivePlayer1.getPlayerLife() - 1);
+                mTextViewP1Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (mActivePlayer1.getPlayerLife() > 99 || mActivePlayer1.getPlayerLife() < -99) ? (totalPlayers == 2 ? 100 : 70) : (totalPlayers == 2 ? 120 : 100));
+                mTextViewP1Life.setText("" + mActivePlayer1.getPlayerLife());
+                break;
 
-    public void onClickP2(View view) {
-        if (totalPlayers >= 2) {
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("TAG", "2");
-            startActivity(intent);
-            this.finish();
-        }
-    }
+            case R.id.nameP2:
+                if (totalPlayers >= 2) {
+                    getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 1).apply();
+                    startActivity(new Intent(this, MainActivityNew.class));
+                    overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_top);
+                    this.finish();
+                }
+                break;
+            case R.id.textViewOverviewP2Life:
+                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 1).apply();
+                break;
+            case R.id.lifePositiveP2:
+                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 1).apply();
+                mActivePlayer2.setPlayerLife(mActivePlayer2.getPlayerLife() + 1);
+                mTextViewP2Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (mActivePlayer2.getPlayerLife() > 99 || mActivePlayer2.getPlayerLife() < -99) ? (totalPlayers == 2 ? 100 : 70) : (totalPlayers == 2 ? 120 : 100));
+                mTextViewP2Life.setText("" + mActivePlayer2.getPlayerLife());
+                break;
+            case R.id.lifeNegativeP2:
+                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 1).apply();
+                mActivePlayer2.setPlayerLife(mActivePlayer2.getPlayerLife() - 1);
+                mTextViewP2Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (mActivePlayer2.getPlayerLife() > 99 || mActivePlayer2.getPlayerLife() < -99) ? (totalPlayers == 2 ? 100 : 70) : (totalPlayers == 2 ? 120 : 100));
+                mTextViewP2Life.setText("" + mActivePlayer2.getPlayerLife());
+                break;
 
-    public void onClickP3(View view) {
-        if (totalPlayers >= 3) {
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("TAG", "3");
-            startActivity(intent);
-            this.finish();
-        }
-    }
+            case R.id.nameP3:
+                if (totalPlayers >= 3) {
+                    getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 2).apply();
+                    startActivity(new Intent(this, MainActivityNew.class));
+                    overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_top);
+                    this.finish();
+                }
+                break;
+            case R.id.textViewOverviewP3Life:
+                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 2).apply();
+                break;
+            case R.id.lifePositiveP3:
+                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 2).apply();
+                mActivePlayer3.setPlayerLife(mActivePlayer3.getPlayerLife() + 1);
+                mTextViewP3Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (mActivePlayer3.getPlayerLife() > 99 || mActivePlayer3.getPlayerLife() < -99) ? (totalPlayers == 3 ? 100 : 70) : (totalPlayers == 3 ? 120 : 100));
+                mTextViewP3Life.setText("" + mActivePlayer3.getPlayerLife());
+                break;
+            case R.id.lifeNegativeP3:
+                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 2).apply();
+                mActivePlayer3.setPlayerLife(mActivePlayer3.getPlayerLife() - 1);
+                mTextViewP3Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (mActivePlayer3.getPlayerLife() > 99 || mActivePlayer3.getPlayerLife() < -99) ? (totalPlayers == 3 ? 100 : 70) : (totalPlayers == 3 ? 120 : 100));
+                mTextViewP3Life.setText("" + mActivePlayer3.getPlayerLife());
+                break;
 
-    public void onClickP4(View view) {
-        if (totalPlayers >= 4) {
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("TAG", "4");
-            startActivity(intent);
-            this.finish();
+            case R.id.nameP4:
+                if (totalPlayers >= 4) {
+                    getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 3).apply();
+                    startActivity(new Intent(this, MainActivityNew.class));
+                    overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_top);
+                    this.finish();
+                }
+                break;
+            case R.id.textViewOverviewP4Life:
+                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 3).apply();
+                break;
+            case R.id.lifePositiveP4:
+                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 3).apply();
+                mActivePlayer4.setPlayerLife(mActivePlayer4.getPlayerLife() + 1);
+                mTextViewP4Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (mActivePlayer4.getPlayerLife() > 99 || mActivePlayer4.getPlayerLife() < -99) ? 70 : 100);
+                mTextViewP4Life.setText("" + mActivePlayer4.getPlayerLife());
+                break;
+            case R.id.lifeNegativeP4:
+                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 3).apply();
+                mActivePlayer4.setPlayerLife(mActivePlayer4.getPlayerLife() - 1);
+                mTextViewP4Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (mActivePlayer4.getPlayerLife() > 99 || mActivePlayer4.getPlayerLife() < -99) ? 70 : 100);
+                mTextViewP4Life.setText("" + mActivePlayer4.getPlayerLife());
+                break;
         }
     }
 
@@ -191,6 +258,7 @@ public class OverviewActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                startActivity(new Intent(this, MainActivityNew.class));
                 this.finish();
                 return true;
         }
@@ -212,6 +280,19 @@ public class OverviewActivity extends AppCompatActivity {
         createStatusBar();
         createToolbar();
         createLayout();
+    }
+
+    @Override
+    protected void onPause() {
+        if (mActivePlayer1 != null)
+            Utils.savePlayerInSharedPreferences(this, mActivePlayer1);
+        if (mActivePlayer2 != null)
+            Utils.savePlayerInSharedPreferences(this, mActivePlayer2);
+        if (totalPlayers >= 3 && mActivePlayer3 != null)
+            Utils.savePlayerInSharedPreferences(this, mActivePlayer3);
+        if (totalPlayers >= 4 && mActivePlayer4 != null)
+            Utils.savePlayerInSharedPreferences(this, mActivePlayer4);
+        super.onPause();
     }
 
     @Override
@@ -415,50 +496,44 @@ public class OverviewActivity extends AppCompatActivity {
         mTextViewP1Name.setEnabled(mActivePlayer1.getPlayerIsAlive());
         mTextViewP1Name.setTextColor(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer1.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
         mTextViewP1Life.setText(String.valueOf(mActivePlayer1.getPlayerLife()));
+        mTextViewP1Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (mActivePlayer1.getPlayerLife() > 99 || mActivePlayer1.getPlayerLife() < -99) ? (totalPlayers == 2 ? 100 : 70) : (totalPlayers == 2 ? 120 : 100));
         mTextViewP1Life.setEnabled(mActivePlayer1.getPlayerIsAlive());
-//        mTextViewP1Life.setTextColor(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer1.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
+        mTextViewP1Life.setTextColor(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer1.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
         lifePositiveP1.setColorFilter(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer1.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
         lifeNegativeP1.setColorFilter(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer1.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
         mTextViewP1EDH1.setText(String.valueOf(mActivePlayer1.getPlayerEDH1()));
         mTextViewP1EDH1.setEnabled(mActivePlayer1.getPlayerIsAlive());
-//        mTextViewP1EDH1.setTextColor(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer1.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
         mTextViewP1EDH2.setText(String.valueOf(mActivePlayer1.getPlayerEDH2()));
         mTextViewP1EDH2.setEnabled(mActivePlayer1.getPlayerIsAlive());
-//        mTextViewP1EDH2.setTextColor(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer1.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
         if (totalPlayers >= 3) {
             mTextViewP1EDH3.setText(String.valueOf(mActivePlayer1.getPlayerEDH3()));
             mTextViewP1EDH3.setEnabled(mActivePlayer1.getPlayerIsAlive());
-//            mTextViewP1EDH3.setTextColor(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer1.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
         }
         if (totalPlayers >= 4) {
             mTextViewP1EDH4.setText(String.valueOf(mActivePlayer1.getPlayerEDH4()));
             mTextViewP1EDH4.setEnabled(mActivePlayer1.getPlayerIsAlive());
-//            mTextViewP1EDH4.setTextColor(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer1.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
         }
 
         mTextViewP2Name.setText(mActivePlayer2.getPlayerDeck().getDeckOwnerName());
         mTextViewP2Name.setEnabled(mActivePlayer2.getPlayerIsAlive());
         mTextViewP2Name.setTextColor(mActivePlayer2.getPlayerIsAlive() ? mActivePlayer2.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
         mTextViewP2Life.setText(String.valueOf(mActivePlayer2.getPlayerLife()));
+        mTextViewP2Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (mActivePlayer2.getPlayerLife() > 99 || mActivePlayer2.getPlayerLife() < -99) ? (totalPlayers == 2 ? 100 : 70) : (totalPlayers == 2 ? 120 : 100));
         mTextViewP2Life.setEnabled(mActivePlayer2.getPlayerIsAlive());
-//        mTextViewP2Life.setTextColor(mActivePlayer2.getPlayerIsAlive() ? mActivePlayer2.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
+        mTextViewP2Life.setTextColor(mActivePlayer2.getPlayerIsAlive() ? mActivePlayer2.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
         lifePositiveP2.setColorFilter(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer2.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
         lifeNegativeP2.setColorFilter(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer2.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
         mTextViewP2EDH1.setText(String.valueOf(mActivePlayer2.getPlayerEDH1()));
         mTextViewP2EDH1.setEnabled(mActivePlayer2.getPlayerIsAlive());
-//        mTextViewP2EDH1.setTextColor(mActivePlayer2.getPlayerIsAlive() ? mActivePlayer2.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
         mTextViewP2EDH2.setText(String.valueOf(mActivePlayer2.getPlayerEDH2()));
         mTextViewP2EDH2.setEnabled(mActivePlayer2.getPlayerIsAlive());
-//        mTextViewP2EDH2.setTextColor(mActivePlayer2.getPlayerIsAlive() ? mActivePlayer2.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
         if (totalPlayers >= 3) {
             mTextViewP2EDH3.setText(String.valueOf(mActivePlayer2.getPlayerEDH3()));
             mTextViewP2EDH3.setEnabled(mActivePlayer2.getPlayerIsAlive());
-//            mTextViewP2EDH3.setTextColor(mActivePlayer2.getPlayerIsAlive() ? mActivePlayer2.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
         }
         if (totalPlayers >= 4) {
             mTextViewP2EDH4.setText(String.valueOf(mActivePlayer2.getPlayerEDH4()));
             mTextViewP2EDH4.setEnabled(mActivePlayer2.getPlayerIsAlive());
-//            mTextViewP2EDH4.setTextColor(mActivePlayer2.getPlayerIsAlive() ? mActivePlayer2.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
         }
 
         if (totalPlayers >= 3) {
@@ -466,23 +541,20 @@ public class OverviewActivity extends AppCompatActivity {
             mTextViewP3Name.setEnabled(mActivePlayer3.getPlayerIsAlive());
             mTextViewP3Name.setTextColor(mActivePlayer3.getPlayerIsAlive() ? mActivePlayer3.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
             mTextViewP3Life.setText(String.valueOf(mActivePlayer3.getPlayerLife()));
+            mTextViewP3Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (mActivePlayer3.getPlayerLife() > 99 || mActivePlayer3.getPlayerLife() < -99) ? (totalPlayers == 3 ? 100 : 70) : (totalPlayers == 3 ? 120 : 100));
             mTextViewP3Life.setEnabled(mActivePlayer3.getPlayerIsAlive());
-//            mTextViewP3Life.setTextColor(mActivePlayer3.getPlayerIsAlive() ? mActivePlayer3.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
+            mTextViewP3Life.setTextColor(mActivePlayer3.getPlayerIsAlive() ? mActivePlayer3.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
             lifePositiveP3.setColorFilter(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer3.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
             lifeNegativeP3.setColorFilter(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer3.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
             mTextViewP3EDH1.setText(String.valueOf(mActivePlayer3.getPlayerEDH1()));
             mTextViewP3EDH1.setEnabled(mActivePlayer3.getPlayerIsAlive());
-//            mTextViewP3EDH1.setTextColor(mActivePlayer3.getPlayerIsAlive() ? mActivePlayer3.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
             mTextViewP3EDH2.setText(String.valueOf(mActivePlayer3.getPlayerEDH2()));
             mTextViewP3EDH2.setEnabled(mActivePlayer3.getPlayerIsAlive());
-//            mTextViewP3EDH2.setTextColor(mActivePlayer3.getPlayerIsAlive() ? mActivePlayer3.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
             mTextViewP3EDH3.setText(String.valueOf(mActivePlayer3.getPlayerEDH3()));
             mTextViewP3EDH3.setEnabled(mActivePlayer3.getPlayerIsAlive());
-//            mTextViewP3EDH3.setTextColor(mActivePlayer3.getPlayerIsAlive() ? mActivePlayer3.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
             if (totalPlayers >= 4) {
                 mTextViewP3EDH4.setText(String.valueOf(mActivePlayer3.getPlayerEDH4()));
                 mTextViewP3EDH4.setEnabled(mActivePlayer3.getPlayerIsAlive());
-//                mTextViewP3EDH4.setTextColor(mActivePlayer3.getPlayerIsAlive() ? mActivePlayer3.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
             }
         }
 
@@ -491,22 +563,19 @@ public class OverviewActivity extends AppCompatActivity {
             mTextViewP4Name.setEnabled(mActivePlayer4.getPlayerIsAlive());
             mTextViewP4Name.setTextColor(mActivePlayer4.getPlayerIsAlive() ? mActivePlayer4.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
             mTextViewP4Life.setText(String.valueOf(mActivePlayer4.getPlayerLife()));
+            mTextViewP4Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (mActivePlayer4.getPlayerLife() > 99 || mActivePlayer4.getPlayerLife() < -99) ? 70 : 100);
             mTextViewP4Life.setEnabled(mActivePlayer4.getPlayerIsAlive());
-//            mTextViewP4Life.setTextColor(mActivePlayer4.getPlayerIsAlive() ? mActivePlayer4.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
+            mTextViewP4Life.setTextColor(mActivePlayer4.getPlayerIsAlive() ? mActivePlayer4.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
             lifePositiveP4.setColorFilter(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer4.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
             lifeNegativeP4.setColorFilter(mActivePlayer1.getPlayerIsAlive() ? mActivePlayer4.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
             mTextViewP4EDH1.setText(String.valueOf(mActivePlayer4.getPlayerEDH1()));
             mTextViewP4EDH1.setEnabled(mActivePlayer4.getPlayerIsAlive());
-//            mTextViewP4EDH1.setTextColor(mActivePlayer4.getPlayerIsAlive() ? mActivePlayer4.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
             mTextViewP4EDH2.setText(String.valueOf(mActivePlayer4.getPlayerEDH2()));
             mTextViewP4EDH2.setEnabled(mActivePlayer4.getPlayerIsAlive());
-//            mTextViewP4EDH2.setTextColor(mActivePlayer4.getPlayerIsAlive() ? mActivePlayer4.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
             mTextViewP4EDH3.setText(String.valueOf(mActivePlayer4.getPlayerEDH3()));
             mTextViewP4EDH3.setEnabled(mActivePlayer4.getPlayerIsAlive());
-//            mTextViewP4EDH3.setTextColor(mActivePlayer4.getPlayerIsAlive() ? mActivePlayer4.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
             mTextViewP4EDH4.setText(String.valueOf(mActivePlayer4.getPlayerEDH4()));
             mTextViewP4EDH4.setEnabled(mActivePlayer4.getPlayerIsAlive());
-//            mTextViewP4EDH4.setTextColor(mActivePlayer4.getPlayerIsAlive() ? mActivePlayer4.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
         }
     }
 }
