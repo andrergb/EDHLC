@@ -1,16 +1,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:orientation="vertical">
 
     <EditText
         android:id="@+id/editTextPlayerLife"
-        android:inputType="numberSigned"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginBottom="4dp"
-        android:hint="@string/hint_playerLife" />
+        android:gravity="center"
+        android:layout_marginTop="4dp"
+        android:hint="@string/hint_playerLife"
+        android:inputType="numberSigned"
+        android:textSize="24sp"/>
 </LinearLayout>
