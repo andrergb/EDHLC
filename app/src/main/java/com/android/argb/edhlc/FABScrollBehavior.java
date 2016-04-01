@@ -21,13 +21,17 @@ public class FABScrollBehavior extends FloatingActionButton.Behavior {
         super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed);
         if (dyConsumed > 0 && child.getVisibility() == View.VISIBLE) {
             child.hide();
+            child.setClickable(false);
         } else if (dyConsumed < 0 && child.getVisibility() == View.GONE) {
             child.show();
+            child.setClickable(true);
         }
         if (dyUnconsumed > 0 && child.getVisibility() == View.VISIBLE) {
             child.hide();
+            child.setClickable(false);
         } else if (dyUnconsumed < 0 && child.getVisibility() == View.GONE) {
             child.show();
+            child.setClickable(true);
         }
     }
 
