@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -32,6 +33,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
@@ -53,9 +55,11 @@ import java.util.Random;
 
 public class MainActivityNew extends AppCompatActivity implements MainFragment.OnUpdateData {
 
+    private static final int MODE_INVALID = -1;
     private static final int MODE_NEW_GAME = 0;
     private static final int MODE_OVERVIEW = 1;
     private static final int MODE_PLAYING = 2;
+    private static final int MODE_HISTORY = 3;
 
     ///LAYOUT OVERVIEW
     private static ImageView overview_ImageViewThroneP1;
@@ -95,22 +99,35 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
     private static TextView overview_TextViewP4EDH3;
     private static TextView overview_TextViewP4EDH4;
 
+    //LAYOUT HISTORY
+    private static TextView history_P1Name;
+    private static ListView history_listViewP1;
+    private static TextView history_P2Name;
+    private static ListView history_listViewP2;
+    private static TextView history_P3Name;
+    private static ListView history_listViewP3;
+    private static TextView history_P4Name;
+    private static ListView history_listViewP4;
+    private static Thread mThreadLife1;
+    private static Thread mThreadLife2;
+    private static Thread mThreadLife3;
+    private static Thread mThreadLife4;
     ///Drawer
     private DrawerLayout mPlayerDrawerLayout;
     private LinearLayout mPlayerDrawer;
     private ActionBarDrawerToggle mDrawerToggle;
     private Switch switchScreen;
     private SharedPreferences mSharedPreferences;
-    private ActionBar mActionBar;
     private Menu optionMenu;
+    private List<MainFragment> fragments;
+    private MainPagerAdapter mPagerAdapter;
+    private ActionBar mActionBar;
     private View statusBarBackground;
     private ViewPager viewPager;
     private TabLayout tabLayout;
     private RelativeLayout viewNewGame;
     private RelativeLayout viewOverview;
-    private List<MainFragment> fragments;
-    private MainPagerAdapter mPagerAdapter;
-
+    private FrameLayout viewHistory;
     //Players
     private int totalPlayers;
     private ActivePlayerNew activePlayer1;
@@ -146,15 +163,19 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
                                 if (currentPlayer == 1) {
                                     activePlayer1.setPlayerLife(Integer.valueOf(tempLife));
                                     overview_TextViewP1Life.setText(String.valueOf(activePlayer1.getPlayerLife()));
+                                    historyHandler(activePlayer1);
                                 } else if (currentPlayer == 2) {
                                     activePlayer2.setPlayerLife(Integer.valueOf(tempLife));
                                     overview_TextViewP2Life.setText(String.valueOf(activePlayer2.getPlayerLife()));
+                                    historyHandler(activePlayer2);
                                 } else if (currentPlayer == 3) {
                                     activePlayer3.setPlayerLife(Integer.valueOf(tempLife));
                                     overview_TextViewP3Life.setText(String.valueOf(activePlayer3.getPlayerLife()));
+                                    historyHandler(activePlayer3);
                                 } else if (currentPlayer == 4) {
                                     activePlayer4.setPlayerLife(Integer.valueOf(tempLife));
                                     overview_TextViewP4Life.setText(String.valueOf(activePlayer4.getPlayerLife()));
+                                    historyHandler(activePlayer4);
                                 }
                             }
                         } catch (NumberFormatException ignored) {
@@ -213,6 +234,11 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
             fragments.get(i).updateFragmentDethrone(isPlayerOnThrone(i));
     }
 
+    @Override
+    public void iUpdateHistory() {
+        historyHandler(getActivePlayer(tabLayout.getSelectedTabPosition()));
+    }
+
     public boolean isValidGame() {
         boolean isValid = true;
         DecksDataAccessObject deckDb = new DecksDataAccessObject(this);
@@ -245,7 +271,7 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
         if (mPlayerDrawerLayout.isDrawerOpen(mPlayerDrawer))
             mPlayerDrawerLayout.closeDrawers();
         else if (getCurrentMode() != MODE_PLAYING && isValidGame())
-            setMode(MODE_PLAYING);
+            setMode(MODE_PLAYING, getCurrentMode());
         else
             super.onBackPressed();
     }
@@ -303,7 +329,7 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
             // PLAYER 1
             case R.id.nameP1:
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 0).apply();
-                setMode(MODE_PLAYING);
+                setMode(MODE_PLAYING, getCurrentMode());
                 break;
             case R.id.textViewOverviewP1Life:
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 0).apply();
@@ -314,18 +340,20 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
                 activePlayer1.setPlayerLife(activePlayer1.getPlayerLife() + 1);
                 overview_TextViewP1Life.setText(String.valueOf(activePlayer1.getPlayerLife()));
                 updateOverviewDethroneIcon();
+                historyHandler(activePlayer1);
                 break;
             case R.id.lifeNegativeP1:
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 0).apply();
                 activePlayer1.setPlayerLife(activePlayer1.getPlayerLife() - 1);
                 overview_TextViewP1Life.setText(String.valueOf(activePlayer1.getPlayerLife()));
                 updateOverviewDethroneIcon();
+                historyHandler(activePlayer1);
                 break;
 
             // PLAYER 2
             case R.id.nameP2:
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 1).apply();
-                setMode(MODE_PLAYING);
+                setMode(MODE_PLAYING, getCurrentMode());
                 break;
             case R.id.textViewOverviewP2Life:
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 1).apply();
@@ -336,18 +364,20 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
                 activePlayer2.setPlayerLife(activePlayer2.getPlayerLife() + 1);
                 overview_TextViewP2Life.setText(String.valueOf(activePlayer2.getPlayerLife()));
                 updateOverviewDethroneIcon();
+                historyHandler(activePlayer2);
                 break;
             case R.id.lifeNegativeP2:
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 1).apply();
                 activePlayer2.setPlayerLife(activePlayer2.getPlayerLife() - 1);
                 overview_TextViewP2Life.setText(String.valueOf(activePlayer2.getPlayerLife()));
                 updateOverviewDethroneIcon();
+                historyHandler(activePlayer2);
                 break;
 
             // PLAYER 3
             case R.id.nameP3:
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 2).apply();
-                setMode(MODE_PLAYING);
+                setMode(MODE_PLAYING, getCurrentMode());
                 break;
             case R.id.textViewOverviewP3Life:
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 2).apply();
@@ -358,18 +388,20 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
                 activePlayer3.setPlayerLife(activePlayer3.getPlayerLife() + 1);
                 overview_TextViewP3Life.setText(String.valueOf(activePlayer3.getPlayerLife()));
                 updateOverviewDethroneIcon();
+                historyHandler(activePlayer3);
                 break;
             case R.id.lifeNegativeP3:
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 2).apply();
                 activePlayer3.setPlayerLife(activePlayer3.getPlayerLife() - 1);
                 overview_TextViewP3Life.setText(String.valueOf(activePlayer3.getPlayerLife()));
                 updateOverviewDethroneIcon();
+                historyHandler(activePlayer3);
                 break;
 
             // PLAYER 4
             case R.id.nameP4:
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 3).apply();
-                setMode(MODE_PLAYING);
+                setMode(MODE_PLAYING, getCurrentMode());
                 break;
             case R.id.textViewOverviewP4Life:
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 3).apply();
@@ -380,12 +412,14 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
                 activePlayer4.setPlayerLife(activePlayer4.getPlayerLife() + 1);
                 overview_TextViewP4Life.setText(String.valueOf(activePlayer4.getPlayerLife()));
                 updateOverviewDethroneIcon();
+                historyHandler(activePlayer4);
                 break;
             case R.id.lifeNegativeP4:
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 3).apply();
                 activePlayer4.setPlayerLife(activePlayer4.getPlayerLife() - 1);
                 overview_TextViewP4Life.setText(String.valueOf(activePlayer4.getPlayerLife()));
                 updateOverviewDethroneIcon();
+                historyHandler(activePlayer4);
                 break;
         }
     }
@@ -413,15 +447,20 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
         switch (item.getItemId()) {
             case R.id.action_overview:
                 if (!isInAnimation) {
-                    if (getCurrentMode() == MODE_PLAYING)
-                        setMode(MODE_OVERVIEW);
-                    else if (getCurrentMode() == MODE_OVERVIEW)
-                        setMode(MODE_PLAYING);
+                    if (getCurrentMode() == MODE_OVERVIEW)
+                        setMode(MODE_PLAYING, getCurrentMode());
+                    else
+                        setMode(MODE_OVERVIEW, getCurrentMode());
                 }
                 break;
 
             case R.id.action_history:
-                startActivity(new Intent(this, HistoryActivity.class));
+                if (!isInAnimation) {
+                    if (getCurrentMode() == MODE_HISTORY)
+                        setMode(MODE_PLAYING, getCurrentMode());
+                    else
+                        setMode(MODE_HISTORY, getCurrentMode());
+                }
                 break;
 
             case R.id.actions_new_game:
@@ -474,15 +513,19 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_new);
 
-        createStatusBar();
-        createToolbar();
-        createDrawer();
-        createLayout();
-
         mSharedPreferences = getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE);
         totalPlayers = mSharedPreferences.getInt(Constants.CURRENT_GAME_TOTAL_PLAYERS, 0);
 
+        createStatusBar();
+        createToolbar();
+        createDrawer();
+
+        //TODO enhance layout
+        viewNewGame = (RelativeLayout) findViewById(R.id.fragmentNewGame);
+
+        createLayout();
         createOverviewLayout();
+        createHistoryLayout();
 
         if (isValidGame()) {
             activePlayer1 = Utils.loadPlayerFromSharedPreferences(this, 0);
@@ -513,7 +556,14 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
 
             tabLayout.setupWithViewPager(viewPager);
 
-            setMode(MODE_PLAYING);
+            int color = getActivePlayer(mSharedPreferences.getInt(Constants.CURRENT_VIEW_TAB, 0)).getPlayerDeck().getDeckShieldColor()[0];
+            if (color == 0)
+                color = getResources().getIntArray(R.array.edh_default)[0];
+            setActionBarColor(color);
+
+            setMode(MODE_PLAYING, MODE_INVALID);
+        } else {
+            setMode(MODE_NEW_GAME, MODE_INVALID);
         }
     }
 
@@ -537,10 +587,10 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
             switchScreen.setChecked(false);
         }
 
-        if (!isValidGame())
-            setMode(MODE_NEW_GAME);
+        if (isValidGame())
+            setMode(MODE_PLAYING, MODE_INVALID);
         else
-            setMode(MODE_PLAYING);
+            setMode(MODE_NEW_GAME, MODE_INVALID);
     }
 
     @Override
@@ -582,12 +632,38 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
         drawerItemTextHome.setTextColor(ContextCompat.getColor(this, R.color.accent_color));
     }
 
+    private void createHistoryLayout() {
+        viewHistory = (FrameLayout) findViewById(R.id.fragmentHistory);
+        if (totalPlayers == 2)
+            getLayoutInflater().inflate(R.layout.fragment_history_2p, viewHistory, true);
+        else if (totalPlayers == 3)
+            getLayoutInflater().inflate(R.layout.fragment_history_3p, viewHistory, true);
+        else if (totalPlayers == 4)
+            getLayoutInflater().inflate(R.layout.fragment_history_4p, viewHistory, true);
+
+        if (totalPlayers >= 1) {
+            history_P1Name = (TextView) findViewById(R.id.textViewP1Name);
+            history_listViewP1 = (ListView) findViewById(R.id.listViewP1);
+        }
+
+        if (totalPlayers >= 2) {
+            history_P2Name = (TextView) findViewById(R.id.textViewP2Name);
+            history_listViewP2 = (ListView) findViewById(R.id.listViewP2);
+        }
+
+        if (totalPlayers >= 3) {
+            history_P3Name = (TextView) findViewById(R.id.textViewP3Name);
+            history_listViewP3 = (ListView) findViewById(R.id.listViewP3);
+        }
+
+        if (totalPlayers >= 4) {
+            history_P4Name = (TextView) findViewById(R.id.textViewP4Name);
+            history_listViewP4 = (ListView) findViewById(R.id.listViewP4);
+        }
+    }
+
     private void createLayout() {
         isInAnimation = false;
-
-        //TODO enhance layout
-        viewNewGame = (RelativeLayout) findViewById(R.id.fragmentNewGame);
-        viewOverview = (RelativeLayout) findViewById(R.id.fragmentOverview);
 
         viewPager = (ViewPager) findViewById(R.id.fragmentViewPager);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -629,13 +705,15 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
     }
 
     private void createOverviewLayout() {
+        viewOverview = (RelativeLayout) findViewById(R.id.fragmentOverview);
+
         FrameLayout overview = (FrameLayout) findViewById(R.id.fragmentOverviewFrameLayout);
         if (totalPlayers == 2)
-            getLayoutInflater().inflate(R.layout.activity_overview_new_content_2p, overview, true);
+            getLayoutInflater().inflate(R.layout.fragment_overview_2p, overview, true);
         else if (totalPlayers == 3)
-            getLayoutInflater().inflate(R.layout.activity_overview_new_content_3p, overview, true);
+            getLayoutInflater().inflate(R.layout.fragment_overview_3p, overview, true);
         else if (totalPlayers == 4)
-            getLayoutInflater().inflate(R.layout.activity_overview_new_content_4p, overview, true);
+            getLayoutInflater().inflate(R.layout.fragment_overview_4p, overview, true);
 
         if (totalPlayers >= 1) {
             overview_ImageViewThroneP1 = (ImageView) findViewById(R.id.imageViewThroneP1);
@@ -751,7 +829,87 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
             return MODE_OVERVIEW;
         else if (viewPager.getVisibility() == View.VISIBLE)
             return MODE_PLAYING;
+        else if (viewHistory.getVisibility() == View.VISIBLE)
+            return MODE_HISTORY;
         return -1;
+    }
+
+    private void historyHandler(final ActivePlayerNew player) {
+        Thread threadLife;
+        final int playerTag;
+
+        if (player.getPlayerTag() == 0) {
+            threadLife = mThreadLife1;
+            playerTag = 0;
+        } else if (player.getPlayerTag() == 1) {
+            threadLife = mThreadLife2;
+            playerTag = 1;
+        } else if (player.getPlayerTag() == 2) {
+            threadLife = mThreadLife3;
+            playerTag = 2;
+        } else if (player.getPlayerTag() == 3) {
+            threadLife = mThreadLife4;
+            playerTag = 3;
+        } else {
+            threadLife = null;
+            playerTag = -1;
+        }
+
+        if (threadLife != null) {
+            threadLife.interrupt();
+        }
+
+        threadLife = new Thread(
+                new Runnable() {
+                    public void run() {
+                        try {
+                            int latestSavedLife;
+                            String latestSavedLifePreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString(Constants.PLAYER_HISTORY_LIFE + playerTag, Constants.INITIAL_PLAYER_LIFE_STRING);
+                            if (!latestSavedLifePreferences.isEmpty()) {
+                                String[] latestSavedLifeArray = latestSavedLifePreferences.split("_");
+                                latestSavedLife = Integer.valueOf(latestSavedLifeArray[latestSavedLifeArray.length - 1]);
+                            } else {
+                                latestSavedLife = player.getPlayerLife();
+                            }
+
+                            String latestSavedEDH;
+                            String latestSavedEDHPreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString(Constants.PLAYER_EDH_PREFIX + playerTag, "0@0@0@0");
+                            if (!latestSavedEDHPreferences.isEmpty()) {
+                                String[] latestSavedLifeArray = latestSavedEDHPreferences.split("_");
+                                latestSavedEDH = latestSavedLifeArray[latestSavedLifeArray.length - 1];
+                            } else {
+                                latestSavedEDH = player.getPlayerEDH1() + "@" + player.getPlayerEDH2() + "@" + player.getPlayerEDH3() + "@" + player.getPlayerEDH4();
+                            }
+
+                            Thread.sleep(2000);
+
+                            int currentLife = player.getPlayerLife();
+                            String currentEdh = player.getPlayerEDH1() + "@" + player.getPlayerEDH2() + "@" + player.getPlayerEDH3() + "@" + player.getPlayerEDH4();
+
+                            if ((currentLife - latestSavedLife) != 0 || !currentEdh.equalsIgnoreCase(latestSavedEDH)) {
+                                String lifeToBeSaved = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString(Constants.PLAYER_HISTORY_LIFE + playerTag, Constants.INITIAL_PLAYER_LIFE_STRING);
+                                lifeToBeSaved = lifeToBeSaved + "_" + currentLife;
+                                getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString(Constants.PLAYER_HISTORY_LIFE + playerTag, lifeToBeSaved).commit();
+
+                                String edhToBeSaved = latestSavedEDHPreferences + "_" + currentEdh;
+                                getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString(Constants.PLAYER_EDH_PREFIX + playerTag, edhToBeSaved).commit();
+                            }
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+        );
+        threadLife.start();
+
+        if (player.getPlayerTag() == 0)
+            mThreadLife1 = threadLife;
+        else if (player.getPlayerTag() == 1)
+            mThreadLife2 = threadLife;
+        else if (player.getPlayerTag() == 2)
+            mThreadLife3 = threadLife;
+        else if (player.getPlayerTag() == 3)
+            mThreadLife4 = threadLife;
     }
 
     private boolean isPlayerActiveAndAlive(int playerTag) {
@@ -918,51 +1076,123 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
         statusBarBackground.setBackgroundColor(color);
     }
 
-    private void setMode(int mode) {
-        Animation slide_in_top = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_in_top);
-        Animation slide_in_bottom = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_in_bottom);
-        Animation slide_out_top = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_out_top);
-        Animation slide_out_bottom = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_out_bottom);
+    private void setMode(int mode, int previousMode) {
+        final Animation slide_in_top = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_in_top);
+        final Animation slide_in_bottom = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_in_bottom);
+        final Animation slide_out_top = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_out_top);
+        final Animation slide_out_bottom = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_out_bottom);
 
         switch (mode) {
             case MODE_NEW_GAME:
                 setActionBarColor(getResources().getIntArray(R.array.edh_default)[0]);
 
                 viewNewGame.setVisibility(View.VISIBLE);
+                viewHistory.setVisibility(View.GONE);
                 viewOverview.setVisibility(View.GONE);
                 viewPager.setVisibility(View.GONE);
                 tabLayout.setVisibility(View.GONE);
                 break;
 
+            case MODE_HISTORY:
+                updateHistoryLayout();
+
+                if (previousMode == MODE_OVERVIEW) {
+                    setMode(MODE_PLAYING, MODE_OVERVIEW);
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            setMode(MODE_HISTORY, MODE_PLAYING);
+                        }
+                    }, 600);
+                } else if (previousMode == MODE_PLAYING) {
+                    isInAnimation = true;
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            viewHistory.startAnimation(slide_in_bottom);
+                            viewPager.startAnimation(slide_out_top);
+                            tabLayout.setVisibility(View.GONE);
+                        }
+                    }, 400);
+
+                    slide_in_bottom.setAnimationListener(new Animation.AnimationListener() {
+                        public void onAnimationEnd(Animation animation) {
+                            setActionBarColor(getResources().getIntArray(R.array.edh_default)[0]);
+
+                            viewNewGame.setVisibility(View.GONE);
+                            viewHistory.setVisibility(View.VISIBLE);
+                            viewOverview.setVisibility(View.GONE);
+                            viewPager.setVisibility(View.GONE);
+                            tabLayout.setVisibility(View.GONE);
+
+                            isInAnimation = false;
+                        }
+
+                        public void onAnimationRepeat(Animation animation) {
+                        }
+
+                        public void onAnimationStart(Animation animation) {
+                        }
+                    });
+
+
+                } else if (previousMode == MODE_INVALID) {
+                    viewNewGame.setVisibility(View.GONE);
+                    viewHistory.setVisibility(View.VISIBLE);
+                    viewOverview.setVisibility(View.GONE);
+                    viewPager.setVisibility(View.GONE);
+                    tabLayout.setVisibility(View.GONE);
+                }
+                break;
+
             case MODE_OVERVIEW:
-                isInAnimation = true;
                 updateOverviewLayout();
 
-                viewOverview.startAnimation(slide_in_top);
-                viewPager.startAnimation(slide_out_bottom);
-                tabLayout.setVisibility(View.GONE);
+                if (previousMode == MODE_HISTORY) {
+                    setMode(MODE_PLAYING, MODE_HISTORY);
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            setMode(MODE_OVERVIEW, MODE_PLAYING);
+                        }
+                    }, 700);
+                } else if (previousMode == MODE_PLAYING) {
+                    isInAnimation = true;
 
-                slide_in_top.setAnimationListener(new Animation.AnimationListener() {
-                    public void onAnimationEnd(Animation animation) {
-                        setActionBarColor(getResources().getIntArray(R.array.edh_default)[0]);
+                    viewOverview.startAnimation(slide_in_top);
+                    viewPager.startAnimation(slide_out_bottom);
+                    tabLayout.setVisibility(View.GONE);
 
-                        viewNewGame.setVisibility(View.GONE);
-                        viewOverview.setVisibility(View.VISIBLE);
-                        viewPager.setVisibility(View.GONE);
-                        isInAnimation = false;
-                    }
+                    slide_in_top.setAnimationListener(new Animation.AnimationListener() {
+                        public void onAnimationEnd(Animation animation) {
+                            setActionBarColor(getResources().getIntArray(R.array.edh_default)[0]);
 
-                    public void onAnimationRepeat(Animation animation) {
-                    }
+                            viewNewGame.setVisibility(View.GONE);
+                            viewHistory.setVisibility(View.GONE);
+                            viewOverview.setVisibility(View.VISIBLE);
+                            viewPager.setVisibility(View.GONE);
+                            tabLayout.setVisibility(View.GONE);
 
-                    public void onAnimationStart(Animation animation) {
-                    }
-                });
+                            isInAnimation = false;
+                        }
+
+                        public void onAnimationRepeat(Animation animation) {
+                        }
+
+                        public void onAnimationStart(Animation animation) {
+                        }
+                    });
+                } else if (previousMode == MODE_INVALID) {
+                    viewNewGame.setVisibility(View.GONE);
+                    viewHistory.setVisibility(View.GONE);
+                    viewOverview.setVisibility(View.VISIBLE);
+                    viewPager.setVisibility(View.GONE);
+                    tabLayout.setVisibility(View.GONE);
+                }
                 break;
 
             case MODE_PLAYING:
-                isInAnimation = true;
-
                 for (int i = 0; i < fragments.size(); i++) {
                     if (i == 0)
                         fragments.get(0).updateLife(activePlayer1.getPlayerLife());
@@ -974,41 +1204,62 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
                         fragments.get(3).updateLife(activePlayer4.getPlayerLife());
                 }
 
-                if (viewPager != null)
+                if (previousMode == MODE_INVALID) {
                     viewPager.setCurrentItem(mSharedPreferences.getInt(Constants.CURRENT_VIEW_TAB, 0), false);
 
-                viewOverview.startAnimation(slide_out_top);
-                viewPager.startAnimation(slide_in_bottom);
+                    viewNewGame.setVisibility(View.GONE);
+                    viewHistory.setVisibility(View.GONE);
+                    viewOverview.setVisibility(View.GONE);
+                    viewPager.setVisibility(View.VISIBLE);
+                    tabLayout.setVisibility(View.VISIBLE);
+                } else {
+                    isInAnimation = true;
+                    viewPager.setCurrentItem(mSharedPreferences.getInt(Constants.CURRENT_VIEW_TAB, 0), false);
 
-                // (1/2) Workaround to avoid viewPager to pop to up when tabLayout gets visible
-                final int paddingBottom = viewPager.getPaddingBottom();
-                viewPager.setPadding(viewPager.getPaddingLeft(), viewPager.getPaddingTop(), viewPager.getPaddingRight(), tabLayout.getHeight());
-
-                slide_in_bottom.setAnimationListener(new Animation.AnimationListener() {
-                    public void onAnimationEnd(Animation animation) {
-                        int color = getActivePlayer(tabLayout.getSelectedTabPosition()).getPlayerDeck().getDeckShieldColor()[0];
-                        if (color == 0)
-                            color = getResources().getIntArray(R.array.edh_default)[0];
-                        setActionBarColor(color);
-
-                        viewNewGame.setVisibility(View.GONE);
-                        viewOverview.setVisibility(View.GONE);
-                        viewPager.setVisibility(View.VISIBLE);
-                        tabLayout.setVisibility(View.VISIBLE);
-
-                        // (2/2) Workaround to avoid viewPager to pop to up when tabLayout gets visible
-                        viewPager.setPadding(viewPager.getPaddingLeft(), viewPager.getPaddingTop(), viewPager.getPaddingRight(), paddingBottom);
-
-                        isInAnimation = false;
+                    Animation animationIn = null;
+                    if (previousMode == MODE_OVERVIEW) {
+                        animationIn = slide_in_bottom;
+                        viewOverview.startAnimation(slide_out_top);
+                    } else if (previousMode == MODE_HISTORY) {
+                        animationIn = slide_in_top;
+                        viewHistory.startAnimation(slide_out_bottom);
                     }
 
-                    public void onAnimationRepeat(Animation animation) {
-                    }
+                    assert viewPager != null;
+                    viewPager.startAnimation(animationIn);
 
-                    public void onAnimationStart(Animation animation) {
-                    }
-                });
+                    // (1/2) Workaround to avoid viewPager to pop to up when tabLayout gets visible
+                    final int paddingBottom = viewPager.getPaddingBottom();
+                    viewPager.setPadding(viewPager.getPaddingLeft(), viewPager.getPaddingTop(), viewPager.getPaddingRight(), tabLayout.getHeight());
 
+                    assert animationIn != null;
+                    animationIn.setAnimationListener(new Animation.AnimationListener() {
+                        public void onAnimationEnd(Animation animation) {
+                            int color = getActivePlayer(tabLayout.getSelectedTabPosition()).getPlayerDeck().getDeckShieldColor()[0];
+                            if (color == 0)
+                                color = getResources().getIntArray(R.array.edh_default)[0];
+                            setActionBarColor(color);
+
+                            viewNewGame.setVisibility(View.GONE);
+                            viewHistory.setVisibility(View.GONE);
+                            viewOverview.setVisibility(View.GONE);
+                            viewPager.setVisibility(View.VISIBLE);
+                            tabLayout.setVisibility(View.VISIBLE);
+
+                            // (2/2) Workaround to avoid viewPager to pop to up when tabLayout gets visible
+                            viewPager.setPadding(viewPager.getPaddingLeft(), viewPager.getPaddingTop(), viewPager.getPaddingRight(), paddingBottom);
+
+                            isInAnimation = false;
+                        }
+
+                        public void onAnimationRepeat(Animation animation) {
+                        }
+
+                        public void onAnimationStart(Animation animation) {
+                        }
+                    });
+
+                }
                 break;
         }
     }
@@ -1140,6 +1391,51 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
                 textViewResult.setText(MessageFormat.format("{0}", getActivePlayer(randomResult[0]).getPlayerDeck().getDeckOwnerName()));
             }
         });
+    }
+
+    private void updateHistoryLayout() {
+        history_P1Name.setText(activePlayer1.getPlayerDeck().getDeckOwnerName());
+        history_P1Name.setTextColor(activePlayer1.getPlayerDeck().getDeckShieldColor()[0]);
+        String latestSavedLifePreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString(Constants.PLAYER_HISTORY_LIFE + activePlayer1.getPlayerTag(), "40");
+        String latestSavedEDHPreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString(Constants.PLAYER_EDH_PREFIX + activePlayer1.getPlayerTag(), "0@0@0@0");
+        if (!latestSavedLifePreferences.isEmpty() && !latestSavedEDHPreferences.isEmpty()) {
+            String[] latestSavedLifeArray = latestSavedLifePreferences.split("_");
+            String[] latestSavedEDHArray = latestSavedEDHPreferences.split("_");
+            history_listViewP1.setAdapter(new Utils.customHistoryListViewAdapter(this.getBaseContext(), totalPlayers, latestSavedLifeArray, latestSavedEDHArray, activePlayer1.getPlayerDeck().getDeckShieldColor()[0]));
+        }
+
+        history_P2Name.setText(activePlayer2.getPlayerDeck().getDeckOwnerName());
+        history_P2Name.setTextColor(activePlayer2.getPlayerDeck().getDeckShieldColor()[0]);
+        latestSavedLifePreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString(Constants.PLAYER_HISTORY_LIFE + activePlayer2.getPlayerTag(), "0");
+        latestSavedEDHPreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString(Constants.PLAYER_EDH_PREFIX + activePlayer2.getPlayerTag(), "0@0@0@0");
+        if (!latestSavedLifePreferences.isEmpty() && !latestSavedEDHPreferences.isEmpty()) {
+            String[] latestSavedLifeArray = latestSavedLifePreferences.split("_");
+            String[] latestSavedEDHArray = latestSavedEDHPreferences.split("_");
+            history_listViewP2.setAdapter(new Utils.customHistoryListViewAdapter(this.getBaseContext(), totalPlayers, latestSavedLifeArray, latestSavedEDHArray, activePlayer2.getPlayerDeck().getDeckShieldColor()[0]));
+        }
+        if (totalPlayers >= 3) {
+            history_P3Name.setText(activePlayer3.getPlayerDeck().getDeckOwnerName());
+            history_P3Name.setTextColor(activePlayer3.getPlayerDeck().getDeckShieldColor()[0]);
+            latestSavedLifePreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString(Constants.PLAYER_HISTORY_LIFE + activePlayer3.getPlayerTag(), "0");
+            latestSavedEDHPreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString(Constants.PLAYER_EDH_PREFIX + activePlayer3.getPlayerTag(), "0@0@0@0");
+            if (!latestSavedLifePreferences.isEmpty() && !latestSavedEDHPreferences.isEmpty()) {
+                String[] latestSavedLifeArray = latestSavedLifePreferences.split("_");
+                String[] latestSavedEDHArray = latestSavedEDHPreferences.split("_");
+                history_listViewP3.setAdapter(new Utils.customHistoryListViewAdapter(this.getBaseContext(), totalPlayers, latestSavedLifeArray, latestSavedEDHArray, activePlayer3.getPlayerDeck().getDeckShieldColor()[0]));
+            }
+        }
+
+        if (totalPlayers >= 4) {
+            history_P4Name.setText(activePlayer4.getPlayerDeck().getDeckOwnerName());
+            history_P4Name.setTextColor(activePlayer4.getPlayerDeck().getDeckShieldColor()[0]);
+            latestSavedLifePreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString(Constants.PLAYER_HISTORY_LIFE + activePlayer4.getPlayerTag(), "0");
+            latestSavedEDHPreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString(Constants.PLAYER_EDH_PREFIX + activePlayer4.getPlayerTag(), "0@0@0@0");
+            if (!latestSavedLifePreferences.isEmpty() && !latestSavedEDHPreferences.isEmpty()) {
+                String[] latestSavedLifeArray = latestSavedLifePreferences.split("_");
+                String[] latestSavedEDHArray = latestSavedEDHPreferences.split("_");
+                history_listViewP4.setAdapter(new Utils.customHistoryListViewAdapter(this.getBaseContext(), totalPlayers, latestSavedLifeArray, latestSavedEDHArray, activePlayer4.getPlayerDeck().getDeckShieldColor()[0]));
+            }
+        }
     }
 
     private void updateOverviewDethroneIcon() {

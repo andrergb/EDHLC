@@ -35,7 +35,7 @@
 
             <!-- Main content -->
             <include
-                layout="@layout/activity_overview_new_content_3p">
+                layout="@layout/fragment_overview_3p">
             </include>
         </LinearLayout>
     </RelativeLayout>

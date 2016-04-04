@@ -11,12 +11,13 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.CardView;
 import android.util.DisplayMetrics;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
@@ -539,6 +540,120 @@ public class Utils {
             viewBottom += dy;
 
             view = viewGroupParent;
+        }
+    }
+
+    public static void resetHistoryLife(Context context) {
+        context.getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE).edit().putString(Constants.PLAYER_HISTORY_LIFE + 0, Constants.INITIAL_PLAYER_LIFE_STRING).commit();
+        context.getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE).edit().putString(Constants.PLAYER_HISTORY_LIFE + 1, Constants.INITIAL_PLAYER_LIFE_STRING).commit();
+        context.getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE).edit().putString(Constants.PLAYER_HISTORY_LIFE + 2, Constants.INITIAL_PLAYER_LIFE_STRING).commit();
+        context.getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE).edit().putString(Constants.PLAYER_HISTORY_LIFE + 3, Constants.INITIAL_PLAYER_LIFE_STRING).commit();
+
+        context.getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE).edit().putString(Constants.PLAYER_EDH_PREFIX + 0, "0@0@0@0").commit();
+        context.getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE).edit().putString(Constants.PLAYER_EDH_PREFIX + 1, "0@0@0@0").commit();
+        context.getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE).edit().putString(Constants.PLAYER_EDH_PREFIX + 2, "0@0@0@0").commit();
+        context.getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE).edit().putString(Constants.PLAYER_EDH_PREFIX + 3, "0@0@0@0").commit();
+    }
+
+
+    public static class customHistoryListViewAdapter extends BaseAdapter {
+
+        private static LayoutInflater inflater = null;
+        Context context;
+        int totalPlayers;
+        String[] dataLife;
+        String[] dataEDH;
+        int color;
+
+        public customHistoryListViewAdapter(Context context, int totalPlayers, String[] dataLife, String[] dataEDH, int color) {
+            this.context = context;
+            this.totalPlayers = totalPlayers;
+            this.dataLife = dataLife;
+            this.dataEDH = dataEDH;
+            this.color = color;
+            inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        }
+
+        @Override
+        public int getCount() {
+            return dataLife.length;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return dataLife[position];
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View vi = convertView;
+            if (vi == null)
+                vi = inflater.inflate(R.layout.row_history, null);
+
+            TextView textViewLife = (TextView) vi.findViewById(R.id.textViewRowLife);
+            textViewLife.setText(dataLife[position]);
+            textViewLife.setTextColor(color);
+            textViewLife.setTypeface(null, Typeface.BOLD);
+
+            String[] aux = dataEDH[position].split("@");
+            TextView textViewRowEDH1 = (TextView) vi.findViewById(R.id.textViewRowEDH1);
+            textViewRowEDH1.setText(aux[0]);
+            textViewRowEDH1.setTextColor(color);
+
+            TextView textViewRowEDH2 = (TextView) vi.findViewById(R.id.textViewRowEDH2);
+            textViewRowEDH2.setText(aux[1]);
+            textViewRowEDH2.setTextColor(color);
+
+            TextView textViewRowEDH3 = (TextView) vi.findViewById(R.id.textViewRowEDH3);
+            if (totalPlayers >= 3) {
+                textViewRowEDH3.setText(aux[2]);
+                textViewRowEDH3.setTextColor(color);
+            } else {
+                textViewRowEDH3.setVisibility(View.GONE);
+            }
+
+            TextView textViewRowEDH4 = (TextView) vi.findViewById(R.id.textViewRowEDH4);
+            if (totalPlayers >= 4) {
+                textViewRowEDH4.setText(aux[3]);
+                textViewRowEDH4.setTextColor(color);
+            } else {
+                textViewRowEDH4.setVisibility(View.GONE);
+            }
+
+            textViewRowEDH1.setAlpha((float) 1.0);
+            textViewRowEDH2.setAlpha((float) 1.0);
+            if (totalPlayers >= 3)
+                textViewRowEDH3.setAlpha((float) 1.0);
+            if (totalPlayers >= 4)
+                textViewRowEDH4.setAlpha((float) 1.0);
+
+            if (position == 0) {
+                textViewRowEDH1.setAlpha((float) 0.4);
+                textViewRowEDH2.setAlpha((float) 0.4);
+                if (totalPlayers >= 3)
+                    textViewRowEDH3.setAlpha((float) 0.4);
+                if (totalPlayers >= 4)
+                    textViewRowEDH4.setAlpha((float) 0.4);
+            } else {
+                String[] aux2 = dataEDH[position - 1].split("@");
+                if (aux[0].equalsIgnoreCase(aux2[0]))
+                    textViewRowEDH1.setAlpha((float) 0.4);
+                if (aux[1].equalsIgnoreCase(aux2[1]))
+                    textViewRowEDH2.setAlpha((float) 0.4);
+                if (totalPlayers >= 3)
+                    if (aux[2].equalsIgnoreCase(aux2[2]))
+                        textViewRowEDH3.setAlpha((float) 0.4);
+                if (totalPlayers >= 4)
+                    if (aux[3].equalsIgnoreCase(aux2[3]))
+                        textViewRowEDH4.setAlpha((float) 0.4);
+            }
+
+            return vi;
         }
     }
 }

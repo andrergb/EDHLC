@@ -196,6 +196,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         onUpdateDataInterface.iUpdateActivePlayer(argsToPlayer(getArguments()));
 
         onUpdateDataInterface.iUpdateDethrone();
+
+        onUpdateDataInterface.iUpdateHistory();
     }
 
     @Override
@@ -342,5 +344,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         void iUpdateActivePlayer(ActivePlayerNew activePlayer);
 
         void iUpdateDethrone();
+
+        void iUpdateHistory();
     }
 }

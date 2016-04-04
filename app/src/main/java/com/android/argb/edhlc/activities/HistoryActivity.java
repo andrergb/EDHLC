@@ -22,7 +22,6 @@ import android.widget.TextView;
 import com.android.argb.edhlc.Constants;
 import com.android.argb.edhlc.R;
 import com.android.argb.edhlc.objects.ActivePlayer;
-import com.android.argb.edhlc.objects.Drawer.DrawerHistory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +45,7 @@ public class HistoryActivity extends ActionBarActivity {
 
     private int numPlayers;
 
-    private DrawerHistory drawerHistory;
+//    private DrawerHistory drawerHistory;
 
     public void createLayout(View view) {
         if (view != null) {
@@ -75,16 +74,6 @@ public class HistoryActivity extends ActionBarActivity {
             if (!isPlayerActive(4)) {
                 mLinearLayoutP4.setVisibility(View.GONE);
             }
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (drawerHistory.isDrawerOpen()) {
-            drawerHistory.dismiss();
-        } else {
-            super.onBackPressed();
-            this.finish();
         }
     }
 
@@ -123,7 +112,7 @@ public class HistoryActivity extends ActionBarActivity {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        drawerHistory.getDrawerToggle().onConfigurationChanged(newConfig);
+//        drawerHistory.getDrawerToggle().onConfigurationChanged(newConfig);
     }
 
     @Override
@@ -135,9 +124,9 @@ public class HistoryActivity extends ActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         //DrawerMain menu
-        if (drawerHistory.getDrawerToggle().onOptionsItemSelected(item)) {
-            return true;
-        }
+//        if (drawerHistory.getDrawerToggle().onOptionsItemSelected(item)) {
+//            return true;
+//        }
 
         //Option menu
         int id = item.getItemId();
@@ -159,10 +148,10 @@ public class HistoryActivity extends ActionBarActivity {
         drawerLists.add(getResources().getStringArray(R.array.string_menu_history_1));
         drawerLists.add(getResources().getStringArray(R.array.string_menu_history_2));
 
-        assert getSupportActionBar() != null;
-        drawerHistory = new DrawerHistory(this, drawerLists);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+//        assert getSupportActionBar() != null;
+//        drawerHistory = new DrawerHistory(this, drawerLists);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setHomeButtonEnabled(true);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = this.getWindow();
@@ -179,7 +168,7 @@ public class HistoryActivity extends ActionBarActivity {
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        drawerHistory.getDrawerToggle().syncState();
+//        drawerHistory.getDrawerToggle().syncState();
     }
 
     @Override
