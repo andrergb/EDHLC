@@ -1,6 +1,8 @@
 package com.android.argb.edhlc.activities;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -9,10 +11,13 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.argb.edhlc.Constants;
 import com.android.argb.edhlc.R;
 import com.android.argb.edhlc.objects.ActivePlayerNew;
 import com.android.argb.edhlc.objects.Deck;
@@ -98,6 +103,60 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         return auxPlayer;
     }
 
+    public void createLifeDialog(final View view) {
+        View playerLifeView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_player_life, null);
+        final EditText userInput = (EditText) playerLifeView.findViewById(R.id.editTextPlayerLife);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
+        alertDialogBuilder.setView(playerLifeView);
+        alertDialogBuilder.setTitle(getArguments().getString(ARG_PLAYER_NAME) + ": " + getArguments().getInt(ARG_LIFE));
+
+        alertDialogBuilder.setPositiveButton("Ok",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        String tempLife = userInput.getText().toString();
+                        try {
+                            if (!tempLife.equalsIgnoreCase("")) {
+                                if (Integer.valueOf(tempLife) < Constants.MIN_PLAYER_LIFE_INT)
+                                    tempLife = Constants.MIN_PLAYER_LIFE_STRING;
+                                if (Integer.valueOf(tempLife) > Constants.MAX_PLAYER_LIFE_INT)
+                                    tempLife = Constants.MAX_PLAYER_LIFE_STRING;
+
+                                getArguments().putInt(ARG_LIFE, Integer.valueOf(tempLife));
+                                setLife(getArguments().getInt(ARG_LIFE));
+
+                                onUpdateDataInterface.iUpdateActivePlayer(argsToPlayer(getArguments()));
+                                onUpdateDataInterface.iUpdateDethrone();
+                                onUpdateDataInterface.iUpdateHistory();
+                            }
+                        } catch (NumberFormatException ignored) {
+                        }
+                    }
+                }
+        );
+        alertDialogBuilder.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                }
+        );
+        alertDialogBuilder.setNeutralButton("Lose Game",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        getArguments().putBoolean(ARG_IS_ALIVE, false);
+
+                        onUpdateDataInterface.iUpdateActivePlayer(argsToPlayer(getArguments()));
+                        onUpdateDataInterface.iUpdateDethrone();
+                        onUpdateDataInterface.iUpdateHistory();
+                    }
+                }
+        );
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
+        alertDialog.show();
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -111,6 +170,11 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+
+            case R.id.lifeValue:
+                createLifeDialog(v);
+                break;
+
             case R.id.lifePositive:
                 getArguments().putInt(ARG_LIFE, (getArguments().getInt(ARG_LIFE) + 1));
                 setLife(getArguments().getInt(ARG_LIFE));
@@ -211,14 +275,14 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
-    public void updateLife(int value) {
-        getArguments().putInt(ARG_LIFE, value);
-        setLife(getArguments().getInt(ARG_LIFE));
-    }
-
     public void updateFragmentDethrone(boolean isOnThrone) {
         if (imageViewThrone != null)
             imageViewThrone.setVisibility(isOnThrone ? View.VISIBLE : View.GONE);
+    }
+
+    public void updateLife(int value) {
+        getArguments().putInt(ARG_LIFE, value);
+        setLife(getArguments().getInt(ARG_LIFE));
     }
 
     private void createLayout(View view) {
@@ -245,6 +309,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         negativeEDH1 = (ImageView) view.findViewById(R.id.negativeEDH1);
         negativeEDH2 = (ImageView) view.findViewById(R.id.negativeEDH2);
 
+        lifeValue.setOnClickListener(this);
         lifePositive.setOnClickListener(this);
         lifeNegative.setOnClickListener(this);
         positiveEDH1.setOnClickListener(this);

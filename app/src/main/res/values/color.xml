@@ -17,7 +17,7 @@
     <!--<item name="gray800" type="color">#424242</item>-->
     <!--<item name="gray900" type="color">#212121</item>-->
 
-    <item name="tab_selection_color" type="color">#80FF3D00</item>
+    <item name="tab_selection_color" type="color">#a2b7b7b7</item>
 
     <!-- LEGENDS -->
     <item name="first" type="color">#f5dd5b</item>

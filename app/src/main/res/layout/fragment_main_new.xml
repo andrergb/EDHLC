@@ -61,23 +61,28 @@
         android:paddingLeft="12dp"
         android:paddingRight="12dp">
 
-        <!--LIFE VALUE-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
             android:weightSum="10">
 
-            <TextView
-                android:id="@+id/lifeValue"
+            <!--LIFE VALUE-->
+            <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="8"
-                android:gravity="center"
-                android:singleLine="true"
-                android:text="40"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="180sp"/>
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/lifeValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="40"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="180sp"/>
+            </RelativeLayout>
 
             <!--LIFE BUTTONS-->
             <LinearLayout

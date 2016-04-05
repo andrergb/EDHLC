@@ -29,7 +29,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -135,80 +134,6 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
     private ActivePlayerNew activePlayer3;
     private ActivePlayerNew activePlayer4;
     private boolean isInAnimation;
-
-    public void createActivePlayerLifeDialog(final View view, final int currentPlayer) {
-        View playerLifeView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_player_life, null);
-        final EditText userInput = (EditText) playerLifeView.findViewById(R.id.editTextPlayerLife);
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
-        alertDialogBuilder.setView(playerLifeView);
-        if (currentPlayer == 1)
-            alertDialogBuilder.setTitle(activePlayer1.getPlayerDeck().getDeckOwnerName() + ": " + activePlayer1.getPlayerLife());
-        else if (currentPlayer == 2)
-            alertDialogBuilder.setTitle(activePlayer2.getPlayerDeck().getDeckOwnerName() + ": " + activePlayer2.getPlayerLife());
-        else if (currentPlayer == 3)
-            alertDialogBuilder.setTitle(activePlayer3.getPlayerDeck().getDeckOwnerName() + ": " + activePlayer3.getPlayerLife());
-        else if (currentPlayer == 4)
-            alertDialogBuilder.setTitle(activePlayer4.getPlayerDeck().getDeckOwnerName() + ": " + activePlayer4.getPlayerLife());
-        alertDialogBuilder.setPositiveButton("Ok",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        String tempLife = userInput.getText().toString();
-                        try {
-                            if (!tempLife.equalsIgnoreCase("")) {
-                                if (Integer.valueOf(tempLife) < Constants.MIN_PLAYER_LIFE_INT)
-                                    tempLife = Constants.MIN_PLAYER_LIFE_STRING;
-                                if (Integer.valueOf(tempLife) > Constants.MAX_PLAYER_LIFE_INT)
-                                    tempLife = Constants.MAX_PLAYER_LIFE_STRING;
-
-                                if (currentPlayer == 1) {
-                                    activePlayer1.setPlayerLife(Integer.valueOf(tempLife));
-                                    overview_TextViewP1Life.setText(String.valueOf(activePlayer1.getPlayerLife()));
-                                    historyHandler(activePlayer1);
-                                } else if (currentPlayer == 2) {
-                                    activePlayer2.setPlayerLife(Integer.valueOf(tempLife));
-                                    overview_TextViewP2Life.setText(String.valueOf(activePlayer2.getPlayerLife()));
-                                    historyHandler(activePlayer2);
-                                } else if (currentPlayer == 3) {
-                                    activePlayer3.setPlayerLife(Integer.valueOf(tempLife));
-                                    overview_TextViewP3Life.setText(String.valueOf(activePlayer3.getPlayerLife()));
-                                    historyHandler(activePlayer3);
-                                } else if (currentPlayer == 4) {
-                                    activePlayer4.setPlayerLife(Integer.valueOf(tempLife));
-                                    overview_TextViewP4Life.setText(String.valueOf(activePlayer4.getPlayerLife()));
-                                    historyHandler(activePlayer4);
-                                }
-                            }
-                        } catch (NumberFormatException ignored) {
-                        }
-                    }
-                }
-        );
-        alertDialogBuilder.setNegativeButton("Cancel",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                }
-        );
-        alertDialogBuilder.setNeutralButton("Lose Game",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        if (currentPlayer == 1)
-                            activePlayer1.setPlayerIsAlive(false);
-                        else if (currentPlayer == 2)
-                            activePlayer2.setPlayerIsAlive(false);
-                        else if (currentPlayer == 3)
-                            activePlayer3.setPlayerIsAlive(false);
-                        else if (currentPlayer == 4)
-                            activePlayer4.setPlayerIsAlive(false);
-                    }
-                }
-        );
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-
-        alertDialog.show();
-    }
 
     @Override
     public void iUpdateActivePlayer(ActivePlayerNew activePlayer) {
@@ -333,7 +258,6 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
                 break;
             case R.id.textViewOverviewP1Life:
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 0).apply();
-                createActivePlayerLifeDialog(view, 1);
                 break;
             case R.id.lifePositiveP1:
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 0).apply();
@@ -357,7 +281,6 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
                 break;
             case R.id.textViewOverviewP2Life:
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 1).apply();
-                createActivePlayerLifeDialog(view, 2);
                 break;
             case R.id.lifePositiveP2:
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 1).apply();
@@ -381,7 +304,6 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
                 break;
             case R.id.textViewOverviewP3Life:
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 2).apply();
-                createActivePlayerLifeDialog(view, 3);
                 break;
             case R.id.lifePositiveP3:
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 2).apply();
@@ -405,7 +327,6 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
                 break;
             case R.id.textViewOverviewP4Life:
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 3).apply();
-                createActivePlayerLifeDialog(view, 4);
                 break;
             case R.id.lifePositiveP4:
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 3).apply();
@@ -504,6 +425,18 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
     @Override
     public void onPause() {
         super.onPause();
+
+        if (isValidGame()) {
+            if (activePlayer1 != null)
+                Utils.savePlayerInSharedPreferences(this, activePlayer1);
+            if (activePlayer2 != null)
+                Utils.savePlayerInSharedPreferences(this, activePlayer2);
+            if (totalPlayers >= 3 && activePlayer3 != null)
+                Utils.savePlayerInSharedPreferences(this, activePlayer3);
+            if (totalPlayers >= 4 && activePlayer4 != null)
+                Utils.savePlayerInSharedPreferences(this, activePlayer4);
+        }
+
         if (tabLayout != null)
             getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, tabLayout.getSelectedTabPosition()).apply();
     }
@@ -1114,7 +1047,7 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
                             viewPager.startAnimation(slide_out_top);
                             tabLayout.setVisibility(View.GONE);
                         }
-                    }, 400);
+                    }, 500);
 
                     slide_in_bottom.setAnimationListener(new Animation.AnimationListener() {
                         public void onAnimationEnd(Animation animation) {
@@ -1215,6 +1148,8 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
                 } else {
                     isInAnimation = true;
                     viewPager.setCurrentItem(mSharedPreferences.getInt(Constants.CURRENT_VIEW_TAB, 0), false);
+
+                    iUpdateDethrone();
 
                     Animation animationIn = null;
                     if (previousMode == MODE_OVERVIEW) {
