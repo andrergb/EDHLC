@@ -248,10 +248,6 @@ public class MainActivity extends AppCompatActivity {
                         String tempLife = userInput.getText().toString();
                         try {
                             if (!tempLife.equalsIgnoreCase("")) {
-                                if (Integer.valueOf(tempLife) < Constants.MIN_PLAYER_LIFE_INT)
-                                    tempLife = Constants.MIN_PLAYER_LIFE_STRING;
-                                if (Integer.valueOf(tempLife) > Constants.MAX_PLAYER_LIFE_INT)
-                                    tempLife = Constants.MAX_PLAYER_LIFE_STRING;
                                 getCurrentActivePlayer().setPlayerLife(Integer.valueOf(tempLife));
                                 setActivePlayerLife(String.valueOf(getCurrentActivePlayer().getPlayerLife()));
 
@@ -499,23 +495,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickActivePlayerLifeMinusButton(View view) {
-        if (getCurrentActivePlayer().getPlayerLife() > Constants.MIN_PLAYER_LIFE_INT) {
-            getCurrentActivePlayer().setPlayerLife(getCurrentActivePlayer().getPlayerLife() - 1);
-            setActivePlayerLife(String.valueOf(getCurrentActivePlayer().getPlayerLife()));
+        getCurrentActivePlayer().setPlayerLife(getCurrentActivePlayer().getPlayerLife() - 1);
+        setActivePlayerLife(String.valueOf(getCurrentActivePlayer().getPlayerLife()));
 
-            activePlayerLifeHistoryHandler();
-            updateLayout(getCurrentActivePlayer());
-        }
+        activePlayerLifeHistoryHandler();
+        updateLayout(getCurrentActivePlayer());
+
     }
 
     public void onClickActivePlayerLifePlusButton(View view) {
-        if (getCurrentActivePlayer().getPlayerLife() < Constants.MAX_PLAYER_LIFE_INT) {
-            getCurrentActivePlayer().setPlayerLife(getCurrentActivePlayer().getPlayerLife() + 1);
-            setActivePlayerLife(String.valueOf(getCurrentActivePlayer().getPlayerLife()));
+        getCurrentActivePlayer().setPlayerLife(getCurrentActivePlayer().getPlayerLife() + 1);
+        setActivePlayerLife(String.valueOf(getCurrentActivePlayer().getPlayerLife()));
 
-            activePlayerLifeHistoryHandler();
-            updateLayout(getCurrentActivePlayer());
-        }
+        activePlayerLifeHistoryHandler();
+        updateLayout(getCurrentActivePlayer());
     }
 
     public void onClickActivePlayerName(View v) {

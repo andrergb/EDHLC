@@ -50,8 +50,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-//TODO activePlayerLifeHistoryHandler
-
 public class MainActivityNew extends AppCompatActivity implements MainFragment.OnUpdateData {
 
     private static final int MODE_INVALID = -1;
@@ -263,6 +261,7 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 0).apply();
                 activePlayer1.setPlayerLife(activePlayer1.getPlayerLife() + 1);
                 overview_TextViewP1Life.setText(String.valueOf(activePlayer1.getPlayerLife()));
+                overview_TextViewP1Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (activePlayer1.getPlayerLife() <= 99 && activePlayer1.getPlayerLife() >= -99) ? (totalPlayers == 2 ? 120 : 100) : (totalPlayers == 2 ? 100 : 80));
                 updateOverviewDethroneIcon();
                 historyHandler(activePlayer1);
                 break;
@@ -270,6 +269,7 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 0).apply();
                 activePlayer1.setPlayerLife(activePlayer1.getPlayerLife() - 1);
                 overview_TextViewP1Life.setText(String.valueOf(activePlayer1.getPlayerLife()));
+                overview_TextViewP1Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (activePlayer1.getPlayerLife() <= 99 && activePlayer1.getPlayerLife() >= -99) ? (totalPlayers == 2 ? 120 : 100) : (totalPlayers == 2 ? 100 : 80));
                 updateOverviewDethroneIcon();
                 historyHandler(activePlayer1);
                 break;
@@ -286,6 +286,7 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 1).apply();
                 activePlayer2.setPlayerLife(activePlayer2.getPlayerLife() + 1);
                 overview_TextViewP2Life.setText(String.valueOf(activePlayer2.getPlayerLife()));
+                overview_TextViewP2Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (activePlayer2.getPlayerLife() <= 99 && activePlayer2.getPlayerLife() >= -99) ? (totalPlayers == 2 ? 120 : 100) : (totalPlayers == 2 ? 100 : 80));
                 updateOverviewDethroneIcon();
                 historyHandler(activePlayer2);
                 break;
@@ -293,6 +294,7 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 1).apply();
                 activePlayer2.setPlayerLife(activePlayer2.getPlayerLife() - 1);
                 overview_TextViewP2Life.setText(String.valueOf(activePlayer2.getPlayerLife()));
+                overview_TextViewP2Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (activePlayer2.getPlayerLife() <= 99 && activePlayer2.getPlayerLife() >= -99) ? (totalPlayers == 2 ? 120 : 100) : (totalPlayers == 2 ? 100 : 80));
                 updateOverviewDethroneIcon();
                 historyHandler(activePlayer2);
                 break;
@@ -309,6 +311,7 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 2).apply();
                 activePlayer3.setPlayerLife(activePlayer3.getPlayerLife() + 1);
                 overview_TextViewP3Life.setText(String.valueOf(activePlayer3.getPlayerLife()));
+                overview_TextViewP3Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (activePlayer3.getPlayerLife() <= 99 && activePlayer3.getPlayerLife() >= -99) ? (totalPlayers == 3 ? 120 : 100) : (totalPlayers == 3 ? 100 : 80));
                 updateOverviewDethroneIcon();
                 historyHandler(activePlayer3);
                 break;
@@ -316,6 +319,7 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 2).apply();
                 activePlayer3.setPlayerLife(activePlayer3.getPlayerLife() - 1);
                 overview_TextViewP3Life.setText(String.valueOf(activePlayer3.getPlayerLife()));
+                overview_TextViewP3Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (activePlayer3.getPlayerLife() <= 99 && activePlayer3.getPlayerLife() >= -99) ? (totalPlayers == 3 ? 120 : 100) : (totalPlayers == 3 ? 100 : 80));
                 updateOverviewDethroneIcon();
                 historyHandler(activePlayer3);
                 break;
@@ -332,6 +336,7 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 3).apply();
                 activePlayer4.setPlayerLife(activePlayer4.getPlayerLife() + 1);
                 overview_TextViewP4Life.setText(String.valueOf(activePlayer4.getPlayerLife()));
+                overview_TextViewP4Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (activePlayer4.getPlayerLife() <= 99 && activePlayer4.getPlayerLife() >= -99) ? 100 : 80);
                 updateOverviewDethroneIcon();
                 historyHandler(activePlayer4);
                 break;
@@ -339,6 +344,7 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 3).apply();
                 activePlayer4.setPlayerLife(activePlayer4.getPlayerLife() - 1);
                 overview_TextViewP4Life.setText(String.valueOf(activePlayer4.getPlayerLife()));
+                overview_TextViewP4Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (activePlayer4.getPlayerLife() <= 99 && activePlayer4.getPlayerLife() >= -99) ? 100 : 80);
                 updateOverviewDethroneIcon();
                 historyHandler(activePlayer4);
                 break;
@@ -1507,7 +1513,7 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
             overview_TextViewP1Name.setEnabled(activePlayer1.getPlayerIsAlive());
             overview_TextViewP1Name.setTextColor(activePlayer1.getPlayerIsAlive() ? activePlayer1.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
             overview_TextViewP1Life.setText(String.valueOf(activePlayer1.getPlayerLife()));
-            overview_TextViewP1Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (activePlayer1.getPlayerLife() > 99 || activePlayer1.getPlayerLife() < -99) ? (totalPlayers == 2 ? 100 : 70) : (totalPlayers == 2 ? 120 : 100));
+            overview_TextViewP1Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (activePlayer1.getPlayerLife() <= 99 && activePlayer1.getPlayerLife() >= -99) ? (totalPlayers == 2 ? 120 : 100) : (totalPlayers == 2 ? 100 : 80));
             overview_TextViewP1Life.setEnabled(activePlayer1.getPlayerIsAlive());
             overview_TextViewP1Life.setTextColor(activePlayer1.getPlayerIsAlive() ? activePlayer1.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
             overview_lifePositiveP1.setColorFilter(activePlayer1.getPlayerIsAlive() ? activePlayer1.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
@@ -1531,7 +1537,7 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
             overview_TextViewP2Name.setEnabled(activePlayer2.getPlayerIsAlive());
             overview_TextViewP2Name.setTextColor(activePlayer2.getPlayerIsAlive() ? activePlayer2.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
             overview_TextViewP2Life.setText(String.valueOf(activePlayer2.getPlayerLife()));
-            overview_TextViewP2Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (activePlayer2.getPlayerLife() > 99 || activePlayer2.getPlayerLife() < -99) ? (totalPlayers == 2 ? 100 : 70) : (totalPlayers == 2 ? 120 : 100));
+            overview_TextViewP2Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (activePlayer2.getPlayerLife() <= 99 && activePlayer2.getPlayerLife() >= -99) ? (totalPlayers == 2 ? 120 : 100) : (totalPlayers == 2 ? 100 : 80));
             overview_TextViewP2Life.setEnabled(activePlayer2.getPlayerIsAlive());
             overview_TextViewP2Life.setTextColor(activePlayer2.getPlayerIsAlive() ? activePlayer2.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
             overview_lifePositiveP2.setColorFilter(activePlayer1.getPlayerIsAlive() ? activePlayer2.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
@@ -1555,7 +1561,7 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
             overview_TextViewP3Name.setEnabled(activePlayer3.getPlayerIsAlive());
             overview_TextViewP3Name.setTextColor(activePlayer3.getPlayerIsAlive() ? activePlayer3.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
             overview_TextViewP3Life.setText(String.valueOf(activePlayer3.getPlayerLife()));
-            overview_TextViewP3Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (activePlayer3.getPlayerLife() > 99 || activePlayer3.getPlayerLife() < -99) ? (totalPlayers == 3 ? 100 : 70) : (totalPlayers == 3 ? 120 : 100));
+            overview_TextViewP3Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (activePlayer3.getPlayerLife() <= 99 && activePlayer3.getPlayerLife() >= -99) ? (totalPlayers == 3 ? 120 : 100) : (totalPlayers == 3 ? 100 : 80));
             overview_TextViewP3Life.setEnabled(activePlayer3.getPlayerIsAlive());
             overview_TextViewP3Life.setTextColor(activePlayer3.getPlayerIsAlive() ? activePlayer3.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
             overview_lifePositiveP3.setColorFilter(activePlayer1.getPlayerIsAlive() ? activePlayer3.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
@@ -1577,7 +1583,7 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
             overview_TextViewP4Name.setEnabled(activePlayer4.getPlayerIsAlive());
             overview_TextViewP4Name.setTextColor(activePlayer4.getPlayerIsAlive() ? activePlayer4.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
             overview_TextViewP4Life.setText(String.valueOf(activePlayer4.getPlayerLife()));
-            overview_TextViewP4Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (activePlayer4.getPlayerLife() > 99 || activePlayer4.getPlayerLife() < -99) ? 70 : 100);
+            overview_TextViewP4Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (activePlayer4.getPlayerLife() <= 99 && activePlayer4.getPlayerLife() >= -99) ? 100 : 80);
             overview_TextViewP4Life.setEnabled(activePlayer4.getPlayerIsAlive());
             overview_TextViewP4Life.setTextColor(activePlayer4.getPlayerIsAlive() ? activePlayer4.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
             overview_lifePositiveP4.setColorFilter(activePlayer1.getPlayerIsAlive() ? activePlayer4.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);

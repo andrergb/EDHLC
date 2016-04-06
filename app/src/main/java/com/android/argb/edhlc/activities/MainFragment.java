@@ -17,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.android.argb.edhlc.Constants;
 import com.android.argb.edhlc.R;
 import com.android.argb.edhlc.objects.ActivePlayerNew;
 import com.android.argb.edhlc.objects.Deck;
@@ -116,11 +115,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                         String tempLife = userInput.getText().toString();
                         try {
                             if (!tempLife.equalsIgnoreCase("")) {
-                                if (Integer.valueOf(tempLife) < Constants.MIN_PLAYER_LIFE_INT)
-                                    tempLife = Constants.MIN_PLAYER_LIFE_STRING;
-                                if (Integer.valueOf(tempLife) > Constants.MAX_PLAYER_LIFE_INT)
-                                    tempLife = Constants.MAX_PLAYER_LIFE_STRING;
-
                                 getArguments().putInt(ARG_LIFE, Integer.valueOf(tempLife));
                                 setLife(getArguments().getInt(ARG_LIFE));
 

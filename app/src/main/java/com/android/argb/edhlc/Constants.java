@@ -10,11 +10,7 @@ public class Constants {
     public static final String PHASE4_TIMER = "PHASE4_TIMER";
     public static final String PHASE5_TIMER = "PHASE5_TIMER";
     public static String INITIAL_PLAYER_LIFE_STRING = "40";
-    public static String MIN_PLAYER_LIFE_STRING = "-99";
-    public static String MAX_PLAYER_LIFE_STRING = "99";
     public static int INITIAL_PLAYER_LIFE_INT = 40;
-    public static int MIN_PLAYER_LIFE_INT = -99;
-    public static int MAX_PLAYER_LIFE_INT = 99;
     public static int INITIAL_EDH_DAMAGE_INT = 0;
     public static int MIN_EDH_DAMAGE_INT = 0;
     public static int MAX_EDH_DAMAGE_INT = 21;

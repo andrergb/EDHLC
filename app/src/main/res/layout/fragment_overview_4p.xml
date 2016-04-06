@@ -97,7 +97,6 @@
 
                             <!--LIFE BUTTONS-->
                             <LinearLayout
-                                android:id="@+id/linearOverviewP1Buttons"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_marginRight="4dp"
@@ -263,7 +262,6 @@
 
                             <!--LIFE BUTTONS-->
                             <LinearLayout
-                                android:id="@+id/linearOverviewP2Buttons"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_marginRight="4dp"
