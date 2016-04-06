@@ -62,9 +62,9 @@ public class NewGameActivity extends AppCompatActivity {
         this.optionMenu = menu;
         getMenuInflater().inflate(R.menu.menu_new_game, menu);
         if (getCurrentTotalPlayers() >= 2)
-            optionMenu.getItem(0).setEnabled(true);
+            optionMenu.getItem(1).setEnabled(true);
         else
-            optionMenu.getItem(0).setEnabled(false);
+            optionMenu.getItem(1).setEnabled(false);
         return true;
     }
 
@@ -151,6 +151,7 @@ public class NewGameActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         updateLayout();
+        mActionBar.setTitle("New Game - " + getCurrentTotalPlayers());
     }
 
 
@@ -183,9 +184,9 @@ public class NewGameActivity extends AppCompatActivity {
                     mPlayersAdapter.notifyDataSetChanged();
 
                     if (getCurrentTotalPlayers() >= 2)
-                        optionMenu.getItem(0).setEnabled(true);
+                        optionMenu.getItem(1).setEnabled(true);
                     else
-                        optionMenu.getItem(0).setEnabled(false);
+                        optionMenu.getItem(1).setEnabled(false);
                 }
             }
         });
@@ -215,7 +216,6 @@ public class NewGameActivity extends AppCompatActivity {
         mActionBar.setDisplayShowTitleEnabled(true);
         mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setHomeButtonEnabled(true);
-        mActionBar.setTitle("New Game - " + getCurrentTotalPlayers());
     }
 
     private int getCurrentTotalPlayers() {

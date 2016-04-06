@@ -109,6 +109,7 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
     private static Thread mThreadLife2;
     private static Thread mThreadLife3;
     private static Thread mThreadLife4;
+
     ///Drawer
     private DrawerLayout mPlayerDrawerLayout;
     private LinearLayout mPlayerDrawer;
@@ -125,6 +126,7 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
     private RelativeLayout viewNewGame;
     private RelativeLayout viewOverview;
     private FrameLayout viewHistory;
+
     //Players
     private int totalPlayers;
     private ActivePlayerNew activePlayer1;
@@ -463,10 +465,11 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
         viewNewGame = (RelativeLayout) findViewById(R.id.fragmentNewGame);
 
         createLayout();
-        createOverviewLayout();
-        createHistoryLayout();
 
         if (isValidGame()) {
+            createOverviewLayout();
+            createHistoryLayout();
+
             activePlayer1 = Utils.loadPlayerFromSharedPreferences(this, 0);
             activePlayer2 = Utils.loadPlayerFromSharedPreferences(this, 1);
             if (totalPlayers >= 3)
@@ -1026,8 +1029,10 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
                 setActionBarColor(getResources().getIntArray(R.array.edh_default)[0]);
 
                 viewNewGame.setVisibility(View.VISIBLE);
-                viewHistory.setVisibility(View.GONE);
-                viewOverview.setVisibility(View.GONE);
+                if (viewHistory != null)
+                    viewHistory.setVisibility(View.GONE);
+                if (viewOverview != null)
+                    viewOverview.setVisibility(View.GONE);
                 viewPager.setVisibility(View.GONE);
                 tabLayout.setVisibility(View.GONE);
                 break;
