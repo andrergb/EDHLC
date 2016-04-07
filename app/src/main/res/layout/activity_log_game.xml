@@ -34,7 +34,7 @@
 
             <!-- Main content -->
             <include
-                layout="@layout/activity_new_game_content">
+                layout="@layout/activity_log_game_content">
             </include>
         </LinearLayout>
     </RelativeLayout>

@@ -47,6 +47,11 @@
             android:screenOrientation="portrait"/>
 
         <activity
+            android:name=".activities.LogGameActivity"
+            android:label="@string/activity_log_game"
+            android:screenOrientation="portrait"/>
+
+        <activity
             android:name=".activities.NewGameActivity"
             android:label="@string/activity_new_game"
             android:screenOrientation="portrait"/>

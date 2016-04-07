@@ -419,6 +419,11 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
                 this.finish();
                 break;
 
+            case R.id.actions_log_game:
+                startActivity(new Intent(this, LogGameActivity.class));
+                this.finish();
+                break;
+
             case R.id.actions_roll_dice:
                 showDiceDialog();
                 break;
