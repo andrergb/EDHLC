@@ -271,22 +271,25 @@ public class LogGameActivity extends AppCompatActivity {
                     View draggedView = (View) event.getLocalState();
                     View currentView = ((LinearLayout) viewTarget).getChildAt(0);
 
-                    ViewGroup owner = (ViewGroup) draggedView.getParent();
-                    LinearLayout container = (LinearLayout) viewTarget;
+                    if (draggedView != null) {
+                        ViewGroup owner = (ViewGroup) draggedView.getParent();
+                        LinearLayout container = (LinearLayout) viewTarget;
 
-                    owner.removeView(draggedView);
-                    container.addView(draggedView);
+                        owner.removeView(draggedView);
+                        container.addView(draggedView);
 
-                    container.removeView(currentView);
-                    owner.addView(currentView);
+                        container.removeView(currentView);
+                        owner.addView(currentView);
 
-                    draggedView.setVisibility(View.VISIBLE);
+                        draggedView.setVisibility(View.VISIBLE);
+                    }
                     break;
 
                 case DragEvent.ACTION_DRAG_ENDED:
                     viewTarget.setBackgroundResource(R.drawable.shape);
                     View draggedView2 = (View) event.getLocalState();
-                    draggedView2.setVisibility(View.VISIBLE);
+                    if (draggedView2 != null)
+                        draggedView2.setVisibility(View.VISIBLE);
                     break;
 
                 default:
