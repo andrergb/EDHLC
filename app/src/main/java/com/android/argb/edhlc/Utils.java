@@ -6,7 +6,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.CardView;
@@ -28,6 +30,7 @@ import com.android.argb.edhlc.objects.ActivePlayerNew;
 import com.android.argb.edhlc.objects.Deck;
 import com.android.argb.edhlc.objects.Record;
 
+import java.io.File;
 import java.util.Calendar;
 
 /**
@@ -555,6 +558,17 @@ public class Utils {
         context.getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE).edit().putString(Constants.PLAYER_EDH_PREFIX + 3, "0@0@0@0").commit();
     }
 
+    public static Drawable getRoundedImage(Activity activity, String playerName, String playerDeck) {
+        File p1CroppedImageFile = new File(activity.getFilesDir(), "image_" + playerName + "_" + playerDeck + ".png");
+        Bitmap bitmap;
+        if (p1CroppedImageFile.isFile())
+            bitmap = BitmapFactory.decodeFile(p1CroppedImageFile.getAbsolutePath());
+        else
+            bitmap = BitmapFactory.decodeResource(activity.getResources(), R.drawable.avatar_holder);
+        RoundedAvatarDrawable roundedImage = new RoundedAvatarDrawable(Utils.getSquareBitmap(bitmap));
+        roundedImage.setAntiAlias(true);
+        return roundedImage;
+    }
 
     public static class customHistoryListViewAdapter extends BaseAdapter {
 

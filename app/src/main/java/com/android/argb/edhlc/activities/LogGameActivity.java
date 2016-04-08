@@ -15,13 +15,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.Display;
 import android.view.DragEvent;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.android.argb.edhlc.R;
 import com.android.argb.edhlc.Utils;
@@ -31,16 +34,38 @@ public class LogGameActivity extends AppCompatActivity {
     private ActionBar mActionBar;
     private Menu optionMenu;
     private View statusBarBackground;
-    private CardView firstCard;
-    private CardView secondCard;
-    private CardView thirdCard;
-    private CardView fourthCard;
+
+    private LinearLayout firstLineParent;
     private LinearLayout firstLine;
+    private CardView firstCard;
+    private ImageView avatarFirstLogGame;
+    private TextView playerFirstNameLogGame;
+    private TextView playerFirstDeckLogGame;
+
+    private LinearLayout secondLineParent;
     private LinearLayout secondLine;
+    private CardView secondCard;
+    private ImageView avatarSecondLogGame;
+    private TextView playerSecondNameLogGame;
+    private TextView playerSecondDeckLogGame;
+
+    private LinearLayout thirdLineParent;
     private LinearLayout thirdLine;
+    private CardView thirdCard;
+    private ImageView avatarThirdLogGame;
+    private TextView playerThirdNameLogGame;
+    private TextView playerThirdDeckLogGame;
+
+    private LinearLayout fourthLineParent;
     private LinearLayout fourthLine;
-    private int mScrollDistance;
+    private CardView fourthCard;
+    private ImageView avatarFourthLogGame;
+    private TextView playerFourthNameLogGame;
+    private TextView playerFourthDeckLogGame;
+
+
     private ScrollView scrollView;
+    private int totalPlayers;
 
     @Override
     public void onBackPressed() {
@@ -60,6 +85,20 @@ public class LogGameActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Intent intent = new Intent(this, MainActivityNew.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                this.finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_game);
@@ -67,6 +106,7 @@ public class LogGameActivity extends AppCompatActivity {
         createStatusBar();
         createToolbar();
         createLayout();
+        updateLayout();
     }
 
     @Override
@@ -85,25 +125,50 @@ public class LogGameActivity extends AppCompatActivity {
     }
 
     private void createLayout() {
-        firstCard = (CardView) findViewById(R.id.firstCard);
-        secondCard = (CardView) findViewById(R.id.secondCard);
-        thirdCard = (CardView) findViewById(R.id.thirdCard);
-        fourthCard = (CardView) findViewById(R.id.fourthCard);
+        Intent intent = getIntent();
+        totalPlayers = intent.getIntExtra("LOG_GAME_TOTAL_PLAYERS", 0);
 
         firstLine = (LinearLayout) findViewById(R.id.firstLine);
-        secondLine = (LinearLayout) findViewById(R.id.secondLine);
-        thirdLine = (LinearLayout) findViewById(R.id.thirdLine);
-        fourthLine = (LinearLayout) findViewById(R.id.fourthLine);
-
-        firstCard.setOnTouchListener(new MyTouchListener());
-        secondCard.setOnTouchListener(new MyTouchListener());
-        thirdCard.setOnTouchListener(new MyTouchListener());
-        fourthCard.setOnTouchListener(new MyTouchListener());
-
         firstLine.setOnDragListener(new MyDragListener());
+        firstCard = (CardView) findViewById(R.id.firstCard);
+        firstCard.setOnTouchListener(new MyTouchListener());
+        avatarFirstLogGame = (ImageView) findViewById(R.id.avatarFirstLogGame);
+        playerFirstNameLogGame = (TextView) findViewById(R.id.playerFirstNameLogGame);
+        playerFirstDeckLogGame = (TextView) findViewById(R.id.playerFirstDeckLogGame);
+
+        secondLine = (LinearLayout) findViewById(R.id.secondLine);
         secondLine.setOnDragListener(new MyDragListener());
-        thirdLine.setOnDragListener(new MyDragListener());
-        fourthLine.setOnDragListener(new MyDragListener());
+        secondCard = (CardView) findViewById(R.id.secondCard);
+        secondCard.setOnTouchListener(new MyTouchListener());
+        avatarSecondLogGame = (ImageView) findViewById(R.id.avatarSecondLogGame);
+        playerSecondNameLogGame = (TextView) findViewById(R.id.playerSecondNameLogGame);
+        playerSecondDeckLogGame = (TextView) findViewById(R.id.playerSecondDeckLogGame);
+
+        thirdLineParent = (LinearLayout) findViewById(R.id.thirdLineParent);
+        if (totalPlayers >= 3) {
+            thirdLine = (LinearLayout) findViewById(R.id.thirdLine);
+            thirdLine.setOnDragListener(new MyDragListener());
+            thirdCard = (CardView) findViewById(R.id.thirdCard);
+            thirdCard.setOnTouchListener(new MyTouchListener());
+            avatarThirdLogGame = (ImageView) findViewById(R.id.avatarThirdLogGame);
+            playerThirdNameLogGame = (TextView) findViewById(R.id.playerThirdNameLogGame);
+            playerThirdDeckLogGame = (TextView) findViewById(R.id.playerThirdDeckLogGame);
+        } else {
+            thirdLineParent.setVisibility(View.GONE);
+        }
+
+        fourthLineParent = (LinearLayout) findViewById(R.id.fourthLineParent);
+        if (totalPlayers >= 4) {
+            fourthLine = (LinearLayout) findViewById(R.id.fourthLine);
+            fourthLine.setOnDragListener(new MyDragListener());
+            fourthCard = (CardView) findViewById(R.id.fourthCard);
+            fourthCard.setOnTouchListener(new MyTouchListener());
+            avatarFourthLogGame = (ImageView) findViewById(R.id.avatarFourthLogGame);
+            playerFourthNameLogGame = (TextView) findViewById(R.id.playerFourthNameLogGame);
+            playerFourthDeckLogGame = (TextView) findViewById(R.id.playerFourthDeckLogGame);
+        } else {
+            fourthLineParent.setVisibility(View.GONE);
+        }
 
         scrollView = (ScrollView) findViewById(R.id.scrollLogGame);
     }
@@ -133,6 +198,38 @@ public class LogGameActivity extends AppCompatActivity {
         mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setHomeButtonEnabled(true);
         mActionBar.setTitle("Log Game");
+    }
+
+    private void updateLayout() {
+        Intent intent = getIntent();
+
+        String p1Name = intent.getStringExtra("LOG_GAME_PLAYER_1");
+        String p1Deck = intent.getStringExtra("LOG_GAME_DECK_1");
+        playerFirstNameLogGame.setText(p1Name);
+        playerFirstDeckLogGame.setText(p1Deck);
+        avatarFirstLogGame.setImageDrawable(Utils.getRoundedImage(this, p1Name, p1Deck));
+
+        String p2Name = intent.getStringExtra("LOG_GAME_PLAYER_2");
+        String p2Deck = intent.getStringExtra("LOG_GAME_DECK_2");
+        playerSecondNameLogGame.setText(p2Name);
+        playerSecondDeckLogGame.setText(p2Deck);
+        avatarSecondLogGame.setImageDrawable(Utils.getRoundedImage(this, p2Name, p2Deck));
+
+        if (totalPlayers >= 3) {
+            String p3Name = intent.getStringExtra("LOG_GAME_PLAYER_3");
+            String p3Deck = intent.getStringExtra("LOG_GAME_DECK_3");
+            playerThirdNameLogGame.setText(p3Name);
+            playerThirdDeckLogGame.setText(p3Deck);
+            avatarThirdLogGame.setImageDrawable(Utils.getRoundedImage(this, p3Name, p3Deck));
+        }
+
+        if (totalPlayers >= 4) {
+            String p4Name = intent.getStringExtra("LOG_GAME_PLAYER_4");
+            String p4Deck = intent.getStringExtra("LOG_GAME_DECK_4");
+            playerFourthNameLogGame.setText(p4Name);
+            playerFourthDeckLogGame.setText(p4Deck);
+            avatarFourthLogGame.setImageDrawable(Utils.getRoundedImage(this, p4Name, p4Deck));
+        }
     }
 
     class MyDragListener implements View.OnDragListener {
