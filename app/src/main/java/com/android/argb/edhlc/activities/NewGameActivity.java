@@ -115,7 +115,6 @@ public class NewGameActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-
     }
 
     @Override
