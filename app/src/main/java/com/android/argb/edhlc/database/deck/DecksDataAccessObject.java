@@ -77,7 +77,6 @@ public class DecksDataAccessObject {
     }
 
     public Deck getDeck(String playerName, String deckName) {
-        List<Deck> deckList = new ArrayList<>();
         Cursor cursor = database.query(
                 DecksContract.DecksEntry.TABLE_NAME,
                 null,
@@ -88,15 +87,13 @@ public class DecksDataAccessObject {
                 null
         );
 
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            deckList.add(cursorToDeck(cursor));
-            cursor.moveToNext();
-        }
-        cursor.close();
-        return deckList.get(0);
-    }
+        Deck aux = new Deck();
+        if (cursor.moveToFirst())
+            aux = cursorToDeck(cursor);
 
+        cursor.close();
+        return aux;
+    }
 
     public boolean hasDeck(Deck deck) {
         return database.query(

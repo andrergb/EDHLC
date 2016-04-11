@@ -178,9 +178,12 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
                 isValid = false;
             if (auxPlayer.getPlayerDeck().getDeckOwnerName().equalsIgnoreCase("") || auxPlayer.getPlayerDeck().getDeckName().equalsIgnoreCase(""))
                 isValid = false;
-            if (auxPlayer.getPlayerDeck().getDeckShieldColor()[0] !=
-                    deckDb.getDeck(auxPlayer.getPlayerDeck().getDeckOwnerName(), auxPlayer.getPlayerDeck().getDeckName()).getDeckShieldColor()[0])
+            try {
+                if (auxPlayer.getPlayerDeck().getDeckShieldColor()[0] != deckDb.getDeck(auxPlayer.getPlayerDeck().getDeckOwnerName(), auxPlayer.getPlayerDeck().getDeckName()).getDeckShieldColor()[0])
+                    isValid = false;
+            } catch (NullPointerException e) {
                 isValid = false;
+            }
         }
 
         if (totalPlayers < 2)
@@ -240,6 +243,30 @@ public class MainActivityNew extends AppCompatActivity implements MainFragment.O
 
             case R.id.drawerItemAbout:
                 mPlayerDrawerLayout.closeDrawers();
+                break;
+        }
+    }
+
+    public void onClickHistory(View view) {
+        switch (view.getId()) {
+            case R.id.textViewP1Name:
+                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 0).apply();
+                setMode(MODE_PLAYING, getCurrentMode());
+                break;
+
+            case R.id.textViewP2Name:
+                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 1).apply();
+                setMode(MODE_PLAYING, getCurrentMode());
+                break;
+
+            case R.id.textViewP3Name:
+                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 2).apply();
+                setMode(MODE_PLAYING, getCurrentMode());
+                break;
+
+            case R.id.textViewP4Name:
+                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 3).apply();
+                setMode(MODE_PLAYING, getCurrentMode());
                 break;
         }
     }
