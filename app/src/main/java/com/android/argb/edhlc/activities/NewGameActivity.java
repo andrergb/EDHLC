@@ -1,6 +1,5 @@
 package com.android.argb.edhlc.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -19,13 +18,11 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.android.argb.edhlc.Constants;
 import com.android.argb.edhlc.NewGameAdapter;
 import com.android.argb.edhlc.R;
 import com.android.argb.edhlc.Utils;
 import com.android.argb.edhlc.database.deck.DecksDataAccessObject;
 import com.android.argb.edhlc.database.player.PlayersDataAccessObject;
-import com.android.argb.edhlc.objects.ActivePlayerNew;
 import com.android.argb.edhlc.objects.Deck;
 import com.android.argb.edhlc.objects.Player;
 
@@ -80,7 +77,8 @@ public class NewGameActivity extends AppCompatActivity {
                 this.finish();
                 return true;
 
-            case R.id.actions_start_game:
+            case R.id.actions_next:
+                Intent intentNewGame2 = new Intent(this, NewGame2Activity.class);
 
                 int index = -1;
                 String player = "";
@@ -94,26 +92,33 @@ public class NewGameActivity extends AppCompatActivity {
 
                     if (!player.equalsIgnoreCase("") && !deck.equalsIgnoreCase("")) {
                         index++;
-                        Utils.savePlayerInSharedPreferences(this, new ActivePlayerNew(decksDb.getDeck(player, deck), true, 40, 0, 0, 0, 0, index));
+
+                        if (index == 0) {
+                            intentNewGame2.putExtra("NEW_GAME2_PLAYER_1", player);
+                            intentNewGame2.putExtra("NEW_GAME2_DECK_1", deck);
+                        } else if (index == 1) {
+                            intentNewGame2.putExtra("NEW_GAME2_PLAYER_2", player);
+                            intentNewGame2.putExtra("NEW_GAME2_DECK_2", deck);
+                        } else if (index == 2) {
+                            intentNewGame2.putExtra("NEW_GAME2_PLAYER_3", player);
+                            intentNewGame2.putExtra("NEW_GAME2_DECK_3", deck);
+                        } else if (index == 3) {
+                            intentNewGame2.putExtra("NEW_GAME2_PLAYER_4", player);
+                            intentNewGame2.putExtra("NEW_GAME2_DECK_4", deck);
+                        }
+
                         player = "";
                         deck = "";
                     }
                 }
-                //Total players
-                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_GAME_TOTAL_PLAYERS, index + 1).apply();
-                //INITIAL TAB
-                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 0).apply();
+                intentNewGame2.putExtra("NEW_GAME2_TOTAL_PLAYERS", index + 1);
 
-                Utils.resetHistoryLife(this);
-
-                Intent intentHome = new Intent(this, MainActivityNew.class);
-                intentHome.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intentHome);
+                startActivity(intentNewGame2);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 this.finish();
 
                 return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -150,7 +155,7 @@ public class NewGameActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         updateLayout();
-        mActionBar.setTitle("New Game - " + getCurrentTotalPlayers());
+        mActionBar.setTitle("New Game (" + getCurrentTotalPlayers() + ")");
     }
 
 
@@ -169,10 +174,10 @@ public class NewGameActivity extends AppCompatActivity {
 
                     if (getCurrentTotalPlayers() < 4) {
                         setPlayerSelected(position, currentSelection.equalsIgnoreCase("TRUE") ? "FALSE" : "TRUE");
-                        mActionBar.setTitle("New Game - " + getCurrentTotalPlayers());
+                        mActionBar.setTitle("New Game (" + getCurrentTotalPlayers() + ")");
                     } else if (isPlayerSelected(position)) {
                         setPlayerSelected(position, currentSelection.equalsIgnoreCase("TRUE") ? "FALSE" : "TRUE");
-                        mActionBar.setTitle("New Game - " + getCurrentTotalPlayers());
+                        mActionBar.setTitle("New Game (" + getCurrentTotalPlayers() + ")");
                     } else if (currentSelection.equalsIgnoreCase("TRUE")) {
                         playersList.get(position)[2] = "FALSE";
                     } else {

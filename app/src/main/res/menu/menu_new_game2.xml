@@ -9,12 +9,11 @@
         android:icon="@drawable/transparent"
         android:orderInCategory="0"
         android:visible="true"
-        android:title=""
         app:showAsAction="always"/>
 
     <item
-        android:id="@+id/actions_next"
+        android:id="@+id/actions_start_game"
         android:orderInCategory="1"
-        android:title="@string/actions_next"
+        android:title="@string/actions_start_game"
         app:showAsAction="always"/>
 </menu>

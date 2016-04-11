@@ -9,6 +9,7 @@
     <string name="activity_turn_label">EDHLC: Turn Phases</string>
     <string name="activity_turn_deck">EDHLC: Deck</string>
     <string name="activity_new_game">EDHLC: New Game</string>
+    <string name="activity_new_game2">EDHLC: New Game Confirmation</string>
     <string name="activity_log_game">EDHLC: Log Game</string>
 
     <string name="title_section1">Section 1</string>
@@ -25,6 +26,7 @@
     <string name="actions_playerView">Player View</string>
     <string name="actions_overview">Overview</string>
     <string name="actions_start_game">Start game</string>
+    <string name="actions_next">Next</string>
     <string name="actions_new_game">New game</string>
     <string name="actions_log_game">Log game</string>
     <string name="actions_roll_dice">Roll a dice</string>

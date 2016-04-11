@@ -1,0 +1,770 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout
+    android:id="@+id/DrawerLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:elevation="7dp">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true">
+
+        <ScrollView
+            android:id="@+id/scrollNewGame2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/linearNewGame2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!--First Line-->
+                <LinearLayout
+                    android:id="@+id/firstLineParent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingBottom="3dp"
+                        android:paddingTop="3dp">
+
+                        <LinearLayout
+                            android:id="@+id/firstLine"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <android.support.v7.widget.CardView
+                                android:id="@+id/firstCard"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="6dp"
+                                card_view:cardElevation="2dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+                                    <RelativeLayout
+                                        android:layout_width="48dp"
+                                        android:layout_height="48dp"
+                                        android:layout_marginBottom="16dp"
+                                        android:layout_marginLeft="20dp"
+                                        android:layout_marginRight="20dp"
+                                        android:layout_marginTop="16dp">
+
+                                        <!-- Circle icon -->
+                                        <ImageView
+                                            android:id="@+id/avatarFirstNewGame2"
+                                            android:layout_width="48dp"
+                                            android:layout_height="48dp"
+                                            android:layout_gravity="center"
+                                            android:scaleType="centerCrop"
+                                            android:src="@drawable/avatar_holder">
+                                        </ImageView>
+                                    </RelativeLayout>
+
+                                    <!-- Row text -->
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_marginEnd="16dp"
+                                        android:layout_marginLeft="8dp"
+                                        android:layout_marginRight="16dp"
+                                        android:layout_marginStart="8dp"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/playerFirstNameNewGame2"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:singleLine="true"
+                                            android:text="Player name1"
+                                            android:textColor="@color/primary_text"
+                                            android:textSize="16sp"/>
+
+                                        <TextView
+                                            android:id="@+id/playerFirstDeckNewGame2"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="deck name"
+                                            android:textColor="@color/secondary_text"
+                                            android:textSize="12sp"/>
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </android.support.v7.widget.CardView>
+                        </LinearLayout>
+
+                        <!-- DOTS HOLDER -->
+                        <LinearLayout
+                            android:layout_width="92dp"
+                            android:layout_height="92dp"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginStart="4dp"
+                            android:gravity="center_horizontal"
+                            android:orientation="vertical"
+                            android:paddingTop="12dp">
+
+                            <!--UPPER DOTS-->
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="2dp"
+                                android:orientation="horizontal">
+
+                                <View
+                                    android:id="@+id/indicator111"
+                                    android:layout_width="8dp"
+                                    android:layout_height="8dp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginEnd="22dp"
+                                    android:layout_marginRight="22dp"
+                                    android:alpha="0.5"
+                                    android:background="@drawable/icon_circle"
+                                    android:visibility="invisible"/>
+
+                                <View
+                                    android:id="@+id/indicator112"
+                                    android:layout_width="8dp"
+                                    android:layout_height="8dp"
+                                    android:layout_gravity="center"
+                                    android:alpha="0.5"
+                                    android:background="@drawable/icon_circle"
+                                    android:visibility="invisible"/>
+
+                                <View
+                                    android:id="@+id/indicator113"
+                                    android:layout_width="8dp"
+                                    android:layout_height="8dp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginLeft="22dp"
+                                    android:layout_marginStart="22dp"
+                                    android:alpha="0.5"
+                                    android:background="@drawable/icon_circle"
+                                    android:visibility="invisible"/>
+                            </LinearLayout>
+
+                            <!--AVATAR HOLDER-->
+                            <LinearLayout
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"/>
+
+                            <!--BOTTOM DOTS-->
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:orientation="horizontal">
+
+                                <View
+                                    android:id="@+id/indicator121"
+                                    android:layout_width="8dp"
+                                    android:layout_height="8dp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginEnd="22dp"
+                                    android:layout_marginRight="22dp"
+                                    android:alpha="0.5"
+                                    android:background="@drawable/icon_circle"
+                                    android:visibility="invisible"/>
+
+                                <View
+                                    android:id="@+id/indicator122"
+                                    android:layout_width="8dp"
+                                    android:layout_height="8dp"
+                                    android:layout_gravity="center"
+                                    android:alpha="0.5"
+                                    android:background="@drawable/icon_circle"
+                                    android:visibility="invisible"/>
+
+                                <View
+                                    android:id="@+id/indicator123"
+                                    android:layout_width="8dp"
+                                    android:layout_height="8dp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginLeft="22dp"
+                                    android:layout_marginStart="22dp"
+                                    android:alpha="0.5"
+                                    android:background="@drawable/icon_circle"
+                                    android:visibility="invisible"/>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/gray300"/>
+                </LinearLayout>
+
+                <!--Second Line-->
+                <LinearLayout
+                    android:id="@+id/secondLineParent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingBottom="3dp"
+                        android:paddingTop="3dp">
+
+                        <LinearLayout
+                            android:id="@+id/secondLine"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <android.support.v7.widget.CardView
+                                android:id="@+id/secondCard"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="6dp"
+                                card_view:cardElevation="2dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+                                    <RelativeLayout
+                                        android:layout_width="48dp"
+                                        android:layout_height="48dp"
+                                        android:layout_marginBottom="16dp"
+                                        android:layout_marginLeft="20dp"
+                                        android:layout_marginRight="20dp"
+                                        android:layout_marginTop="16dp">
+
+                                        <!-- Circle icon -->
+                                        <ImageView
+                                            android:id="@+id/avatarSecondNewGame2"
+                                            android:layout_width="48dp"
+                                            android:layout_height="48dp"
+                                            android:layout_gravity="center"
+                                            android:scaleType="centerCrop"
+                                            android:src="@drawable/avatar_holder">
+                                        </ImageView>
+                                    </RelativeLayout>
+
+                                    <!-- Row text -->
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_marginEnd="16dp"
+                                        android:layout_marginLeft="8dp"
+                                        android:layout_marginRight="16dp"
+                                        android:layout_marginStart="8dp"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/playerSecondNameNewGame2"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:singleLine="true"
+                                            android:text="Player name1"
+                                            android:textColor="@color/primary_text"
+                                            android:textSize="16sp"/>
+
+                                        <TextView
+                                            android:id="@+id/playerSecondDeckNewGame2"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="deck name"
+                                            android:textColor="@color/secondary_text"
+                                            android:textSize="12sp"/>
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </android.support.v7.widget.CardView>
+                        </LinearLayout>
+
+                        <!-- DOTS HOLDER -->
+                        <LinearLayout
+                            android:layout_width="92dp"
+                            android:layout_height="92dp"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginStart="4dp"
+                            android:gravity="center_horizontal"
+                            android:orientation="vertical"
+                            android:paddingTop="12dp">
+
+                            <!--UPPER DOTS-->
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="2dp"
+                                android:orientation="horizontal">
+
+                                <View
+                                    android:id="@+id/indicator211"
+                                    android:layout_width="8dp"
+                                    android:layout_height="8dp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginEnd="22dp"
+                                    android:layout_marginRight="22dp"
+                                    android:alpha="0.5"
+                                    android:background="@drawable/icon_circle"
+                                    android:visibility="invisible"/>
+
+                                <View
+                                    android:id="@+id/indicator212"
+                                    android:layout_width="8dp"
+                                    android:layout_height="8dp"
+                                    android:layout_gravity="center"
+                                    android:alpha="0.5"
+                                    android:background="@drawable/icon_circle"
+                                    android:visibility="invisible"/>
+
+                                <View
+                                    android:id="@+id/indicator213"
+                                    android:layout_width="8dp"
+                                    android:layout_height="8dp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginLeft="22dp"
+                                    android:layout_marginStart="22dp"
+                                    android:alpha="0.5"
+                                    android:background="@drawable/icon_circle"
+                                    android:visibility="invisible"/>
+                            </LinearLayout>
+
+                            <!--AVATAR HOLDER-->
+                            <LinearLayout
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"/>
+
+                            <!--BOTTOM DOTS-->
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:orientation="horizontal">
+
+                                <View
+                                    android:id="@+id/indicator221"
+                                    android:layout_width="8dp"
+                                    android:layout_height="8dp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginEnd="22dp"
+                                    android:layout_marginRight="22dp"
+                                    android:alpha="0.5"
+                                    android:background="@drawable/icon_circle"
+                                    android:visibility="invisible"/>
+
+                                <View
+                                    android:id="@+id/indicator222"
+                                    android:layout_width="8dp"
+                                    android:layout_height="8dp"
+                                    android:layout_gravity="center"
+                                    android:alpha="0.5"
+                                    android:background="@drawable/icon_circle"
+                                    android:visibility="invisible"/>
+
+                                <View
+                                    android:id="@+id/indicator223"
+                                    android:layout_width="8dp"
+                                    android:layout_height="8dp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginLeft="22dp"
+                                    android:layout_marginStart="22dp"
+                                    android:alpha="0.5"
+                                    android:background="@drawable/icon_circle"
+                                    android:visibility="invisible"/>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/gray300"/>
+                </LinearLayout>
+
+                <!--Third Line-->
+                <LinearLayout
+                    android:id="@+id/thirdLineParent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingBottom="3dp"
+                        android:paddingTop="3dp">
+
+                        <LinearLayout
+                            android:id="@+id/thirdLine"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <android.support.v7.widget.CardView
+                                android:id="@+id/thirdCard"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="6dp"
+                                card_view:cardElevation="2dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+                                    <RelativeLayout
+                                        android:layout_width="48dp"
+                                        android:layout_height="48dp"
+                                        android:layout_marginBottom="16dp"
+                                        android:layout_marginLeft="20dp"
+                                        android:layout_marginRight="20dp"
+                                        android:layout_marginTop="16dp">
+
+                                        <!-- Circle icon -->
+                                        <ImageView
+                                            android:id="@+id/avatarThirdNewGame2"
+                                            android:layout_width="48dp"
+                                            android:layout_height="48dp"
+                                            android:layout_gravity="center"
+                                            android:scaleType="centerCrop"
+                                            android:src="@drawable/avatar_holder">
+                                        </ImageView>
+                                    </RelativeLayout>
+
+                                    <!-- Row text -->
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_marginEnd="16dp"
+                                        android:layout_marginLeft="8dp"
+                                        android:layout_marginRight="16dp"
+                                        android:layout_marginStart="8dp"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/playerThirdNameNewGame2"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:singleLine="true"
+                                            android:text="Player name1"
+                                            android:textColor="@color/primary_text"
+                                            android:textSize="16sp"/>
+
+                                        <TextView
+                                            android:id="@+id/playerThirdDeckNewGame2"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="deck name"
+                                            android:textColor="@color/secondary_text"
+                                            android:textSize="12sp"/>
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </android.support.v7.widget.CardView>
+                        </LinearLayout>
+
+                        <!-- DOTS HOLDER -->
+                        <LinearLayout
+                            android:layout_width="92dp"
+                            android:layout_height="92dp"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginStart="4dp"
+                            android:gravity="center_horizontal"
+                            android:orientation="vertical"
+                            android:paddingTop="12dp">
+
+                            <!--UPPER DOTS-->
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="2dp"
+                                android:orientation="horizontal">
+
+                                <View
+                                    android:id="@+id/indicator311"
+                                    android:layout_width="8dp"
+                                    android:layout_height="8dp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginEnd="22dp"
+                                    android:layout_marginRight="22dp"
+                                    android:alpha="0.5"
+                                    android:background="@drawable/icon_circle"
+                                    android:visibility="invisible"/>
+
+                                <View
+                                    android:id="@+id/indicator312"
+                                    android:layout_width="8dp"
+                                    android:layout_height="8dp"
+                                    android:layout_gravity="center"
+                                    android:alpha="0.5"
+                                    android:background="@drawable/icon_circle"
+                                    android:visibility="invisible"/>
+
+                                <View
+                                    android:id="@+id/indicator313"
+                                    android:layout_width="8dp"
+                                    android:layout_height="8dp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginLeft="22dp"
+                                    android:layout_marginStart="22dp"
+                                    android:alpha="0.5"
+                                    android:background="@drawable/icon_circle"
+                                    android:visibility="invisible"/>
+                            </LinearLayout>
+
+                            <!--AVATAR HOLDER-->
+                            <LinearLayout
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"/>
+
+                            <!--BOTTOM DOTS-->
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:orientation="horizontal">
+
+                                <View
+                                    android:id="@+id/indicator321"
+                                    android:layout_width="8dp"
+                                    android:layout_height="8dp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginEnd="22dp"
+                                    android:layout_marginRight="22dp"
+                                    android:alpha="0.5"
+                                    android:background="@drawable/icon_circle"
+                                    android:visibility="invisible"/>
+
+                                <View
+                                    android:id="@+id/indicator322"
+                                    android:layout_width="8dp"
+                                    android:layout_height="8dp"
+                                    android:layout_gravity="center"
+                                    android:alpha="0.5"
+                                    android:background="@drawable/icon_circle"
+                                    android:visibility="invisible"/>
+
+                                <View
+                                    android:id="@+id/indicator323"
+                                    android:layout_width="8dp"
+                                    android:layout_height="8dp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginLeft="22dp"
+                                    android:layout_marginStart="22dp"
+                                    android:alpha="0.5"
+                                    android:background="@drawable/icon_circle"
+                                    android:visibility="invisible"/>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/gray300"/>
+                </LinearLayout>
+
+                <!--Fourth Line-->
+                <LinearLayout
+                    android:id="@+id/fourthLineParent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingBottom="3dp"
+                        android:paddingTop="3dp">
+
+                        <LinearLayout
+                            android:id="@+id/fourthLine"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <android.support.v7.widget.CardView
+                                android:id="@+id/fourthCard"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="6dp"
+                                card_view:cardElevation="2dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+                                    <RelativeLayout
+                                        android:layout_width="48dp"
+                                        android:layout_height="48dp"
+                                        android:layout_marginBottom="16dp"
+                                        android:layout_marginLeft="20dp"
+                                        android:layout_marginRight="20dp"
+                                        android:layout_marginTop="16dp">
+
+                                        <!-- Circle icon -->
+                                        <ImageView
+                                            android:id="@+id/avatarFourthNewGame2"
+                                            android:layout_width="48dp"
+                                            android:layout_height="48dp"
+                                            android:layout_gravity="center"
+                                            android:scaleType="centerCrop"
+                                            android:src="@drawable/avatar_holder">
+                                        </ImageView>
+                                    </RelativeLayout>
+
+                                    <!-- Row text -->
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_marginEnd="16dp"
+                                        android:layout_marginLeft="8dp"
+                                        android:layout_marginRight="16dp"
+                                        android:layout_marginStart="8dp"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/playerFourthNameNewGame2"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:singleLine="true"
+                                            android:text="Player name1"
+                                            android:textColor="@color/primary_text"
+                                            android:textSize="16sp"/>
+
+                                        <TextView
+                                            android:id="@+id/playerFourthDeckNewGame2"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="deck name"
+                                            android:textColor="@color/secondary_text"
+                                            android:textSize="12sp"/>
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </android.support.v7.widget.CardView>
+                        </LinearLayout>
+
+                        <!-- DOTS HOLDER -->
+                        <LinearLayout
+                            android:layout_width="92dp"
+                            android:layout_height="92dp"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginStart="4dp"
+                            android:gravity="center_horizontal"
+                            android:orientation="vertical"
+                            android:paddingTop="12dp">
+
+                            <!--UPPER DOTS-->
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="2dp"
+                                android:orientation="horizontal">
+
+                                <View
+                                    android:id="@+id/indicator411"
+                                    android:layout_width="8dp"
+                                    android:layout_height="8dp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginEnd="22dp"
+                                    android:layout_marginRight="22dp"
+                                    android:alpha="0.5"
+                                    android:background="@drawable/icon_circle"
+                                    android:visibility="invisible"/>
+
+                                <View
+                                    android:id="@+id/indicator412"
+                                    android:layout_width="8dp"
+                                    android:layout_height="8dp"
+                                    android:layout_gravity="center"
+                                    android:alpha="0.5"
+                                    android:background="@drawable/icon_circle"
+                                    android:visibility="invisible"/>
+
+                                <View
+                                    android:id="@+id/indicator413"
+                                    android:layout_width="8dp"
+                                    android:layout_height="8dp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginLeft="22dp"
+                                    android:layout_marginStart="22dp"
+                                    android:alpha="0.5"
+                                    android:background="@drawable/icon_circle"
+                                    android:visibility="invisible"/>
+                            </LinearLayout>
+
+                            <!--AVATAR HOLDER-->
+                            <LinearLayout
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"/>
+
+                            <!--BOTTOM DOTS-->
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:orientation="horizontal">
+
+                                <View
+                                    android:id="@+id/indicator421"
+                                    android:layout_width="8dp"
+                                    android:layout_height="8dp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginEnd="22dp"
+                                    android:layout_marginRight="22dp"
+                                    android:alpha="0.5"
+                                    android:background="@drawable/icon_circle"
+                                    android:visibility="invisible"/>
+
+                                <View
+                                    android:id="@+id/indicator422"
+                                    android:layout_width="8dp"
+                                    android:layout_height="8dp"
+                                    android:layout_gravity="center"
+                                    android:alpha="0.5"
+                                    android:background="@drawable/icon_circle"
+                                    android:visibility="invisible"/>
+
+                                <View
+                                    android:id="@+id/indicator423"
+                                    android:layout_width="8dp"
+                                    android:layout_height="8dp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginLeft="22dp"
+                                    android:layout_marginStart="22dp"
+                                    android:alpha="0.5"
+                                    android:background="@drawable/icon_circle"
+                                    android:visibility="invisible"/>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/gray300"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+    </android.support.design.widget.CoordinatorLayout>
+</android.support.v4.widget.DrawerLayout>
