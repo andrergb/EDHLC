@@ -9,7 +9,6 @@
     tools:context=".activities.MainActivity$PlaceholderFragment">
 
     <TextView
-        android:id="@+id/TextiViewPhase"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"

@@ -1,4 +1,4 @@
-package com.android.argb.edhlc;
+package com.android.argb.edhlc.adapters;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
@@ -10,6 +10,8 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.android.argb.edhlc.R;
 
 import java.util.ArrayList;
 import java.util.List;

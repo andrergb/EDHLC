@@ -1,29 +1,15 @@
 <resources>
     <string name="app_name">EDHLC</string>
-    <string name="activity_overview_label">EDHLC: Overview</string>
-    <string name="activity_history_label">EDHLC: History</string>
     <string name="activity_player_label">EDHLC: Player</string>
     <string name="activity_player_list_label">EDHLC: Player List</string>
     <string name="activity_records_label">EDHLC: Records</string>
     <string name="activity_settings_label">EDHLC: Settings</string>
-    <string name="activity_turn_label">EDHLC: Turn Phases</string>
     <string name="activity_turn_deck">EDHLC: Deck</string>
     <string name="activity_new_game">EDHLC: New Game</string>
     <string name="activity_new_game2">EDHLC: New Game Confirmation</string>
     <string name="activity_log_game">EDHLC: Log Game</string>
+    <string name="activity_turn_label">EDHLC: Turn Phases</string>
 
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
-    <string name="title_section4">Section 4</string>
-
-    <string name="hello_world">Hello world!</string>
-
-    <string name="action_settings">Settings</string>
-    <string name="actions_about">About</string>
-    <string name="actions_newGame">New Game</string>
-    <string name="actions_screen">Keep screen ON</string>
-    <string name="actions_playerView">Player View</string>
     <string name="actions_overview">Overview</string>
     <string name="actions_start_game">Start game</string>
     <string name="actions_next">Next</string>
@@ -34,10 +20,8 @@
     <string name="action_edit_deck">Edit deck</string>
     <string name="action_delete_deck">Delete deck</string>
     <string name="actions_history">History</string>
-    <string name="actions_playerColor">Player Color</string>
 
     <string name="hint_deckName">Deck Name</string>
-    <string name="hint_deckTotal">0</string>
     <string name="hint_playerName">Player Name</string>
     <string name="hint_playerLife">Player Life</string>
 
@@ -45,31 +29,15 @@
     <string name="color_swatch_description">Color</string>
     <string name="color_swatch_description_selected">Color selected</string>
 
-    <string name="buttonLifeNegative">buttonLifeNegative</string>
-    <string name="buttonLifePositive">buttonLifePositive</string>
-
-    <string name="actions_remove">Remove Player</string>
-    <string name="actions_add">Add Player</string>
-
     <string name="default_edh_21">21</string>
 
-    <string name="player_decks">%1$d decks</string>
-    <string name="player_games">%1$d total games (%2$d/%3$d/%4$d/%5$d)</string>
-    <string name="player_deck_games">%1$d games played (%2$d/%3$d/%4$d/%5$d)</string>
     <string name="screen_on">Keep screen on</string>
-    <string name="edh_spinner_player_hint">- Select a Player -</string>
-    <string name="edh_spinner_deck_hint">- Select a Deck -</string>
 
     <string name="turn_beginning_phase">Beginning\nPhase</string>
-    <string name="turn_beginning_phase2">Beginning Phase</string>
     <string name="turn_first_main_phase">First Main\nPhase</string>
-    <string name="turn_first_main_phase2">First Main\nPhase</string>
     <string name="turn_combat_phase">Combat\nPhase</string>
-    <string name="turn_combat_phase2">Combat\nPhase</string>
     <string name="turn_second_main_phase">Second Main\nPhase</string>
-    <string name="turn_second_main_phase2">Second Main\nPhase</string>
     <string name="turn_end_phase">End\nPhase</string>
-    <string name="turn_end_phase2">End\nPhase</string>
     <string name="turn_untap_step">Untap Step</string>
     <string name="turn_upkeep_step">Upkeep Step</string>
     <string name="turn_draw_step">Draw Step</string>
@@ -81,103 +49,10 @@
     <string name="turn_end_step">End of turn Step</string>
     <string name="turn_cleanup_step">Cleanup Step</string>
 
-    <string name="default_player_1">Player 1</string>
-    <string name="default_player_2">Player 2</string>
-    <string name="default_player_3">Player 3</string>
-    <string name="default_player_4">Player 4</string>
-
-    <string name="default_deck_1">Deck 1</string>
-    <string name="default_deck_2">Deck 2</string>
-    <string name="default_deck_3">Deck 3</string>
-    <string name="default_deck_4">Deck 4</string>
-
     <string name="drawer_home">Home</string>
     <string name="drawer_players">Players</string>
     <string name="drawer_records">Records</string>
     <string name="drawer_screen">Keep screen on</string>
     <string name="drawer_settings">Settings</string>
     <string name="drawer_about">About</string>
-
-    <!-- Current match -->
-    <string-array name="string_menu_main_1">
-        <item>New Game</item>
-        <item>Log Game</item>
-        <item>Roll a dice</item>
-        <item>Random Player</item>
-        <!-- <item>Turns</item> -->
-    </string-array>
-    <!-- Current match -->
-    <string-array name="string_menu_main_2">
-        <item>Home</item>
-        <item>Players</item>
-        <item>All Records</item>
-        <item>Settings</item>
-        <item>About</item>
-    </string-array>
-
-    <!-- Player List activity -->
-    <string-array name="string_menu_player_list_1">
-        <item>Add Player</item>
-        <item>Edit Player</item>
-        <item>Remove Player</item>
-    </string-array>
-    <!-- Player List activity -->
-    <string-array name="string_menu_player_list_2">
-        <item>Home</item>
-        <item>Players</item>
-        <item>All Records</item>
-        <item>Settings</item>
-        <item>About</item>
-    </string-array>
-
-    <!-- Player activity -->
-    <string-array name="string_menu_player_1">
-        <item>Add Deck</item>
-        <item>Edit Deck</item>
-        <item>Remove Deck</item>
-    </string-array>
-    <!-- Player List activity -->
-    <string-array name="string_menu_player_2">
-        <item>Home</item>
-        <item>Players</item>
-        <item>All Records</item>
-        <item>Settings</item>
-        <item>About</item>
-    </string-array>
-
-    <!-- Records activity -->
-    <string-array name="string_menu_records_1">
-    </string-array>
-    <!-- Records activity -->
-    <string-array name="string_menu_records_2">
-        <item>Home</item>
-        <item>Players</item>
-        <item>All Records</item>
-        <item>Settings</item>
-        <item>About</item>
-    </string-array>
-
-    <!-- Overview activity -->
-    <string-array name="string_menu_overview_1">
-    </string-array>
-    <!-- Overview activity -->
-    <string-array name="string_menu_overview_2">
-        <item>Home</item>
-        <item>Players</item>
-        <item>All Records</item>
-        <item>Settings</item>
-        <item>About</item>
-    </string-array>
-
-    <!-- History activity -->
-    <string-array name="string_menu_history_1">
-    </string-array>
-    <!-- History activity -->
-    <string-array name="string_menu_history_2">
-        <item>Home</item>
-        <item>Players</item>
-        <item>All Records</item>
-        <item>Settings</item>
-        <item>About</item>
-    </string-array>
 </resources>

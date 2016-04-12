@@ -1,364 +1,370 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@drawable/border"
-              android:orientation="vertical"
-              android:weightSum="10"
-              tools:context=".activities.MainActivityNew$PlaceholderFragment">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-    <!--HEADER-->
-    <RelativeLayout
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardMain"
+        android:layout_margin="4dp"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1.5"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/headerPlayerName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Player Name"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="32sp"/>
-
-            <TextView
-                android:id="@+id/headerDeckName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:gravity="center"
-                android:text="Deck Name"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textSize="22sp"/>
-        </LinearLayout>
-
-        <!--DETHRONE-->
-        <ImageView
-            android:id="@+id/imageViewThrone"
-            android:layout_width="24sp"
-            android:layout_height="24sp"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/icon_crown"/>
-    </RelativeLayout>
-
-    <!--LIFE-->
-    <RelativeLayout
-        android:id="@+id/linearLayoutLife"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="5.5"
-        android:orientation="horizontal"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:weightSum="10">
 
-            <!--LIFE VALUE-->
+            <!--HEADER-->
             <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="8"
-                android:gravity="center">
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.5"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp">
 
-                <TextView
-                    android:id="@+id/lifeValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:text="40"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textSize="180sp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/headerPlayerName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Player Name"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textSize="32sp"/>
+
+                    <TextView
+                        android:id="@+id/headerDeckName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:text="Deck Name"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textSize="22sp"/>
+                </LinearLayout>
+
+                <!--DETHRONE-->
+                <ImageView
+                    android:id="@+id/imageViewThrone"
+                    android:layout_width="24sp"
+                    android:layout_height="24sp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/icon_crown"/>
             </RelativeLayout>
 
-            <!--LIFE BUTTONS-->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:orientation="vertical"
-                android:paddingTop="16dp"
-                android:weightSum="2">
+            <!--LIFE-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="5.5"
+                android:orientation="horizontal"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp">
 
-                <!--LIFE POSITIVE-->
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="bottom"
-                    android:paddingBottom="16dp">
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
 
-                    <ImageView
-                        android:id="@+id/lifePositive"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:adjustViewBounds="true"
-                        android:src="@drawable/icon_up1"/>
+                    <!--LIFE VALUE-->
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="8"
+                        android:gravity="center">
+
+                        <TextView
+                            android:id="@+id/lifeValue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:singleLine="true"
+                            android:text="40"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:textSize="180sp"/>
+                    </RelativeLayout>
+
+                    <!--LIFE BUTTONS-->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:orientation="vertical"
+                        android:paddingTop="16dp"
+                        android:weightSum="2">
+
+                        <!--LIFE POSITIVE-->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:gravity="bottom"
+                            android:paddingBottom="16dp">
+
+                            <ImageView
+                                android:id="@+id/lifePositive"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:adjustViewBounds="true"
+                                android:src="@drawable/icon_up1"/>
+                        </LinearLayout>
+
+                        <!--LIFE NEGATIVE-->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:gravity="top"
+                            android:paddingTop="16dp">
+
+                            <ImageView
+                                android:id="@+id/lifeNegative"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:adjustViewBounds="true"
+                                android:src="@drawable/icon_down1"/>
+                        </LinearLayout>
+                    </LinearLayout>
                 </LinearLayout>
 
-                <!--LIFE NEGATIVE-->
+            </RelativeLayout>
+
+            <!--EDH-->
+            <LinearLayout
+                android:id="@+id/mainEDH"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="3"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:weightSum="4">
+
+                <!--EDH1-->
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
                     android:layout_weight="1"
-                    android:gravity="top"
-                    android:paddingTop="16dp">
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:weightSum="3">
 
-                    <ImageView
-                        android:id="@+id/lifeNegative"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:adjustViewBounds="true"
-                        android:src="@drawable/icon_down1"/>
+                    <!--EDH1 POSITIVE-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:id="@+id/positiveEDH1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:adjustViewBounds="true"
+                            android:gravity="center"
+                            android:src="@drawable/icon_up2"/>
+                    </LinearLayout>
+
+                    <!--EDH1 VALUE-->
+                    <TextView
+                        android:id="@+id/valueEDH1"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textSize="35sp"/>
+
+                    <!--EDH1 NEGATIVE-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:id="@+id/negativeEDH1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:adjustViewBounds="true"
+                            android:gravity="center"
+                            android:src="@drawable/icon_down2"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+
+                <!--EDH2-->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:weightSum="3">
+
+                    <!--EDH2 POSITIVE-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:id="@+id/positiveEDH2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:adjustViewBounds="true"
+                            android:gravity="center"
+                            android:src="@drawable/icon_up2"/>
+                    </LinearLayout>
+
+                    <!--EDH2 VALUE-->
+                    <TextView
+                        android:id="@+id/valueEDH2"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textSize="35sp"/>
+
+                    <!--EDH2 NEGATIVE-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:id="@+id/negativeEDH2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:adjustViewBounds="true"
+                            android:gravity="center"
+                            android:src="@drawable/icon_down2"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+
+                <!--EDH3-->
+                <LinearLayout
+                    android:id="@+id/mainEDH3"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:weightSum="3">
+
+                    <!--EDH3 POSITIVE-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:id="@+id/positiveEDH3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:adjustViewBounds="true"
+                            android:gravity="center"
+                            android:src="@drawable/icon_up2"/>
+                    </LinearLayout>
+
+                    <!--EDH3 VALUE-->
+                    <TextView
+                        android:id="@+id/valueEDH3"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textSize="35sp"/>
+
+                    <!--EDH3 NEGATIVE-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:id="@+id/negativeEDH3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:adjustViewBounds="true"
+                            android:gravity="center"
+                            android:src="@drawable/icon_down2"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!--EDH4-->
+                <LinearLayout
+                    android:id="@+id/mainEDH4"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:weightSum="3">
+
+                    <!--EDH4 POSITIVE-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:id="@+id/positiveEDH4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:adjustViewBounds="true"
+                            android:gravity="center"
+                            android:src="@drawable/icon_up2"/>
+                    </LinearLayout>
+
+                    <!--EDH4 VALUE-->
+                    <TextView
+                        android:id="@+id/valueEDH4"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textSize="35sp"/>
+
+                    <!--EDH4 NEGATIVE-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:id="@+id/negativeEDH4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:adjustViewBounds="true"
+                            android:gravity="center"
+                            android:src="@drawable/icon_down2"/>
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-
-    </RelativeLayout>
-
-    <!--EDH-->
-    <LinearLayout
-        android:id="@+id/mainEDH"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:weightSum="4">
-
-        <!--EDH1-->
-        <LinearLayout
-            android:id="@+id/mainEDH1"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:weightSum="3">
-
-            <!--EDH1 POSITIVE-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center">
-
-                <ImageView
-                    android:id="@+id/positiveEDH1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:adjustViewBounds="true"
-                    android:gravity="center"
-                    android:src="@drawable/icon_up2"/>
-            </LinearLayout>
-
-            <!--EDH1 VALUE-->
-            <TextView
-                android:id="@+id/valueEDH1"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="0"
-                android:textSize="35sp"/>
-
-            <!--EDH1 NEGATIVE-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center">
-
-                <ImageView
-                    android:id="@+id/negativeEDH1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:adjustViewBounds="true"
-                    android:gravity="center"
-                    android:src="@drawable/icon_down2"/>
-            </LinearLayout>
-        </LinearLayout>
-
-
-        <!--EDH2-->
-        <LinearLayout
-            android:id="@+id/mainEDH2"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:weightSum="3">
-
-            <!--EDH2 POSITIVE-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center">
-
-                <ImageView
-                    android:id="@+id/positiveEDH2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:adjustViewBounds="true"
-                    android:gravity="center"
-                    android:src="@drawable/icon_up2"/>
-            </LinearLayout>
-
-            <!--EDH2 VALUE-->
-            <TextView
-                android:id="@+id/valueEDH2"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="0"
-                android:textSize="35sp"/>
-
-            <!--EDH2 NEGATIVE-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center">
-
-                <ImageView
-                    android:id="@+id/negativeEDH2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:adjustViewBounds="true"
-                    android:gravity="center"
-                    android:src="@drawable/icon_down2"/>
-            </LinearLayout>
-        </LinearLayout>
-
-
-        <!--EDH3-->
-        <LinearLayout
-            android:id="@+id/mainEDH3"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:weightSum="3">
-
-            <!--EDH3 POSITIVE-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center">
-
-                <ImageView
-                    android:id="@+id/positiveEDH3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:adjustViewBounds="true"
-                    android:gravity="center"
-                    android:src="@drawable/icon_up2"/>
-            </LinearLayout>
-
-            <!--EDH3 VALUE-->
-            <TextView
-                android:id="@+id/valueEDH3"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="0"
-                android:textSize="35sp"/>
-
-            <!--EDH3 NEGATIVE-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center">
-
-                <ImageView
-                    android:id="@+id/negativeEDH3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:adjustViewBounds="true"
-                    android:gravity="center"
-                    android:src="@drawable/icon_down2"/>
-            </LinearLayout>
-        </LinearLayout>
-
-        <!--EDH4-->
-        <LinearLayout
-            android:id="@+id/mainEDH4"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:weightSum="3">
-
-            <!--EDH4 POSITIVE-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center">
-
-                <ImageView
-                    android:id="@+id/positiveEDH4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:adjustViewBounds="true"
-                    android:gravity="center"
-                    android:src="@drawable/icon_up2"/>
-            </LinearLayout>
-
-            <!--EDH4 VALUE-->
-            <TextView
-                android:id="@+id/valueEDH4"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="0"
-                android:textSize="35sp"/>
-
-            <!--EDH4 NEGATIVE-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center">
-
-                <ImageView
-                    android:id="@+id/negativeEDH4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:adjustViewBounds="true"
-                    android:gravity="center"
-                    android:src="@drawable/icon_down2"/>
-            </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
-</LinearLayout>
+    </android.support.v7.widget.CardView>
+</RelativeLayout>

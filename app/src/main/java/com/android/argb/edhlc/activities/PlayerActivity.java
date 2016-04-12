@@ -40,7 +40,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.argb.edhlc.Constants;
-import com.android.argb.edhlc.DeckListAdapter;
+import com.android.argb.edhlc.adapters.DeckListAdapter;
 import com.android.argb.edhlc.R;
 import com.android.argb.edhlc.Utils;
 import com.android.argb.edhlc.chart.DonutChart;

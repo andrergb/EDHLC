@@ -2,11 +2,11 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion '23.0.0'
+    buildToolsVersion '23.0.3'
 
     defaultConfig {
         applicationId "com.android.argb.edhlc"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 23
         versionCode 2
         versionName "2.0"
@@ -16,10 +16,10 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:23.1.1'
-    compile 'com.android.support:design:23.1.1'
-    compile 'com.android.support:cardview-v7:23.1.1'
-    compile 'com.android.support:recyclerview-v7:23.1.1'
+    compile 'com.android.support:appcompat-v7:23.3.0'
+    compile 'com.android.support:design:23.3.0'
+    compile 'com.android.support:cardview-v7:23.3.0'
+    compile 'com.android.support:recyclerview-v7:23.3.0'
 
     compile files('libs/achartengine-1.2.0.jar')
     compile 'me.villani.lorenzo.android:android-cropimage:1.1.+'

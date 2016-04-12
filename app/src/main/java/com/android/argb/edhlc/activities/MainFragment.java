@@ -18,7 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.argb.edhlc.R;
-import com.android.argb.edhlc.objects.ActivePlayerNew;
+import com.android.argb.edhlc.objects.ActivePlayer;
 import com.android.argb.edhlc.objects.Deck;
 
 public class MainFragment extends Fragment implements View.OnClickListener {
@@ -64,7 +64,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     private ImageView positiveEDH4;
     private ImageView negativeEDH4;
 
-    public static MainFragment newInstance(ActivePlayerNew activePlayer, int totalPlayers) {
+    public static MainFragment newInstance(ActivePlayer activePlayer, int totalPlayers) {
         Bundle args = new Bundle();
         if (activePlayer != null) {
             args.putString(ARG_PLAYER_NAME, activePlayer.getPlayerDeck().getDeckOwnerName());
@@ -87,8 +87,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         return fragment;
     }
 
-    private static ActivePlayerNew argsToPlayer(Bundle args) {
-        ActivePlayerNew auxPlayer = new ActivePlayerNew();
+    private static ActivePlayer argsToPlayer(Bundle args) {
+        ActivePlayer auxPlayer = new ActivePlayer();
         if (args != null) {
             auxPlayer.setPlayerDeck(new Deck(args.getString(ARG_PLAYER_NAME), args.getString(ARG_DECK_NAME), new int[]{args.getInt(ARG_DECK_COLOR)}));
             auxPlayer.setPlayerIsAlive(args.getBoolean(ARG_IS_ALIVE));
@@ -400,7 +400,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     }
 
     public interface OnUpdateData {
-        void iUpdateActivePlayer(ActivePlayerNew activePlayer);
+        void iUpdateActivePlayer(ActivePlayer activePlayer);
 
         void iUpdateDethrone();
 

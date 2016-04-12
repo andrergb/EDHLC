@@ -1,4 +1,4 @@
-package com.android.argb.edhlc;
+package com.android.argb.edhlc.adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -13,6 +13,10 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.android.argb.edhlc.R;
+import com.android.argb.edhlc.RoundedAvatarDrawable;
+import com.android.argb.edhlc.Utils;
 
 import java.io.File;
 import java.util.ArrayList;

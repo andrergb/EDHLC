@@ -30,7 +30,7 @@ import android.widget.TextView;
 
 import com.android.argb.edhlc.Constants;
 import com.android.argb.edhlc.R;
-import com.android.argb.edhlc.RecordListAdapter;
+import com.android.argb.edhlc.adapters.RecordListAdapter;
 import com.android.argb.edhlc.Utils;
 import com.android.argb.edhlc.database.record.RecordsDataAccessObject;
 import com.android.argb.edhlc.objects.Deck;

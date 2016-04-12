@@ -18,7 +18,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.android.argb.edhlc.NewGameAdapter;
+import com.android.argb.edhlc.adapters.NewGameListAdapter;
 import com.android.argb.edhlc.R;
 import com.android.argb.edhlc.Utils;
 import com.android.argb.edhlc.database.deck.DecksDataAccessObject;
@@ -38,14 +38,14 @@ public class NewGameActivity extends AppCompatActivity {
     private ListView listViewNewGame;
 
     private ArrayList<String[]> playersList; // 0: type - 1: item - 2: check
-    private NewGameAdapter mPlayersAdapter;
+    private NewGameListAdapter mPlayersAdapter;
 
     private DecksDataAccessObject decksDb;
     private PlayersDataAccessObject playersDb;
 
     @Override
     public void onBackPressed() {
-        Intent intentHome = new Intent(this, MainActivityNew.class);
+        Intent intentHome = new Intent(this, MainActivity.class);
         intentHome.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intentHome);
         this.finish();
@@ -71,7 +71,7 @@ public class NewGameActivity extends AppCompatActivity {
         switch (item.getItemId()) {
 
             case android.R.id.home:
-                Intent intent = new Intent(this, MainActivityNew.class);
+                Intent intent = new Intent(this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 this.finish();
@@ -161,7 +161,7 @@ public class NewGameActivity extends AppCompatActivity {
 
     private void createLayout() {
         playersList = new ArrayList<>();
-        mPlayersAdapter = new NewGameAdapter(this, playersList);
+        mPlayersAdapter = new NewGameListAdapter(this, playersList);
 
         listViewNewGame = (ListView) findViewById(R.id.new_game_list);
         listViewNewGame.setAdapter(mPlayersAdapter);

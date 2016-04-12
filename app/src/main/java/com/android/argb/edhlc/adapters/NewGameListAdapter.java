@@ -1,4 +1,4 @@
-package com.android.argb.edhlc;
+package com.android.argb.edhlc.adapters;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -9,9 +9,11 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.android.argb.edhlc.R;
+
 import java.util.List;
 
-public class NewGameAdapter extends BaseAdapter {
+public class NewGameListAdapter extends BaseAdapter {
 
     private static LayoutInflater inflater = null;
     private Context context;
@@ -19,7 +21,7 @@ public class NewGameAdapter extends BaseAdapter {
 
     private CheckBox checkBox;
 
-    public NewGameAdapter(Context context, List<String[]> data) {
+    public NewGameListAdapter(Context context, List<String[]> data) {
         this.context = context;
         this.data = data;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

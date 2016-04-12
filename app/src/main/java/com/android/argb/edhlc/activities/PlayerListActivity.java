@@ -34,7 +34,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.argb.edhlc.Constants;
-import com.android.argb.edhlc.PlayerListAdapter;
+import com.android.argb.edhlc.adapters.PlayerListAdapter;
 import com.android.argb.edhlc.R;
 import com.android.argb.edhlc.Utils;
 import com.android.argb.edhlc.database.deck.DecksDataAccessObject;
@@ -166,7 +166,7 @@ public class PlayerListActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         this.optionMenu = menu;
-        getMenuInflater().inflate(R.menu.menu_player_list_activity, menu);
+        getMenuInflater().inflate(R.menu.menu_playerlist_activity, menu);
         return true;
     }
 

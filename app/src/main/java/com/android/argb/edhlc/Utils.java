@@ -26,7 +26,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.android.argb.edhlc.objects.ActivePlayerNew;
+import com.android.argb.edhlc.objects.ActivePlayer;
 import com.android.argb.edhlc.objects.Deck;
 import com.android.argb.edhlc.objects.Record;
 
@@ -449,7 +449,7 @@ public class Utils {
         return dp * (metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
     }
 
-    public static void savePlayerInSharedPreferences(Activity activity, ActivePlayerNew activePlayer) {
+    public static void savePlayerInSharedPreferences(Activity activity, ActivePlayer activePlayer) {
         SharedPreferences.Editor editor = activity.getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit();
         editor.putString(activePlayer.getPlayerTag() + Constants.CURRENT_GAME_PLAYER_NAME, activePlayer.getPlayerDeck().getDeckOwnerName());
         editor.putString(activePlayer.getPlayerTag() + Constants.CURRENT_GAME_PLAYER_DECK, activePlayer.getPlayerDeck().getDeckName());
@@ -463,7 +463,7 @@ public class Utils {
         editor.apply();
     }
 
-    public static ActivePlayerNew loadPlayerFromSharedPreferences(Activity activity, int tag) {
+    public static ActivePlayer loadPlayerFromSharedPreferences(Activity activity, int tag) {
         SharedPreferences prefs = activity.getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE);
         String pName = prefs.getString(tag + Constants.CURRENT_GAME_PLAYER_NAME, "");
         String pPlayerDeck = prefs.getString(tag + Constants.CURRENT_GAME_PLAYER_DECK, "");
@@ -475,7 +475,7 @@ public class Utils {
         int pEDH3 = prefs.getInt(tag + Constants.CURRENT_GAME_PLAYER_EDH3, 0);
         int pEDH4 = prefs.getInt(tag + Constants.CURRENT_GAME_PLAYER_EDH4, 0);
 
-        return new ActivePlayerNew(new Deck(pName, pPlayerDeck, pColor), pIsAlive, pLife, pEDH1, pEDH2, pEDH3, pEDH4, tag);
+        return new ActivePlayer(new Deck(pName, pPlayerDeck, pColor), pIsAlive, pLife, pEDH1, pEDH2, pEDH3, pEDH4, tag);
     }
 
     public static void makeViewVisible(View view) {

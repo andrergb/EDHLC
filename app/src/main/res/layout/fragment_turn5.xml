@@ -9,7 +9,6 @@
     tools:context=".activities.MainActivity$PlaceholderFragment">
 
     <TextView
-        android:id="@+id/TextiViewPhase"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.4"
@@ -19,7 +18,6 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/TextiViewStep1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.3"
@@ -28,7 +26,6 @@
         android:textSize="25sp" />
 
     <TextView
-        android:id="@+id/TextiViewStep2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.3"

@@ -21,7 +21,6 @@
             android:fitsSystemWindows="false"/>
 
         <LinearLayout
-            android:id="@+id/main_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
@@ -36,7 +35,7 @@
 
             <!-- Main content -->
             <include
-                layout="@layout/activity_player_list_content">
+                layout="@layout/activity_playerlist_content">
             </include>
         </LinearLayout>
     </RelativeLayout>

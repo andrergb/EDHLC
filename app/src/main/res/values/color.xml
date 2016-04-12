@@ -4,7 +4,6 @@
 
     <item name="white" type="color">#FFFFFF</item>
     <item name="black" type="color">#000000</item>
-    <item name="white_transparent" type="color">#80ffffff</item>
     <item name="black_transparent" type="color">#3a000000</item>
 
     <!-- GRAY -->
@@ -12,7 +11,6 @@
     <item name="gray300" type="color">#E0E0E0</item>
     <!--<item name="gray400" type="color">#BDBDBD</item>-->
     <!--<item name="gray500" type="color">#9E9E9E</item>-->
-    <item name="gray600" type="color">#757575</item>
     <!--<item name="gray700" type="color">#616161</item>-->
     <!--<item name="gray800" type="color">#424242</item>-->
     <!--<item name="gray900" type="color">#212121</item>-->
@@ -25,22 +23,10 @@
     <item name="third" type="color">#cd7f32</item>
     <item name="fourth" type="color">#878787</item>
 
-    <!-- GrayScale -->
-    <!--<item name="first4" type="color">#EAEAEA</item>-->
-    <!--<item name="second4" type="color">#BBBBBB</item>-->
-    <!--<item name="third4" type="color">#5A5A5A</item>-->
-    <!--<item name="fourth4" type="color">#000000</item>-->
-
-    <!-- THEME -->
-    <!--<item name="primary_color" type="color">#FF03A9F4</item>-->
-    <!--<item name="secondary_color" type="color">#FF0288D1</item>-->
-    <!--<item name="accent_color" type="color">#FFFF5722</item>-->
-    <!--<item name="light_primary_color" type="color">#FFB3E5FC</item>-->
     <item name="primary_color" type="color">#FF3F51B5</item>
     <item name="secondary_color" type="color">#FF303F9F</item>
     <item name="light_primary_color" type="color">#FFC5CAE9</item>
     <item name="accent_color" type="color">#FFFF3D00</item>
-    <item name="accent_secondary_color" type="color">#FFFF9E80</item>
     <item name="accent_secondary_black_color" type="color">#b62b00</item>
 
     <item name="primary_text" type="color">#FF212121</item>
@@ -56,12 +42,6 @@
     <!--<item name="edh_default_primary_aplha" type="color">#32348cac</item>-->
 
     <!-- MANA -->
-    <item name="edh_mana_black" type="color">#ccc2c0</item>
-    <item name="edh_mana_blue" type="color">#FFaae0fa</item>
-    <item name="edh_mana_colorless" type="color">#cbc6c1</item>
-    <item name="edh_mana_red" type="color">#faaa8f</item>
-    <item name="edh_mana_green" type="color">#9bd3ae</item>
-    <item name="edh_mana_white" type="color">#FFFFFCD6</item>
 
     <!-- SHIELDS -->
     <item name="edh_shield_turquoise_main" type="color">#ff00c5ce</item>

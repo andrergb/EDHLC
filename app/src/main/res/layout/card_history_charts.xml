@@ -418,7 +418,6 @@
                     android:paddingStart="28dp">
 
                     <LinearLayout
-                        android:id="@+id/linearFirstChart"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
@@ -442,7 +441,6 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/linearSecondChart"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
@@ -466,7 +464,6 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/linearThirdChart"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
@@ -490,7 +487,6 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/linearFourthChart"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"

@@ -32,7 +32,7 @@ import com.android.argb.edhlc.Constants;
 import com.android.argb.edhlc.R;
 import com.android.argb.edhlc.Utils;
 import com.android.argb.edhlc.database.deck.DecksDataAccessObject;
-import com.android.argb.edhlc.objects.ActivePlayerNew;
+import com.android.argb.edhlc.objects.ActivePlayer;
 
 public class NewGame2Activity extends AppCompatActivity {
 
@@ -140,22 +140,22 @@ public class NewGame2Activity extends AppCompatActivity {
 
                 String firstName = ((TextView) ((LinearLayout) ((LinearLayout) ((CardView) firstLine.getChildAt(0)).getChildAt(0)).getChildAt(1)).getChildAt(0)).getText().toString();
                 String firstDeck = ((TextView) ((LinearLayout) ((LinearLayout) ((CardView) firstLine.getChildAt(0)).getChildAt(0)).getChildAt(1)).getChildAt(1)).getText().toString();
-                Utils.savePlayerInSharedPreferences(this, new ActivePlayerNew(decksDb.getDeck(firstName, firstDeck), true, 40, 0, 0, 0, 0, 0));
+                Utils.savePlayerInSharedPreferences(this, new ActivePlayer(decksDb.getDeck(firstName, firstDeck), true, 40, 0, 0, 0, 0, 0));
 
                 String secondName = ((TextView) ((LinearLayout) ((LinearLayout) ((CardView) secondLine.getChildAt(0)).getChildAt(0)).getChildAt(1)).getChildAt(0)).getText().toString();
                 String secondDeck = ((TextView) ((LinearLayout) ((LinearLayout) ((CardView) secondLine.getChildAt(0)).getChildAt(0)).getChildAt(1)).getChildAt(1)).getText().toString();
-                Utils.savePlayerInSharedPreferences(this, new ActivePlayerNew(decksDb.getDeck(secondName, secondDeck), true, 40, 0, 0, 0, 0, 1));
+                Utils.savePlayerInSharedPreferences(this, new ActivePlayer(decksDb.getDeck(secondName, secondDeck), true, 40, 0, 0, 0, 0, 1));
 
                 if (totalPlayers >= 3) {
                     String thirdName = ((TextView) ((LinearLayout) ((LinearLayout) ((CardView) thirdLine.getChildAt(0)).getChildAt(0)).getChildAt(1)).getChildAt(0)).getText().toString();
                     String thirdDeck = ((TextView) ((LinearLayout) ((LinearLayout) ((CardView) thirdLine.getChildAt(0)).getChildAt(0)).getChildAt(1)).getChildAt(1)).getText().toString();
-                    Utils.savePlayerInSharedPreferences(this, new ActivePlayerNew(decksDb.getDeck(thirdName, thirdDeck), true, 40, 0, 0, 0, 0, 2));
+                    Utils.savePlayerInSharedPreferences(this, new ActivePlayer(decksDb.getDeck(thirdName, thirdDeck), true, 40, 0, 0, 0, 0, 2));
                 }
 
                 if (totalPlayers >= 4) {
                     String fourthName = ((TextView) ((LinearLayout) ((LinearLayout) ((CardView) fourthLine.getChildAt(0)).getChildAt(0)).getChildAt(1)).getChildAt(0)).getText().toString();
                     String fourthDeck = ((TextView) ((LinearLayout) ((LinearLayout) ((CardView) fourthLine.getChildAt(0)).getChildAt(0)).getChildAt(1)).getChildAt(1)).getText().toString();
-                    Utils.savePlayerInSharedPreferences(this, new ActivePlayerNew(decksDb.getDeck(fourthName, fourthDeck), true, 40, 0, 0, 0, 0, 3));
+                    Utils.savePlayerInSharedPreferences(this, new ActivePlayer(decksDb.getDeck(fourthName, fourthDeck), true, 40, 0, 0, 0, 0, 3));
                 }
 
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_GAME_TOTAL_PLAYERS, totalPlayers).apply();
@@ -165,7 +165,7 @@ public class NewGame2Activity extends AppCompatActivity {
 
                 decksDb.close();
 
-                Intent intentHome = new Intent(this, MainActivityNew.class);
+                Intent intentHome = new Intent(this, MainActivity.class);
                 intentHome.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intentHome);
                 this.finish();

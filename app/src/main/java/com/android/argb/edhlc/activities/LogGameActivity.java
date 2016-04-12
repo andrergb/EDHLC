@@ -69,7 +69,7 @@ public class LogGameActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent intentHome = new Intent(this, MainActivityNew.class);
+        Intent intentHome = new Intent(this, MainActivity.class);
         intentHome.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intentHome);
         this.finish();
@@ -87,7 +87,7 @@ public class LogGameActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent intent = new Intent(this, MainActivityNew.class);
+                Intent intent = new Intent(this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 this.finish();
@@ -234,7 +234,7 @@ public class LogGameActivity extends AppCompatActivity {
                         recordDB.addRecord(new Record(records, Utils.getCurrentDate()));
                         recordDB.close();
 
-                        Intent intent = new Intent(LogGameActivity.this, MainActivityNew.class);
+                        Intent intent = new Intent(LogGameActivity.this, MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                         LogGameActivity.this.finish();

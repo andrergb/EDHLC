@@ -1,4 +1,4 @@
-package com.android.argb.edhlc.activities;
+package com.android.argb.edhlc.turn;
 
 import android.content.Intent;
 import android.os.Build;
@@ -15,8 +15,8 @@ import android.widget.TextView;
 
 import com.android.argb.edhlc.Constants;
 import com.android.argb.edhlc.R;
-import com.android.argb.edhlc.TurnSectionsPagerAdapter;
-import com.android.argb.edhlc.objects.ActivePlayer;
+import com.android.argb.edhlc.activities.MainActivity;
+import com.android.argb.edhlc.adapters.TurnSectionsPagerAdapter;
 
 public class TurnActivity extends ActionBarActivity {
 
@@ -212,7 +212,7 @@ public class TurnActivity extends ActionBarActivity {
         });
     }
 
-    private void updateLayout(ActivePlayer currentActivePlayer) {
+//    private void updateLayout(ActivePlayer currentActivePlayer) {
         //TODO checkbox
 //        if (getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt(Constants.SCREEN_ON, 0) == 1) {
 //            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -221,7 +221,7 @@ public class TurnActivity extends ActionBarActivity {
 //            checkBox.setChecked(false);
 //            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 //        }
-    }
+//    }
 
     private void onClickKeepScreenOn(View view) {
 //        if (!checkBox.isChecked()) {

@@ -1,4 +1,4 @@
-package com.android.argb.edhlc;
+package com.android.argb.edhlc.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
