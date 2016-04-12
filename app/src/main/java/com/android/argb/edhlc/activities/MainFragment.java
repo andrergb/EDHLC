@@ -17,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.argb.edhlc.Constants;
+import com.android.argb.edhlc.GestureTouchListener;
 import com.android.argb.edhlc.R;
 import com.android.argb.edhlc.objects.ActivePlayer;
 import com.android.argb.edhlc.objects.Deck;
@@ -279,15 +281,44 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         setLife(getArguments().getInt(ARG_LIFE));
     }
 
-    private void createLayout(View view) {
+    private void createLayout(final View view) {
         LinearLayout mainEDH = (LinearLayout) view.findViewById(R.id.mainEDH);
         mainEDH.setWeightSum(getTotalPlayers());
+
+        view.findViewById(R.id.cardMain).setOnTouchListener(new GestureTouchListener(view.getContext()) {
+            @Override
+            public void onSwipeBottom() {
+                onUpdateDataInterface.iSwipe(Constants.SWIPE_BOTTOM);
+            }
+
+            @Override
+            public void onSwipeTop() {
+                onUpdateDataInterface.iSwipe(Constants.SWIPE_TOP);
+            }
+        });
 
         headerPlayerName = (TextView) view.findViewById(R.id.headerPlayerName);
         headerDeckName = (TextView) view.findViewById(R.id.headerDeckName);
         imageViewThrone = (ImageView) view.findViewById(R.id.imageViewThrone);
 
         lifeValue = (TextView) view.findViewById(R.id.lifeValue);
+        lifeValue.setOnTouchListener(new GestureTouchListener(view.getContext()) {
+            @Override
+            public void onClick() {
+                createLifeDialog(view);
+            }
+
+            @Override
+            public void onSwipeBottom() {
+                onUpdateDataInterface.iSwipe(Constants.SWIPE_BOTTOM);
+            }
+
+            @Override
+            public void onSwipeTop() {
+                onUpdateDataInterface.iSwipe(Constants.SWIPE_TOP);
+            }
+        });
+
         lifePositive = (ImageView) view.findViewById(R.id.lifePositive);
         lifeNegative = (ImageView) view.findViewById(R.id.lifeNegative);
 
@@ -400,6 +431,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     }
 
     public interface OnUpdateData {
+        void iSwipe(int direction);
+
         void iUpdateActivePlayer(ActivePlayer activePlayer);
 
         void iUpdateDethrone();

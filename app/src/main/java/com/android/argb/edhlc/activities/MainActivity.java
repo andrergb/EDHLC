@@ -136,6 +136,18 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
     private boolean isInAnimation;
 
     @Override
+    public void iSwipe(int direction) {
+        switch (direction) {
+            case Constants.SWIPE_BOTTOM:
+                setMode(MODE_OVERVIEW, getCurrentMode());
+                break;
+            case Constants.SWIPE_TOP:
+                setMode(MODE_HISTORY, getCurrentMode());
+                break;
+        }
+    }
+
+    @Override
     public void iUpdateActivePlayer(ActivePlayer activePlayer) {
         switch (activePlayer.getPlayerTag()) {
             case 0:

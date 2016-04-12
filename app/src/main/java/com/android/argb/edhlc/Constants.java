@@ -9,6 +9,8 @@ public class Constants {
     public static final String PHASE3_TIMER = "PHASE3_TIMER";
     public static final String PHASE4_TIMER = "PHASE4_TIMER";
     public static final String PHASE5_TIMER = "PHASE5_TIMER";
+    public static final int SWIPE_BOTTOM = 0;
+    public static final int SWIPE_TOP = 1;
     public static String INITIAL_PLAYER_LIFE_STRING = "40";
     public static int INITIAL_PLAYER_LIFE_INT = 40;
     public static int INITIAL_EDH_DAMAGE_INT = 0;
