@@ -529,7 +529,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
         createToolbar();
         createDrawer();
 
-        //TODO enhance layout
         viewNewGame = (RelativeLayout) findViewById(R.id.fragmentNewGame);
 
         createLayout();

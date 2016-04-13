@@ -203,7 +203,6 @@ public class NewGameActivity extends AppCompatActivity {
                     } else if (currentSelection.equalsIgnoreCase("TRUE")) {
                         playersList.get(position)[2] = "FALSE";
                     } else {
-                        //TODO snack
                         Log.d("dezao", "limit reached - 4 players");
                     }
 

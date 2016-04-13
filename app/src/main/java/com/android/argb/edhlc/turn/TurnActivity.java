@@ -213,7 +213,6 @@ public class TurnActivity extends ActionBarActivity {
     }
 
 //    private void updateLayout(ActivePlayer currentActivePlayer) {
-        //TODO checkbox
 //        if (getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt(Constants.SCREEN_ON, 0) == 1) {
 //            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 //            checkBox.setChecked(true);
