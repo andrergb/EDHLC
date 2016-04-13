@@ -1,5 +1,6 @@
 package com.android.argb.edhlc.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -16,14 +17,13 @@ import com.android.argb.edhlc.R;
 import java.util.ArrayList;
 import java.util.List;
 
+/* Created by ARGB */
 public class PlayerListAdapter extends BaseAdapter {
 
     private static LayoutInflater inflater = null;
     Context context;
     List<String[]> data; // 0 title - 1 subTitle - 2 selection
     private boolean isInEditMode = false;
-
-    private CheckBox checkBox;
 
     public PlayerListAdapter(Context context, List<String[]> data) {
         this.context = context;
@@ -80,6 +80,7 @@ public class PlayerListAdapter extends BaseAdapter {
         return total;
     }
 
+    @SuppressLint("InflateParams")
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         View vi = convertView;
@@ -93,7 +94,7 @@ public class PlayerListAdapter extends BaseAdapter {
             deckListLine.setBackgroundColor(ContextCompat.getColor(context, R.color.gray300));
 
         //Checkbox
-        checkBox = (CheckBox) vi.findViewById(R.id.checkboxPlayerList);
+        CheckBox checkBox = (CheckBox) vi.findViewById(R.id.checkboxPlayerList);
         checkBox.setVisibility(isInEditMode() ? View.VISIBLE : View.GONE);
         checkBox.setChecked(checkBoxGetSelection(position));
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

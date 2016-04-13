@@ -1,5 +1,6 @@
 package com.android.argb.edhlc.activities;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -56,8 +57,10 @@ import org.achartengine.renderer.DefaultRenderer;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-//Crop: https://github.com/lvillani/android-cropimage
+/* Created by ARGB */
+/* Using to crop: https://github.com/lvillani/android-cropimage */
 public class DeckActivity extends AppCompatActivity {
 
     private static int REQUEST_PICTURE_PICKER = 1;
@@ -242,10 +245,10 @@ public class DeckActivity extends AppCompatActivity {
                 switchScreen.setChecked(!switchScreen.isChecked());
                 if (!switchScreen.isChecked()) {
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 0).commit();
+                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 0).apply();
                 } else {
                     getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 1).commit();
+                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 1).apply();
                 }
                 break;
 
@@ -474,17 +477,24 @@ public class DeckActivity extends AppCompatActivity {
                 invalidateOptionsMenu();
             }
         };
-        mDeckDrawerLayout.setDrawerListener(mDrawerToggle);
+        mDeckDrawerLayout.addDrawerListener(mDrawerToggle);
 
         LinearLayout drawerItemPlayers = (LinearLayout) findViewById(R.id.drawerItemPlayers);
         ImageView drawerItemIconPlayers = (ImageView) findViewById(R.id.drawerItemIconPlayers);
         TextView drawerItemTextPlayers = (TextView) findViewById(R.id.drawerItemTextPlayers);
-        drawerItemPlayers.setBackgroundColor(ContextCompat.getColor(this, R.color.gray200));
-        drawerItemIconPlayers.setColorFilter(ContextCompat.getColor(this, R.color.accent_color));
-        drawerItemTextPlayers.setTextColor(ContextCompat.getColor(this, R.color.accent_color));
+        if (drawerItemPlayers != null) {
+            drawerItemPlayers.setBackgroundColor(ContextCompat.getColor(this, R.color.gray200));
+        }
+        if (drawerItemIconPlayers != null) {
+            drawerItemIconPlayers.setColorFilter(ContextCompat.getColor(this, R.color.accent_color));
+        }
+        if (drawerItemTextPlayers != null) {
+            drawerItemTextPlayers.setTextColor(ContextCompat.getColor(this, R.color.accent_color));
+        }
     }
 
     private void createEditDeckDialog() {
+        @SuppressLint("InflateParams")
         View dialogDeckView = LayoutInflater.from(DeckActivity.this).inflate(R.layout.dialog_deck, null);
         final EditText userInput = (EditText) dialogDeckView.findViewById(R.id.editTextEditDeckName);
         final ImageView shieldColor = (ImageView) dialogDeckView.findViewById(R.id.imageViewEditShieldColor);
@@ -625,10 +635,10 @@ public class DeckActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (!switchScreen.isChecked()) {
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 0).commit();
+                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 0).apply();
                 } else {
                     getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 1).commit();
+                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 1).apply();
                 }
             }
         });
@@ -826,9 +836,9 @@ public class DeckActivity extends AppCompatActivity {
 
 
         //Deck info - Total Games
-        textViewTotalGames.setText("" + allRecords.size());
+        textViewTotalGames.setText(String.format(Locale.US, "%d", allRecords.size()));
         //Deck info - Wins
-        textViewWins.setText("" + allFirstRecords.size());
+        textViewWins.setText(String.format(Locale.US, "%d", allFirstRecords.size()));
 
 
         //Record card
@@ -850,7 +860,7 @@ public class DeckActivity extends AppCompatActivity {
             }
 
             Record lastRecord = allRecords.get(allRecords.size() - 1);
-            textTitleRecordCard.setText("Last game played");
+            textTitleRecordCard.setText(R.string.last_game_played);
             Utils.createRecordListElement(this, lastRecord, mPlayerName);
         }
 

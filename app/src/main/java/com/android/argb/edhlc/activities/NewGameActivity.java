@@ -17,10 +17,11 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
-import com.android.argb.edhlc.adapters.NewGameListAdapter;
 import com.android.argb.edhlc.R;
 import com.android.argb.edhlc.Utils;
+import com.android.argb.edhlc.adapters.NewGameListAdapter;
 import com.android.argb.edhlc.database.deck.DecksDataAccessObject;
 import com.android.argb.edhlc.database.player.PlayersDataAccessObject;
 import com.android.argb.edhlc.objects.Deck;
@@ -29,13 +30,11 @@ import com.android.argb.edhlc.objects.Player;
 import java.util.ArrayList;
 import java.util.List;
 
+/* Created by ARGB */
 public class NewGameActivity extends AppCompatActivity {
 
     private ActionBar mActionBar;
     private Menu optionMenu;
-    private View statusBarBackground;
-
-    private ListView listViewNewGame;
 
     private ArrayList<String[]> playersList; // 0: type - 1: item - 2: check
     private NewGameListAdapter mPlayersAdapter;
@@ -127,7 +126,6 @@ public class NewGameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_game);
 
-
         playersDb = new PlayersDataAccessObject(this);
         decksDb = new DecksDataAccessObject(this);
         playersDb.open();
@@ -160,10 +158,34 @@ public class NewGameActivity extends AppCompatActivity {
 
 
     private void createLayout() {
+        TextView atLeast2 = (TextView) findViewById(R.id.atLeast2);
+        assert atLeast2 != null;
+
+        ListView listViewNewGame = (ListView) findViewById(R.id.new_game_list);
+        assert listViewNewGame != null;
+
+        int totalPlayableDecks = 0;
+        List<Player> players = playersDb.getAllPlayers();
+        for (int i = 0; i < players.size(); i++) {
+            if (totalPlayableDecks >= 2)
+                break;
+
+            if (decksDb.getAllDeckByPlayerName(players.get(i).getPlayerName()).size() > 0)
+                totalPlayableDecks++;
+        }
+
+        if (totalPlayableDecks < 2) {
+            listViewNewGame.setVisibility(View.GONE);
+            atLeast2.setVisibility(View.VISIBLE);
+        } else {
+            listViewNewGame.setVisibility(View.VISIBLE);
+            atLeast2.setVisibility(View.GONE);
+        }
+
+
         playersList = new ArrayList<>();
         mPlayersAdapter = new NewGameListAdapter(this, playersList);
 
-        listViewNewGame = (ListView) findViewById(R.id.new_game_list);
         listViewNewGame.setAdapter(mPlayersAdapter);
         listViewNewGame.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -197,11 +219,13 @@ public class NewGameActivity extends AppCompatActivity {
     }
 
     private void createStatusBar() {
-        statusBarBackground = findViewById(R.id.statusBarBackground);
-        ViewGroup.LayoutParams params = statusBarBackground.getLayoutParams();
-        params.height = Utils.getStatusBarHeight(this);
-        statusBarBackground.setLayoutParams(params);
-        statusBarBackground.setBackgroundColor(ContextCompat.getColor(this, R.color.primary_color));
+        View statusBarBackground = findViewById(R.id.statusBarBackground);
+        if (statusBarBackground != null) {
+            ViewGroup.LayoutParams params = statusBarBackground.getLayoutParams();
+            params.height = Utils.getStatusBarHeight(this);
+            statusBarBackground.setLayoutParams(params);
+            statusBarBackground.setBackgroundColor(ContextCompat.getColor(this, R.color.primary_color));
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = this.getWindow();

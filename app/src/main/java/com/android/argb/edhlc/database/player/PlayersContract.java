@@ -2,9 +2,7 @@ package com.android.argb.edhlc.database.player;
 
 import android.provider.BaseColumns;
 
-/**
- * -Created by agbarros on 05/11/2015.
- */
+/* Created by ARGB */
 public class PlayersContract {
 
     public PlayersContract() {

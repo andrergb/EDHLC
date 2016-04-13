@@ -1,11 +1,8 @@
 package com.android.argb.edhlc.objects;
 
-import java.util.ArrayList;
 import java.util.List;
 
-/**
- * -Created by agbarros on 05/11/2015.
- */
+/* Created by ARGB */
 public class Record {
 
     protected Deck emptyDeck = new Deck("", "");
@@ -19,13 +16,6 @@ public class Record {
 
     public Record() {
     }
-//
-//    public Record(Deck fistPlace, Deck secondPlace, Deck thirdPlace, Deck fourthPlace) {
-//        this.fistPlace = fistPlace;
-//        this.secondPlace = secondPlace;
-//        this.thirdPlace = thirdPlace;
-//        this.fourthPlace = fourthPlace;
-//    }
 
     public Record(List<Deck> listDeck, String date) {
         this.date = date;
@@ -47,20 +37,20 @@ public class Record {
             this.fourthPlace = listDeck.get(3);
     }
 
-    public static boolean isValidRecord(List<Deck> deckList, Deck analyzed) {
-        List<Deck> aux = new ArrayList<>(deckList);
-        aux.add(analyzed);
-        for (int j = 0; j <= aux.size() - 2; j++) {
-            for (int i = j + 1; i <= aux.size() - 1; i++) {
-                if (aux.get(j).isEqualDeck(aux.get(i))) {
-                    aux.clear();
-                    return false;
-                }
-            }
-        }
-        aux.clear();
-        return true;
-    }
+//    public static boolean isValidRecord(List<Deck> deckList, Deck analyzed) {
+//        List<Deck> aux = new ArrayList<>(deckList);
+//        aux.add(analyzed);
+//        for (int j = 0; j <= aux.size() - 2; j++) {
+//            for (int i = j + 1; i <= aux.size() - 1; i++) {
+//                if (aux.get(j).isEqualDeck(aux.get(i))) {
+//                    aux.clear();
+//                    return false;
+//                }
+//            }
+//        }
+//        aux.clear();
+//        return true;
+//    }
 
     public String getDate() {
         return date;

@@ -1,5 +1,6 @@
 package com.android.argb.edhlc.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -22,14 +23,13 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+/* Created by ARGB */
 public class DeckListAdapter extends BaseAdapter {
 
     private static LayoutInflater inflater = null;
     Context context;
     List<String[]> data; // 0 imagePath - 1 title - 2 subTitle - 3 identity - 4 selection
     private boolean isInEditMode = false;
-
-    private CheckBox checkBox;
 
     public DeckListAdapter(Context context, List<String[]> data) {
         this.context = context;
@@ -86,6 +86,7 @@ public class DeckListAdapter extends BaseAdapter {
         return total;
     }
 
+    @SuppressLint("InflateParams")
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         View vi = convertView;
@@ -111,7 +112,7 @@ public class DeckListAdapter extends BaseAdapter {
         imageViewAvatarDeckListCard.setImageDrawable(roundedImage);
 
         //Avatar checkbox
-        checkBox = (CheckBox) vi.findViewById(R.id.checkboxAvatarDeckListCard);
+        CheckBox checkBox = (CheckBox) vi.findViewById(R.id.checkboxAvatarDeckListCard);
         checkBox.setVisibility(isInEditMode() ? View.VISIBLE : View.GONE);
         checkBox.setChecked(checkBoxGetSelection(position));
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

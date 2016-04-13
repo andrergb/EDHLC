@@ -11,8 +11,8 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 
+/* Created by ARGB */
 public class RoundedAvatarDrawable extends Drawable {
-    private final Bitmap mBitmap;
     private final Paint mPaint;
     private final RectF mRectF;
     private final int mBitmapWidth;
@@ -20,14 +20,13 @@ public class RoundedAvatarDrawable extends Drawable {
 
     public RoundedAvatarDrawable(Bitmap bitmap) {
         final BitmapShader shader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
-        this.mBitmap = bitmap;
         this.mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mPaint.setDither(true);
         mPaint.setShader(shader);
         this.mRectF = new RectF();
-        this.mBitmapWidth = mBitmap.getWidth();
-        this.mBitmapHeight = mBitmap.getHeight();
+        this.mBitmapWidth = bitmap.getWidth();
+        this.mBitmapHeight = bitmap.getHeight();
     }
 
     @Override
@@ -68,11 +67,11 @@ public class RoundedAvatarDrawable extends Drawable {
         mPaint.setColorFilter(cf);
     }
 
-    @Override
-    public void setDither(boolean dither) {
-        mPaint.setDither(dither);
-        invalidateSelf();
-    }
+//    @Override
+//    public void setDither(boolean dither) {
+//        mPaint.setDither(dither);
+//        invalidateSelf();
+//    }
 
     @Override
     public void setFilterBitmap(boolean filter) {

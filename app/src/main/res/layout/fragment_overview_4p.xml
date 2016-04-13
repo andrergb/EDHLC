@@ -61,8 +61,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
                                 android:layout_margin="6dp"
-                                android:layout_toEndOf="@id/textViewOverviewP1Name"
-                                android:layout_toRightOf="@id/textViewOverviewP1Name"
+                                android:layout_toStartOf="@id/textViewOverviewP1Name"
                                 android:adjustViewBounds="true"
                                 android:padding="4dp"
                                 android:src="@drawable/icon_crown"/>
@@ -225,8 +224,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
                                 android:layout_margin="6dp"
-                                android:layout_toEndOf="@id/textViewOverviewP2Name"
-                                android:layout_toRightOf="@id/textViewOverviewP2Name"
+                                android:layout_toStartOf="@id/textViewOverviewP2Name"
                                 android:adjustViewBounds="true"
                                 android:padding="4dp"
                                 android:src="@drawable/icon_crown"/>
@@ -396,8 +394,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
                                 android:layout_margin="6dp"
-                                android:layout_toEndOf="@id/textViewOverviewP3Name"
-                                android:layout_toRightOf="@id/textViewOverviewP3Name"
+                                android:layout_toStartOf="@id/textViewOverviewP3Name"
                                 android:adjustViewBounds="true"
                                 android:padding="4dp"
                                 android:src="@drawable/icon_crown"/>
@@ -559,8 +556,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
                                 android:layout_margin="6dp"
-                                android:layout_toEndOf="@id/textViewOverviewP4Name"
-                                android:layout_toRightOf="@id/textViewOverviewP4Name"
+                                android:layout_toStartOf="@id/textViewOverviewP4Name"
                                 android:adjustViewBounds="true"
                                 android:padding="4dp"
                                 android:src="@drawable/icon_crown"/>

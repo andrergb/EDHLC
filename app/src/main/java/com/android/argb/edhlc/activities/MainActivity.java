@@ -1,5 +1,6 @@
 package com.android.argb.edhlc.activities;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -50,6 +51,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/* Created by ARGB */
 public class MainActivity extends AppCompatActivity implements MainFragment.OnUpdateData {
 
     private static final int MODE_INVALID = -1;
@@ -116,9 +118,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
     private ActionBarDrawerToggle mDrawerToggle;
     private Switch switchScreen;
     private SharedPreferences mSharedPreferences;
-    private Menu optionMenu;
     private List<MainFragment> fragments;
-    private MainPagerAdapter mPagerAdapter;
     private ActionBar mActionBar;
     private View statusBarBackground;
     private ViewPager viewPager;
@@ -241,10 +241,10 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
                 switchScreen.setChecked(!switchScreen.isChecked());
                 if (!switchScreen.isChecked()) {
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 0).commit();
+                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 0).apply();
                 } else {
                     getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 1).commit();
+                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 1).apply();
                 }
                 break;
 
@@ -296,7 +296,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
                 setMode(MODE_PLAYING, getCurrentMode());
                 break;
             case R.id.textViewOverviewP1Life:
-                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 0).apply();
+//                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 0).apply();
                 break;
             case R.id.lifePositiveP1:
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 0).apply();
@@ -321,7 +321,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
                 setMode(MODE_PLAYING, getCurrentMode());
                 break;
             case R.id.textViewOverviewP2Life:
-                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 1).apply();
+//                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 1).apply();
                 break;
             case R.id.lifePositiveP2:
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 1).apply();
@@ -346,7 +346,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
                 setMode(MODE_PLAYING, getCurrentMode());
                 break;
             case R.id.textViewOverviewP3Life:
-                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 2).apply();
+//                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 2).apply();
                 break;
             case R.id.lifePositiveP3:
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 2).apply();
@@ -371,7 +371,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
                 setMode(MODE_PLAYING, getCurrentMode());
                 break;
             case R.id.textViewOverviewP4Life:
-                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 3).apply();
+//                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 3).apply();
                 break;
             case R.id.lifePositiveP4:
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 3).apply();
@@ -400,7 +400,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        this.optionMenu = menu;
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
@@ -415,6 +414,8 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
         switch (item.getItemId()) {
             case R.id.action_overview:
                 if (!isInAnimation) {
+                    if (getCurrentMode() == MODE_PLAYING)
+                        getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, tabLayout.getSelectedTabPosition()).apply();
                     if (getCurrentMode() == MODE_OVERVIEW)
                         setMode(MODE_PLAYING, getCurrentMode());
                     else
@@ -424,6 +425,8 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
 
             case R.id.action_history:
                 if (!isInAnimation) {
+                    if (getCurrentMode() == MODE_PLAYING)
+                        getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, tabLayout.getSelectedTabPosition()).apply();
                     if (getCurrentMode() == MODE_HISTORY)
                         setMode(MODE_PLAYING, getCurrentMode());
                     else
@@ -488,7 +491,8 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
                 break;
 
             case R.id.actions_random_player:
-                showRandomPlayerDialog();
+                if (isValidGame())
+                    showRandomPlayerDialog();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -555,7 +559,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
                 fragments.add(MainFragment.newInstance(activePlayer4, totalPlayers));
                 tabTitles.add(activePlayer4.getPlayerDeck().getDeckOwnerName());
             }
-            mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager(), MainActivity.this, fragments, tabTitles);
+            MainPagerAdapter mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager(), MainActivity.this, fragments, tabTitles);
 
             viewPager.setAdapter(mPagerAdapter);
             viewPager.setOffscreenPageLimit(fragments.size());
@@ -628,14 +632,20 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
                 invalidateOptionsMenu();
             }
         };
-        mPlayerDrawerLayout.setDrawerListener(mDrawerToggle);
+        mPlayerDrawerLayout.addDrawerListener(mDrawerToggle);
 
         LinearLayout drawerItemHome = (LinearLayout) findViewById(R.id.drawerItemHome);
         ImageView drawerItemIconHome = (ImageView) findViewById(R.id.drawerItemIconHome);
         TextView drawerItemTextHome = (TextView) findViewById(R.id.drawerItemTextHome);
-        drawerItemHome.setBackgroundColor(ContextCompat.getColor(this, R.color.gray200));
-        drawerItemIconHome.setColorFilter(ContextCompat.getColor(this, R.color.accent_color));
-        drawerItemTextHome.setTextColor(ContextCompat.getColor(this, R.color.accent_color));
+        if (drawerItemHome != null) {
+            drawerItemHome.setBackgroundColor(ContextCompat.getColor(this, R.color.gray200));
+        }
+        if (drawerItemIconHome != null) {
+            drawerItemIconHome.setColorFilter(ContextCompat.getColor(this, R.color.accent_color));
+        }
+        if (drawerItemTextHome != null) {
+            drawerItemTextHome.setTextColor(ContextCompat.getColor(this, R.color.accent_color));
+        }
     }
 
     private void createHistoryLayout() {
@@ -701,10 +711,10 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
             public void onClick(View v) {
                 if (!switchScreen.isChecked()) {
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 0).commit();
+                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 0).apply();
                 } else {
                     getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 1).commit();
+                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 1).apply();
                 }
             }
         });
@@ -732,7 +742,9 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
             overview_TextViewP1Name = (TextView) findViewById(R.id.textViewOverviewP1Name);
             overview_TextViewP1Life = (TextView) findViewById(R.id.textViewOverviewP1Life);
             LinearLayout mLinearEDH1 = (LinearLayout) findViewById(R.id.linearEDH1);
-            mLinearEDH1.setWeightSum(totalPlayers);
+            if (mLinearEDH1 != null) {
+                mLinearEDH1.setWeightSum(totalPlayers);
+            }
             overview_lifePositiveP1 = (ImageView) findViewById(R.id.lifePositiveP1);
             overview_lifeNegativeP1 = (ImageView) findViewById(R.id.lifeNegativeP1);
             overview_TextViewP1EDH1 = (TextView) findViewById(R.id.textViewOverviewP1EDH1);
@@ -747,7 +759,9 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
             overview_TextViewP2Name = (TextView) findViewById(R.id.textViewOverviewP2Name);
             overview_TextViewP2Life = (TextView) findViewById(R.id.textViewOverviewP2Life);
             LinearLayout mLinearEDH2 = (LinearLayout) findViewById(R.id.linearEDH2);
-            mLinearEDH2.setWeightSum(totalPlayers);
+            if (mLinearEDH2 != null) {
+                mLinearEDH2.setWeightSum(totalPlayers);
+            }
             overview_lifePositiveP2 = (ImageView) findViewById(R.id.lifePositiveP2);
             overview_lifeNegativeP2 = (ImageView) findViewById(R.id.lifeNegativeP2);
             overview_TextViewP2EDH1 = (TextView) findViewById(R.id.textViewOverviewP2EDH1);
@@ -762,7 +776,9 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
             overview_TextViewP3Name = (TextView) findViewById(R.id.textViewOverviewP3Name);
             overview_TextViewP3Life = (TextView) findViewById(R.id.textViewOverviewP3Life);
             LinearLayout mLinearEDH3 = (LinearLayout) findViewById(R.id.linearEDH3);
-            mLinearEDH3.setWeightSum(totalPlayers);
+            if (mLinearEDH3 != null) {
+                mLinearEDH3.setWeightSum(totalPlayers);
+            }
             overview_lifePositiveP3 = (ImageView) findViewById(R.id.lifePositiveP3);
             overview_lifeNegativeP3 = (ImageView) findViewById(R.id.lifeNegativeP3);
             overview_TextViewP3EDH1 = (TextView) findViewById(R.id.textViewOverviewP3EDH1);
@@ -776,7 +792,9 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
             overview_TextViewP4Name = (TextView) findViewById(R.id.textViewOverviewP4Name);
             overview_TextViewP4Life = (TextView) findViewById(R.id.textViewOverviewP4Life);
             LinearLayout mLinearEDH4 = (LinearLayout) findViewById(R.id.linearEDH4);
-            mLinearEDH4.setWeightSum(totalPlayers);
+            if (mLinearEDH4 != null) {
+                mLinearEDH4.setWeightSum(totalPlayers);
+            }
             overview_lifePositiveP4 = (ImageView) findViewById(R.id.lifePositiveP4);
             overview_lifeNegativeP4 = (ImageView) findViewById(R.id.lifeNegativeP4);
             overview_TextViewP4EDH1 = (TextView) findViewById(R.id.textViewOverviewP4EDH1);
@@ -789,10 +807,12 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
 
     private void createStatusBar() {
         statusBarBackground = findViewById(R.id.statusBarBackground);
-        ViewGroup.LayoutParams params = statusBarBackground.getLayoutParams();
-        params.height = Utils.getStatusBarHeight(this);
-        statusBarBackground.setLayoutParams(params);
-        statusBarBackground.setBackgroundColor(ContextCompat.getColor(this, R.color.primary_color));
+        if (statusBarBackground != null) {
+            ViewGroup.LayoutParams params = statusBarBackground.getLayoutParams();
+            params.height = Utils.getStatusBarHeight(this);
+            statusBarBackground.setLayoutParams(params);
+            statusBarBackground.setBackgroundColor(ContextCompat.getColor(this, R.color.primary_color));
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = this.getWindow();
@@ -895,10 +915,10 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
                             if ((currentLife - latestSavedLife) != 0 || !currentEdh.equalsIgnoreCase(latestSavedEDH)) {
                                 String lifeToBeSaved = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString(Constants.PLAYER_HISTORY_LIFE + playerTag, Constants.INITIAL_PLAYER_LIFE_STRING);
                                 lifeToBeSaved = lifeToBeSaved + "_" + currentLife;
-                                getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString(Constants.PLAYER_HISTORY_LIFE + playerTag, lifeToBeSaved).commit();
+                                getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString(Constants.PLAYER_HISTORY_LIFE + playerTag, lifeToBeSaved).apply();
 
                                 String edhToBeSaved = latestSavedEDHPreferences + "_" + currentEdh;
-                                getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString(Constants.PLAYER_EDH_PREFIX + playerTag, edhToBeSaved).commit();
+                                getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString(Constants.PLAYER_EDH_PREFIX + playerTag, edhToBeSaved).apply();
                             }
                         } catch (InterruptedException e) {
                             e.printStackTrace();
@@ -1102,101 +1122,105 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
                 break;
 
             case MODE_HISTORY:
-                updateHistoryLayout();
+                if (isValidGame()) {
+                    updateHistoryLayout();
 
-                if (previousMode == MODE_OVERVIEW) {
-                    setMode(MODE_PLAYING, MODE_OVERVIEW);
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            setMode(MODE_HISTORY, MODE_PLAYING);
-                        }
-                    }, 600);
-                } else if (previousMode == MODE_PLAYING) {
-                    isInAnimation = true;
+                    if (previousMode == MODE_OVERVIEW) {
+                        setMode(MODE_PLAYING, MODE_OVERVIEW);
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                setMode(MODE_HISTORY, MODE_PLAYING);
+                            }
+                        }, 600);
+                    } else if (previousMode == MODE_PLAYING) {
+                        isInAnimation = true;
 
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            viewHistory.startAnimation(slide_in_bottom);
-                            viewPager.startAnimation(slide_out_top);
-                            tabLayout.setVisibility(View.GONE);
-                        }
-                    }, 500);
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                viewHistory.startAnimation(slide_in_bottom);
+                                viewPager.startAnimation(slide_out_top);
+                                tabLayout.setVisibility(View.GONE);
+                            }
+                        }, 500);
 
-                    slide_in_bottom.setAnimationListener(new Animation.AnimationListener() {
-                        public void onAnimationEnd(Animation animation) {
-                            setActionBarColor(getResources().getIntArray(R.array.edh_default)[0]);
+                        slide_in_bottom.setAnimationListener(new Animation.AnimationListener() {
+                            public void onAnimationEnd(Animation animation) {
+                                setActionBarColor(getResources().getIntArray(R.array.edh_default)[0]);
 
-                            viewNewGame.setVisibility(View.GONE);
-                            viewHistory.setVisibility(View.VISIBLE);
-                            viewOverview.setVisibility(View.GONE);
-                            viewPager.setVisibility(View.GONE);
-                            tabLayout.setVisibility(View.GONE);
+                                viewNewGame.setVisibility(View.GONE);
+                                viewHistory.setVisibility(View.VISIBLE);
+                                viewOverview.setVisibility(View.GONE);
+                                viewPager.setVisibility(View.GONE);
+                                tabLayout.setVisibility(View.GONE);
 
-                            isInAnimation = false;
-                        }
+                                isInAnimation = false;
+                            }
 
-                        public void onAnimationRepeat(Animation animation) {
-                        }
+                            public void onAnimationRepeat(Animation animation) {
+                            }
 
-                        public void onAnimationStart(Animation animation) {
-                        }
-                    });
+                            public void onAnimationStart(Animation animation) {
+                            }
+                        });
 
 
-                } else if (previousMode == MODE_INVALID) {
-                    viewNewGame.setVisibility(View.GONE);
-                    viewHistory.setVisibility(View.VISIBLE);
-                    viewOverview.setVisibility(View.GONE);
-                    viewPager.setVisibility(View.GONE);
-                    tabLayout.setVisibility(View.GONE);
+                    } else if (previousMode == MODE_INVALID) {
+                        viewNewGame.setVisibility(View.GONE);
+                        viewHistory.setVisibility(View.VISIBLE);
+                        viewOverview.setVisibility(View.GONE);
+                        viewPager.setVisibility(View.GONE);
+                        tabLayout.setVisibility(View.GONE);
+                    }
                 }
                 break;
 
             case MODE_OVERVIEW:
-                updateOverviewLayout();
+                if (isValidGame()) {
+                    updateOverviewLayout();
 
-                if (previousMode == MODE_HISTORY) {
-                    setMode(MODE_PLAYING, MODE_HISTORY);
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            setMode(MODE_OVERVIEW, MODE_PLAYING);
-                        }
-                    }, 700);
-                } else if (previousMode == MODE_PLAYING) {
-                    isInAnimation = true;
+                    if (previousMode == MODE_HISTORY) {
+                        setMode(MODE_PLAYING, MODE_HISTORY);
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                setMode(MODE_OVERVIEW, MODE_PLAYING);
+                            }
+                        }, 700);
+                    } else if (previousMode == MODE_PLAYING) {
+                        isInAnimation = true;
 
-                    viewOverview.startAnimation(slide_in_top);
-                    viewPager.startAnimation(slide_out_bottom);
-                    tabLayout.setVisibility(View.GONE);
+                        viewOverview.startAnimation(slide_in_top);
+                        viewPager.startAnimation(slide_out_bottom);
+                        tabLayout.setVisibility(View.GONE);
 
-                    slide_in_top.setAnimationListener(new Animation.AnimationListener() {
-                        public void onAnimationEnd(Animation animation) {
-                            setActionBarColor(getResources().getIntArray(R.array.edh_default)[0]);
+                        slide_in_top.setAnimationListener(new Animation.AnimationListener() {
+                            public void onAnimationEnd(Animation animation) {
+                                setActionBarColor(getResources().getIntArray(R.array.edh_default)[0]);
 
-                            viewNewGame.setVisibility(View.GONE);
-                            viewHistory.setVisibility(View.GONE);
-                            viewOverview.setVisibility(View.VISIBLE);
-                            viewPager.setVisibility(View.GONE);
-                            tabLayout.setVisibility(View.GONE);
+                                viewNewGame.setVisibility(View.GONE);
+                                viewHistory.setVisibility(View.GONE);
+                                viewOverview.setVisibility(View.VISIBLE);
+                                viewPager.setVisibility(View.GONE);
+                                tabLayout.setVisibility(View.GONE);
 
-                            isInAnimation = false;
-                        }
+                                isInAnimation = false;
+                            }
 
-                        public void onAnimationRepeat(Animation animation) {
-                        }
+                            public void onAnimationRepeat(Animation animation) {
+                            }
 
-                        public void onAnimationStart(Animation animation) {
-                        }
-                    });
-                } else if (previousMode == MODE_INVALID) {
-                    viewNewGame.setVisibility(View.GONE);
-                    viewHistory.setVisibility(View.GONE);
-                    viewOverview.setVisibility(View.VISIBLE);
-                    viewPager.setVisibility(View.GONE);
-                    tabLayout.setVisibility(View.GONE);
+                            public void onAnimationStart(Animation animation) {
+                            }
+                        });
+                    } else if (previousMode == MODE_INVALID) {
+                        viewNewGame.setVisibility(View.GONE);
+                        viewHistory.setVisibility(View.GONE);
+                        viewOverview.setVisibility(View.VISIBLE);
+                        viewPager.setVisibility(View.GONE);
+                        tabLayout.setVisibility(View.GONE);
+                    }
                 }
                 break;
 
@@ -1275,6 +1299,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
     }
 
     private void showDiceDialog() {
+        @SuppressLint("InflateParams")
         View logView = LayoutInflater.from(this).inflate(R.layout.dialog_roll_a_dice, null);
 
         TextView dummyView = (TextView) logView.findViewById(R.id.dummyView);
@@ -1315,6 +1340,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
                         final Random r = new Random();
                         final int[] dice = {r.nextInt(maxValue - minValue + 1) + minValue};
 
+                        @SuppressLint("InflateParams")
                         View logView = LayoutInflater.from(MainActivity.this).inflate(R.layout.dialog_roll_a_dice_result, null);
                         final TextView textViewDiceResult = (TextView) logView.findViewById(R.id.textViewDiceResult);
                         textViewDiceResult.setText(MessageFormat.format("{0}", dice[0]));
@@ -1371,6 +1397,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
         final Random r = new Random();
         final int[] randomResult = {r.nextInt(maxValue - minValue + 1) + minValue};
 
+        @SuppressLint("InflateParams")
         View logView = LayoutInflater.from(this).inflate(R.layout.dialog_roll_a_dice_result, null);
         final TextView textViewResult = (TextView) logView.findViewById(R.id.textViewDiceResult);
         textViewResult.setTextSize(42);

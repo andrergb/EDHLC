@@ -11,9 +11,7 @@ import com.android.argb.edhlc.objects.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * -Created by agbarros on 05/11/2015.
- */
+/* Created by ARGB */
 public class PlayersDataAccessObject {
 
     private SQLiteDatabase database;
@@ -60,21 +58,20 @@ public class PlayersDataAccessObject {
         return playerList;
     }
 
-    public List<String> getAllPlayersName() {
-        List<String> playerList = new ArrayList<>();
-        Cursor cursor = database.query(PlayersContract.PlayersEntry.TABLE_NAME, null, null, null, null, null, null);
-
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            playerList.add(cursor.getString(cursor.getColumnIndexOrThrow(PlayersContract.PlayersEntry.COLUMN_PLAYER_NAME)));
-            cursor.moveToNext();
-        }
-        cursor.close();
-        return playerList;
-    }
+//    public List<String> getAllPlayersName() {
+//        List<String> playerList = new ArrayList<>();
+//        Cursor cursor = database.query(PlayersContract.PlayersEntry.TABLE_NAME, null, null, null, null, null, null);
+//
+//        cursor.moveToFirst();
+//        while (!cursor.isAfterLast()) {
+//            playerList.add(cursor.getString(cursor.getColumnIndexOrThrow(PlayersContract.PlayersEntry.COLUMN_PLAYER_NAME)));
+//            cursor.moveToNext();
+//        }
+//        cursor.close();
+//        return playerList;
+//    }
 
     public Player getPlayer(String playerName) {
-        Player playerList = null;
         Cursor cursor = database.query(
                 PlayersContract.PlayersEntry.TABLE_NAME,
                 null,
@@ -86,7 +83,7 @@ public class PlayersDataAccessObject {
         );
 
         cursor.moveToFirst();
-        playerList = new Player(cursor.getString(cursor.getColumnIndexOrThrow(PlayersContract.PlayersEntry.COLUMN_PLAYER_NAME)),
+        Player playerList = new Player(cursor.getString(cursor.getColumnIndexOrThrow(PlayersContract.PlayersEntry.COLUMN_PLAYER_NAME)),
                 cursor.getString(cursor.getColumnIndexOrThrow(PlayersContract.PlayersEntry.COLUMN_PLAYER_DATE)));
         cursor.close();
         return playerList;

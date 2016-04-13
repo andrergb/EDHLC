@@ -38,6 +38,7 @@ import com.android.argb.edhlc.objects.Record;
 
 import java.util.ArrayList;
 
+/* Created by ARGB */
 public class RecordsActivity extends AppCompatActivity {
     private RecordsDataAccessObject recordsDB;
 
@@ -47,7 +48,6 @@ public class RecordsActivity extends AppCompatActivity {
     private RelativeLayout relativeCardTitleRecords2List;
     private TextView textTitleRecords2List;
     private ImageView iconIndicatorRecords2List;
-    private RecordListAdapter mRecord2ListAdapter;
     private ArrayList<Record> listRecords2Content;
     private ListView listViewRecords2;
 
@@ -57,7 +57,6 @@ public class RecordsActivity extends AppCompatActivity {
     private RelativeLayout relativeCardTitleRecords3List;
     private TextView textTitleRecords3List;
     private ImageView iconIndicatorRecords3List;
-    private RecordListAdapter mRecord3ListAdapter;
     private ArrayList<Record> listRecords3Content;
     private ListView listViewRecords3;
 
@@ -67,7 +66,6 @@ public class RecordsActivity extends AppCompatActivity {
     private RelativeLayout relativeCardTitleRecords4List;
     private TextView textTitleRecords4List;
     private ImageView iconIndicatorRecords4List;
-    private RecordListAdapter mRecord4ListAdapter;
     private ArrayList<Record> listRecords4Content;
     private ListView listViewRecords4;
 
@@ -76,9 +74,6 @@ public class RecordsActivity extends AppCompatActivity {
     private LinearLayout mDrawer;
     private ActionBarDrawerToggle mDrawerToggle;
     private Switch switchScreen;
-
-    private ActionBar mActionBar;
-    private View statusBarBackground;
 
     private String mRecordHighlightName;
     private String mRecordHighlightDeck;
@@ -127,9 +122,9 @@ public class RecordsActivity extends AppCompatActivity {
 
             case R.id.drawerItemRecords:
                 mDrawerLayout.closeDrawers();
-                //TODO finish all, except main
                 if (mRecordHighlightName != null || mRecordHighlightDeck != null) {
                     Intent intentRecords = new Intent(this, RecordsActivity.class);
+                    intentRecords.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intentRecords);
                     this.finish();
                 }
@@ -139,10 +134,10 @@ public class RecordsActivity extends AppCompatActivity {
                 switchScreen.setChecked(!switchScreen.isChecked());
                 if (!switchScreen.isChecked()) {
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 0).commit();
+                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 0).apply();
                 } else {
                     getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 1).commit();
+                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 1).apply();
                 }
                 break;
 
@@ -239,19 +234,27 @@ public class RecordsActivity extends AppCompatActivity {
                 invalidateOptionsMenu();
             }
         };
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        mDrawerLayout.addDrawerListener(mDrawerToggle);
 
         LinearLayout drawerItemPlayers = (LinearLayout) findViewById(R.id.drawerItemRecords);
         ImageView drawerItemIconPlayers = (ImageView) findViewById(R.id.drawerItemIconRecords);
         TextView drawerItemTextPlayers = (TextView) findViewById(R.id.drawerItemTextRecords);
-        drawerItemPlayers.setBackgroundColor(ContextCompat.getColor(this, R.color.gray200));
-        drawerItemIconPlayers.setColorFilter(ContextCompat.getColor(this, R.color.accent_color));
-        drawerItemTextPlayers.setTextColor(ContextCompat.getColor(this, R.color.accent_color));
+        if (drawerItemPlayers != null) {
+            drawerItemPlayers.setBackgroundColor(ContextCompat.getColor(this, R.color.gray200));
+        }
+        if (drawerItemIconPlayers != null) {
+            drawerItemIconPlayers.setColorFilter(ContextCompat.getColor(this, R.color.accent_color));
+        }
+        if (drawerItemTextPlayers != null) {
+            drawerItemTextPlayers.setTextColor(ContextCompat.getColor(this, R.color.accent_color));
+        }
     }
 
     private void createLayout() {
         NestedScrollView nestedScrollView = (NestedScrollView) findViewById(R.id.nestedScrollView);
-        nestedScrollView.smoothScrollBy(0, 0);
+        if (nestedScrollView != null) {
+            nestedScrollView.smoothScrollBy(0, 0);
+        }
 
         //Drawer
         switchScreen = (Switch) findViewById(R.id.switchScreen);
@@ -260,10 +263,10 @@ public class RecordsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (!switchScreen.isChecked()) {
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 0).commit();
+                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 0).apply();
                 } else {
                     getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 1).commit();
+                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 1).apply();
                 }
             }
         });
@@ -281,7 +284,7 @@ public class RecordsActivity extends AppCompatActivity {
             listRecords2Content = new ArrayList<>(recordsDB.getAllRecordsByPlayerName(mRecordHighlightName, 2));
         else
             listRecords2Content = new ArrayList<>(recordsDB.getAllRecords(2));
-        mRecord2ListAdapter = new RecordListAdapter(this, listRecords2Content, 2, mRecordHighlightName);
+        RecordListAdapter mRecord2ListAdapter = new RecordListAdapter(this, listRecords2Content, 2, mRecordHighlightName);
         listViewRecords2.setAdapter(mRecord2ListAdapter);
 
         //Card 3 players
@@ -297,7 +300,7 @@ public class RecordsActivity extends AppCompatActivity {
             listRecords3Content = new ArrayList<>(recordsDB.getAllRecordsByPlayerName(mRecordHighlightName, 3));
         else
             listRecords3Content = new ArrayList<>(recordsDB.getAllRecords(3));
-        mRecord3ListAdapter = new RecordListAdapter(this, listRecords3Content, 3, mRecordHighlightName);
+        RecordListAdapter mRecord3ListAdapter = new RecordListAdapter(this, listRecords3Content, 3, mRecordHighlightName);
         listViewRecords3.setAdapter(mRecord3ListAdapter);
 
         //Card 4 players
@@ -313,16 +316,18 @@ public class RecordsActivity extends AppCompatActivity {
             listRecords4Content = new ArrayList<>(recordsDB.getAllRecordsByPlayerName(mRecordHighlightName, 4));
         else
             listRecords4Content = new ArrayList<>(recordsDB.getAllRecords(4));
-        mRecord4ListAdapter = new RecordListAdapter(this, listRecords4Content, 4, mRecordHighlightName);
+        RecordListAdapter mRecord4ListAdapter = new RecordListAdapter(this, listRecords4Content, 4, mRecordHighlightName);
         listViewRecords4.setAdapter(mRecord4ListAdapter);
     }
 
     private void createStatusBar() {
-        statusBarBackground = findViewById(R.id.statusBarBackground);
-        ViewGroup.LayoutParams params = statusBarBackground.getLayoutParams();
-        params.height = Utils.getStatusBarHeight(this);
-        statusBarBackground.setLayoutParams(params);
-        statusBarBackground.setBackgroundColor(ContextCompat.getColor(this, R.color.primary_color));
+        View statusBarBackground = findViewById(R.id.statusBarBackground);
+        if (statusBarBackground != null) {
+            ViewGroup.LayoutParams params = statusBarBackground.getLayoutParams();
+            params.height = Utils.getStatusBarHeight(this);
+            statusBarBackground.setLayoutParams(params);
+            statusBarBackground.setBackgroundColor(ContextCompat.getColor(this, R.color.primary_color));
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = this.getWindow();
@@ -336,7 +341,7 @@ public class RecordsActivity extends AppCompatActivity {
         assert getSupportActionBar() != null;
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
-        mActionBar = getSupportActionBar();
+        ActionBar mActionBar = getSupportActionBar();
         mActionBar.setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(this, R.color.primary_color)));
         mActionBar.setDisplayShowTitleEnabled(true);
         mActionBar.setDisplayHomeAsUpEnabled(true);

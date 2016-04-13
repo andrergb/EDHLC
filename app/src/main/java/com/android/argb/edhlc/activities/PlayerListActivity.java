@@ -1,5 +1,6 @@
 package com.android.argb.edhlc.activities;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -44,8 +45,10 @@ import com.android.argb.edhlc.objects.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-//Crop: https://github.com/lvillani/android-cropimage
+/* Created by ARGB */
+/* Using to crop: https://github.com/lvillani/android-cropimage */
 public class PlayerListActivity extends AppCompatActivity {
     private DecksDataAccessObject decksDB;
     private RecordsDataAccessObject recordsDB;
@@ -126,10 +129,10 @@ public class PlayerListActivity extends AppCompatActivity {
                 switchScreen.setChecked(!switchScreen.isChecked());
                 if (!switchScreen.isChecked()) {
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 0).commit();
+                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 0).apply();
                 } else {
                     getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 1).commit();
+                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 1).apply();
                 }
                 break;
 
@@ -141,7 +144,6 @@ public class PlayerListActivity extends AppCompatActivity {
 
             case R.id.drawerItemAbout:
                 mPlayerDrawerLayout.closeDrawers();
-                //TODO
                 break;
         }
     }
@@ -264,19 +266,27 @@ public class PlayerListActivity extends AppCompatActivity {
                 invalidateOptionsMenu();
             }
         };
-        mPlayerDrawerLayout.setDrawerListener(mDrawerToggle);
+        mPlayerDrawerLayout.addDrawerListener(mDrawerToggle);
 
         LinearLayout drawerItemPlayers = (LinearLayout) findViewById(R.id.drawerItemPlayers);
         ImageView drawerItemIconPlayers = (ImageView) findViewById(R.id.drawerItemIconPlayers);
         TextView drawerItemTextPlayers = (TextView) findViewById(R.id.drawerItemTextPlayers);
-        drawerItemPlayers.setBackgroundColor(ContextCompat.getColor(this, R.color.gray200));
-        drawerItemIconPlayers.setColorFilter(ContextCompat.getColor(this, R.color.accent_color));
-        drawerItemTextPlayers.setTextColor(ContextCompat.getColor(this, R.color.accent_color));
+        if (drawerItemPlayers != null) {
+            drawerItemPlayers.setBackgroundColor(ContextCompat.getColor(this, R.color.gray200));
+        }
+        if (drawerItemIconPlayers != null) {
+            drawerItemIconPlayers.setColorFilter(ContextCompat.getColor(this, R.color.accent_color));
+        }
+        if (drawerItemTextPlayers != null) {
+            drawerItemTextPlayers.setTextColor(ContextCompat.getColor(this, R.color.accent_color));
+        }
     }
 
     private void createLayout() {
         NestedScrollView nestedScrollView = (NestedScrollView) findViewById(R.id.nestedScrollView);
-        nestedScrollView.smoothScrollBy(0, 0);
+        if (nestedScrollView != null) {
+            nestedScrollView.smoothScrollBy(0, 0);
+        }
 
         //Drawer
         switchScreen = (Switch) findViewById(R.id.switchScreen);
@@ -285,10 +295,10 @@ public class PlayerListActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (!switchScreen.isChecked()) {
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 0).commit();
+                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 0).apply();
                 } else {
                     getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 1).commit();
+                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 1).apply();
                 }
             }
         });
@@ -335,10 +345,12 @@ public class PlayerListActivity extends AppCompatActivity {
 
     private void createStatusBar() {
         statusBarBackground = findViewById(R.id.statusBarBackground);
-        ViewGroup.LayoutParams params = statusBarBackground.getLayoutParams();
-        params.height = Utils.getStatusBarHeight(this);
-        statusBarBackground.setLayoutParams(params);
-        statusBarBackground.setBackgroundColor(ContextCompat.getColor(this, R.color.primary_color));
+        if (statusBarBackground != null) {
+            ViewGroup.LayoutParams params = statusBarBackground.getLayoutParams();
+            params.height = Utils.getStatusBarHeight(this);
+            statusBarBackground.setLayoutParams(params);
+            statusBarBackground.setBackgroundColor(ContextCompat.getColor(this, R.color.primary_color));
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = this.getWindow();
@@ -361,6 +373,7 @@ public class PlayerListActivity extends AppCompatActivity {
     }
 
     private void dialogAddPlayer() {
+        @SuppressLint("InflateParams")
         View playerNameView = LayoutInflater.from(PlayerListActivity.this).inflate(R.layout.dialog_player_name, null);
         final EditText userInput = (EditText) playerNameView.findViewById(R.id.editTextPlayerName);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PlayerListActivity.this);
@@ -403,6 +416,7 @@ public class PlayerListActivity extends AppCompatActivity {
     }
 
     private void dialogEditPlayer(final String mPlayerName) {
+        @SuppressLint("InflateParams")
         View playerNameView = LayoutInflater.from(PlayerListActivity.this).inflate(R.layout.dialog_player_name, null);
         final EditText userInput = (EditText) playerNameView.findViewById(R.id.editTextPlayerName);
         userInput.setText(mPlayerName);
@@ -483,7 +497,9 @@ public class PlayerListActivity extends AppCompatActivity {
     }
 
     private void updateEditMode() {
-        int color = mIsInEditMode ? ContextCompat.getColor(this, R.color.secondary_text) : ContextCompat.getColor(this, R.color.primary_color);
+        int color = ContextCompat.getColor(this, R.color.primary_color);
+        if (mIsInEditMode)
+            color = ContextCompat.getColor(this, R.color.secondary_text);
 
         statusBarBackground.setBackgroundColor(color);
         mActionBar.setBackgroundDrawable(new ColorDrawable(color));
@@ -513,9 +529,9 @@ public class PlayerListActivity extends AppCompatActivity {
                 }
             });
         }
-        textViewTotalPlayer.setText("" + playersDB.getAllPlayers().size());
-        textViewTotalDecks.setText("" + decksDB.getAllDecks().size());
-        textViewTotalGames.setText("" + recordsDB.getAllRecords().size());
+        textViewTotalPlayer.setText(String.format(Locale.US, "%d", playersDB.getAllPlayers().size()));
+        textViewTotalDecks.setText(String.format(Locale.US, "%d", decksDB.getAllDecks().size()));
+        textViewTotalGames.setText(String.format(Locale.US, "%d", recordsDB.getAllRecords().size()));
 
         //Card playerList
         List<Player> allPlayers = playersDB.getAllPlayers();

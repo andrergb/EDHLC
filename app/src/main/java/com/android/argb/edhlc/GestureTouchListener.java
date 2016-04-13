@@ -7,6 +7,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 
+/* Created by ARGB */
 public abstract class GestureTouchListener implements OnTouchListener {
 
     private final GestureDetector mGestureDetector;
@@ -61,7 +62,6 @@ public abstract class GestureTouchListener implements OnTouchListener {
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            boolean result = false;
             try {
                 float diffY = e2.getY() - e1.getY();
                 float diffX = e2.getX() - e1.getX();
@@ -85,7 +85,7 @@ public abstract class GestureTouchListener implements OnTouchListener {
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
-            return result;
+            return false;
         }
 
         @Override

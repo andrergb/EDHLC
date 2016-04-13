@@ -5,6 +5,7 @@ import android.support.v7.app.ActionBarActivity;
 
 import com.android.argb.edhlc.R;
 
+/* Created by ARGB */
 public class SettingsActivity extends ActionBarActivity {
 
     @Override

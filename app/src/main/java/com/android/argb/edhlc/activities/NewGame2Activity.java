@@ -34,6 +34,7 @@ import com.android.argb.edhlc.Utils;
 import com.android.argb.edhlc.database.deck.DecksDataAccessObject;
 import com.android.argb.edhlc.objects.ActivePlayer;
 
+/* Created by ARGB */
 public class NewGame2Activity extends AppCompatActivity {
 
     private ActionBar mActionBar;
@@ -210,7 +211,9 @@ public class NewGame2Activity extends AppCompatActivity {
         firstLine = (LinearLayout) findViewById(R.id.firstLine);
         firstLine.setOnDragListener(new MyDragListener());
         CardView firstCard = (CardView) findViewById(R.id.firstCard);
-        firstCard.setOnTouchListener(new MyTouchListener());
+        if (firstCard != null) {
+            firstCard.setOnTouchListener(new MyTouchListener());
+        }
         avatarFirstNewGame2 = (ImageView) findViewById(R.id.avatarFirstNewGame2);
         playerFirstNameNewGame2 = (TextView) findViewById(R.id.playerFirstNameNewGame2);
         playerFirstDeckNewGame2 = (TextView) findViewById(R.id.playerFirstDeckNewGame2);
@@ -218,7 +221,9 @@ public class NewGame2Activity extends AppCompatActivity {
         secondLine = (LinearLayout) findViewById(R.id.secondLine);
         secondLine.setOnDragListener(new MyDragListener());
         CardView secondCard = (CardView) findViewById(R.id.secondCard);
-        secondCard.setOnTouchListener(new MyTouchListener());
+        if (secondCard != null) {
+            secondCard.setOnTouchListener(new MyTouchListener());
+        }
         avatarSecondNewGame2 = (ImageView) findViewById(R.id.avatarSecondNewGame2);
         playerSecondNameNewGame2 = (TextView) findViewById(R.id.playerSecondNameNewGame2);
         playerSecondDeckNewGame2 = (TextView) findViewById(R.id.playerSecondDeckNewGame2);
@@ -228,12 +233,16 @@ public class NewGame2Activity extends AppCompatActivity {
             thirdLine = (LinearLayout) findViewById(R.id.thirdLine);
             thirdLine.setOnDragListener(new MyDragListener());
             CardView thirdCard = (CardView) findViewById(R.id.thirdCard);
-            thirdCard.setOnTouchListener(new MyTouchListener());
+            if (thirdCard != null) {
+                thirdCard.setOnTouchListener(new MyTouchListener());
+            }
             avatarThirdNewGame2 = (ImageView) findViewById(R.id.avatarThirdNewGame2);
             playerThirdNameNewGame2 = (TextView) findViewById(R.id.playerThirdNameNewGame2);
             playerThirdDeckNewGame2 = (TextView) findViewById(R.id.playerThirdDeckNewGame2);
         } else {
-            thirdLineParent.setVisibility(View.GONE);
+            if (thirdLineParent != null) {
+                thirdLineParent.setVisibility(View.GONE);
+            }
         }
 
         LinearLayout fourthLineParent = (LinearLayout) findViewById(R.id.fourthLineParent);
@@ -241,12 +250,16 @@ public class NewGame2Activity extends AppCompatActivity {
             fourthLine = (LinearLayout) findViewById(R.id.fourthLine);
             fourthLine.setOnDragListener(new MyDragListener());
             CardView fourthCard = (CardView) findViewById(R.id.fourthCard);
-            fourthCard.setOnTouchListener(new MyTouchListener());
+            if (fourthCard != null) {
+                fourthCard.setOnTouchListener(new MyTouchListener());
+            }
             avatarFourthNewGame2 = (ImageView) findViewById(R.id.avatarFourthNewGame2);
             playerFourthNameNewGame2 = (TextView) findViewById(R.id.playerFourthNameNewGame2);
             playerFourthDeckNewGame2 = (TextView) findViewById(R.id.playerFourthDeckNewGame2);
         } else {
-            fourthLineParent.setVisibility(View.GONE);
+            if (fourthLineParent != null) {
+                fourthLineParent.setVisibility(View.GONE);
+            }
         }
 
         scrollView = (ScrollView) findViewById(R.id.scrollNewGame2);
@@ -282,6 +295,33 @@ public class NewGame2Activity extends AppCompatActivity {
         View indicator421 = findViewById(R.id.indicator421);
         //View indicator422 = findViewById(R.id.indicator422);
         View indicator423 = findViewById(R.id.indicator423);
+
+        assert indicator111 != null;
+        assert indicator112 != null;
+        assert indicator113 != null;
+        assert indicator121 != null;
+        assert indicator122 != null;
+        assert indicator123 != null;
+
+        assert indicator211 != null;
+        assert indicator212 != null;
+        assert indicator213 != null;
+        assert indicator221 != null;
+        assert indicator222 != null;
+        assert indicator223 != null;
+
+        assert indicator311 != null;
+        assert indicator312 != null;
+        assert indicator313 != null;
+        assert indicator321 != null;
+        assert indicator322 != null;
+        assert indicator323 != null;
+
+        assert indicator411 != null;
+        assert indicator412 != null;
+        assert indicator413 != null;
+        assert indicator421 != null;
+        assert indicator423 != null;
 
         if (totalPlayers == 2) {
             indicator112.setVisibility(View.VISIBLE);
@@ -357,10 +397,12 @@ public class NewGame2Activity extends AppCompatActivity {
 
     private void createStatusBar() {
         statusBarBackground = findViewById(R.id.statusBarBackground);
-        ViewGroup.LayoutParams params = statusBarBackground.getLayoutParams();
-        params.height = Utils.getStatusBarHeight(this);
-        statusBarBackground.setLayoutParams(params);
-        statusBarBackground.setBackgroundColor(ContextCompat.getColor(this, R.color.primary_color));
+        if (statusBarBackground != null) {
+            ViewGroup.LayoutParams params = statusBarBackground.getLayoutParams();
+            params.height = Utils.getStatusBarHeight(this);
+            statusBarBackground.setLayoutParams(params);
+            statusBarBackground.setBackgroundColor(ContextCompat.getColor(this, R.color.primary_color));
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = this.getWindow();

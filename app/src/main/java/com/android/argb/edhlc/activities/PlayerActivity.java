@@ -1,10 +1,12 @@
 package com.android.argb.edhlc.activities;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -40,9 +42,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.argb.edhlc.Constants;
-import com.android.argb.edhlc.adapters.DeckListAdapter;
 import com.android.argb.edhlc.R;
 import com.android.argb.edhlc.Utils;
+import com.android.argb.edhlc.adapters.DeckListAdapter;
 import com.android.argb.edhlc.chart.DonutChart;
 import com.android.argb.edhlc.colorpicker.ColorPickerDialog;
 import com.android.argb.edhlc.colorpicker.ColorPickerSwatch;
@@ -59,7 +61,9 @@ import org.achartengine.renderer.DefaultRenderer;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
+/* Created by ARGB */
 public class PlayerActivity extends AppCompatActivity {
 
     private String mPlayerName;
@@ -272,10 +276,10 @@ public class PlayerActivity extends AppCompatActivity {
                 switchScreen.setChecked(!switchScreen.isChecked());
                 if (!switchScreen.isChecked()) {
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 0).commit();
+                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 0).apply();
                 } else {
                     getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 1).commit();
+                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 1).apply();
                 }
                 break;
 
@@ -287,7 +291,6 @@ public class PlayerActivity extends AppCompatActivity {
 
             case R.id.drawerItemAbout:
                 mPlayerDrawerLayout.closeDrawers();
-                //TODO
                 break;
         }
     }
@@ -485,19 +488,27 @@ public class PlayerActivity extends AppCompatActivity {
                 invalidateOptionsMenu();
             }
         };
-        mPlayerDrawerLayout.setDrawerListener(mDrawerToggle);
+        mPlayerDrawerLayout.addDrawerListener(mDrawerToggle);
 
         LinearLayout drawerItemPlayers = (LinearLayout) findViewById(R.id.drawerItemPlayers);
         ImageView drawerItemIconPlayers = (ImageView) findViewById(R.id.drawerItemIconPlayers);
         TextView drawerItemTextPlayers = (TextView) findViewById(R.id.drawerItemTextPlayers);
-        drawerItemPlayers.setBackgroundColor(ContextCompat.getColor(this, R.color.gray200));
-        drawerItemIconPlayers.setColorFilter(ContextCompat.getColor(this, R.color.accent_color));
-        drawerItemTextPlayers.setTextColor(ContextCompat.getColor(this, R.color.accent_color));
+        if (drawerItemPlayers != null) {
+            drawerItemPlayers.setBackgroundColor(ContextCompat.getColor(this, R.color.gray200));
+        }
+        if (drawerItemIconPlayers != null) {
+            drawerItemIconPlayers.setColorFilter(ContextCompat.getColor(this, R.color.accent_color));
+        }
+        if (drawerItemTextPlayers != null) {
+            drawerItemTextPlayers.setTextColor(ContextCompat.getColor(this, R.color.accent_color));
+        }
     }
 
     private void createLayout() {
         NestedScrollView nestedScrollView = (NestedScrollView) findViewById(R.id.nestedScrollView);
-        nestedScrollView.smoothScrollBy(0, 0);
+        if (nestedScrollView != null) {
+            nestedScrollView.smoothScrollBy(0, 0);
+        }
 
         fabDismissView = findViewById(R.id.fabDismissView);
         fabDismissView.setOnTouchListener(new View.OnTouchListener() {
@@ -519,10 +530,10 @@ public class PlayerActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (!switchScreen.isChecked()) {
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 0).commit();
+                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 0).apply();
                 } else {
                     getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 1).commit();
+                    getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putInt(Constants.SCREEN_ON, 1).apply();
                 }
             }
         });
@@ -621,10 +632,12 @@ public class PlayerActivity extends AppCompatActivity {
 
     private void createStatusBar() {
         statusBarBackground = findViewById(R.id.statusBarBackground);
-        ViewGroup.LayoutParams params = statusBarBackground.getLayoutParams();
-        params.height = Utils.getStatusBarHeight(this);
-        statusBarBackground.setLayoutParams(params);
-        statusBarBackground.setBackgroundColor(ContextCompat.getColor(this, R.color.primary_color));
+        if (statusBarBackground != null) {
+            ViewGroup.LayoutParams params = statusBarBackground.getLayoutParams();
+            params.height = Utils.getStatusBarHeight(this);
+            statusBarBackground.setLayoutParams(params);
+            statusBarBackground.setBackgroundColor(ContextCompat.getColor(this, R.color.primary_color));
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = this.getWindow();
@@ -647,6 +660,7 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     private void dialogAddDeck(final View view) {
+        @SuppressLint("InflateParams")
         View playerNameView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_add_deck, null);
         final EditText userInput = (EditText) playerNameView.findViewById(R.id.editTextEditDeckName);
         final ImageView imageViewAddShieldColor = (ImageView) playerNameView.findViewById(R.id.imageViewAddShieldColor);
@@ -745,6 +759,7 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     private void dialogEditDeck(final Deck mCurrentDeck) {
+        @SuppressLint("InflateParams")
         View dialogDeckView = LayoutInflater.from(PlayerActivity.this).inflate(R.layout.dialog_deck, null);
         final EditText userInput = (EditText) dialogDeckView.findViewById(R.id.editTextEditDeckName);
         final ImageView shieldColor = (ImageView) dialogDeckView.findViewById(R.id.imageViewEditShieldColor);
@@ -864,6 +879,7 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     private void dialogEditPlayer(final View view) {
+        @SuppressLint("InflateParams")
         View playerNameView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_player_name, null);
         final EditText userInput = (EditText) playerNameView.findViewById(R.id.editTextPlayerName);
         userInput.setText(mPlayerName);
@@ -983,14 +999,14 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     private void handleTiedLeastPlayedDecks(final List<Deck> tiedDecks) {
-        textViewOthersLeastPlayedDeckPlayerInfo.setText("more decks");
+        textViewOthersLeastPlayedDeckPlayerInfo.setText(R.string.more_decks);
         textViewOthersLeastPlayedDeckPlayerInfo.setTextColor(ContextCompat.getColor(this, R.color.primary_color));
         textViewOthersLeastPlayedDeckPlayerInfo.setClickable(true);
         textViewOthersLeastPlayedDeckPlayerInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (textViewOthersLeastPlayedDeckPlayerInfo.isActivated()) {
-                    textViewOthersLeastPlayedDeckPlayerInfo.setText("more decks");
+                    textViewOthersLeastPlayedDeckPlayerInfo.setText(R.string.more_decks);
                     textViewLeastPlayedDeckPlayerInfo.setText(tiedDecks.get(0).getDeckName());
 
                     LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -1006,7 +1022,7 @@ public class PlayerActivity extends AppCompatActivity {
                         }
                     });
                 } else {
-                    textViewOthersLeastPlayedDeckPlayerInfo.setText("hide decks");
+                    textViewOthersLeastPlayedDeckPlayerInfo.setText(R.string.hide_decks);
                     String decks = "";
                     for (int i = 0; i < tiedDecks.size(); i++) {
                         decks = decks + tiedDecks.get(i).getDeckName();
@@ -1034,14 +1050,14 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     private void handleTiedMostPlayedDecks(final List<Deck> tiedDecks) {
-        textViewOthersMostPlayedDeckPlayerInfo.setText("more decks");
+        textViewOthersMostPlayedDeckPlayerInfo.setText(R.string.more_decks);
         textViewOthersMostPlayedDeckPlayerInfo.setTextColor(ContextCompat.getColor(this, R.color.primary_color));
         textViewOthersMostPlayedDeckPlayerInfo.setClickable(true);
         textViewOthersMostPlayedDeckPlayerInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (textViewOthersMostPlayedDeckPlayerInfo.isActivated()) {
-                    textViewOthersMostPlayedDeckPlayerInfo.setText("more decks");
+                    textViewOthersMostPlayedDeckPlayerInfo.setText(R.string.more_decks);
                     textViewMostPlayedDeckPlayerInfo.setText(tiedDecks.get(0).getDeckName());
 
                     LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -1057,7 +1073,7 @@ public class PlayerActivity extends AppCompatActivity {
                         }
                     });
                 } else {
-                    textViewOthersMostPlayedDeckPlayerInfo.setText("hide decks");
+                    textViewOthersMostPlayedDeckPlayerInfo.setText(R.string.hide_decks);
                     String decks = "";
                     for (int i = 0; i < tiedDecks.size(); i++) {
                         decks = decks + tiedDecks.get(i).getDeckName();
@@ -1085,7 +1101,9 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     private void updateEditMode() {
-        int color = mIsInEditMode ? ContextCompat.getColor(this, R.color.secondary_text) : ContextCompat.getColor(this, R.color.primary_color);
+        int color = ContextCompat.getColor(this, R.color.primary_color);
+        if (mIsInEditMode)
+            color = ContextCompat.getColor(this, R.color.secondary_text);
 
         statusBarBackground.setBackgroundColor(color);
         mActionBar.setBackgroundDrawable(new ColorDrawable(color));
@@ -1129,49 +1147,48 @@ public class PlayerActivity extends AppCompatActivity {
         final List<Deck> mostUsedDecks = recordsDB.getMostUsedDecks(allDecks);
         final List<Deck> leastUsedDecks = recordsDB.getLeastUsedDecks(allDecks);
 
-        LinearLayout mostUsedDeck = (LinearLayout) findViewById(R.id.mostUsedDeck);
-        View dividerMostUsedDeck = findViewById(R.id.dividerMostUsedDeck);
         if (mostUsedDecks.size() == 0) {
-            mostUsedDeck.setVisibility(View.GONE);
-            dividerMostUsedDeck.setVisibility(View.GONE);
+            //Most played deck
+            textViewMostPlayedDeckPlayerInfo.setText(R.string.none_deck_added);
+            textViewMostPlayedDeckPlayerInfo.setTypeface(null, Typeface.ITALIC);
+            textViewMostTimePlayedDeckPlayerInfo.setText("0");
+            textViewOthersMostPlayedDeckPlayerInfo.setText("");
         } else {
-            mostUsedDeck.setVisibility(View.VISIBLE);
-            dividerMostUsedDeck.setVisibility(View.VISIBLE);
             //Most played deck
             textViewMostPlayedDeckPlayerInfo.setText(mostUsedDecks.get(0).getDeckName());
+            textViewMostPlayedDeckPlayerInfo.setTypeface(null, Typeface.NORMAL);
             //Handle tied decks
             if (mostUsedDecks.size() == 1)
                 textViewOthersMostPlayedDeckPlayerInfo.setText("");
             else
                 handleTiedMostPlayedDecks(mostUsedDecks);
             //TIMES most played deck
-            textViewMostTimePlayedDeckPlayerInfo.setText("" + recordsDB.getAllRecordsByDeck(mostUsedDecks.get(0)).size());
+            textViewMostTimePlayedDeckPlayerInfo.setText(String.format(Locale.US, "%d", recordsDB.getAllRecordsByDeck(mostUsedDecks.get(0)).size()));
         }
 
-        LinearLayout leastUsedDeck = (LinearLayout) findViewById(R.id.leastUsedDeck);
-        View divideLeastUsedDeck = findViewById(R.id.dividerLeastUsedDeck);
         if (leastUsedDecks.size() == 0) {
-            leastUsedDeck.setVisibility(View.GONE);
-            divideLeastUsedDeck.setVisibility(View.GONE);
+            textViewLeastPlayedDeckPlayerInfo.setText(R.string.none_deck_added);
+            textViewLeastPlayedDeckPlayerInfo.setTypeface(null, Typeface.ITALIC);
+            textViewLeastTimePlayedDeckPlayerInfo.setText("0");
+            textViewOthersLeastPlayedDeckPlayerInfo.setText("");
         } else {
-            leastUsedDeck.setVisibility(View.VISIBLE);
-            divideLeastUsedDeck.setVisibility(View.VISIBLE);
             //Least played deck
             textViewLeastPlayedDeckPlayerInfo.setText(leastUsedDecks.get(0).getDeckName());
+            textViewLeastPlayedDeckPlayerInfo.setTypeface(null, Typeface.NORMAL);
             //Handle Least tied decks
             if (leastUsedDecks.size() == 1)
                 textViewOthersLeastPlayedDeckPlayerInfo.setText("");
             else
                 handleTiedLeastPlayedDecks(leastUsedDecks);
             //TIMES Least played deck
-            textViewLeastTimePlayedDeckPlayerInfo.setText("" + recordsDB.getAllRecordsByDeck(leastUsedDecks.get(0)).size());
+            textViewLeastTimePlayedDeckPlayerInfo.setText(String.format(Locale.US, "%d", recordsDB.getAllRecordsByDeck(leastUsedDecks.get(0)).size()));
         }
 
         Player currentPlayer = playersDB.getPlayer(mPlayerName);
         textViewCreationDate.setText(currentPlayer.getPlayerDate());
-        textViewTotalGames.setText("" + allRecords.size());
-        textViewWins.setText("" + allFirstRecords.size());
-        textViewTotalDecksPlayerInfo.setText("" + allDecks.size());
+        textViewTotalGames.setText(String.format(Locale.US, "%d", allRecords.size()));
+        textViewWins.setText(String.format(Locale.US, "%d", allFirstRecords.size()));
+        textViewTotalDecksPlayerInfo.setText(String.format(Locale.US, "%d", allDecks.size()));
 
         //Card deckList
         if (deckList == null)
@@ -1239,7 +1256,7 @@ public class PlayerActivity extends AppCompatActivity {
             }
 
             Record lastRecord = allRecords.get(allRecords.size() - 1);
-            textTitleRecordCard.setText("Last game played");
+            textTitleRecordCard.setText(R.string.last_game_played);
             Utils.createRecordListElement(this, lastRecord, mPlayerName);
         }
 

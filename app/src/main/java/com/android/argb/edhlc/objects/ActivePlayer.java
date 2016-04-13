@@ -1,11 +1,6 @@
 package com.android.argb.edhlc.objects;
 
-import android.app.Activity;
-import android.content.SharedPreferences;
-
-import com.android.argb.edhlc.Constants;
-
-
+/* Created by ARGB */
 public class ActivePlayer {
 
     protected Deck deck;

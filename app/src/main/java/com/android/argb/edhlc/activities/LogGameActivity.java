@@ -37,6 +37,7 @@ import com.android.argb.edhlc.objects.Record;
 import java.util.ArrayList;
 import java.util.List;
 
+/* Created by ARGB */
 public class LogGameActivity extends AppCompatActivity {
 
     private ActionBar mActionBar;
@@ -133,7 +134,9 @@ public class LogGameActivity extends AppCompatActivity {
         firstLine = (LinearLayout) findViewById(R.id.firstLine);
         firstLine.setOnDragListener(new MyDragListener());
         CardView firstCard = (CardView) findViewById(R.id.firstCard);
-        firstCard.setOnTouchListener(new MyTouchListener());
+        if (firstCard != null) {
+            firstCard.setOnTouchListener(new MyTouchListener());
+        }
         avatarFirstLogGame = (ImageView) findViewById(R.id.avatarFirstLogGame);
         playerFirstNameLogGame = (TextView) findViewById(R.id.playerFirstNameLogGame);
         playerFirstDeckLogGame = (TextView) findViewById(R.id.playerFirstDeckLogGame);
@@ -141,7 +144,9 @@ public class LogGameActivity extends AppCompatActivity {
         secondLine = (LinearLayout) findViewById(R.id.secondLine);
         secondLine.setOnDragListener(new MyDragListener());
         CardView secondCard = (CardView) findViewById(R.id.secondCard);
-        secondCard.setOnTouchListener(new MyTouchListener());
+        if (secondCard != null) {
+            secondCard.setOnTouchListener(new MyTouchListener());
+        }
         avatarSecondLogGame = (ImageView) findViewById(R.id.avatarSecondLogGame);
         playerSecondNameLogGame = (TextView) findViewById(R.id.playerSecondNameLogGame);
         playerSecondDeckLogGame = (TextView) findViewById(R.id.playerSecondDeckLogGame);
@@ -151,12 +156,16 @@ public class LogGameActivity extends AppCompatActivity {
             thirdLine = (LinearLayout) findViewById(R.id.thirdLine);
             thirdLine.setOnDragListener(new MyDragListener());
             CardView thirdCard = (CardView) findViewById(R.id.thirdCard);
-            thirdCard.setOnTouchListener(new MyTouchListener());
+            if (thirdCard != null) {
+                thirdCard.setOnTouchListener(new MyTouchListener());
+            }
             avatarThirdLogGame = (ImageView) findViewById(R.id.avatarThirdLogGame);
             playerThirdNameLogGame = (TextView) findViewById(R.id.playerThirdNameLogGame);
             playerThirdDeckLogGame = (TextView) findViewById(R.id.playerThirdDeckLogGame);
         } else {
-            thirdLineParent.setVisibility(View.GONE);
+            if (thirdLineParent != null) {
+                thirdLineParent.setVisibility(View.GONE);
+            }
         }
 
         LinearLayout fourthLineParent = (LinearLayout) findViewById(R.id.fourthLineParent);
@@ -164,12 +173,16 @@ public class LogGameActivity extends AppCompatActivity {
             fourthLine = (LinearLayout) findViewById(R.id.fourthLine);
             fourthLine.setOnDragListener(new MyDragListener());
             CardView fourthCard = (CardView) findViewById(R.id.fourthCard);
-            fourthCard.setOnTouchListener(new MyTouchListener());
+            if (fourthCard != null) {
+                fourthCard.setOnTouchListener(new MyTouchListener());
+            }
             avatarFourthLogGame = (ImageView) findViewById(R.id.avatarFourthLogGame);
             playerFourthNameLogGame = (TextView) findViewById(R.id.playerFourthNameLogGame);
             playerFourthDeckLogGame = (TextView) findViewById(R.id.playerFourthDeckLogGame);
         } else {
-            fourthLineParent.setVisibility(View.GONE);
+            if (fourthLineParent != null) {
+                fourthLineParent.setVisibility(View.GONE);
+            }
         }
 
         scrollView = (ScrollView) findViewById(R.id.scrollLogGame);
@@ -177,10 +190,12 @@ public class LogGameActivity extends AppCompatActivity {
 
     private void createStatusBar() {
         statusBarBackground = findViewById(R.id.statusBarBackground);
-        ViewGroup.LayoutParams params = statusBarBackground.getLayoutParams();
-        params.height = Utils.getStatusBarHeight(this);
-        statusBarBackground.setLayoutParams(params);
-        statusBarBackground.setBackgroundColor(ContextCompat.getColor(this, R.color.primary_color));
+        if (statusBarBackground != null) {
+            ViewGroup.LayoutParams params = statusBarBackground.getLayoutParams();
+            params.height = Utils.getStatusBarHeight(this);
+            statusBarBackground.setLayoutParams(params);
+            statusBarBackground.setBackgroundColor(ContextCompat.getColor(this, R.color.primary_color));
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = this.getWindow();

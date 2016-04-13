@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import java.util.List;
 
+/* Created by ARGB */
 //http://stackoverflow.com/questions/7263291/viewpager-pageradapter-not-updating-the-view
 public class MainPagerAdapter extends FragmentPagerAdapter {
     private List<String> tabTitles;

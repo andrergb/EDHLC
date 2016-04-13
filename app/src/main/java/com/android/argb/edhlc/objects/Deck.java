@@ -1,8 +1,6 @@
 package com.android.argb.edhlc.objects;
 
-/**
- * -Created by agbarros on 05/11/2015.
- */
+/* Created by ARGB */
 public class Deck {
 
     private String deckOwnerName;

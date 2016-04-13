@@ -16,10 +16,8 @@ import org.achartengine.renderer.SimpleSeriesRenderer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-/**
- * -Created by agbarros on 25/02/2016.
- */
 public class DonutChart {
     private Activity context;
     private DefaultRenderer mDoughnutRender;
@@ -59,10 +57,10 @@ public class DonutChart {
         int second = data[1];
         double total = (double) (first + second);
 
-        textTotalGames1Chart2Slots.setText("" + (int) total);
+        textTotalGames1Chart2Slots.setText(String.format(Locale.US, "%d", (int) total));
         textTotalGames2Chart2Slots.setText(total == 1 ? "game played" : "games played");
-        textFirstChart2Slots.setText("First: " + first);
-        textSecondChart2Slots.setText("Second: " + second);
+        textFirstChart2Slots.setText(String.format(Locale.US, "First: %d", first));
+        textSecondChart2Slots.setText(String.format(Locale.US, "Second: %d", second));
 
         List<double[]> values = new ArrayList<>();
         double emptySpace = (total == first || total == second) ? 0 : total * 0.005;
@@ -124,11 +122,11 @@ public class DonutChart {
         int third = data[2];
         double total = (double) (first + second + third);
 
-        textTotalGames1Chart3Slots.setText("" + (int) total);
+        textTotalGames1Chart3Slots.setText(String.format(Locale.US, "%d", (int) total));
         textTotalGames2Chart3Slots.setText(total == 1 ? "game played" : "games played");
-        textFirstChart3Slots.setText("First: " + first);
-        textSecondChart3Slots.setText("Second: " + second);
-        textThirdChart3Slots.setText("Third: " + third);
+        textFirstChart3Slots.setText(String.format(Locale.US, "First: %d", first));
+        textSecondChart3Slots.setText(String.format(Locale.US, "Second: %d", second));
+        textThirdChart3Slots.setText(String.format(Locale.US, "Third: %d", third));
 
         List<double[]> values = new ArrayList<>();
         double emptySpace = (total == first || total == second || total == third) ? 0 : total * 0.005;
@@ -196,12 +194,12 @@ public class DonutChart {
         int fourth = data[3];
         double total = (double) (first + second + third + fourth);
 
-        textTotalGames1Chart4Slots.setText("" + (int) total);
+        textTotalGames1Chart4Slots.setText(String.format(Locale.US, "%d", (int) total));
         textTotalGames2Chart4Slots.setText(total == 1 ? "game played" : "games played");
-        textFirstChart4Slots.setText("First: " + first);
-        textSecondChart4Slots.setText("Second: " + second);
-        textThirdChart4Slots.setText("Third: " + third);
-        textFourthChart4Slots.setText("Fourth: " + fourth);
+        textFirstChart4Slots.setText(String.format(Locale.US, "First: %d", first));
+        textSecondChart4Slots.setText(String.format(Locale.US, "Second: %d", second));
+        textThirdChart4Slots.setText(String.format(Locale.US, "Third: %d", third));
+        textFourthChart4Slots.setText(String.format(Locale.US, "Fourth: %d", fourth));
 
         List<double[]> values = new ArrayList<>();
         double emptySpace = (total == first || total == second || total == third || total == fourth) ? 0 : total * 0.005;

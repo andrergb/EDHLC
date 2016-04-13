@@ -119,18 +119,6 @@
                         android:layout_weight="0.4"
                         android:onClick="onClickOverview">
 
-                        <ImageView
-                            android:id="@+id/imageViewThroneP1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:layout_centerVertical="true"
-                            android:layout_toLeftOf="@+id/textViewOverviewP1Name"
-                            android:layout_toStartOf="@+id/textViewOverviewP1Name"
-                            android:adjustViewBounds="true"
-                            android:padding="12dp"
-                            android:src="@drawable/icon_crown"/>
-
                         <TextView
                             android:id="@+id/textViewOverviewP1Name"
                             android:layout_width="wrap_content"
@@ -141,6 +129,17 @@
                             android:gravity="center"
                             android:text="PlayerName"
                             android:textSize="26sp"/>
+
+                        <ImageView
+                            android:id="@+id/imageViewThroneP1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
+                            android:layout_toStartOf="@id/textViewOverviewP1Name"
+                            android:adjustViewBounds="true"
+                            android:padding="12dp"
+                            android:src="@drawable/icon_crown"/>
                     </RelativeLayout>
 
                     <!--FAKE LIFE-->
@@ -287,18 +286,6 @@
                         android:layout_weight="0.4"
                         android:onClick="onClickOverview">
 
-                        <ImageView
-                            android:id="@+id/imageViewThroneP2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:layout_centerVertical="true"
-                            android:layout_toLeftOf="@+id/textViewOverviewP2Name"
-                            android:layout_toStartOf="@+id/textViewOverviewP2Name"
-                            android:adjustViewBounds="true"
-                            android:padding="12dp"
-                            android:src="@drawable/icon_crown"/>
-
                         <TextView
                             android:id="@+id/textViewOverviewP2Name"
                             android:layout_width="wrap_content"
@@ -309,6 +296,17 @@
                             android:gravity="center"
                             android:text="PlayerName"
                             android:textSize="26sp"/>
+
+                        <ImageView
+                            android:id="@+id/imageViewThroneP2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
+                            android:layout_toStartOf="@id/textViewOverviewP2Name"
+                            android:adjustViewBounds="true"
+                            android:padding="12dp"
+                            android:src="@drawable/icon_crown"/>
                     </RelativeLayout>
 
                     <!--FAKE LIFE-->

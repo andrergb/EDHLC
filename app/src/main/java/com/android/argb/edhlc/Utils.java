@@ -1,6 +1,7 @@
 package com.android.argb.edhlc;
 
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -33,9 +34,7 @@ import com.android.argb.edhlc.objects.Record;
 import java.io.File;
 import java.util.Calendar;
 
-/**
- * -Created by agbarros on 25/02/2016.
- */
+/* Created by ARGB */
 public class Utils {
 
     public static int getStatusBarHeight(Context context) {
@@ -96,10 +95,9 @@ public class Utils {
 
     public static String getCurrentDate() {
         Calendar c = Calendar.getInstance();
-        String date = Constants.MONTH[c.get(Calendar.MONTH)]
+        return Constants.MONTH[c.get(Calendar.MONTH)]
                 + " " + String.valueOf(c.get(Calendar.DAY_OF_MONTH))
                 + ", " + String.valueOf(c.get(Calendar.YEAR));
-        return date;
     }
 
     public static Bitmap getSquareBitmap(Bitmap sourceBitmap) {
@@ -153,7 +151,7 @@ public class Utils {
         int colorAccent = ContextCompat.getColor(parent, R.color.accent_color);
         int colorSecondary = ContextCompat.getColor(parent, R.color.secondary_text);
 
-        textDateRecordCard.setText("Played on " + currentRecord.getDate());
+        textDateRecordCard.setText(String.format("Played on %s", currentRecord.getDate()));
 
         switch (currentRecord.getTotalPlayers()) {
             case 2:
@@ -303,7 +301,7 @@ public class Utils {
         int colorAccent = ContextCompat.getColor(parent.getContext(), R.color.accent_color);
         int colorSecondary = ContextCompat.getColor(parent.getContext(), R.color.secondary_text);
 
-        textDateRecordCard.setText("Played on " + currentRecord.getDate());
+        textDateRecordCard.setText(String.format("Played on %s", currentRecord.getDate()));
 
         switch (currentRecord.getTotalPlayers()) {
             case 2:
@@ -547,15 +545,15 @@ public class Utils {
     }
 
     public static void resetHistoryLife(Context context) {
-        context.getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE).edit().putString(Constants.PLAYER_HISTORY_LIFE + 0, Constants.INITIAL_PLAYER_LIFE_STRING).commit();
-        context.getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE).edit().putString(Constants.PLAYER_HISTORY_LIFE + 1, Constants.INITIAL_PLAYER_LIFE_STRING).commit();
-        context.getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE).edit().putString(Constants.PLAYER_HISTORY_LIFE + 2, Constants.INITIAL_PLAYER_LIFE_STRING).commit();
-        context.getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE).edit().putString(Constants.PLAYER_HISTORY_LIFE + 3, Constants.INITIAL_PLAYER_LIFE_STRING).commit();
+        context.getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE).edit().putString(Constants.PLAYER_HISTORY_LIFE + 0, Constants.INITIAL_PLAYER_LIFE_STRING).apply();
+        context.getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE).edit().putString(Constants.PLAYER_HISTORY_LIFE + 1, Constants.INITIAL_PLAYER_LIFE_STRING).apply();
+        context.getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE).edit().putString(Constants.PLAYER_HISTORY_LIFE + 2, Constants.INITIAL_PLAYER_LIFE_STRING).apply();
+        context.getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE).edit().putString(Constants.PLAYER_HISTORY_LIFE + 3, Constants.INITIAL_PLAYER_LIFE_STRING).apply();
 
-        context.getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE).edit().putString(Constants.PLAYER_EDH_PREFIX + 0, "0@0@0@0").commit();
-        context.getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE).edit().putString(Constants.PLAYER_EDH_PREFIX + 1, "0@0@0@0").commit();
-        context.getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE).edit().putString(Constants.PLAYER_EDH_PREFIX + 2, "0@0@0@0").commit();
-        context.getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE).edit().putString(Constants.PLAYER_EDH_PREFIX + 3, "0@0@0@0").commit();
+        context.getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE).edit().putString(Constants.PLAYER_EDH_PREFIX + 0, "0@0@0@0").apply();
+        context.getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE).edit().putString(Constants.PLAYER_EDH_PREFIX + 1, "0@0@0@0").apply();
+        context.getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE).edit().putString(Constants.PLAYER_EDH_PREFIX + 2, "0@0@0@0").apply();
+        context.getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE).edit().putString(Constants.PLAYER_EDH_PREFIX + 3, "0@0@0@0").apply();
     }
 
     public static Drawable getRoundedImage(Activity activity, String playerName, String playerDeck) {
@@ -603,11 +601,13 @@ public class Utils {
             return position;
         }
 
+        @SuppressLint("InflateParams")
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View vi = convertView;
-            if (vi == null)
+            if (vi == null) {
                 vi = inflater.inflate(R.layout.row_history, null);
+            }
 
             TextView textViewLife = (TextView) vi.findViewById(R.id.textViewRowLife);
             textViewLife.setText(dataLife[position]);

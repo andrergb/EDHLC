@@ -14,5 +14,12 @@
             android:id="@+id/new_game_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
+
+        <TextView
+            android:id="@+id/atLeast2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/at_least_2"/>
     </android.support.design.widget.CoordinatorLayout>
 </android.support.v4.widget.DrawerLayout>

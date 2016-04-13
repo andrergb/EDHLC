@@ -1,5 +1,6 @@
 package com.android.argb.edhlc.objects;
 
+/* Created by ARGB */
 public class Player {
 
     protected String playerName;
@@ -17,17 +18,17 @@ public class Player {
         return this.playerName;
     }
 
-    public void setPlayerName(String playerName) {
-        this.playerName = playerName;
-    }
+//    public void setPlayerName(String playerName) {
+//        this.playerName = playerName;
+//    }
 
     public String getPlayerDate() {
         return playerDate;
     }
 
-    public void setPlayerDate(String playerDate) {
-        this.playerDate = playerDate;
-    }
+//    public void setPlayerDate(String playerDate) {
+//        this.playerDate = playerDate;
+//    }
 
 }
 

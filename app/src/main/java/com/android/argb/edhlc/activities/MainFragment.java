@@ -1,5 +1,6 @@
 package com.android.argb.edhlc.activities;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -23,6 +24,9 @@ import com.android.argb.edhlc.R;
 import com.android.argb.edhlc.objects.ActivePlayer;
 import com.android.argb.edhlc.objects.Deck;
 
+import java.util.Locale;
+
+/* Created by ARGB */
 public class MainFragment extends Fragment implements View.OnClickListener {
 
     //Args
@@ -105,6 +109,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     }
 
     public void createLifeDialog(final View view) {
+        @SuppressLint("InflateParams")
         View playerLifeView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_player_life, null);
         final EditText userInput = (EditText) playerLifeView.findViewById(R.id.editTextPlayerLife);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
@@ -372,19 +377,19 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     private void setEDH(int which, int edhValue) {
         switch (which) {
             case 1:
-                valueEDH1.setText("" + edhValue);
+                valueEDH1.setText(String.format(Locale.US, "%d", edhValue));
                 break;
 
             case 2:
-                valueEDH2.setText("" + edhValue);
+                valueEDH2.setText(String.format(Locale.US, "%d", edhValue));
                 break;
 
             case 3:
-                valueEDH3.setText("" + edhValue);
+                valueEDH3.setText(String.format(Locale.US, "%d", edhValue));
                 break;
 
             case 4:
-                valueEDH4.setText("" + edhValue);
+                valueEDH4.setText(String.format(Locale.US, "%d", edhValue));
                 break;
         }
     }
@@ -392,7 +397,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     private void setLife(int life) {
         if (lifeValue != null) {
             lifeValue.setTextSize(TypedValue.COMPLEX_UNIT_SP, (life > 99 || life < -99) ? 120 : 180);
-            lifeValue.setText("" + life);
+            lifeValue.setText(String.format(Locale.US, "%d", life));
         }
     }
 

@@ -1,5 +1,6 @@
 package com.android.argb.edhlc.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
@@ -13,16 +14,13 @@ import com.android.argb.edhlc.R;
 
 import java.util.List;
 
+/* Created by ARGB */
 public class NewGameListAdapter extends BaseAdapter {
 
     private static LayoutInflater inflater = null;
-    private Context context;
     private List<String[]> data; // 0 type - 1 text - 2 checkbox selection
 
-    private CheckBox checkBox;
-
     public NewGameListAdapter(Context context, List<String[]> data) {
-        this.context = context;
         this.data = data;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -42,6 +40,7 @@ public class NewGameListAdapter extends BaseAdapter {
         return position;
     }
 
+    @SuppressLint("InflateParams")
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         View vi = convertView;

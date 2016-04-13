@@ -1,5 +1,6 @@
 package com.android.argb.edhlc.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,18 +13,15 @@ import com.android.argb.edhlc.objects.Record;
 
 import java.util.List;
 
+/* Created by ARGB */
 public class RecordListAdapter extends BaseAdapter {
 
     private static LayoutInflater inflater = null;
-    private Context context;
     private List<Record> data;
-    private int total;
     private String highlightedValue;
 
     public RecordListAdapter(Context context, List<Record> data, int total, String highlightedValue) {
-        this.context = context;
         this.data = data;
-        this.total = total;
         this.highlightedValue = highlightedValue;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -43,6 +41,7 @@ public class RecordListAdapter extends BaseAdapter {
         return position;
     }
 
+    @SuppressLint("InflateParams")
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         View vi = convertView;
