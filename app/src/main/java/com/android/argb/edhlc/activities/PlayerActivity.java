@@ -368,6 +368,10 @@ public class PlayerActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (mDrawerToggle.onOptionsItemSelected(item)) {
+            if (mIsInEditMode) {
+                mIsInEditMode = false;
+                updateEditMode();
+            }
             return true;
         }
 

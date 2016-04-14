@@ -20,7 +20,7 @@ public class RecordListAdapter extends BaseAdapter {
     private List<Record> data;
     private String highlightedValue;
 
-    public RecordListAdapter(Context context, List<Record> data, int total, String highlightedValue) {
+    public RecordListAdapter(Context context, List<Record> data, String highlightedValue) {
         this.data = data;
         this.highlightedValue = highlightedValue;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

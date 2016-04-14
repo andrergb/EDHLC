@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.argb.edhlc.objects.ActivePlayer;
@@ -269,6 +270,9 @@ public class Utils {
     }
 
     public static void createRecordListElement(View parent, Record currentRecord, String highlightedPlayerName) {
+        RelativeLayout selectedRecord = (RelativeLayout) parent.findViewById(R.id.selectedRecord);
+        selectedRecord.setVisibility(currentRecord.isSelected() ? View.VISIBLE : View.GONE);
+
         TextView textDateRecordCard = (TextView) parent.findViewById(R.id.textDateRecordCard);
         LinearLayout linearFirstLineRecordCard = (LinearLayout) parent.findViewById(R.id.linearFirstLineRecordCard);
         TextView textFirstIndicatorRecordCard = (TextView) parent.findViewById(R.id.textFirstIndicatorRecordCard);

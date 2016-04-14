@@ -21,6 +21,7 @@ import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -30,8 +31,8 @@ import android.widget.TextView;
 
 import com.android.argb.edhlc.Constants;
 import com.android.argb.edhlc.R;
-import com.android.argb.edhlc.adapters.RecordListAdapter;
 import com.android.argb.edhlc.Utils;
+import com.android.argb.edhlc.adapters.RecordListAdapter;
 import com.android.argb.edhlc.database.record.RecordsDataAccessObject;
 import com.android.argb.edhlc.objects.Deck;
 import com.android.argb.edhlc.objects.Record;
@@ -50,6 +51,7 @@ public class RecordsActivity extends AppCompatActivity {
     private ImageView iconIndicatorRecords2List;
     private ArrayList<Record> listRecords2Content;
     private ListView listViewRecords2;
+    private RecordListAdapter mRecord2ListAdapter;
 
     //Card - Records3
     private CardView cardViewRecords3List;
@@ -59,6 +61,7 @@ public class RecordsActivity extends AppCompatActivity {
     private ImageView iconIndicatorRecords3List;
     private ArrayList<Record> listRecords3Content;
     private ListView listViewRecords3;
+    private RecordListAdapter mRecord3ListAdapter;
 
     //Card - Records4
     private CardView cardViewRecords4List;
@@ -68,6 +71,7 @@ public class RecordsActivity extends AppCompatActivity {
     private ImageView iconIndicatorRecords4List;
     private ArrayList<Record> listRecords4Content;
     private ListView listViewRecords4;
+    private RecordListAdapter mRecord4ListAdapter;
 
     ///Drawer
     private DrawerLayout mDrawerLayout;
@@ -79,10 +83,21 @@ public class RecordsActivity extends AppCompatActivity {
     private String mRecordHighlightDeck;
     private int mRecordSize;
 
+    private boolean mIsInEditMode = false;
+    private View statusBarBackground;
+    private ActionBar mActionBar;
+    private Menu optionMenu;
+
+
     @Override
     public void onBackPressed() {
         if (mDrawerLayout.isDrawerOpen(mDrawer)) {
             mDrawerLayout.closeDrawers();
+        } else if (mIsInEditMode) {
+            mIsInEditMode = false;
+            updateEditMode(mRecord2ListAdapter, listRecords2Content);
+            updateEditMode(mRecord3ListAdapter, listRecords3Content);
+            updateEditMode(mRecord4ListAdapter, listRecords4Content);
         } else {
             super.onBackPressed();
         }
@@ -161,12 +176,119 @@ public class RecordsActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        this.optionMenu = menu;
+        getMenuInflater().inflate(R.menu.menu_records_activity, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
+
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            if (mIsInEditMode) {
+                mIsInEditMode = false;
+                updateEditMode(mRecord2ListAdapter, listRecords2Content);
+                updateEditMode(mRecord3ListAdapter, listRecords3Content);
+                updateEditMode(mRecord4ListAdapter, listRecords4Content);
+            }
+            return true;
+        }
+
+        //Option menu
+        switch (item.getItemId()) {
+            case R.id.action_delete_record:
+                boolean removed2 = false;
+                boolean removed3 = false;
+                boolean removed4 = false;
+
+                for (int i = 0; i < listRecords2Content.size(); i++) {
+                    if (listRecords2Content.get(i).isSelected()) {
+                        recordsDB.deleteRecord(listRecords2Content.get(i));
+                        removed2 = true;
+                    }
+                }
+
+                for (int i = 0; i < listRecords3Content.size(); i++) {
+                    if (listRecords3Content.get(i).isSelected()) {
+                        recordsDB.deleteRecord(listRecords3Content.get(i));
+                        removed3 = true;
+                    }
+                }
+
+                for (int i = 0; i < listRecords4Content.size(); i++) {
+                    if (listRecords4Content.get(i).isSelected()) {
+                        recordsDB.deleteRecord(listRecords4Content.get(i));
+                        removed4 = true;
+                    }
+                }
+
+                createLayout();
+
+                int pixel6dp = (int) Utils.convertDpToPixel((float) 6, getApplicationContext());
+
+                if (removed2) {
+                    LinearLayout.LayoutParams layoutParams2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    layoutParams2.setMargins(pixel6dp, pixel6dp, pixel6dp, pixel6dp);
+                    cardViewRecords2List.setLayoutParams(layoutParams2);
+                }
+
+                if (removed3) {
+                    LinearLayout.LayoutParams layoutParams3 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    layoutParams3.setMargins(pixel6dp, pixel6dp, pixel6dp, pixel6dp);
+                    cardViewRecords3List.setLayoutParams(layoutParams3);
+                }
+
+                if (removed4) {
+                    LinearLayout.LayoutParams layoutParams4 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    layoutParams4.setMargins(pixel6dp, pixel6dp, pixel6dp, pixel6dp);
+                    cardViewRecords4List.setLayoutParams(layoutParams4);
+                }
+
+                updateLayout();
+
+                if (removed2)
+                    cardViewRecords2List.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                        @Override
+                        public boolean onPreDraw() {
+                            cardViewRecords2List.getViewTreeObserver().removeOnPreDrawListener(this);
+                            mCardViewFullHeightRecords2 = cardViewRecords2List.getHeight();
+                            Utils.expand(RecordsActivity.this, cardViewRecords2List, textTitleRecords2List, iconIndicatorRecords2List, relativeCardTitleRecords2List.getHeight(), mCardViewFullHeightRecords2);
+                            return true;
+                        }
+                    });
+
+                if (removed3)
+                    cardViewRecords3List.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                        @Override
+                        public boolean onPreDraw() {
+                            cardViewRecords3List.getViewTreeObserver().removeOnPreDrawListener(this);
+                            mCardViewFullHeightRecords3 = cardViewRecords3List.getHeight();
+                            Utils.expand(RecordsActivity.this, cardViewRecords3List, textTitleRecords3List, iconIndicatorRecords3List, relativeCardTitleRecords3List.getHeight(), mCardViewFullHeightRecords3);
+                            return true;
+                        }
+                    });
+
+                if (removed4)
+                    cardViewRecords4List.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                        @Override
+                        public boolean onPreDraw() {
+                            cardViewRecords4List.getViewTreeObserver().removeOnPreDrawListener(this);
+                            mCardViewFullHeightRecords4 = cardViewRecords4List.getHeight();
+                            Utils.expand(RecordsActivity.this, cardViewRecords4List, textTitleRecords4List, iconIndicatorRecords4List, relativeCardTitleRecords4List.getHeight(), mCardViewFullHeightRecords4);
+                            return true;
+                        }
+                    });
+
+                mIsInEditMode = false;
+
+                updateEditMode(mRecord2ListAdapter, listRecords2Content);
+                updateEditMode(mRecord3ListAdapter, listRecords3Content);
+                updateEditMode(mRecord4ListAdapter, listRecords4Content);
+
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -197,6 +319,12 @@ public class RecordsActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
+        if (mIsInEditMode) {
+            mIsInEditMode = false;
+            updateEditMode(mRecord2ListAdapter, listRecords2Content);
+            updateEditMode(mRecord3ListAdapter, listRecords3Content);
+            updateEditMode(mRecord4ListAdapter, listRecords4Content);
+        }
         super.onPause();
     }
 
@@ -284,8 +412,26 @@ public class RecordsActivity extends AppCompatActivity {
             listRecords2Content = new ArrayList<>(recordsDB.getAllRecordsByPlayerName(mRecordHighlightName, 2));
         else
             listRecords2Content = new ArrayList<>(recordsDB.getAllRecords(2));
-        RecordListAdapter mRecord2ListAdapter = new RecordListAdapter(this, listRecords2Content, 2, mRecordHighlightName);
+        mRecord2ListAdapter = new RecordListAdapter(this, listRecords2Content, mRecordHighlightName);
         listViewRecords2.setAdapter(mRecord2ListAdapter);
+        listViewRecords2.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                mIsInEditMode = true;
+                listRecords2Content.get(position).setSelected(!listRecords2Content.get(position).isSelected());
+                updateEditMode(mRecord2ListAdapter, listRecords2Content);
+                return true;
+            }
+        });
+        listViewRecords2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (mIsInEditMode) {
+                    listRecords2Content.get(position).setSelected(!listRecords2Content.get(position).isSelected());
+                    updateEditMode(mRecord2ListAdapter, listRecords2Content);
+                }
+            }
+        });
 
         //Card 3 players
         cardViewRecords3List = (CardView) findViewById(R.id.cardViewRecords3List);
@@ -300,8 +446,26 @@ public class RecordsActivity extends AppCompatActivity {
             listRecords3Content = new ArrayList<>(recordsDB.getAllRecordsByPlayerName(mRecordHighlightName, 3));
         else
             listRecords3Content = new ArrayList<>(recordsDB.getAllRecords(3));
-        RecordListAdapter mRecord3ListAdapter = new RecordListAdapter(this, listRecords3Content, 3, mRecordHighlightName);
+        mRecord3ListAdapter = new RecordListAdapter(this, listRecords3Content, mRecordHighlightName);
         listViewRecords3.setAdapter(mRecord3ListAdapter);
+        listViewRecords3.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                mIsInEditMode = true;
+                listRecords3Content.get(position).setSelected(!listRecords3Content.get(position).isSelected());
+                updateEditMode(mRecord3ListAdapter, listRecords3Content);
+                return true;
+            }
+        });
+        listViewRecords3.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (mIsInEditMode) {
+                    listRecords3Content.get(position).setSelected(!listRecords3Content.get(position).isSelected());
+                    updateEditMode(mRecord3ListAdapter, listRecords3Content);
+                }
+            }
+        });
 
         //Card 4 players
         cardViewRecords4List = (CardView) findViewById(R.id.cardViewRecords4List);
@@ -316,12 +480,30 @@ public class RecordsActivity extends AppCompatActivity {
             listRecords4Content = new ArrayList<>(recordsDB.getAllRecordsByPlayerName(mRecordHighlightName, 4));
         else
             listRecords4Content = new ArrayList<>(recordsDB.getAllRecords(4));
-        RecordListAdapter mRecord4ListAdapter = new RecordListAdapter(this, listRecords4Content, 4, mRecordHighlightName);
+        mRecord4ListAdapter = new RecordListAdapter(this, listRecords4Content, mRecordHighlightName);
         listViewRecords4.setAdapter(mRecord4ListAdapter);
+        listViewRecords4.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                mIsInEditMode = true;
+                listRecords4Content.get(position).setSelected(!listRecords4Content.get(position).isSelected());
+                updateEditMode(mRecord4ListAdapter, listRecords4Content);
+                return true;
+            }
+        });
+        listViewRecords4.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (mIsInEditMode) {
+                    listRecords4Content.get(position).setSelected(!listRecords4Content.get(position).isSelected());
+                    updateEditMode(mRecord4ListAdapter, listRecords4Content);
+                }
+            }
+        });
     }
 
     private void createStatusBar() {
-        View statusBarBackground = findViewById(R.id.statusBarBackground);
+        statusBarBackground = findViewById(R.id.statusBarBackground);
         if (statusBarBackground != null) {
             ViewGroup.LayoutParams params = statusBarBackground.getLayoutParams();
             params.height = Utils.getStatusBarHeight(this);
@@ -341,7 +523,7 @@ public class RecordsActivity extends AppCompatActivity {
         assert getSupportActionBar() != null;
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
-        ActionBar mActionBar = getSupportActionBar();
+        mActionBar = getSupportActionBar();
         mActionBar.setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(this, R.color.primary_color)));
         mActionBar.setDisplayShowTitleEnabled(true);
         mActionBar.setDisplayHomeAsUpEnabled(true);
@@ -351,6 +533,24 @@ public class RecordsActivity extends AppCompatActivity {
                         (mRecordHighlightName != null ? " - " + mRecordHighlightName : "")));
     }
 
+    private void updateEditMode(RecordListAdapter mAdapter, ArrayList<Record> records) {
+        if (mAdapter != null && records != null) {
+            int color = ContextCompat.getColor(this, R.color.primary_color);
+            if (mIsInEditMode)
+                color = ContextCompat.getColor(this, R.color.secondary_text);
+
+            statusBarBackground.setBackgroundColor(color);
+            mActionBar.setBackgroundDrawable(new ColorDrawable(color));
+
+            optionMenu.findItem(R.id.action_delete_record).setVisible(mIsInEditMode);
+
+            if (!mIsInEditMode)
+                for (int i = 0; i < records.size(); i++)
+                    records.get(i).setSelected(false);
+
+            mAdapter.notifyDataSetChanged();
+        }
+    }
 
     private void updateLayout() {
         //Card 2 players

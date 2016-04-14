@@ -1,246 +1,266 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:paddingBottom="16dp"
-    android:paddingTop="16dp">
-
-    <!-- Date -->
-    <TextView
-        android:id="@+id/textDateRecordCard"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:text="Played on 25/12/2015"
-        android:textColor="@color/secondary_text"
-        android:textSize="14sp"/>
+    android:layout_height="wrap_content">
 
     <LinearLayout
+        android:id="@+id/parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="16dp"
+        android:paddingTop="16dp">
 
-        <!-- separator -->
-        <View
-            android:id="@+id/divider1RecordCard"
+        <!-- Date -->
+        <TextView
+            android:id="@+id/textDateRecordCard"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/transparent"/>
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/played_on"
+            android:textColor="@color/secondary_text"
+            android:textSize="14sp"/>
 
-        <!-- 1st -->
         <LinearLayout
-            android:id="@+id/linearFirstLineRecordCard"
             android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/textFirstIndicatorRecordCard"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center"
-                android:layout_marginBottom="8dp"
-                android:layout_marginLeft="32dp"
-                android:layout_marginRight="32dp"
-                android:layout_marginTop="8dp"
-                android:gravity="center_vertical"
-                android:text="1st"
-                android:tint="@color/secondary_text"/>
-
-            <!-- First place text -->
-            <LinearLayout
+            <!-- separator -->
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_height="1dp"
+                android:background="@android:color/transparent"/>
 
-                <TextView
-                    android:id="@+id/textFirstDeckRecordCard"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Deck's name"
-                    android:textColor="@color/primary_text"
-                    android:textSize="16sp"/>
-
-                <TextView
-                    android:id="@+id/textFirstPlayerRecordCard"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Deck's owner"
-                    android:textColor="@color/secondary_text"
-                    android:textSize="12sp"/>
-            </LinearLayout>
-        </LinearLayout>
-
-        <!-- separator -->
-        <View
-            android:id="@+id/divider1RecordCard"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="88dp"
-            android:alpha="0.5"
-            android:background="@color/divider"/>
-
-        <!-- 2nd -->
-        <LinearLayout
-            android:id="@+id/linearSecondLineRecordCard"
-            android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/textSecondIndicatorRecordCard"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center"
-                android:layout_marginBottom="8dp"
-                android:layout_marginLeft="32dp"
-                android:layout_marginRight="32dp"
-                android:layout_marginTop="8dp"
-                android:gravity="center_vertical"
-                android:text="2nd"
-                android:tint="@color/secondary_text"/>
-
-            <!-- First place text -->
+            <!-- 1st -->
             <LinearLayout
+                android:id="@+id/linearFirstLineRecordCard"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/textSecondDeckRecordCard"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Deck's name"
-                    android:textColor="@color/primary_text"
-                    android:textSize="16sp"/>
-
-                <TextView
-                    android:id="@+id/textSecondPlayerRecordCard"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Deck's owner"
-                    android:textColor="@color/secondary_text"
-                    android:textSize="12sp"/>
-            </LinearLayout>
-        </LinearLayout>
-
-        <!-- separator -->
-        <View
-            android:id="@+id/divider2RecordCard"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="88dp"
-            android:alpha="0.5"
-            android:background="@color/divider"/>
-
-        <!-- 3rd -->
-        <LinearLayout
-            android:id="@+id/linearThirdLineRecordCard"
-            android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/textThirdIndicatorRecordCard"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center"
-                android:layout_marginBottom="8dp"
-                android:layout_marginLeft="32dp"
-                android:layout_marginRight="32dp"
-                android:layout_marginTop="8dp"
+                android:layout_height="72dp"
                 android:gravity="center_vertical"
-                android:text="3rd"
-                android:tint="@color/secondary_text"/>
-
-            <!-- First place text -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/textThirdDeckRecordCard"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Deck's name"
-                    android:textColor="@color/primary_text"
-                    android:textSize="16sp"/>
+                    android:id="@+id/textFirstIndicatorRecordCard"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="32dp"
+                    android:layout_marginRight="32dp"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/first"
+                    android:tint="@color/secondary_text"/>
 
-                <TextView
-                    android:id="@+id/textThirdPlayerRecordCard"
-                    android:layout_width="wrap_content"
+                <!-- First place text -->
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Deck's owner"
-                    android:textColor="@color/secondary_text"
-                    android:textSize="12sp"/>
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textFirstDeckRecordCard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/deck_name"
+                        android:textColor="@color/primary_text"
+                        android:textSize="16sp"/>
+
+                    <TextView
+                        android:id="@+id/textFirstPlayerRecordCard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/deck_owner"
+                        android:textColor="@color/secondary_text"
+                        android:textSize="12sp"/>
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
 
-        <!-- separator -->
-        <View
-            android:id="@+id/divider3RecordCard"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="88dp"
-            android:alpha="0.5"
-            android:background="@color/divider"/>
+            <!-- separator -->
+            <View
+                android:id="@+id/divider1RecordCard"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="88dp"
+                android:alpha="0.5"
+                android:background="@color/divider"/>
 
-        <!-- 4th -->
-        <LinearLayout
-            android:id="@+id/linearFourthLineRecordCard"
-            android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/textFourthIndicatorRecordCard"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center"
-                android:layout_marginBottom="8dp"
-                android:layout_marginLeft="32dp"
-                android:layout_marginRight="32dp"
-                android:layout_marginTop="8dp"
+            <!-- 2nd -->
+            <LinearLayout
+                android:id="@+id/linearSecondLineRecordCard"
+                android:layout_width="match_parent"
+                android:layout_height="72dp"
                 android:gravity="center_vertical"
-                android:text="4th"
-                android:tint="@color/secondary_text"/>
-
-            <!-- First place text -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/textFourthDeckRecordCard"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Deck's name"
-                    android:textColor="@color/primary_text"
-                    android:textSize="16sp"/>
+                    android:id="@+id/textSecondIndicatorRecordCard"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="32dp"
+                    android:layout_marginRight="32dp"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/second"
+                    android:tint="@color/secondary_text"/>
 
-                <TextView
-                    android:id="@+id/textFourthPlayerRecordCard"
-                    android:layout_width="wrap_content"
+                <!-- First place text -->
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Deck's owner"
-                    android:textColor="@color/secondary_text"
-                    android:textSize="12sp"/>
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textSecondDeckRecordCard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/deck_name"
+                        android:textColor="@color/primary_text"
+                        android:textSize="16sp"/>
+
+                    <TextView
+                        android:id="@+id/textSecondPlayerRecordCard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/deck_owner"
+                        android:textColor="@color/secondary_text"
+                        android:textSize="12sp"/>
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
 
-        <!-- separator -->
-        <View
-            android:id="@+id/divider1RecordCard"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/transparent"/>
+            <!-- separator -->
+            <View
+                android:id="@+id/divider2RecordCard"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="88dp"
+                android:alpha="0.5"
+                android:background="@color/divider"/>
+
+            <!-- 3rd -->
+            <LinearLayout
+                android:id="@+id/linearThirdLineRecordCard"
+                android:layout_width="match_parent"
+                android:layout_height="72dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textThirdIndicatorRecordCard"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="32dp"
+                    android:layout_marginRight="32dp"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/third"
+                    android:tint="@color/secondary_text"/>
+
+                <!-- First place text -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textThirdDeckRecordCard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/deck_name"
+                        android:textColor="@color/primary_text"
+                        android:textSize="16sp"/>
+
+                    <TextView
+                        android:id="@+id/textThirdPlayerRecordCard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/deck_owner"
+                        android:textColor="@color/secondary_text"
+                        android:textSize="12sp"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- separator -->
+            <View
+                android:id="@+id/divider3RecordCard"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="88dp"
+                android:alpha="0.5"
+                android:background="@color/divider"/>
+
+            <!-- 4th -->
+            <LinearLayout
+                android:id="@+id/linearFourthLineRecordCard"
+                android:layout_width="match_parent"
+                android:layout_height="72dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textFourthIndicatorRecordCard"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="32dp"
+                    android:layout_marginRight="32dp"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/fourth"
+                    android:tint="@color/secondary_text"/>
+
+                <!-- First place text -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textFourthDeckRecordCard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/deck_name"
+                        android:textColor="@color/primary_text"
+                        android:textSize="16sp"/>
+
+                    <TextView
+                        android:id="@+id/textFourthPlayerRecordCard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/deck_owner"
+                        android:textColor="@color/secondary_text"
+                        android:textSize="12sp"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- separator -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/transparent"/>
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/selectedRecord"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/parent"
+        android:layout_alignTop="@id/parent"
+        android:alpha="0.5"
+        android:background="@color/secondary_text">
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/check"/>
+    </RelativeLayout>
+</RelativeLayout>

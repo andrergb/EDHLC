@@ -48,28 +48,47 @@ public class RecordsDataAccessObject {
         recordsDBHelper.close();
     }
 
-//    public void deleteRecord(Record record) {
-//        database.delete(
-//                RecordsContract.RecordsEntry.TABLE_NAME,
-//                RecordsContract.RecordsEntry.COLUMN_FIRST_PLAYER_NAME + " LIKE ? AND "
-//                        + RecordsContract.RecordsEntry.COLUMN_FIRST_PLAYER_DECK + " LIKE ? AND "
-//
-//                        + RecordsContract.RecordsEntry.COLUMN_SECOND_PLAYER_NAME + " LIKE ? AND "
-//                        + RecordsContract.RecordsEntry.COLUMN_SECOND_PLAYER_DECK + " LIKE ? AND "
-//
-//                        + RecordsContract.RecordsEntry.COLUMN_THIRD_PLAYER_NAME + " LIKE ? AND "
-//                        + RecordsContract.RecordsEntry.COLUMN_THIRD_PLAYER_DECK + " LIKE ? AND "
-//
-//                        + RecordsContract.RecordsEntry.COLUMN_FOURTH_PLAYER_NAME + " LIKE ? AND"
-//                        + RecordsContract.RecordsEntry.COLUMN_FOURTH_PLAYER_DECK + " LIKE ?",
-//                new String[]{
-//                        record.getFirstPlace().getDeckOwnerName(), record.getFirstPlace().getDeckName(),
-//                        record.getSecondPlace().getDeckOwnerName(), record.getSecondPlace().getDeckName(),
-//                        record.getThirdPlace().getDeckOwnerName(), record.getThirdPlace().getDeckName(),
-//                        record.getFourthPlace().getDeckOwnerName(), record.getFourthPlace().getDeckName(),
-//                }
-//        );
-//    }
+    public void deleteRecord(Record record) {
+
+        String whereClause = RecordsContract.RecordsEntry.COLUMN_ID + " LIKE ? AND "
+                 + RecordsContract.RecordsEntry.COLUMN_FIRST_PLAYER_NAME + " LIKE ? AND "
+                + RecordsContract.RecordsEntry.COLUMN_FIRST_PLAYER_DECK + " LIKE ? AND "
+
+                + RecordsContract.RecordsEntry.COLUMN_SECOND_PLAYER_NAME + " LIKE ? AND "
+                + RecordsContract.RecordsEntry.COLUMN_SECOND_PLAYER_DECK + " LIKE ?";
+
+        ArrayList<String> whereArgs = new ArrayList<>();
+
+        whereArgs.add(String.valueOf(record.getId()));
+
+        whereArgs.add(record.getFirstPlace().getDeckOwnerName());
+        whereArgs.add(record.getFirstPlace().getDeckName());
+
+        whereArgs.add(record.getSecondPlace().getDeckOwnerName());
+        whereArgs.add(record.getSecondPlace().getDeckName());
+
+        if (record.getTotalPlayers() >= 3) {
+            whereClause = whereClause + " AND "
+                    + RecordsContract.RecordsEntry.COLUMN_THIRD_PLAYER_NAME + " LIKE ? AND "
+                    + RecordsContract.RecordsEntry.COLUMN_THIRD_PLAYER_DECK + " LIKE ?";
+            whereArgs.add(record.getThirdPlace().getDeckOwnerName());
+            whereArgs.add(record.getThirdPlace().getDeckName());
+        }
+
+        if (record.getTotalPlayers() >= 4) {
+            whereClause = whereClause + " AND "
+                    + RecordsContract.RecordsEntry.COLUMN_FOURTH_PLAYER_NAME + " LIKE ? AND "
+                    + RecordsContract.RecordsEntry.COLUMN_FOURTH_PLAYER_DECK + " LIKE ?";
+            whereArgs.add(record.getFourthPlace().getDeckOwnerName());
+            whereArgs.add(record.getFourthPlace().getDeckName());
+        }
+
+        database.delete(
+                RecordsContract.RecordsEntry.TABLE_NAME,
+                whereClause,
+                whereArgs.toArray(new String[whereArgs.size()])
+        );
+    }
 
     public List<Record> getAllRecords() {
         List<Record> recordList = new ArrayList<>();
@@ -584,6 +603,8 @@ public class RecordsDataAccessObject {
 
     private Record cursorToRecord(Cursor cursor) {
         Record record = new Record();
+
+        record.setId(cursor.getInt(cursor.getColumnIndexOrThrow(RecordsContract.RecordsEntry.COLUMN_ID)));
 
         record.setDate(cursor.getString(cursor.getColumnIndexOrThrow(RecordsContract.RecordsEntry.COLUMN_DATE)));
 
