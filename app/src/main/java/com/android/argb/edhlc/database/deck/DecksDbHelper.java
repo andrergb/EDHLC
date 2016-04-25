@@ -4,12 +4,11 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-
 /* Created by ARGB */
 public class DecksDbHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "Decks.db";
-    public static final int DATABASE_VERSION = 15;
+    public static final int DATABASE_VERSION = 20;
 
     private static final String DATABASE_CREATE = "create table "
             + DecksContract.DecksEntry.TABLE_NAME + "("

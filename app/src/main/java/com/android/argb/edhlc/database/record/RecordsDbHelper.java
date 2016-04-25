@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class RecordsDbHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "Records.db";
-    public static final int DATABASE_VERSION = 9;
+    public static final int DATABASE_VERSION = 20;
 
     private static final String DATABASE_CREATE = "create table "
             + RecordsContract.RecordsEntry.TABLE_NAME + "("
