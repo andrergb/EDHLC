@@ -161,6 +161,7 @@ public class NewGame2Activity extends AppCompatActivity {
 
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_GAME_TOTAL_PLAYERS, totalPlayers).apply();
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 0).apply();
+                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_GAME_TIMER, 0).apply();
 
                 Utils.resetHistoryLife(this);
 

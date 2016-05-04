@@ -1,6 +1,5 @@
 package com.android.argb.edhlc.database.player;
 
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -58,19 +57,6 @@ public class PlayersDataAccessObject {
         return playerList;
     }
 
-//    public List<String> getAllPlayersName() {
-//        List<String> playerList = new ArrayList<>();
-//        Cursor cursor = database.query(PlayersContract.PlayersEntry.TABLE_NAME, null, null, null, null, null, null);
-//
-//        cursor.moveToFirst();
-//        while (!cursor.isAfterLast()) {
-//            playerList.add(cursor.getString(cursor.getColumnIndexOrThrow(PlayersContract.PlayersEntry.COLUMN_PLAYER_NAME)));
-//            cursor.moveToNext();
-//        }
-//        cursor.close();
-//        return playerList;
-//    }
-
     public Player getPlayer(String playerName) {
         Cursor cursor = database.query(
                 PlayersContract.PlayersEntry.TABLE_NAME,
@@ -90,7 +76,7 @@ public class PlayersDataAccessObject {
     }
 
     public boolean hasPlayer(String playerName) {
-        return database.query(
+        Cursor c = database.query(
                 PlayersContract.PlayersEntry.TABLE_NAME,
                 null,
                 PlayersContract.PlayersEntry.COLUMN_PLAYER_NAME + " LIKE ?",
@@ -98,7 +84,19 @@ public class PlayersDataAccessObject {
                 null,
                 null,
                 null
-        ).getCount() > 0;
+        );
+
+        if (c.getCount() > 0) {
+            c.close();
+            return true;
+        } else {
+            c.close();
+            return false;
+        }
+    }
+
+    public boolean isOpen() {
+        return database.isOpen();
     }
 
     public boolean isPlayerAdded(String playerName) {

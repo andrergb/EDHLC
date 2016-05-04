@@ -1,6 +1,5 @@
 package com.android.argb.edhlc.database.record;
 
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -51,7 +50,7 @@ public class RecordsDataAccessObject {
     public void deleteRecord(Record record) {
 
         String whereClause = RecordsContract.RecordsEntry.COLUMN_ID + " LIKE ? AND "
-                 + RecordsContract.RecordsEntry.COLUMN_FIRST_PLAYER_NAME + " LIKE ? AND "
+                + RecordsContract.RecordsEntry.COLUMN_FIRST_PLAYER_NAME + " LIKE ? AND "
                 + RecordsContract.RecordsEntry.COLUMN_FIRST_PLAYER_DECK + " LIKE ? AND "
 
                 + RecordsContract.RecordsEntry.COLUMN_SECOND_PLAYER_NAME + " LIKE ? AND "
@@ -401,92 +400,6 @@ public class RecordsDataAccessObject {
         return recordList;
     }
 
-//    public List<Record> getAllSecondPlaceRecordsByDeck(Deck deck) {
-//        List<Record> recordList = new ArrayList<>();
-//        Cursor cursor = database.query(
-//                RecordsContract.RecordsEntry.TABLE_NAME,
-//                null,
-//                RecordsContract.RecordsEntry.COLUMN_SECOND_PLAYER_NAME + " LIKE ? AND "
-//                        + RecordsContract.RecordsEntry.COLUMN_SECOND_PLAYER_DECK + " LIKE ?",
-//                new String[]{deck.getDeckOwnerName(), deck.getDeckName()},
-//                null,
-//                null,
-//                null
-//        );
-//
-//        cursor.moveToFirst();
-//        while (!cursor.isAfterLast()) {
-//            recordList.add(cursorToRecord(cursor));
-//            cursor.moveToNext();
-//        }
-//        cursor.close();
-//        return recordList;
-//    }
-//
-//    public List<Record> getAllSecondPlaceRecordsByPlayerName(String deckOwnerName) {
-//        List<Record> recordList = new ArrayList<>();
-//        Cursor cursor = database.query(
-//                RecordsContract.RecordsEntry.TABLE_NAME,
-//                null,
-//                RecordsContract.RecordsEntry.COLUMN_SECOND_PLAYER_NAME + " LIKE ?",
-//                new String[]{deckOwnerName},
-//                null,
-//                null,
-//                null
-//        );
-//
-//        cursor.moveToFirst();
-//        while (!cursor.isAfterLast()) {
-//            recordList.add(cursorToRecord(cursor));
-//            cursor.moveToNext();
-//        }
-//        cursor.close();
-//        return recordList;
-//    }
-//
-//    public List<Record> getAllThirdPlaceRecordsByDeck(Deck deck) {
-//        List<Record> recordList = new ArrayList<>();
-//        Cursor cursor = database.query(
-//                RecordsContract.RecordsEntry.TABLE_NAME,
-//                null,
-//                RecordsContract.RecordsEntry.COLUMN_THIRD_PLAYER_NAME + " LIKE ? AND "
-//                        + RecordsContract.RecordsEntry.COLUMN_THIRD_PLAYER_DECK + " LIKE ?",
-//                new String[]{deck.getDeckOwnerName(), deck.getDeckName()},
-//                null,
-//                null,
-//                null
-//        );
-//
-//        cursor.moveToFirst();
-//        while (!cursor.isAfterLast()) {
-//            recordList.add(cursorToRecord(cursor));
-//            cursor.moveToNext();
-//        }
-//        cursor.close();
-//        return recordList;
-//    }
-//
-//    public List<Record> getAllThirdPlaceRecordsByPlayerName(String deckOwnerName) {
-//        List<Record> recordList = new ArrayList<>();
-//        Cursor cursor = database.query(
-//                RecordsContract.RecordsEntry.TABLE_NAME,
-//                null,
-//                RecordsContract.RecordsEntry.COLUMN_THIRD_PLAYER_NAME + " LIKE ?",
-//                new String[]{deckOwnerName},
-//                null,
-//                null,
-//                null
-//        );
-//
-//        cursor.moveToFirst();
-//        while (!cursor.isAfterLast()) {
-//            recordList.add(cursorToRecord(cursor));
-//            cursor.moveToNext();
-//        }
-//        cursor.close();
-//        return recordList;
-//    }
-
     public void open() {
         database = recordsDBHelper.getWritableDatabase();
     }
@@ -554,52 +467,6 @@ public class RecordsDataAccessObject {
 
         return totalUpdate;
     }
-
-//    public long updateRecord(Deck oldDeck, Deck newDeck) {
-//        long totalUpdate = 0;
-//
-//        ContentValues values1 = new ContentValues();
-//        values1.put(RecordsContract.RecordsEntry.COLUMN_FIRST_PLAYER_NAME, newDeck.getDeckOwnerName());
-//        values1.put(RecordsContract.RecordsEntry.COLUMN_FIRST_PLAYER_DECK, newDeck.getDeckName());
-//        totalUpdate += database.update(
-//                RecordsContract.RecordsEntry.TABLE_NAME,
-//                values1,
-//                RecordsContract.RecordsEntry.COLUMN_FIRST_PLAYER_NAME + "=? AND " + RecordsContract.RecordsEntry.COLUMN_FIRST_PLAYER_DECK + "=?",
-//                new String[]{oldDeck.getDeckOwnerName(), oldDeck.getDeckName()}
-//        );
-//
-//        ContentValues values2 = new ContentValues();
-//        values2.put(RecordsContract.RecordsEntry.COLUMN_SECOND_PLAYER_NAME, newDeck.getDeckOwnerName());
-//        values2.put(RecordsContract.RecordsEntry.COLUMN_SECOND_PLAYER_DECK, newDeck.getDeckName());
-//        totalUpdate += database.update(
-//                RecordsContract.RecordsEntry.TABLE_NAME,
-//                values2,
-//                RecordsContract.RecordsEntry.COLUMN_SECOND_PLAYER_NAME + "=? AND " + RecordsContract.RecordsEntry.COLUMN_SECOND_PLAYER_DECK + "=?",
-//                new String[]{oldDeck.getDeckOwnerName(), oldDeck.getDeckName()}
-//        );
-//
-//        ContentValues values3 = new ContentValues();
-//        values3.put(RecordsContract.RecordsEntry.COLUMN_THIRD_PLAYER_NAME, newDeck.getDeckOwnerName());
-//        values3.put(RecordsContract.RecordsEntry.COLUMN_THIRD_PLAYER_DECK, newDeck.getDeckName());
-//        totalUpdate += database.update(
-//                RecordsContract.RecordsEntry.TABLE_NAME,
-//                values3,
-//                RecordsContract.RecordsEntry.COLUMN_THIRD_PLAYER_NAME + "=? AND " + RecordsContract.RecordsEntry.COLUMN_THIRD_PLAYER_DECK + "=?",
-//                new String[]{oldDeck.getDeckOwnerName(), oldDeck.getDeckName()}
-//        );
-//
-//        ContentValues values4 = new ContentValues();
-//        values4.put(RecordsContract.RecordsEntry.COLUMN_FOURTH_PLAYER_NAME, newDeck.getDeckOwnerName());
-//        values4.put(RecordsContract.RecordsEntry.COLUMN_FOURTH_PLAYER_DECK, newDeck.getDeckName());
-//        totalUpdate += database.update(
-//                RecordsContract.RecordsEntry.TABLE_NAME,
-//                values4,
-//                RecordsContract.RecordsEntry.COLUMN_FOURTH_PLAYER_NAME + "=? AND " + RecordsContract.RecordsEntry.COLUMN_FOURTH_PLAYER_DECK + "=?",
-//                new String[]{oldDeck.getDeckOwnerName(), oldDeck.getDeckName()}
-//        );
-//
-//        return totalUpdate;
-//    }
 
     private Record cursorToRecord(Cursor cursor) {
         Record record = new Record();

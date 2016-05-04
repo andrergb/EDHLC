@@ -25,6 +25,7 @@ public class Constants {
 
     public static String CURRENT_VIEW_TAB = "CURRENT_VIEW_TAB";
     public static String CURRENT_GAME_TOTAL_PLAYERS = "CURRENT_GAME_TOTAL_PLAYERS";
+    public static String CURRENT_GAME_TIMER = "CURRENT_GAME_TIMER";
     public static String CURRENT_GAME_PLAYER_NAME = "CURRENT_GAME_PLAYER_NAME";
     public static String CURRENT_GAME_PLAYER_DECK = "CURRENT_GAME_PLAYER_DECK";
     public static String CURRENT_GAME_PLAYER_IS_ALIVE = "CURRENT_GAME_PLAYER_IS_ALIVE";

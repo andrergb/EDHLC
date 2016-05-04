@@ -30,6 +30,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Chronometer;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -596,10 +597,14 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
             switchScreen.setChecked(false);
         }
 
-        if (isValidGame())
+        if (isValidGame()) {
             setMode(MODE_PLAYING, MODE_INVALID);
-        else
+        } else {
+            getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_GAME_TIMER, 0).apply();
             setMode(MODE_NEW_GAME, MODE_INVALID);
+        }
+
+        startTimerCounter();
     }
 
     @Override
@@ -1243,6 +1248,11 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
                     viewOverview.setVisibility(View.GONE);
                     viewPager.setVisibility(View.VISIBLE);
                     tabLayout.setVisibility(View.VISIBLE);
+
+                    int color = getActivePlayer(mSharedPreferences.getInt(Constants.CURRENT_VIEW_TAB, 0)).getPlayerDeck().getDeckShieldColor()[0];
+                    if (color == 0)
+                        color = getResources().getIntArray(R.array.edh_default)[0];
+                    setActionBarColor(color);
                 } else {
                     isInAnimation = true;
                     viewPager.setCurrentItem(mSharedPreferences.getInt(Constants.CURRENT_VIEW_TAB, 0), false);
@@ -1427,6 +1437,33 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
                 textViewResult.setText(MessageFormat.format("{0}", getActivePlayer(randomResult[0]).getPlayerDeck().getDeckOwnerName()));
             }
         });
+    }
+
+    private void startTimerCounter() {
+        final long[] countUpTotal = {mSharedPreferences.getInt(Constants.CURRENT_GAME_TIMER, 0)};
+        Chronometer chronometer = (Chronometer) findViewById(R.id.chronometerTotal);
+        if (chronometer != null) {
+            chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
+                @Override
+                public void onChronometerTick(Chronometer arg0) {
+                    countUpTotal[0]++;
+                    String minute = String.valueOf(countUpTotal[0] / 60);
+                    if (minute.length() == 1)
+                        minute = "0" + minute;
+                    String second = String.valueOf(countUpTotal[0] % 60);
+                    if (second.length() == 1)
+                        second = "0" + second;
+
+                    if (isValidGame())
+                        mActionBar.setTitle(minute + ":" + second);
+                    else
+                        mActionBar.setTitle(getString(R.string.app_name));
+
+                    getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_GAME_TIMER, (int) countUpTotal[0]).apply();
+                }
+            });
+            chronometer.start();
+        }
     }
 
     private void updateHistoryLayout() {
