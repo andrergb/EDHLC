@@ -33,6 +33,7 @@ import com.android.argb.edhlc.objects.Deck;
 import com.android.argb.edhlc.objects.Record;
 
 import java.io.File;
+import java.security.SecureRandom;
 import java.util.Calendar;
 
 /* Created by ARGB */
@@ -478,6 +479,10 @@ public class Utils {
         int pEDH4 = prefs.getInt(tag + Constants.CURRENT_GAME_PLAYER_EDH4, 0);
 
         return new ActivePlayer(new Deck(pName, pPlayerDeck, pColor), pIsAlive, pLife, pEDH1, pEDH2, pEDH3, pEDH4, tag);
+    }
+
+    public static int getRandomInt(int min, int max) {
+        return new SecureRandom().nextInt(max - min + 1) + min;
     }
 
     public static void makeViewVisible(View view) {

@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -36,6 +37,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.NumberPicker;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -50,7 +52,6 @@ import com.android.argb.edhlc.objects.ActivePlayer;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /* Created by ARGB */
 public class MainActivity extends AppCompatActivity implements MainFragment.OnUpdateData {
@@ -135,6 +136,9 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
     private ActivePlayer activePlayer3;
     private ActivePlayer activePlayer4;
     private boolean isInAnimation;
+    private TextView textViewResult;
+    private ProgressBar progressRandomBar;
+    private TextView textViewDiceResult;
 
     @Override
     public void iSwipe(int direction) {
@@ -1346,19 +1350,25 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
                             maxValue = mNumberPicker1.getValue();
                         }
 
-                        final Random r = new Random();
-                        final int[] dice = {r.nextInt(maxValue - minValue + 1) + minValue};
-
                         @SuppressLint("InflateParams")
                         View logView = LayoutInflater.from(MainActivity.this).inflate(R.layout.dialog_roll_a_dice_result, null);
-                        final TextView textViewDiceResult = (TextView) logView.findViewById(R.id.textViewDiceResult);
-                        textViewDiceResult.setText(MessageFormat.format("{0}", dice[0]));
+                        textViewDiceResult = (TextView) logView.findViewById(R.id.textViewDiceResult);
+                        textViewDiceResult.setText(MessageFormat.format("{0}", Utils.getRandomInt(minValue, maxValue)));
+
+                        progressRandomBar = (ProgressBar) logView.findViewById(R.id.randomProgress);
+                        progressRandomBar.setVisibility(View.INVISIBLE);
 
                         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
                         alertDialogBuilder.setView(logView);
                         alertDialogBuilder.setTitle("Roll a dice");
                         alertDialogBuilder.setMessage("Dice result [" + minValue + ", " + maxValue + "]:");
-                        alertDialogBuilder.setPositiveButton("OK",
+                        alertDialogBuilder.setPositiveButton("RANDOM",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                    }
+                                });
+
+                        alertDialogBuilder.setNeutralButton("DISMISS",
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         dialog.cancel();
@@ -1372,20 +1382,13 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
                                     }
                                 });
 
-                        alertDialogBuilder.setNeutralButton("REPEAT",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                    }
-                                });
-
                         final AlertDialog alertDialog = alertDialogBuilder.create();
                         alertDialog.show();
 
-                        alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
+                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                dice[0] = r.nextInt((maxValue - minValue) + 1) + minValue;
-                                textViewDiceResult.setText(MessageFormat.format("{0}", dice[0]));
+                                new RandomDiceTask().execute(minValue, maxValue);
                             }
                         });
                     }
@@ -1401,27 +1404,27 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
     }
 
     private void showRandomPlayerDialog() {
-        final int minValue = 0;
-        final int maxValue = totalPlayers - 1;
-        final Random r = new Random();
-        final int[] randomResult = {r.nextInt(maxValue - minValue + 1) + minValue};
 
         @SuppressLint("InflateParams")
         View logView = LayoutInflater.from(this).inflate(R.layout.dialog_roll_a_dice_result, null);
-        final TextView textViewResult = (TextView) logView.findViewById(R.id.textViewDiceResult);
+        textViewResult = (TextView) logView.findViewById(R.id.textViewDiceResult);
         textViewResult.setTextSize(42);
-        textViewResult.setText(MessageFormat.format("{0}", getActivePlayer(randomResult[0]).getPlayerDeck().getDeckOwnerName()));
+        textViewResult.setText("...");
+        textViewResult.setVisibility(View.VISIBLE);
+
+        progressRandomBar = (ProgressBar) logView.findViewById(R.id.randomProgress);
+        progressRandomBar.setVisibility(View.INVISIBLE);
 
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setView(logView);
         alertDialogBuilder.setTitle("Random Player:");
-        alertDialogBuilder.setPositiveButton("OK",
+        alertDialogBuilder.setNegativeButton("DISMISS",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                     }
                 });
-        alertDialogBuilder.setNeutralButton("REPEAT",
+        alertDialogBuilder.setPositiveButton("RANDOM",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         //Overridden at 'alertDialog.getButton' to avoid dismiss every time
@@ -1430,11 +1433,10 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
         final AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
 
-        alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                randomResult[0] = r.nextInt(maxValue - minValue + 1) + minValue;
-                textViewResult.setText(MessageFormat.format("{0}", getActivePlayer(randomResult[0]).getPlayerDeck().getDeckOwnerName()));
+                new RandomPlayerTask().execute();
             }
         });
     }
@@ -1736,6 +1738,66 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
             overview_TextViewP4EDH3.setEnabled(activePlayer4.getPlayerIsAlive());
             overview_TextViewP4EDH4.setText(String.valueOf(activePlayer4.getPlayerEDH4()));
             overview_TextViewP4EDH4.setEnabled(activePlayer4.getPlayerIsAlive());
+        }
+    }
+
+    class RandomDiceTask extends AsyncTask<Integer, Void, String> {
+
+        @Override
+        protected String doInBackground(Integer... params) {
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            final int minValue = params[0];
+            final int maxValue = params[1];
+            return MessageFormat.format("{0}", Utils.getRandomInt(minValue, maxValue));
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            progressRandomBar.setVisibility(View.INVISIBLE);
+            textViewDiceResult.setVisibility(View.VISIBLE);
+            textViewDiceResult.setText(result);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            progressRandomBar.setVisibility(View.VISIBLE);
+            textViewDiceResult.setVisibility(View.INVISIBLE);
+            super.onPreExecute();
+        }
+    }
+
+    class RandomPlayerTask extends AsyncTask<Void, Void, String> {
+
+        @Override
+        protected String doInBackground(Void... params) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            final int minValue = 0;
+            final int maxValue = totalPlayers - 1;
+            return MessageFormat.format("{0}", getActivePlayer(Utils.getRandomInt(minValue, maxValue)).getPlayerDeck().getDeckOwnerName());
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            progressRandomBar.setVisibility(View.INVISIBLE);
+            textViewResult.setVisibility(View.VISIBLE);
+            textViewResult.setText(result);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            progressRandomBar.setVisibility(View.VISIBLE);
+            textViewResult.setVisibility(View.INVISIBLE);
+            super.onPreExecute();
         }
     }
 }
