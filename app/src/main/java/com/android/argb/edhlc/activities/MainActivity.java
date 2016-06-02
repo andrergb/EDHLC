@@ -21,6 +21,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -43,6 +44,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.android.argb.edhlc.Constants;
+import com.android.argb.edhlc.HistoryBottomSheet;
 import com.android.argb.edhlc.R;
 import com.android.argb.edhlc.Utils;
 import com.android.argb.edhlc.database.deck.DecksDataAccessObject;
@@ -429,14 +431,26 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
                 break;
 
             case R.id.action_history:
-                if (!isInAnimation) {
-                    if (getCurrentMode() == MODE_PLAYING)
-                        getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, tabLayout.getSelectedTabPosition()).apply();
-                    if (getCurrentMode() == MODE_HISTORY)
-                        setMode(MODE_PLAYING, getCurrentMode());
-                    else
-                        setMode(MODE_HISTORY, getCurrentMode());
-                }
+                List<ActivePlayer> activePlayers = new ArrayList<>();
+                for (int i = 0; i < totalPlayers; i++)
+                    activePlayers.add(getActivePlayer(i));
+
+                DisplayMetrics displaymetrics = new DisplayMetrics();
+                getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+
+                HistoryBottomSheet bottomSheetDialogFragment = new HistoryBottomSheet();
+                bottomSheetDialogFragment.setBottomSheetsHeight((int) (displaymetrics.heightPixels * 0.4));
+                bottomSheetDialogFragment.setPlayers(tabLayout.getSelectedTabPosition(), activePlayers);
+                bottomSheetDialogFragment.show(getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
+
+//                if (!isInAnimation) {
+//                    if (getCurrentMode() == MODE_PLAYING)
+//                        getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, tabLayout.getSelectedTabPosition()).apply();
+//                    if (getCurrentMode() == MODE_HISTORY)
+//                        setMode(MODE_PLAYING, getCurrentMode());
+//                    else
+//                        setMode(MODE_HISTORY, getCurrentMode());
+//                }
                 break;
 
             case R.id.actions_new_game:
