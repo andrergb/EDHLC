@@ -149,7 +149,7 @@ public class HistoryBottomSheet extends BottomSheetDialogFragment {
         if (!latestSavedLifePreferences.isEmpty() && !latestSavedEDHPreferences.isEmpty()) {
             String[] latestSavedLifeArray = latestSavedLifePreferences.split("_");
             String[] latestSavedEDHArray = latestSavedEDHPreferences.split("_");
-            listBottomSheet.setAdapter(new Utils.customHistoryListViewAdapter2(view.getContext(), totalPlayer, latestSavedLifeArray, latestSavedEDHArray, activePlayerColor));
+            listBottomSheet.setAdapter(new Utils.customHistoryListViewAdapter(view.getContext(), totalPlayer, latestSavedLifeArray, latestSavedEDHArray, activePlayerColor));
         }
 
         listBottomSheet.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {

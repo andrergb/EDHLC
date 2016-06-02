@@ -12,7 +12,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -36,7 +35,6 @@ import android.widget.Chronometer;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -62,7 +60,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
     private static final int MODE_NEW_GAME = 0;
     private static final int MODE_OVERVIEW = 1;
     private static final int MODE_PLAYING = 2;
-    private static final int MODE_HISTORY = 3;
 
     ///LAYOUT OVERVIEW
     private static ImageView overview_ImageViewThroneP1;
@@ -101,21 +98,10 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
     private static TextView overview_TextViewP4EDH2;
     private static TextView overview_TextViewP4EDH3;
     private static TextView overview_TextViewP4EDH4;
-
-    //LAYOUT HISTORY
-    private static TextView history_P1Name;
-    private static ListView history_listViewP1;
-    private static TextView history_P2Name;
-    private static ListView history_listViewP2;
-    private static TextView history_P3Name;
-    private static ListView history_listViewP3;
-    private static TextView history_P4Name;
-    private static ListView history_listViewP4;
     private static Thread mThreadLife1;
     private static Thread mThreadLife2;
     private static Thread mThreadLife3;
     private static Thread mThreadLife4;
-
     ///Drawer
     private DrawerLayout mPlayerDrawerLayout;
     private LinearLayout mPlayerDrawer;
@@ -129,8 +115,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
     private TabLayout tabLayout;
     private RelativeLayout viewNewGame;
     private RelativeLayout viewOverview;
-    private FrameLayout viewHistory;
-
     //Players
     private int totalPlayers;
     private ActivePlayer activePlayer1;
@@ -148,8 +132,9 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
             case Constants.SWIPE_BOTTOM:
                 setMode(MODE_OVERVIEW, getCurrentMode());
                 break;
+
             case Constants.SWIPE_TOP:
-                setMode(MODE_HISTORY, getCurrentMode());
+                displayBottomSheetsHistory();
                 break;
         }
     }
@@ -262,30 +247,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
 
             case R.id.drawerItemAbout:
                 mPlayerDrawerLayout.closeDrawers();
-                break;
-        }
-    }
-
-    public void onClickHistory(View view) {
-        switch (view.getId()) {
-            case R.id.textViewP1Name:
-                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 0).apply();
-                setMode(MODE_PLAYING, getCurrentMode());
-                break;
-
-            case R.id.textViewP2Name:
-                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 1).apply();
-                setMode(MODE_PLAYING, getCurrentMode());
-                break;
-
-            case R.id.textViewP3Name:
-                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 2).apply();
-                setMode(MODE_PLAYING, getCurrentMode());
-                break;
-
-            case R.id.textViewP4Name:
-                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 3).apply();
-                setMode(MODE_PLAYING, getCurrentMode());
                 break;
         }
     }
@@ -431,17 +392,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
                 break;
 
             case R.id.action_history:
-                List<ActivePlayer> activePlayers = new ArrayList<>();
-                for (int i = 0; i < totalPlayers; i++)
-                    activePlayers.add(getActivePlayer(i));
-
-                DisplayMetrics displaymetrics = new DisplayMetrics();
-                getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-
-                HistoryBottomSheet bottomSheetDialogFragment = new HistoryBottomSheet();
-                bottomSheetDialogFragment.setBottomSheetsHeight((int) (displaymetrics.heightPixels * 0.4));
-                bottomSheetDialogFragment.setPlayers(tabLayout.getSelectedTabPosition(), activePlayers);
-                bottomSheetDialogFragment.show(getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
+                displayBottomSheetsHistory();
 
 //                if (!isInAnimation) {
 //                    if (getCurrentMode() == MODE_PLAYING)
@@ -554,7 +505,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
 
         if (isValidGame()) {
             createOverviewLayout();
-            createHistoryLayout();
 
             activePlayer1 = Utils.loadPlayerFromSharedPreferences(this, 0);
             activePlayer2 = Utils.loadPlayerFromSharedPreferences(this, 1);
@@ -667,36 +617,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
         }
         if (drawerItemTextHome != null) {
             drawerItemTextHome.setTextColor(ContextCompat.getColor(this, R.color.accent_color));
-        }
-    }
-
-    private void createHistoryLayout() {
-        viewHistory = (FrameLayout) findViewById(R.id.fragmentHistory);
-        if (totalPlayers == 2)
-            getLayoutInflater().inflate(R.layout.fragment_history_2p, viewHistory, true);
-        else if (totalPlayers == 3)
-            getLayoutInflater().inflate(R.layout.fragment_history_3p, viewHistory, true);
-        else if (totalPlayers == 4)
-            getLayoutInflater().inflate(R.layout.fragment_history_4p, viewHistory, true);
-
-        if (totalPlayers >= 1) {
-            history_P1Name = (TextView) findViewById(R.id.textViewP1Name);
-            history_listViewP1 = (ListView) findViewById(R.id.listViewP1);
-        }
-
-        if (totalPlayers >= 2) {
-            history_P2Name = (TextView) findViewById(R.id.textViewP2Name);
-            history_listViewP2 = (ListView) findViewById(R.id.listViewP2);
-        }
-
-        if (totalPlayers >= 3) {
-            history_P3Name = (TextView) findViewById(R.id.textViewP3Name);
-            history_listViewP3 = (ListView) findViewById(R.id.listViewP3);
-        }
-
-        if (totalPlayers >= 4) {
-            history_P4Name = (TextView) findViewById(R.id.textViewP4Name);
-            history_listViewP4 = (ListView) findViewById(R.id.listViewP4);
         }
     }
 
@@ -855,6 +775,20 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
         mActionBar.setHomeButtonEnabled(true);
     }
 
+    private void displayBottomSheetsHistory() {
+        List<ActivePlayer> activePlayers = new ArrayList<>();
+        for (int i = 0; i < totalPlayers; i++)
+            activePlayers.add(getActivePlayer(i));
+
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+
+        HistoryBottomSheet bottomSheetDialogFragment = new HistoryBottomSheet();
+        bottomSheetDialogFragment.setBottomSheetsHeight((int) (displaymetrics.heightPixels * 0.4));
+        bottomSheetDialogFragment.setPlayers(tabLayout.getSelectedTabPosition(), activePlayers);
+        bottomSheetDialogFragment.show(getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
+    }
+
     private ActivePlayer getActivePlayer(int position) {
         switch (position) {
             case 0:
@@ -877,8 +811,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
             return MODE_OVERVIEW;
         else if (viewPager.getVisibility() == View.VISIBLE)
             return MODE_PLAYING;
-        else if (viewHistory.getVisibility() == View.VISIBLE)
-            return MODE_HISTORY;
         return -1;
     }
 
@@ -1135,82 +1067,17 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
                 setActionBarColor(getResources().getIntArray(R.array.edh_default)[0]);
 
                 viewNewGame.setVisibility(View.VISIBLE);
-                if (viewHistory != null)
-                    viewHistory.setVisibility(View.GONE);
                 if (viewOverview != null)
                     viewOverview.setVisibility(View.GONE);
                 viewPager.setVisibility(View.GONE);
                 tabLayout.setVisibility(View.GONE);
                 break;
 
-            case MODE_HISTORY:
-                if (isValidGame()) {
-                    updateHistoryLayout();
-
-                    if (previousMode == MODE_OVERVIEW) {
-                        setMode(MODE_PLAYING, MODE_OVERVIEW);
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                setMode(MODE_HISTORY, MODE_PLAYING);
-                            }
-                        }, 600);
-                    } else if (previousMode == MODE_PLAYING) {
-                        isInAnimation = true;
-
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                viewHistory.startAnimation(slide_in_bottom);
-                                viewPager.startAnimation(slide_out_top);
-                                tabLayout.setVisibility(View.GONE);
-                            }
-                        }, 500);
-
-                        slide_in_bottom.setAnimationListener(new Animation.AnimationListener() {
-                            public void onAnimationEnd(Animation animation) {
-                                setActionBarColor(getResources().getIntArray(R.array.edh_default)[0]);
-
-                                viewNewGame.setVisibility(View.GONE);
-                                viewHistory.setVisibility(View.VISIBLE);
-                                viewOverview.setVisibility(View.GONE);
-                                viewPager.setVisibility(View.GONE);
-                                tabLayout.setVisibility(View.GONE);
-
-                                isInAnimation = false;
-                            }
-
-                            public void onAnimationRepeat(Animation animation) {
-                            }
-
-                            public void onAnimationStart(Animation animation) {
-                            }
-                        });
-
-
-                    } else if (previousMode == MODE_INVALID) {
-                        viewNewGame.setVisibility(View.GONE);
-                        viewHistory.setVisibility(View.VISIBLE);
-                        viewOverview.setVisibility(View.GONE);
-                        viewPager.setVisibility(View.GONE);
-                        tabLayout.setVisibility(View.GONE);
-                    }
-                }
-                break;
-
             case MODE_OVERVIEW:
                 if (isValidGame()) {
                     updateOverviewLayout();
 
-                    if (previousMode == MODE_HISTORY) {
-                        setMode(MODE_PLAYING, MODE_HISTORY);
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                setMode(MODE_OVERVIEW, MODE_PLAYING);
-                            }
-                        }, 700);
-                    } else if (previousMode == MODE_PLAYING) {
+                    if (previousMode == MODE_PLAYING) {
                         isInAnimation = true;
 
                         viewOverview.startAnimation(slide_in_top);
@@ -1222,7 +1089,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
                                 setActionBarColor(getResources().getIntArray(R.array.edh_default)[0]);
 
                                 viewNewGame.setVisibility(View.GONE);
-                                viewHistory.setVisibility(View.GONE);
                                 viewOverview.setVisibility(View.VISIBLE);
                                 viewPager.setVisibility(View.GONE);
                                 tabLayout.setVisibility(View.GONE);
@@ -1238,7 +1104,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
                         });
                     } else if (previousMode == MODE_INVALID) {
                         viewNewGame.setVisibility(View.GONE);
-                        viewHistory.setVisibility(View.GONE);
                         viewOverview.setVisibility(View.VISIBLE);
                         viewPager.setVisibility(View.GONE);
                         tabLayout.setVisibility(View.GONE);
@@ -1262,7 +1127,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
                     viewPager.setCurrentItem(mSharedPreferences.getInt(Constants.CURRENT_VIEW_TAB, 0), false);
 
                     viewNewGame.setVisibility(View.GONE);
-                    viewHistory.setVisibility(View.GONE);
                     viewOverview.setVisibility(View.GONE);
                     viewPager.setVisibility(View.VISIBLE);
                     tabLayout.setVisibility(View.VISIBLE);
@@ -1281,9 +1145,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
                     if (previousMode == MODE_OVERVIEW) {
                         animationIn = slide_in_bottom;
                         viewOverview.startAnimation(slide_out_top);
-                    } else if (previousMode == MODE_HISTORY) {
-                        animationIn = slide_in_top;
-                        viewHistory.startAnimation(slide_out_bottom);
                     }
 
                     assert viewPager != null;
@@ -1302,7 +1163,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
                             setActionBarColor(color);
 
                             viewNewGame.setVisibility(View.GONE);
-                            viewHistory.setVisibility(View.GONE);
                             viewOverview.setVisibility(View.GONE);
                             viewPager.setVisibility(View.VISIBLE);
                             tabLayout.setVisibility(View.VISIBLE);
@@ -1479,51 +1339,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
                 }
             });
             chronometer.start();
-        }
-    }
-
-    private void updateHistoryLayout() {
-        history_P1Name.setText(activePlayer1.getPlayerDeck().getDeckOwnerName());
-        history_P1Name.setTextColor(activePlayer1.getPlayerDeck().getDeckShieldColor()[0]);
-        String latestSavedLifePreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString(Constants.PLAYER_HISTORY_LIFE + activePlayer1.getPlayerTag(), "40");
-        String latestSavedEDHPreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString(Constants.PLAYER_EDH_PREFIX + activePlayer1.getPlayerTag(), "0@0@0@0");
-        if (!latestSavedLifePreferences.isEmpty() && !latestSavedEDHPreferences.isEmpty()) {
-            String[] latestSavedLifeArray = latestSavedLifePreferences.split("_");
-            String[] latestSavedEDHArray = latestSavedEDHPreferences.split("_");
-            history_listViewP1.setAdapter(new Utils.customHistoryListViewAdapter(this.getBaseContext(), totalPlayers, latestSavedLifeArray, latestSavedEDHArray, activePlayer1.getPlayerDeck().getDeckShieldColor()[0]));
-        }
-
-        history_P2Name.setText(activePlayer2.getPlayerDeck().getDeckOwnerName());
-        history_P2Name.setTextColor(activePlayer2.getPlayerDeck().getDeckShieldColor()[0]);
-        latestSavedLifePreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString(Constants.PLAYER_HISTORY_LIFE + activePlayer2.getPlayerTag(), "0");
-        latestSavedEDHPreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString(Constants.PLAYER_EDH_PREFIX + activePlayer2.getPlayerTag(), "0@0@0@0");
-        if (!latestSavedLifePreferences.isEmpty() && !latestSavedEDHPreferences.isEmpty()) {
-            String[] latestSavedLifeArray = latestSavedLifePreferences.split("_");
-            String[] latestSavedEDHArray = latestSavedEDHPreferences.split("_");
-            history_listViewP2.setAdapter(new Utils.customHistoryListViewAdapter(this.getBaseContext(), totalPlayers, latestSavedLifeArray, latestSavedEDHArray, activePlayer2.getPlayerDeck().getDeckShieldColor()[0]));
-        }
-        if (totalPlayers >= 3) {
-            history_P3Name.setText(activePlayer3.getPlayerDeck().getDeckOwnerName());
-            history_P3Name.setTextColor(activePlayer3.getPlayerDeck().getDeckShieldColor()[0]);
-            latestSavedLifePreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString(Constants.PLAYER_HISTORY_LIFE + activePlayer3.getPlayerTag(), "0");
-            latestSavedEDHPreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString(Constants.PLAYER_EDH_PREFIX + activePlayer3.getPlayerTag(), "0@0@0@0");
-            if (!latestSavedLifePreferences.isEmpty() && !latestSavedEDHPreferences.isEmpty()) {
-                String[] latestSavedLifeArray = latestSavedLifePreferences.split("_");
-                String[] latestSavedEDHArray = latestSavedEDHPreferences.split("_");
-                history_listViewP3.setAdapter(new Utils.customHistoryListViewAdapter(this.getBaseContext(), totalPlayers, latestSavedLifeArray, latestSavedEDHArray, activePlayer3.getPlayerDeck().getDeckShieldColor()[0]));
-            }
-        }
-
-        if (totalPlayers >= 4) {
-            history_P4Name.setText(activePlayer4.getPlayerDeck().getDeckOwnerName());
-            history_P4Name.setTextColor(activePlayer4.getPlayerDeck().getDeckShieldColor()[0]);
-            latestSavedLifePreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString(Constants.PLAYER_HISTORY_LIFE + activePlayer4.getPlayerTag(), "0");
-            latestSavedEDHPreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString(Constants.PLAYER_EDH_PREFIX + activePlayer4.getPlayerTag(), "0@0@0@0");
-            if (!latestSavedLifePreferences.isEmpty() && !latestSavedEDHPreferences.isEmpty()) {
-                String[] latestSavedLifeArray = latestSavedLifePreferences.split("_");
-                String[] latestSavedEDHArray = latestSavedEDHPreferences.split("_");
-                history_listViewP4.setAdapter(new Utils.customHistoryListViewAdapter(this.getBaseContext(), totalPlayers, latestSavedLifeArray, latestSavedEDHArray, activePlayer4.getPlayerDeck().getDeckShieldColor()[0]));
-            }
         }
     }
 
