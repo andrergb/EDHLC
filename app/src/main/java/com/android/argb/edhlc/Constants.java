@@ -9,12 +9,6 @@ public class Constants {
     public static final String PHASE5_TIMER = "PHASE5_TIMER";
     public static final int SWIPE_BOTTOM = 0;
     public static final int SWIPE_TOP = 1;
-    public static String INITIAL_PLAYER_LIFE_STRING = "40";
-    //    public static int INITIAL_PLAYER_LIFE_INT = 40;
-//    public static int INITIAL_EDH_DAMAGE_INT = 0;
-//    public static int MIN_EDH_DAMAGE_INT = 0;
-//    public static int MAX_EDH_DAMAGE_INT = 21;
-//    public static String TOTAL_PLAYERS = "4";
     public static String SCREEN_ON = "SCREEN_ON";
     public static String CURRENT_PAGE = "CURRENT_PAGE";
     public static String CURRENT_PAGE_TURN = "CURRENT_PAGE_TURN";
@@ -35,17 +29,18 @@ public class Constants {
     public static String CURRENT_GAME_PLAYER_EDH3 = "CURRENT_GAME_PLAYER_EDH3";
     public static String CURRENT_GAME_PLAYER_EDH4 = "CURRENT_GAME_PLAYER_EDH4";
     public static String CURRENT_GAME_PLAYER_COLOR1 = "CURRENT_GAME_PLAYER_COLOR1";
-//    public static String PLAYER_COLOR2 = "PLAYER_COLOR2";
-//
-//    public static String BROADCAST_INTENT = "broadcast_intent_filter_new_game";
-//    public static String BROADCAST_INTENT_FILTER_DECK_CRUD = "broadcast_intent_filter_deck_crud";
-//    public static String BROADCAST_INTENT_FILTER_PLAYER_CRUD = "broadcast_intent_filter_player_crud";
-//
-//    public static String BROADCAST_MESSAGE_RANDOM_PLAYER_OPTION = "broadcast_message_random_player_option";
-//    public static String BROADCAST_MESSAGE_NEW_GAME_OPTION = "broadcast_message_new_game_option";
-//    public static String BROADCAST_MESSAGE_NEW_GAME_PLAYERS = "broadcast_message_new_game_players";
-//    public static String BROADCAST_MESSAGE_NEW_GAME_DECKS = "broadcast_message_new_game_decks";
-//    public static String BROADCAST_MESSAGE_NEW_GAME_COLOR = "broadcast_message_new_game_color";
 
     public static String[] MONTH = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+
+    public static int LIFE_TEXT_SIZE_2_DIGITS_HIGHLIGHT = 120;
+    public static int LIFE_TEXT_SIZE_2_DIGITS = 100;
+    public static int LIFE_TEXT_SIZE_3_DIGITS_HIGHLIGHT = 100;
+    public static int LIFE_TEXT_SIZE_3_DIGITS = 60;
+
+    public static String INITIAL_PLAYER_LIFE = "40";
+
+    public static int MAX_LIFE = 999;
+    public static int MIN_LIFE = -999;
+    public static int MAX_EDH = 21;
+    public static int MIN_EDH = 0;
 }

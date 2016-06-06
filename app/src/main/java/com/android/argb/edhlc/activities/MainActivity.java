@@ -126,6 +126,12 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
     private ProgressBar progressRandomBar;
     private TextView textViewDiceResult;
 
+    public float getPlayerLifeTextSize(ActivePlayer player, int limit) {
+        return (player.getPlayerLife() <= 99 && player.getPlayerLife() >= -9) ?
+                (totalPlayers == limit ? Constants.LIFE_TEXT_SIZE_2_DIGITS_HIGHLIGHT : Constants.LIFE_TEXT_SIZE_2_DIGITS) :
+                (totalPlayers == limit ? Constants.LIFE_TEXT_SIZE_3_DIGITS_HIGHLIGHT : Constants.LIFE_TEXT_SIZE_3_DIGITS);
+    }
+
     @Override
     public void iSwipe(int direction) {
         switch (direction) {
@@ -268,19 +274,23 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
                 break;
             case R.id.lifePositiveP1:
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 0).apply();
-                activePlayer1.setPlayerLife(activePlayer1.getPlayerLife() + 1);
-                overview_TextViewP1Life.setText(String.valueOf(activePlayer1.getPlayerLife()));
-                overview_TextViewP1Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (activePlayer1.getPlayerLife() <= 99 && activePlayer1.getPlayerLife() >= -99) ? (totalPlayers == 2 ? 120 : 100) : (totalPlayers == 2 ? 100 : 80));
-                updateOverviewDethroneIcon();
-                historyHandler(activePlayer1);
+                if (activePlayer1.getPlayerLife() < Constants.MAX_LIFE) {
+                    activePlayer1.setPlayerLife(activePlayer1.getPlayerLife() + 1);
+                    overview_TextViewP1Life.setText(String.valueOf(activePlayer1.getPlayerLife()));
+                    overview_TextViewP1Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (getPlayerLifeTextSize(activePlayer1, 2)));
+                    updateOverviewDethroneIcon();
+                    historyHandler(activePlayer1);
+                }
                 break;
             case R.id.lifeNegativeP1:
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 0).apply();
-                activePlayer1.setPlayerLife(activePlayer1.getPlayerLife() - 1);
-                overview_TextViewP1Life.setText(String.valueOf(activePlayer1.getPlayerLife()));
-                overview_TextViewP1Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (activePlayer1.getPlayerLife() <= 99 && activePlayer1.getPlayerLife() >= -99) ? (totalPlayers == 2 ? 120 : 100) : (totalPlayers == 2 ? 100 : 80));
-                updateOverviewDethroneIcon();
-                historyHandler(activePlayer1);
+                if (activePlayer1.getPlayerLife() > Constants.MIN_LIFE) {
+                    activePlayer1.setPlayerLife(activePlayer1.getPlayerLife() - 1);
+                    overview_TextViewP1Life.setText(String.valueOf(activePlayer1.getPlayerLife()));
+                    overview_TextViewP1Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (getPlayerLifeTextSize(activePlayer1, 2)));
+                    updateOverviewDethroneIcon();
+                    historyHandler(activePlayer1);
+                }
                 break;
 
             // PLAYER 2
@@ -293,19 +303,23 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
                 break;
             case R.id.lifePositiveP2:
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 1).apply();
-                activePlayer2.setPlayerLife(activePlayer2.getPlayerLife() + 1);
-                overview_TextViewP2Life.setText(String.valueOf(activePlayer2.getPlayerLife()));
-                overview_TextViewP2Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (activePlayer2.getPlayerLife() <= 99 && activePlayer2.getPlayerLife() >= -99) ? (totalPlayers == 2 ? 120 : 100) : (totalPlayers == 2 ? 100 : 80));
-                updateOverviewDethroneIcon();
-                historyHandler(activePlayer2);
+                if (activePlayer2.getPlayerLife() < Constants.MAX_LIFE) {
+                    activePlayer2.setPlayerLife(activePlayer2.getPlayerLife() + 1);
+                    overview_TextViewP2Life.setText(String.valueOf(activePlayer2.getPlayerLife()));
+                    overview_TextViewP2Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (getPlayerLifeTextSize(activePlayer2, 2)));
+                    updateOverviewDethroneIcon();
+                    historyHandler(activePlayer2);
+                }
                 break;
             case R.id.lifeNegativeP2:
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 1).apply();
-                activePlayer2.setPlayerLife(activePlayer2.getPlayerLife() - 1);
-                overview_TextViewP2Life.setText(String.valueOf(activePlayer2.getPlayerLife()));
-                overview_TextViewP2Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (activePlayer2.getPlayerLife() <= 99 && activePlayer2.getPlayerLife() >= -99) ? (totalPlayers == 2 ? 120 : 100) : (totalPlayers == 2 ? 100 : 80));
-                updateOverviewDethroneIcon();
-                historyHandler(activePlayer2);
+                if (activePlayer2.getPlayerLife() > Constants.MIN_LIFE) {
+                    activePlayer2.setPlayerLife(activePlayer2.getPlayerLife() - 1);
+                    overview_TextViewP2Life.setText(String.valueOf(activePlayer2.getPlayerLife()));
+                    overview_TextViewP2Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (getPlayerLifeTextSize(activePlayer2, 2)));
+                    updateOverviewDethroneIcon();
+                    historyHandler(activePlayer2);
+                }
                 break;
 
             // PLAYER 3
@@ -318,19 +332,23 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
                 break;
             case R.id.lifePositiveP3:
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 2).apply();
-                activePlayer3.setPlayerLife(activePlayer3.getPlayerLife() + 1);
-                overview_TextViewP3Life.setText(String.valueOf(activePlayer3.getPlayerLife()));
-                overview_TextViewP3Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (activePlayer3.getPlayerLife() <= 99 && activePlayer3.getPlayerLife() >= -99) ? (totalPlayers == 3 ? 120 : 100) : (totalPlayers == 3 ? 100 : 80));
-                updateOverviewDethroneIcon();
-                historyHandler(activePlayer3);
+                if (activePlayer3.getPlayerLife() < Constants.MAX_LIFE) {
+                    activePlayer3.setPlayerLife(activePlayer3.getPlayerLife() + 1);
+                    overview_TextViewP3Life.setText(String.valueOf(activePlayer3.getPlayerLife()));
+                    overview_TextViewP3Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (getPlayerLifeTextSize(activePlayer3, 3)));
+                    updateOverviewDethroneIcon();
+                    historyHandler(activePlayer3);
+                }
                 break;
             case R.id.lifeNegativeP3:
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 2).apply();
-                activePlayer3.setPlayerLife(activePlayer3.getPlayerLife() - 1);
-                overview_TextViewP3Life.setText(String.valueOf(activePlayer3.getPlayerLife()));
-                overview_TextViewP3Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (activePlayer3.getPlayerLife() <= 99 && activePlayer3.getPlayerLife() >= -99) ? (totalPlayers == 3 ? 120 : 100) : (totalPlayers == 3 ? 100 : 80));
-                updateOverviewDethroneIcon();
-                historyHandler(activePlayer3);
+                if (activePlayer3.getPlayerLife() > Constants.MIN_LIFE) {
+                    activePlayer3.setPlayerLife(activePlayer3.getPlayerLife() - 1);
+                    overview_TextViewP3Life.setText(String.valueOf(activePlayer3.getPlayerLife()));
+                    overview_TextViewP3Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (getPlayerLifeTextSize(activePlayer3, 3)));
+                    updateOverviewDethroneIcon();
+                    historyHandler(activePlayer3);
+                }
                 break;
 
             // PLAYER 4
@@ -343,19 +361,23 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
                 break;
             case R.id.lifePositiveP4:
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 3).apply();
-                activePlayer4.setPlayerLife(activePlayer4.getPlayerLife() + 1);
-                overview_TextViewP4Life.setText(String.valueOf(activePlayer4.getPlayerLife()));
-                overview_TextViewP4Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (activePlayer4.getPlayerLife() <= 99 && activePlayer4.getPlayerLife() >= -99) ? 100 : 80);
-                updateOverviewDethroneIcon();
-                historyHandler(activePlayer4);
+                if (activePlayer4.getPlayerLife() < Constants.MAX_LIFE) {
+                    activePlayer4.setPlayerLife(activePlayer4.getPlayerLife() + 1);
+                    overview_TextViewP4Life.setText(String.valueOf(activePlayer4.getPlayerLife()));
+                    overview_TextViewP4Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (getPlayerLifeTextSize(activePlayer4, 3)));
+                    updateOverviewDethroneIcon();
+                    historyHandler(activePlayer4);
+                }
                 break;
             case R.id.lifeNegativeP4:
                 getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 3).apply();
-                activePlayer4.setPlayerLife(activePlayer4.getPlayerLife() - 1);
-                overview_TextViewP4Life.setText(String.valueOf(activePlayer4.getPlayerLife()));
-                overview_TextViewP4Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (activePlayer4.getPlayerLife() <= 99 && activePlayer4.getPlayerLife() >= -99) ? 100 : 80);
-                updateOverviewDethroneIcon();
-                historyHandler(activePlayer4);
+                if (activePlayer4.getPlayerLife() > Constants.MIN_LIFE) {
+                    activePlayer4.setPlayerLife(activePlayer4.getPlayerLife() - 1);
+                    overview_TextViewP4Life.setText(String.valueOf(activePlayer4.getPlayerLife()));
+                    overview_TextViewP4Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (getPlayerLifeTextSize(activePlayer4, 3)));
+                    updateOverviewDethroneIcon();
+                    historyHandler(activePlayer4);
+                }
                 break;
         }
     }
@@ -844,7 +866,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
                     public void run() {
                         try {
                             int latestSavedLife;
-                            String latestSavedLifePreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString(Constants.PLAYER_HISTORY_LIFE + playerTag, Constants.INITIAL_PLAYER_LIFE_STRING);
+                            String latestSavedLifePreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString(Constants.PLAYER_HISTORY_LIFE + playerTag, Constants.INITIAL_PLAYER_LIFE);
                             if (!latestSavedLifePreferences.isEmpty()) {
                                 String[] latestSavedLifeArray = latestSavedLifePreferences.split("_");
                                 latestSavedLife = Integer.valueOf(latestSavedLifeArray[latestSavedLifeArray.length - 1]);
@@ -867,7 +889,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
                             String currentEdh = player.getPlayerEDH1() + "@" + player.getPlayerEDH2() + "@" + player.getPlayerEDH3() + "@" + player.getPlayerEDH4();
 
                             if ((currentLife - latestSavedLife) != 0 || !currentEdh.equalsIgnoreCase(latestSavedEDH)) {
-                                String lifeToBeSaved = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString(Constants.PLAYER_HISTORY_LIFE + playerTag, Constants.INITIAL_PLAYER_LIFE_STRING);
+                                String lifeToBeSaved = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString(Constants.PLAYER_HISTORY_LIFE + playerTag, Constants.INITIAL_PLAYER_LIFE);
                                 lifeToBeSaved = lifeToBeSaved + "_" + currentLife;
                                 getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString(Constants.PLAYER_HISTORY_LIFE + playerTag, lifeToBeSaved).apply();
 
@@ -1477,7 +1499,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
             if (activePlayer1.getPlayerIsAlive()) overview_TextViewP1Name.setTextColor(activePlayer1.getPlayerDeck().getDeckShieldColor()[0]);
             else overview_TextViewP1Name.setTextColor(Color.LTGRAY);
             overview_TextViewP1Life.setText(String.valueOf(activePlayer1.getPlayerLife()));
-            overview_TextViewP1Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (activePlayer1.getPlayerLife() <= 99 && activePlayer1.getPlayerLife() >= -99) ? (totalPlayers == 2 ? 120 : 100) : (totalPlayers == 2 ? 100 : 80));
+            overview_TextViewP1Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (getPlayerLifeTextSize(activePlayer1, 2)));
             overview_TextViewP1Life.setEnabled(activePlayer1.getPlayerIsAlive());
             if (activePlayer1.getPlayerIsAlive()) overview_TextViewP1Life.setTextColor(activePlayer1.getPlayerDeck().getDeckShieldColor()[0]);
             else overview_TextViewP1Life.setTextColor(Color.LTGRAY);
@@ -1503,7 +1525,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
             if (activePlayer2.getPlayerIsAlive()) overview_TextViewP2Name.setTextColor(activePlayer2.getPlayerDeck().getDeckShieldColor()[0]);
             else overview_TextViewP2Name.setTextColor(Color.LTGRAY);
             overview_TextViewP2Life.setText(String.valueOf(activePlayer2.getPlayerLife()));
-            overview_TextViewP2Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (activePlayer2.getPlayerLife() <= 99 && activePlayer2.getPlayerLife() >= -99) ? (totalPlayers == 2 ? 120 : 100) : (totalPlayers == 2 ? 100 : 80));
+            overview_TextViewP2Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (getPlayerLifeTextSize(activePlayer2, 2)));
             overview_TextViewP2Life.setEnabled(activePlayer2.getPlayerIsAlive());
             if (activePlayer2.getPlayerIsAlive()) overview_TextViewP2Life.setTextColor(activePlayer2.getPlayerDeck().getDeckShieldColor()[0]);
             else overview_TextViewP2Life.setTextColor(Color.LTGRAY);
@@ -1529,7 +1551,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
             if (activePlayer3.getPlayerIsAlive()) overview_TextViewP3Name.setTextColor(activePlayer3.getPlayerDeck().getDeckShieldColor()[0]);
             else overview_TextViewP3Name.setTextColor(Color.LTGRAY);
             overview_TextViewP3Life.setText(String.valueOf(activePlayer3.getPlayerLife()));
-            overview_TextViewP3Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (activePlayer3.getPlayerLife() <= 99 && activePlayer3.getPlayerLife() >= -99) ? (totalPlayers == 3 ? 120 : 100) : (totalPlayers == 3 ? 100 : 80));
+            overview_TextViewP3Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (getPlayerLifeTextSize(activePlayer3, 3)));
             overview_TextViewP3Life.setEnabled(activePlayer3.getPlayerIsAlive());
             if (activePlayer3.getPlayerIsAlive()) overview_TextViewP3Life.setTextColor(activePlayer3.getPlayerDeck().getDeckShieldColor()[0]);
             else overview_TextViewP3Life.setTextColor(Color.LTGRAY);
@@ -1553,7 +1575,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
             if (activePlayer4.getPlayerIsAlive()) overview_TextViewP4Name.setTextColor(activePlayer4.getPlayerDeck().getDeckShieldColor()[0]);
             else overview_TextViewP4Name.setTextColor(Color.LTGRAY);
             overview_TextViewP4Life.setText(String.valueOf(activePlayer4.getPlayerLife()));
-            overview_TextViewP4Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (activePlayer4.getPlayerLife() <= 99 && activePlayer4.getPlayerLife() >= -99) ? 100 : 80);
+            overview_TextViewP4Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (getPlayerLifeTextSize(activePlayer4, 3)));
             overview_TextViewP4Life.setEnabled(activePlayer4.getPlayerIsAlive());
             if (activePlayer4.getPlayerIsAlive()) overview_TextViewP4Life.setTextColor(activePlayer4.getPlayerDeck().getDeckShieldColor()[0]);
             else overview_TextViewP4Life.setTextColor(Color.LTGRAY);

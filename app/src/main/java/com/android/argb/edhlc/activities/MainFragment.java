@@ -33,7 +33,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     private static final String ARG_PLAYER_NAME = "ARG_PLAYER_NAME";
     private static final String ARG_DECK_NAME = "ARG_DECK_NAME";
     private static final String ARG_DECK_COLOR = "ARG_DECK_COLOR";
-    private static final String ARG_IS_ALIVE = "ARG_IS_ALIVE";
+    //    private static final String ARG_IS_ALIVE = "ARG_IS_ALIVE";
     private static final String ARG_LIFE = "ARG_LIFE";
     private static final String ARG_EDH1 = "ARG_EDH1";
     private static final String ARG_EDH2 = "ARG_EDH2";
@@ -76,7 +76,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             args.putString(ARG_PLAYER_NAME, activePlayer.getPlayerDeck().getDeckOwnerName());
             args.putString(ARG_DECK_NAME, activePlayer.getPlayerDeck().getDeckName());
             args.putInt(ARG_DECK_COLOR, activePlayer.getPlayerDeck().getDeckShieldColor()[0]);
-            args.putBoolean(ARG_IS_ALIVE, activePlayer.getPlayerIsAlive());
+//            args.putBoolean(ARG_IS_ALIVE, activePlayer.getPlayerIsAlive());
             args.putInt(ARG_LIFE, activePlayer.getPlayerLife());
             args.putInt(ARG_EDH1, activePlayer.getPlayerEDH1());
             args.putInt(ARG_EDH2, activePlayer.getPlayerEDH2());
@@ -97,7 +97,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         ActivePlayer auxPlayer = new ActivePlayer();
         if (args != null) {
             auxPlayer.setPlayerDeck(new Deck(args.getString(ARG_PLAYER_NAME), args.getString(ARG_DECK_NAME), new int[]{args.getInt(ARG_DECK_COLOR)}));
-            auxPlayer.setPlayerIsAlive(args.getBoolean(ARG_IS_ALIVE));
+//            auxPlayer.setPlayerIsAlive(args.getBoolean(ARG_IS_ALIVE));
             auxPlayer.setPlayerLife(args.getInt(ARG_LIFE));
             auxPlayer.setPlayerEDH1(args.getInt(ARG_EDH1));
             auxPlayer.setPlayerEDH2(args.getInt(ARG_EDH2));
@@ -119,10 +119,15 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         alertDialogBuilder.setPositiveButton("Ok",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        String tempLife = userInput.getText().toString();
+                        String stringLife = userInput.getText().toString();
                         try {
-                            if (!tempLife.equalsIgnoreCase("")) {
-                                getArguments().putInt(ARG_LIFE, Integer.valueOf(tempLife));
+                            if (!stringLife.equalsIgnoreCase("")) {
+                                int intLife = Integer.valueOf(stringLife);
+                                if (intLife > Constants.MAX_LIFE)
+                                    intLife = Constants.MAX_LIFE;
+                                else if (intLife < Constants.MIN_LIFE)
+                                    intLife = Constants.MIN_LIFE;
+                                getArguments().putInt(ARG_LIFE, intLife);
                                 setLife(getArguments().getInt(ARG_LIFE));
 
                                 onUpdateDataInterface.iUpdateActivePlayer(argsToPlayer(getArguments()));
@@ -141,17 +146,17 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                     }
                 }
         );
-        alertDialogBuilder.setNeutralButton("Lose Game",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        getArguments().putBoolean(ARG_IS_ALIVE, false);
-
-                        onUpdateDataInterface.iUpdateActivePlayer(argsToPlayer(getArguments()));
-                        onUpdateDataInterface.iUpdateDethrone();
-                        onUpdateDataInterface.iUpdateHistory();
-                    }
-                }
-        );
+//        alertDialogBuilder.setNeutralButton("Lose Game",
+//                new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int id) {
+//                        getArguments().putBoolean(ARG_IS_ALIVE, false);
+//
+//                        onUpdateDataInterface.iUpdateActivePlayer(argsToPlayer(getArguments()));
+//                        onUpdateDataInterface.iUpdateDethrone();
+//                        onUpdateDataInterface.iUpdateHistory();
+//                    }
+//                }
+//        );
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
@@ -177,17 +182,21 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.lifePositive:
-                getArguments().putInt(ARG_LIFE, (getArguments().getInt(ARG_LIFE) + 1));
-                setLife(getArguments().getInt(ARG_LIFE));
+                if (getArguments().getInt(ARG_LIFE) < Constants.MAX_LIFE) {
+                    getArguments().putInt(ARG_LIFE, (getArguments().getInt(ARG_LIFE) + 1));
+                    setLife(getArguments().getInt(ARG_LIFE));
+                }
                 break;
 
             case R.id.lifeNegative:
-                getArguments().putInt(ARG_LIFE, (getArguments().getInt(ARG_LIFE) - 1));
-                setLife(getArguments().getInt(ARG_LIFE));
+                if (getArguments().getInt(ARG_LIFE) > Constants.MIN_LIFE) {
+                    getArguments().putInt(ARG_LIFE, (getArguments().getInt(ARG_LIFE) - 1));
+                    setLife(getArguments().getInt(ARG_LIFE));
+                }
                 break;
 
             case R.id.positiveEDH1:
-                if (getArguments().getInt(ARG_EDH1) < 21) {
+                if (getArguments().getInt(ARG_EDH1) < Constants.MAX_EDH) {
                     getArguments().putInt(ARG_LIFE, getArguments().getInt(ARG_LIFE) - 1);
                     getArguments().putInt(ARG_EDH1, getArguments().getInt(ARG_EDH1) + 1);
                     setLife(getArguments().getInt(ARG_LIFE));
@@ -196,7 +205,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.negativeEDH1:
-                if (getArguments().getInt(ARG_EDH1) > 0) {
+                if (getArguments().getInt(ARG_EDH1) > Constants.MIN_EDH) {
                     getArguments().putInt(ARG_LIFE, getArguments().getInt(ARG_LIFE) + 1);
                     getArguments().putInt(ARG_EDH1, getArguments().getInt(ARG_EDH1) - 1);
                     setLife(getArguments().getInt(ARG_LIFE));
@@ -205,7 +214,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.positiveEDH2:
-                if (getArguments().getInt(ARG_EDH2) < 21) {
+                if (getArguments().getInt(ARG_EDH2) < Constants.MAX_EDH) {
                     getArguments().putInt(ARG_LIFE, getArguments().getInt(ARG_LIFE) - 1);
                     getArguments().putInt(ARG_EDH2, getArguments().getInt(ARG_EDH2) + 1);
                     setLife(getArguments().getInt(ARG_LIFE));
@@ -214,7 +223,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.negativeEDH2:
-                if (getArguments().getInt(ARG_EDH2) > 0) {
+                if (getArguments().getInt(ARG_EDH2) > Constants.MIN_EDH) {
                     getArguments().putInt(ARG_LIFE, getArguments().getInt(ARG_LIFE) + 1);
                     getArguments().putInt(ARG_EDH2, getArguments().getInt(ARG_EDH2) - 1);
                     setLife(getArguments().getInt(ARG_LIFE));
@@ -223,7 +232,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.positiveEDH3:
-                if (getArguments().getInt(ARG_EDH3) < 21) {
+                if (getArguments().getInt(ARG_EDH3) < Constants.MAX_EDH) {
                     getArguments().putInt(ARG_LIFE, getArguments().getInt(ARG_LIFE) - 1);
                     getArguments().putInt(ARG_EDH3, getArguments().getInt(ARG_EDH3) + 1);
                     setLife(getArguments().getInt(ARG_LIFE));
@@ -232,7 +241,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.negativeEDH3:
-                if (getArguments().getInt(ARG_EDH3) > 0) {
+                if (getArguments().getInt(ARG_EDH3) > Constants.MIN_EDH) {
                     getArguments().putInt(ARG_LIFE, getArguments().getInt(ARG_LIFE) + 1);
                     getArguments().putInt(ARG_EDH3, getArguments().getInt(ARG_EDH3) - 1);
                     setLife(getArguments().getInt(ARG_LIFE));
@@ -241,7 +250,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.positiveEDH4:
-                if (getArguments().getInt(ARG_EDH4) < 21) {
+                if (getArguments().getInt(ARG_EDH4) < Constants.MAX_EDH) {
                     getArguments().putInt(ARG_LIFE, getArguments().getInt(ARG_LIFE) - 1);
                     getArguments().putInt(ARG_EDH4, getArguments().getInt(ARG_EDH4) + 1);
                     setLife(getArguments().getInt(ARG_LIFE));
@@ -250,7 +259,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.negativeEDH4:
-                if (getArguments().getInt(ARG_EDH4) > 0) {
+                if (getArguments().getInt(ARG_EDH4) > Constants.MIN_EDH) {
                     getArguments().putInt(ARG_LIFE, getArguments().getInt(ARG_LIFE) + 1);
                     getArguments().putInt(ARG_EDH4, getArguments().getInt(ARG_EDH4) - 1);
                     setLife(getArguments().getInt(ARG_LIFE));
@@ -402,7 +411,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     }
 
     private void updateLayout() {
-        boolean isAlive = getArguments().getBoolean(ARG_IS_ALIVE);
+        boolean isAlive = true;
+//        boolean isAlive = getArguments().getBoolean(ARG_IS_ALIVE);
         int color = getArguments().getInt(ARG_DECK_COLOR);
 
         onUpdateDataInterface.iUpdateDethrone();
