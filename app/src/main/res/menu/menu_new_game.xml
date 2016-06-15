@@ -14,7 +14,7 @@
 
     <item
         android:id="@+id/actions_next"
-        android:orderInCategory="1"
+        android:orderInCategory="@string/menu_new_game_next"
         android:title="@string/actions_next"
         app:showAsAction="always"/>
 </menu>

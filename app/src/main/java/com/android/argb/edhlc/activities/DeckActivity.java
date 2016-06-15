@@ -1,17 +1,21 @@
 package com.android.argb.edhlc.activities;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -311,7 +315,13 @@ public class DeckActivity extends AppCompatActivity {
         alertDialogBuilder.setPositiveButton("PICK IMAGE",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        startActivityForResult(getPickImageIntent(), REQUEST_PICTURE_PICKER);
+                        if (ContextCompat.checkSelfPermission(DeckActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                            startActivityForResult(getPickImageIntent(), REQUEST_PICTURE_PICKER);
+                        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            //onRequestPermissionsResult
+                            ActivityCompat.requestPermissions(DeckActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, Constants.REQUEST_READ_EXTERNAL_STORAGE_PERMISSION);
+                        }
+                        dialog.dismiss();
                     }
                 });
         alertDialogBuilder.setNeutralButton("Cancel",
@@ -350,6 +360,16 @@ public class DeckActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(final int requestCode, @NonNull final String[] permissions, @NonNull final int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == Constants.REQUEST_READ_EXTERNAL_STORAGE_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startActivityForResult(getPickImageIntent(), REQUEST_PICTURE_PICKER);
+            }
+        }
     }
 
     @Override

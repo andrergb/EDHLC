@@ -69,4 +69,7 @@
     <string name="second">2nd</string>
     <string name="third">3rd</string>
     <string name="delete_records">Delete Records</string>
+    <string name="menu_main_history_index">1</string>
+    <string name="menu_main_overview_index">2</string>
+    <string name="menu_new_game_next">1</string>
 </resources>

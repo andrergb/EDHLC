@@ -58,9 +58,9 @@ public class NewGameActivity extends AppCompatActivity {
         this.optionMenu = menu;
         getMenuInflater().inflate(R.menu.menu_new_game, menu);
         if (getCurrentTotalPlayers() >= 2)
-            optionMenu.getItem(1).setEnabled(true);
+            optionMenu.getItem(Integer.valueOf(getString(R.string.menu_new_game_next))).setEnabled(true);
         else
-            optionMenu.getItem(1).setEnabled(false);
+            optionMenu.getItem(Integer.valueOf(getString(R.string.menu_new_game_next))).setEnabled(false);
         return true;
     }
 
@@ -209,9 +209,9 @@ public class NewGameActivity extends AppCompatActivity {
                     mPlayersAdapter.notifyDataSetChanged();
 
                     if (getCurrentTotalPlayers() >= 2)
-                        optionMenu.getItem(1).setEnabled(true);
+                        optionMenu.getItem(Integer.valueOf(getString(R.string.menu_new_game_next))).setEnabled(true);
                     else
-                        optionMenu.getItem(1).setEnabled(false);
+                        optionMenu.getItem(Integer.valueOf(getString(R.string.menu_new_game_next))).setEnabled(false);
                 }
             }
         });

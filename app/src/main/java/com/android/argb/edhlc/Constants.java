@@ -7,7 +7,7 @@ public class Constants {
     public static final String PHASE3_TIMER = "PHASE3_TIMER";
     public static final String PHASE4_TIMER = "PHASE4_TIMER";
     public static final String PHASE5_TIMER = "PHASE5_TIMER";
-//    public static final int SWIPE_BOTTOM = 0;
+    //    public static final int SWIPE_BOTTOM = 0;
 //    public static final int SWIPE_TOP = 1;
     public static String SCREEN_ON = "SCREEN_ON";
     public static String CURRENT_PAGE = "CURRENT_PAGE";
@@ -43,4 +43,5 @@ public class Constants {
     public static int MIN_LIFE = -999;
     public static int MAX_EDH = 21;
     public static int MIN_EDH = 0;
+    public static int REQUEST_READ_EXTERNAL_STORAGE_PERMISSION = 1;
 }

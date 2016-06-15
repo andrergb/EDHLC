@@ -9,20 +9,21 @@
         android:icon="@drawable/transparent"
         android:orderInCategory="0"
         android:visible="true"
+        app:showAsAction="always"
+        android:title=""/>
+
+    <item
+        android:id="@+id/action_history"
+        android:icon="@drawable/icon_history"
+        android:orderInCategory="@string/menu_main_history_index"
+        android:title="@string/actions_history"
         app:showAsAction="always"/>
 
     <item
         android:id="@+id/action_overview"
         android:icon="@drawable/icon_group"
-        android:orderInCategory="1"
+        android:orderInCategory="@string/menu_main_overview_index"
         android:title="@string/actions_overview"
-        app:showAsAction="always"/>
-
-    <item
-        android:id="@+id/action_history"
-        android:icon="@drawable/icon_history"
-        android:orderInCategory="2"
-        android:title="@string/actions_history"
         app:showAsAction="always"/>
 
     <item

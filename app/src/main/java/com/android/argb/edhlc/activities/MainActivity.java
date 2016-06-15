@@ -125,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
     private TextView textViewResult;
     private ProgressBar progressRandomBar;
     private TextView textViewDiceResult;
+    private Menu optionMenu;
 
     public float getPlayerLifeTextSize(ActivePlayer player, int limit) {
         return (player.getPlayerLife() <= 99 && player.getPlayerLife() >= -9) ?
@@ -390,7 +391,26 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        this.optionMenu = menu;
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        if (getCurrentMode() == MODE_NEW_GAME) {
+            optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_history_index))).setEnabled(false);
+            optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_history_index))).setVisible(false);
+            optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_overview_index))).setEnabled(false);
+            optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_overview_index))).setVisible(false);
+        } else if (getCurrentMode() == MODE_OVERVIEW) {
+            optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_history_index))).setEnabled(false);
+            optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_history_index))).setVisible(false);
+            optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_overview_index))).setEnabled(true);
+            optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_overview_index))).setVisible(true);
+        } else if (getCurrentMode() == MODE_PLAYING) {
+            optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_history_index))).setEnabled(true);
+            optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_history_index))).setVisible(true);
+            optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_overview_index))).setEnabled(true);
+            optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_overview_index))).setVisible(true);
+        }
+
         return true;
     }
 
@@ -1088,6 +1108,13 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
             case MODE_NEW_GAME:
                 setActionBarColor(getResources().getIntArray(R.array.edh_default)[0]);
 
+                if (optionMenu != null) {
+                    optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_history_index))).setEnabled(false);
+                    optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_history_index))).setVisible(false);
+                    optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_overview_index))).setEnabled(false);
+                    optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_overview_index))).setVisible(false);
+                }
+
                 viewNewGame.setVisibility(View.VISIBLE);
                 if (viewOverview != null)
                     viewOverview.setVisibility(View.GONE);
@@ -1114,6 +1141,13 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
                                 viewOverview.setVisibility(View.VISIBLE);
                                 viewPager.setVisibility(View.GONE);
                                 tabLayout.setVisibility(View.GONE);
+
+                                if (optionMenu != null) {
+                                    optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_history_index))).setEnabled(false);
+                                    optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_history_index))).setVisible(false);
+                                    optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_overview_index))).setEnabled(true);
+                                    optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_overview_index))).setVisible(true);
+                                }
 
                                 isInAnimation = false;
                             }
@@ -1188,6 +1222,13 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
                             viewOverview.setVisibility(View.GONE);
                             viewPager.setVisibility(View.VISIBLE);
                             tabLayout.setVisibility(View.VISIBLE);
+
+                            if (optionMenu != null) {
+                                optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_history_index))).setEnabled(true);
+                                optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_history_index))).setVisible(true);
+                                optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_overview_index))).setEnabled(true);
+                                optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_overview_index))).setVisible(true);
+                            }
 
                             // (2/2) Workaround to avoid viewPager to pop to up when tabLayout gets visible
                             viewPager.setPadding(viewPager.getPaddingLeft(), viewPager.getPaddingTop(), viewPager.getPaddingRight(), paddingBottom);
