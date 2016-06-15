@@ -35,7 +35,9 @@ public class ActivePlayer {
     }
 
     public boolean getPlayerIsAlive() {
-        return playerIsAlive;
+        //TODO
+        //return playerIsAlive;
+        return true;
     }
 
     public int getPlayerLife() {

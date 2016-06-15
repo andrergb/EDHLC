@@ -299,17 +299,17 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         LinearLayout mainEDH = (LinearLayout) view.findViewById(R.id.mainEDH);
         mainEDH.setWeightSum(getTotalPlayers());
 
-        view.findViewById(R.id.cardMain).setOnTouchListener(new GestureTouchListener(view.getContext()) {
-            @Override
-            public void onSwipeBottom() {
-                onUpdateDataInterface.iSwipe(Constants.SWIPE_BOTTOM);
-            }
-
-            @Override
-            public void onSwipeTop() {
-                onUpdateDataInterface.iSwipe(Constants.SWIPE_TOP);
-            }
-        });
+//        view.findViewById(R.id.cardMain).setOnTouchListener(new GestureTouchListener(view.getContext()) {
+//            @Override
+//            public void onSwipeBottom() {
+//                onUpdateDataInterface.iSwipe(Constants.SWIPE_BOTTOM);
+//            }
+//
+//            @Override
+//            public void onSwipeTop() {
+//                onUpdateDataInterface.iSwipe(Constants.SWIPE_TOP);
+//            }
+//        });
 
         headerPlayerName = (TextView) view.findViewById(R.id.headerPlayerName);
         headerDeckName = (TextView) view.findViewById(R.id.headerDeckName);
@@ -322,15 +322,15 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 createLifeDialog(view);
             }
 
-            @Override
-            public void onSwipeBottom() {
-                onUpdateDataInterface.iSwipe(Constants.SWIPE_BOTTOM);
-            }
-
-            @Override
-            public void onSwipeTop() {
-                onUpdateDataInterface.iSwipe(Constants.SWIPE_TOP);
-            }
+//            @Override
+//            public void onSwipeBottom() {
+//                onUpdateDataInterface.iSwipe(Constants.SWIPE_BOTTOM);
+//            }
+//
+//            @Override
+//            public void onSwipeTop() {
+//                onUpdateDataInterface.iSwipe(Constants.SWIPE_TOP);
+//            }
         });
 
         lifePositive = (ImageView) view.findViewById(R.id.lifePositive);
@@ -446,7 +446,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     }
 
     public interface OnUpdateData {
-        void iSwipe(int direction);
+//        void iSwipe(int direction);
 
         void iUpdateActivePlayer(ActivePlayer activePlayer);
 

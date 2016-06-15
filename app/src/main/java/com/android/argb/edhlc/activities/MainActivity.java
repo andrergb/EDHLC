@@ -132,18 +132,18 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
                 (totalPlayers == limit ? Constants.LIFE_TEXT_SIZE_3_DIGITS_HIGHLIGHT : Constants.LIFE_TEXT_SIZE_3_DIGITS);
     }
 
-    @Override
-    public void iSwipe(int direction) {
-        switch (direction) {
-            case Constants.SWIPE_BOTTOM:
-                setMode(MODE_OVERVIEW, getCurrentMode());
-                break;
-
-            case Constants.SWIPE_TOP:
-                displayBottomSheetsHistory();
-                break;
-        }
-    }
+//    @Override
+//    public void iSwipe(int direction) {
+//        switch (direction) {
+//            case Constants.SWIPE_BOTTOM:
+//                setMode(MODE_OVERVIEW, getCurrentMode());
+//                break;
+//
+//            case Constants.SWIPE_TOP:
+//                displayBottomSheetsHistory();
+//                break;
+//        }
+//    }
 
     @Override
     public void iUpdateActivePlayer(ActivePlayer activePlayer) {
