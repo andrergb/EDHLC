@@ -276,7 +276,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main_new, container, false);
+        View view = inflater.inflate(R.layout.fragment_main, container, false);
 
         createLayout(view);
 

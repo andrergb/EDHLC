@@ -54,7 +54,8 @@
                                 android:layout_margin="2dp"
                                 android:gravity="center"
                                 android:text="PlayerName"
-                                android:textSize="20sp"/>
+                                android:textSize="20sp"
+                                android:textStyle="bold"/>
 
                             <ImageView
                                 android:id="@+id/imageViewThroneP1"
@@ -207,7 +208,8 @@
                                 android:layout_margin="2dp"
                                 android:gravity="center"
                                 android:text="PlayerName"
-                                android:textSize="20sp"/>
+                                android:textSize="20sp"
+                                android:textStyle="bold"/>
 
                             <ImageView
                                 android:id="@+id/imageViewThroneP2"
@@ -442,7 +444,8 @@
                             android:layout_margin="2dp"
                             android:gravity="center"
                             android:text="PlayerName"
-                            android:textSize="26sp"/>
+                            android:textSize="26sp"
+                            android:textStyle="bold"/>
 
                         <ImageView
                             android:id="@+id/imageViewThroneP3"

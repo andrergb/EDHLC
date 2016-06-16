@@ -4,9 +4,9 @@
 
     <android.support.v7.widget.CardView
         android:id="@+id/cardMain"
-        android:layout_margin="4dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_margin="4dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -35,7 +35,8 @@
                         android:gravity="center"
                         android:text="Player Name"
                         android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:textSize="32sp"/>
+                        android:textSize="30sp"
+                        android:textStyle="bold"/>
 
                     <TextView
                         android:id="@+id/headerDeckName"
@@ -45,7 +46,8 @@
                         android:gravity="center"
                         android:text="Deck Name"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textSize="22sp"/>
+                        android:textSize="22sp"
+                        android:textStyle="bold"/>
                 </LinearLayout>
 
                 <!--DETHRONE-->
@@ -168,6 +170,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:adjustViewBounds="true"
+                            android:alpha="0.6"
                             android:gravity="center"
                             android:src="@drawable/icon_up2"/>
                     </LinearLayout>
@@ -194,6 +197,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:adjustViewBounds="true"
+                            android:alpha="0.6"
                             android:gravity="center"
                             android:src="@drawable/icon_down2"/>
                     </LinearLayout>
@@ -223,6 +227,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:adjustViewBounds="true"
+                            android:alpha="0.6"
                             android:gravity="center"
                             android:src="@drawable/icon_up2"/>
                     </LinearLayout>
@@ -249,6 +254,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:adjustViewBounds="true"
+                            android:alpha="0.6"
                             android:gravity="center"
                             android:src="@drawable/icon_down2"/>
                     </LinearLayout>
@@ -279,6 +285,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:adjustViewBounds="true"
+                            android:alpha="0.6"
                             android:gravity="center"
                             android:src="@drawable/icon_up2"/>
                     </LinearLayout>
@@ -305,6 +312,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:adjustViewBounds="true"
+                            android:alpha="0.6"
                             android:gravity="center"
                             android:src="@drawable/icon_down2"/>
                     </LinearLayout>
@@ -334,6 +342,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:adjustViewBounds="true"
+                            android:alpha="0.6"
                             android:gravity="center"
                             android:src="@drawable/icon_up2"/>
                     </LinearLayout>
@@ -360,6 +369,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:adjustViewBounds="true"
+                            android:alpha="0.6"
                             android:gravity="center"
                             android:src="@drawable/icon_down2"/>
                     </LinearLayout>
