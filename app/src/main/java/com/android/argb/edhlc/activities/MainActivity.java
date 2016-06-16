@@ -1272,7 +1272,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
         alertDialogBuilder.setView(logView);
         alertDialogBuilder.setTitle("Roll a dice");
         alertDialogBuilder.setMessage("Choose the limits: ");
-        alertDialogBuilder.setPositiveButton("ROLL",
+        alertDialogBuilder.setPositiveButton(R.string.roll,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
@@ -1299,20 +1299,20 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
                         alertDialogBuilder.setView(logView);
                         alertDialogBuilder.setTitle("Roll a dice");
                         alertDialogBuilder.setMessage("Dice result [" + minValue + ", " + maxValue + "]:");
-                        alertDialogBuilder.setPositiveButton("RANDOM",
+                        alertDialogBuilder.setPositiveButton(R.string.random,
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                     }
                                 });
 
-                        alertDialogBuilder.setNeutralButton("DISMISS",
+                        alertDialogBuilder.setNeutralButton(R.string.cancel,
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         dialog.cancel();
                                     }
                                 });
 
-                        alertDialogBuilder.setNegativeButton("BACK",
+                        alertDialogBuilder.setNegativeButton(R.string.back,
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         showDiceDialog();
@@ -1330,7 +1330,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
                         });
                     }
                 });
-        alertDialogBuilder.setNegativeButton("CANCEL",
+        alertDialogBuilder.setNegativeButton(R.string.cancel,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
@@ -1355,13 +1355,13 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setView(logView);
         alertDialogBuilder.setTitle("Random Player:");
-        alertDialogBuilder.setNegativeButton("DISMISS",
+        alertDialogBuilder.setNegativeButton(R.string.cancel,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                     }
                 });
-        alertDialogBuilder.setPositiveButton("RANDOM",
+        alertDialogBuilder.setPositiveButton(R.string.random,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         //Overridden at 'alertDialog.getButton' to avoid dismiss every time

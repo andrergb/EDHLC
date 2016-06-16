@@ -62,14 +62,26 @@
     <string name="none_deck_added">None deck added</string>
     <string name="players_list">Players List</string>
     <string name="played_on">Played on</string>
-    <string name="first">1st</string>
     <string name="deck_name">Deck\'s name</string>
     <string name="deck_owner">Deck\'s owner</string>
-    <string name="fourth">4th</string>
+    <string name="first">1st</string>
     <string name="second">2nd</string>
     <string name="third">3rd</string>
+    <string name="fourth">4th</string>
     <string name="delete_records">Delete Records</string>
+
     <string name="menu_main_history_index">1</string>
     <string name="menu_main_overview_index">2</string>
     <string name="menu_new_game_next">1</string>
+
+    <string name="cancel">Cancel</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="ok">OK</string>
+    <string name="add">Add</string>
+    <string name="píck_image">Pick Image</string>
+    <string name="roll">Roll</string>
+    <string name="random">Random</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="back">Back</string>
 </resources>

@@ -116,7 +116,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         alertDialogBuilder.setView(playerLifeView);
         alertDialogBuilder.setTitle(getArguments().getString(ARG_PLAYER_NAME) + ": " + getArguments().getInt(ARG_LIFE));
 
-        alertDialogBuilder.setPositiveButton("Ok",
+        alertDialogBuilder.setPositiveButton(R.string.ok,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         String stringLife = userInput.getText().toString();
@@ -139,7 +139,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                     }
                 }
         );
-        alertDialogBuilder.setNegativeButton("Cancel",
+        alertDialogBuilder.setNegativeButton(R.string.cancel,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();

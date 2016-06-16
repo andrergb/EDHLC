@@ -1,5 +1,7 @@
 package com.android.argb.edhlc.activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
@@ -117,6 +119,115 @@ public class RecordsActivity extends AppCompatActivity {
         }
     }
 
+    public void onClickDelete() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(RecordsActivity.this);
+        alertDialogBuilder.setTitle("Deleting records");
+        alertDialogBuilder.setMessage("Are you sure?");
+        alertDialogBuilder.setPositiveButton(R.string.delete,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        boolean removed2 = false;
+                        boolean removed3 = false;
+                        boolean removed4 = false;
+
+                        for (int i = 0; i < listRecords2Content.size(); i++) {
+                            if (listRecords2Content.get(i).isSelected()) {
+                                recordsDB.deleteRecord(listRecords2Content.get(i));
+                                removed2 = true;
+                            }
+                        }
+
+                        for (int i = 0; i < listRecords3Content.size(); i++) {
+                            if (listRecords3Content.get(i).isSelected()) {
+                                recordsDB.deleteRecord(listRecords3Content.get(i));
+                                removed3 = true;
+                            }
+                        }
+
+                        for (int i = 0; i < listRecords4Content.size(); i++) {
+                            if (listRecords4Content.get(i).isSelected()) {
+                                recordsDB.deleteRecord(listRecords4Content.get(i));
+                                removed4 = true;
+                            }
+                        }
+
+                        createLayout();
+
+                        int pixel6dp = (int) Utils.convertDpToPixel((float) 6, getApplicationContext());
+
+                        if (removed2) {
+                            LinearLayout.LayoutParams layoutParams2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                            layoutParams2.setMargins(pixel6dp, pixel6dp, pixel6dp, pixel6dp);
+                            cardViewRecords2List.setLayoutParams(layoutParams2);
+                        }
+
+                        if (removed3) {
+                            LinearLayout.LayoutParams layoutParams3 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                            layoutParams3.setMargins(pixel6dp, pixel6dp, pixel6dp, pixel6dp);
+                            cardViewRecords3List.setLayoutParams(layoutParams3);
+                        }
+
+                        if (removed4) {
+                            LinearLayout.LayoutParams layoutParams4 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                            layoutParams4.setMargins(pixel6dp, pixel6dp, pixel6dp, pixel6dp);
+                            cardViewRecords4List.setLayoutParams(layoutParams4);
+                        }
+
+                        updateLayout();
+
+                        if (removed2)
+                            cardViewRecords2List.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                                @Override
+                                public boolean onPreDraw() {
+                                    cardViewRecords2List.getViewTreeObserver().removeOnPreDrawListener(this);
+                                    mCardViewFullHeightRecords2 = cardViewRecords2List.getHeight();
+                                    Utils.expand(RecordsActivity.this, cardViewRecords2List, textTitleRecords2List, iconIndicatorRecords2List, relativeCardTitleRecords2List.getHeight(), mCardViewFullHeightRecords2);
+                                    return true;
+                                }
+                            });
+
+                        if (removed3)
+                            cardViewRecords3List.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                                @Override
+                                public boolean onPreDraw() {
+                                    cardViewRecords3List.getViewTreeObserver().removeOnPreDrawListener(this);
+                                    mCardViewFullHeightRecords3 = cardViewRecords3List.getHeight();
+                                    Utils.expand(RecordsActivity.this, cardViewRecords3List, textTitleRecords3List, iconIndicatorRecords3List, relativeCardTitleRecords3List.getHeight(), mCardViewFullHeightRecords3);
+                                    return true;
+                                }
+                            });
+
+                        if (removed4)
+                            cardViewRecords4List.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                                @Override
+                                public boolean onPreDraw() {
+                                    cardViewRecords4List.getViewTreeObserver().removeOnPreDrawListener(this);
+                                    mCardViewFullHeightRecords4 = cardViewRecords4List.getHeight();
+                                    Utils.expand(RecordsActivity.this, cardViewRecords4List, textTitleRecords4List, iconIndicatorRecords4List, relativeCardTitleRecords4List.getHeight(), mCardViewFullHeightRecords4);
+                                    return true;
+                                }
+                            });
+
+                        mIsInEditMode = false;
+
+                        updateEditMode(mRecord2ListAdapter, listRecords2Content);
+                        updateEditMode(mRecord3ListAdapter, listRecords3Content);
+                        updateEditMode(mRecord4ListAdapter, listRecords4Content);
+
+                        dialog.dismiss();
+                    }
+                });
+        alertDialogBuilder.setNegativeButton(R.string.cancel,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
     public void onClickDrawerItem(View view) {
         switch (view.getId()) {
             case R.id.drawerItemHome:
@@ -183,7 +294,6 @@ public class RecordsActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             if (mIsInEditMode) {
                 mIsInEditMode = false;
@@ -197,94 +307,7 @@ public class RecordsActivity extends AppCompatActivity {
         //Option menu
         switch (item.getItemId()) {
             case R.id.action_delete_record:
-                boolean removed2 = false;
-                boolean removed3 = false;
-                boolean removed4 = false;
-
-                for (int i = 0; i < listRecords2Content.size(); i++) {
-                    if (listRecords2Content.get(i).isSelected()) {
-                        recordsDB.deleteRecord(listRecords2Content.get(i));
-                        removed2 = true;
-                    }
-                }
-
-                for (int i = 0; i < listRecords3Content.size(); i++) {
-                    if (listRecords3Content.get(i).isSelected()) {
-                        recordsDB.deleteRecord(listRecords3Content.get(i));
-                        removed3 = true;
-                    }
-                }
-
-                for (int i = 0; i < listRecords4Content.size(); i++) {
-                    if (listRecords4Content.get(i).isSelected()) {
-                        recordsDB.deleteRecord(listRecords4Content.get(i));
-                        removed4 = true;
-                    }
-                }
-
-                createLayout();
-
-                int pixel6dp = (int) Utils.convertDpToPixel((float) 6, getApplicationContext());
-
-                if (removed2) {
-                    LinearLayout.LayoutParams layoutParams2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                    layoutParams2.setMargins(pixel6dp, pixel6dp, pixel6dp, pixel6dp);
-                    cardViewRecords2List.setLayoutParams(layoutParams2);
-                }
-
-                if (removed3) {
-                    LinearLayout.LayoutParams layoutParams3 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                    layoutParams3.setMargins(pixel6dp, pixel6dp, pixel6dp, pixel6dp);
-                    cardViewRecords3List.setLayoutParams(layoutParams3);
-                }
-
-                if (removed4) {
-                    LinearLayout.LayoutParams layoutParams4 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                    layoutParams4.setMargins(pixel6dp, pixel6dp, pixel6dp, pixel6dp);
-                    cardViewRecords4List.setLayoutParams(layoutParams4);
-                }
-
-                updateLayout();
-
-                if (removed2)
-                    cardViewRecords2List.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                        @Override
-                        public boolean onPreDraw() {
-                            cardViewRecords2List.getViewTreeObserver().removeOnPreDrawListener(this);
-                            mCardViewFullHeightRecords2 = cardViewRecords2List.getHeight();
-                            Utils.expand(RecordsActivity.this, cardViewRecords2List, textTitleRecords2List, iconIndicatorRecords2List, relativeCardTitleRecords2List.getHeight(), mCardViewFullHeightRecords2);
-                            return true;
-                        }
-                    });
-
-                if (removed3)
-                    cardViewRecords3List.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                        @Override
-                        public boolean onPreDraw() {
-                            cardViewRecords3List.getViewTreeObserver().removeOnPreDrawListener(this);
-                            mCardViewFullHeightRecords3 = cardViewRecords3List.getHeight();
-                            Utils.expand(RecordsActivity.this, cardViewRecords3List, textTitleRecords3List, iconIndicatorRecords3List, relativeCardTitleRecords3List.getHeight(), mCardViewFullHeightRecords3);
-                            return true;
-                        }
-                    });
-
-                if (removed4)
-                    cardViewRecords4List.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                        @Override
-                        public boolean onPreDraw() {
-                            cardViewRecords4List.getViewTreeObserver().removeOnPreDrawListener(this);
-                            mCardViewFullHeightRecords4 = cardViewRecords4List.getHeight();
-                            Utils.expand(RecordsActivity.this, cardViewRecords4List, textTitleRecords4List, iconIndicatorRecords4List, relativeCardTitleRecords4List.getHeight(), mCardViewFullHeightRecords4);
-                            return true;
-                        }
-                    });
-
-                mIsInEditMode = false;
-
-                updateEditMode(mRecord2ListAdapter, listRecords2Content);
-                updateEditMode(mRecord3ListAdapter, listRecords3Content);
-                updateEditMode(mRecord4ListAdapter, listRecords4Content);
-
+                onClickDelete();
                 return true;
         }
 

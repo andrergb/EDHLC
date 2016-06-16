@@ -220,7 +220,7 @@ public class LogGameActivity extends AppCompatActivity {
     private void showConfirmDialog() {
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setTitle("Log game");
-        alertDialogBuilder.setPositiveButton("CONFIRM",
+        alertDialogBuilder.setPositiveButton(R.string.ok,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         RecordsDataAccessObject recordDB = new RecordsDataAccessObject(LogGameActivity.this);
@@ -257,7 +257,7 @@ public class LogGameActivity extends AppCompatActivity {
                         dialog.cancel();
                     }
                 });
-        alertDialogBuilder.setNegativeButton("CANCEL",
+        alertDialogBuilder.setNegativeButton(R.string.cancel,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();

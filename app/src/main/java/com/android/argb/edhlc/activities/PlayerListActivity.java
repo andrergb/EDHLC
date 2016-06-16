@@ -384,12 +384,12 @@ public class PlayerListActivity extends AppCompatActivity {
         alertDialogBuilder.setView(playerNameView);
         alertDialogBuilder.setTitle("Add new Player");
         alertDialogBuilder.setMessage("Player name:");
-        alertDialogBuilder.setPositiveButton("ADD",
+        alertDialogBuilder.setPositiveButton(R.string.add,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                     }
                 });
-        alertDialogBuilder.setNegativeButton("CANCEL",
+        alertDialogBuilder.setNegativeButton(R.string.cancel,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
@@ -429,13 +429,13 @@ public class PlayerListActivity extends AppCompatActivity {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PlayerListActivity.this);
         alertDialogBuilder.setView(playerNameView);
         alertDialogBuilder.setTitle("Edit " + mPlayerName);
-        alertDialogBuilder.setPositiveButton("EDIT",
+        alertDialogBuilder.setPositiveButton(R.string.edit,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         //Overridden at 'alertDialog.getButton' to avoid dismiss every time
                     }
                 });
-        alertDialogBuilder.setNegativeButton("CANCEL",
+        alertDialogBuilder.setNegativeButton(R.string.cancel,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
@@ -476,7 +476,7 @@ public class PlayerListActivity extends AppCompatActivity {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PlayerListActivity.this);
         alertDialogBuilder.setTitle("Delete player");
         alertDialogBuilder.setMessage("Are you sure to delete these players?");
-        alertDialogBuilder.setPositiveButton("DELETE",
+        alertDialogBuilder.setPositiveButton(R.string.delete,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         for (int i = 0; i < playerList.size(); i++)
@@ -490,7 +490,7 @@ public class PlayerListActivity extends AppCompatActivity {
                         dialog.cancel();
                     }
                 });
-        alertDialogBuilder.setNegativeButton("CANCEL",
+        alertDialogBuilder.setNegativeButton(R.string.cancel,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();

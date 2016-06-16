@@ -312,7 +312,7 @@ public class DeckActivity extends AppCompatActivity {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(DeckActivity.this);
         alertDialogBuilder.setTitle("Pick image");
 //        alertDialogBuilder.setMessage("");
-        alertDialogBuilder.setPositiveButton("PICK IMAGE",
+        alertDialogBuilder.setPositiveButton(R.string.píck_image,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (ContextCompat.checkSelfPermission(DeckActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
@@ -324,7 +324,7 @@ public class DeckActivity extends AppCompatActivity {
                         dialog.dismiss();
                     }
                 });
-        alertDialogBuilder.setNeutralButton("Cancel",
+        alertDialogBuilder.setNegativeButton(R.string.cancel,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
@@ -565,12 +565,12 @@ public class DeckActivity extends AppCompatActivity {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(DeckActivity.this);
         alertDialogBuilder.setView(dialogDeckView);
         alertDialogBuilder.setTitle("Edit deck");
-        alertDialogBuilder.setPositiveButton("EDIT",
+        alertDialogBuilder.setPositiveButton(R.string.edit,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                     }
                 });
-        alertDialogBuilder.setNegativeButton("CANCEL",
+        alertDialogBuilder.setNegativeButton(R.string.cancel,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
@@ -723,7 +723,7 @@ public class DeckActivity extends AppCompatActivity {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(DeckActivity.this);
         alertDialogBuilder.setTitle("Delete deck");
         alertDialogBuilder.setMessage("Are you sure to delete this deck?");
-        alertDialogBuilder.setPositiveButton("Delete",
+        alertDialogBuilder.setPositiveButton(R.string.delete,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         long result = decksDB.removeDeck(mCurrentDeck);
@@ -735,7 +735,7 @@ public class DeckActivity extends AppCompatActivity {
                         }
                     }
                 });
-        alertDialogBuilder.setNegativeButton("Cancel",
+        alertDialogBuilder.setNegativeButton(R.string.cancel,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();

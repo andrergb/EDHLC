@@ -255,7 +255,8 @@
         android:layout_alignBottom="@id/parent"
         android:layout_alignTop="@id/parent"
         android:alpha="0.5"
-        android:background="@color/secondary_text">
+        android:background="@color/secondary_text"
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="80dp"
