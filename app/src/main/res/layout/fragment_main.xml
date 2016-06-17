@@ -32,9 +32,9 @@
                         android:id="@+id/headerPlayerName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-thin"
                         android:gravity="center"
                         android:text="Player Name"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
                         android:textSize="30sp"
                         android:textStyle="bold"/>
 
@@ -43,11 +43,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:clickable="true"
+                        android:fontFamily="sans-serif-light"
                         android:gravity="center"
                         android:text="Deck Name"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textSize="22sp"
-                        android:textStyle="bold"/>
+                        android:textSize="22sp"/>
                 </LinearLayout>
 
                 <!--DETHRONE-->
@@ -86,9 +85,9 @@
                             android:id="@+id/lifeValue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-light"
                             android:singleLine="true"
                             android:text="40"
-                            android:textAppearance="?android:attr/textAppearanceLarge"
                             android:textSize="180sp"/>
                     </RelativeLayout>
 
@@ -181,6 +180,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
+                        android:fontFamily="sans-serif-light"
                         android:gravity="center"
                         android:text="0"
                         android:textSize="35sp"/>
@@ -238,6 +238,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
+                        android:fontFamily="sans-serif-light"
                         android:gravity="center"
                         android:text="0"
                         android:textSize="35sp"/>
@@ -296,6 +297,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
+                        android:fontFamily="sans-serif-light"
                         android:gravity="center"
                         android:text="0"
                         android:textSize="35sp"/>
@@ -353,6 +355,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
+                        android:fontFamily="sans-serif-light"
                         android:gravity="center"
                         android:text="0"
                         android:textSize="35sp"/>
