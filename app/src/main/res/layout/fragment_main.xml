@@ -1,6 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <android.support.v7.widget.CardView
         android:id="@+id/cardMain"
@@ -36,7 +36,7 @@
                         android:gravity="center"
                         android:text="Player Name"
                         android:textSize="30sp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/headerDeckName"
@@ -46,7 +46,7 @@
                         android:fontFamily="sans-serif-light"
                         android:gravity="center"
                         android:text="Deck Name"
-                        android:textSize="22sp"/>
+                        android:textSize="22sp" />
                 </LinearLayout>
 
                 <!--DETHRONE-->
@@ -56,7 +56,7 @@
                     android:layout_height="24sp"
                     android:layout_alignParentStart="true"
                     android:layout_centerInParent="true"
-                    android:src="@drawable/icon_crown"/>
+                    android:src="@drawable/icon_crown" />
             </RelativeLayout>
 
             <!--LIFE-->
@@ -88,7 +88,7 @@
                             android:fontFamily="sans-serif-light"
                             android:singleLine="true"
                             android:text="40"
-                            android:textSize="180sp"/>
+                            android:textSize="180sp" />
                     </RelativeLayout>
 
                     <!--LIFE BUTTONS-->
@@ -106,14 +106,14 @@
                             android:layout_height="0dp"
                             android:layout_weight="1"
                             android:gravity="bottom"
-                            android:paddingBottom="16dp">
+                            android:paddingBottom="8dp">
 
                             <ImageView
                                 android:id="@+id/lifePositive"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:adjustViewBounds="true"
-                                android:src="@drawable/icon_up1"/>
+                                android:src="@drawable/icon_up1" />
                         </LinearLayout>
 
                         <!--LIFE NEGATIVE-->
@@ -122,14 +122,14 @@
                             android:layout_height="0dp"
                             android:layout_weight="1"
                             android:gravity="top"
-                            android:paddingTop="16dp">
+                            android:paddingTop="8dp">
 
                             <ImageView
                                 android:id="@+id/lifeNegative"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:adjustViewBounds="true"
-                                android:src="@drawable/icon_down1"/>
+                                android:src="@drawable/icon_down1" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -171,7 +171,7 @@
                             android:adjustViewBounds="true"
                             android:alpha="0.6"
                             android:gravity="center"
-                            android:src="@drawable/icon_up2"/>
+                            android:src="@drawable/icon_up2" />
                     </LinearLayout>
 
                     <!--EDH1 VALUE-->
@@ -183,7 +183,7 @@
                         android:fontFamily="sans-serif-light"
                         android:gravity="center"
                         android:text="0"
-                        android:textSize="35sp"/>
+                        android:textSize="35sp" />
 
                     <!--EDH1 NEGATIVE-->
                     <LinearLayout
@@ -199,7 +199,7 @@
                             android:adjustViewBounds="true"
                             android:alpha="0.6"
                             android:gravity="center"
-                            android:src="@drawable/icon_down2"/>
+                            android:src="@drawable/icon_down2" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -229,7 +229,7 @@
                             android:adjustViewBounds="true"
                             android:alpha="0.6"
                             android:gravity="center"
-                            android:src="@drawable/icon_up2"/>
+                            android:src="@drawable/icon_up2" />
                     </LinearLayout>
 
                     <!--EDH2 VALUE-->
@@ -241,7 +241,7 @@
                         android:fontFamily="sans-serif-light"
                         android:gravity="center"
                         android:text="0"
-                        android:textSize="35sp"/>
+                        android:textSize="35sp" />
 
                     <!--EDH2 NEGATIVE-->
                     <LinearLayout
@@ -257,7 +257,7 @@
                             android:adjustViewBounds="true"
                             android:alpha="0.6"
                             android:gravity="center"
-                            android:src="@drawable/icon_down2"/>
+                            android:src="@drawable/icon_down2" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -288,7 +288,7 @@
                             android:adjustViewBounds="true"
                             android:alpha="0.6"
                             android:gravity="center"
-                            android:src="@drawable/icon_up2"/>
+                            android:src="@drawable/icon_up2" />
                     </LinearLayout>
 
                     <!--EDH3 VALUE-->
@@ -300,7 +300,7 @@
                         android:fontFamily="sans-serif-light"
                         android:gravity="center"
                         android:text="0"
-                        android:textSize="35sp"/>
+                        android:textSize="35sp" />
 
                     <!--EDH3 NEGATIVE-->
                     <LinearLayout
@@ -316,7 +316,7 @@
                             android:adjustViewBounds="true"
                             android:alpha="0.6"
                             android:gravity="center"
-                            android:src="@drawable/icon_down2"/>
+                            android:src="@drawable/icon_down2" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -346,7 +346,7 @@
                             android:adjustViewBounds="true"
                             android:alpha="0.6"
                             android:gravity="center"
-                            android:src="@drawable/icon_up2"/>
+                            android:src="@drawable/icon_up2" />
                     </LinearLayout>
 
                     <!--EDH4 VALUE-->
@@ -358,7 +358,7 @@
                         android:fontFamily="sans-serif-light"
                         android:gravity="center"
                         android:text="0"
-                        android:textSize="35sp"/>
+                        android:textSize="35sp" />
 
                     <!--EDH4 NEGATIVE-->
                     <LinearLayout
@@ -374,7 +374,7 @@
                             android:adjustViewBounds="true"
                             android:alpha="0.6"
                             android:gravity="center"
-                            android:src="@drawable/icon_down2"/>
+                            android:src="@drawable/icon_down2" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
