@@ -3,9 +3,6 @@ package com.android.argb.edhlc.activities;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.Intent;
-import android.graphics.Point;
-import android.graphics.PorterDuff;
-import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,18 +11,17 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
-import android.view.Display;
 import android.view.DragEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.android.argb.edhlc.Constants;
@@ -68,7 +64,7 @@ public class NewGame2Activity extends AppCompatActivity {
     private TextView playerFourthNameNewGame2;
     private TextView playerFourthDeckNewGame2;
 
-    private ScrollView scrollView;
+    //    private ScrollView scrollView;
     private int totalPlayers;
     private boolean isDragging;
 
@@ -139,23 +135,23 @@ public class NewGame2Activity extends AppCompatActivity {
                 DecksDataAccessObject decksDb = new DecksDataAccessObject(this);
                 decksDb.open();
 
-                String firstName = ((TextView) ((LinearLayout) ((LinearLayout) ((CardView) firstLine.getChildAt(0)).getChildAt(0)).getChildAt(1)).getChildAt(0)).getText().toString();
-                String firstDeck = ((TextView) ((LinearLayout) ((LinearLayout) ((CardView) firstLine.getChildAt(0)).getChildAt(0)).getChildAt(1)).getChildAt(1)).getText().toString();
+                String firstName = ((TextView) ((LinearLayout) ((CardView) firstLine.getChildAt(0)).getChildAt(0)).getChildAt(0)).getText().toString();
+                String firstDeck = ((TextView) ((LinearLayout) ((CardView) firstLine.getChildAt(0)).getChildAt(0)).getChildAt(1)).getText().toString();
                 Utils.savePlayerInSharedPreferences(this, new ActivePlayer(decksDb.getDeck(firstName, firstDeck), true, 40, 0, 0, 0, 0, 0));
 
-                String secondName = ((TextView) ((LinearLayout) ((LinearLayout) ((CardView) secondLine.getChildAt(0)).getChildAt(0)).getChildAt(1)).getChildAt(0)).getText().toString();
-                String secondDeck = ((TextView) ((LinearLayout) ((LinearLayout) ((CardView) secondLine.getChildAt(0)).getChildAt(0)).getChildAt(1)).getChildAt(1)).getText().toString();
+                String secondName = ((TextView) ((LinearLayout) ((CardView) secondLine.getChildAt(0)).getChildAt(0)).getChildAt(0)).getText().toString();
+                String secondDeck = ((TextView) ((LinearLayout) ((CardView) secondLine.getChildAt(0)).getChildAt(0)).getChildAt(1)).getText().toString();
                 Utils.savePlayerInSharedPreferences(this, new ActivePlayer(decksDb.getDeck(secondName, secondDeck), true, 40, 0, 0, 0, 0, 1));
 
                 if (totalPlayers >= 3) {
-                    String thirdName = ((TextView) ((LinearLayout) ((LinearLayout) ((CardView) thirdLine.getChildAt(0)).getChildAt(0)).getChildAt(1)).getChildAt(0)).getText().toString();
-                    String thirdDeck = ((TextView) ((LinearLayout) ((LinearLayout) ((CardView) thirdLine.getChildAt(0)).getChildAt(0)).getChildAt(1)).getChildAt(1)).getText().toString();
+                    String thirdName = ((TextView) ((LinearLayout) ((CardView) thirdLine.getChildAt(0)).getChildAt(0)).getChildAt(0)).getText().toString();
+                    String thirdDeck = ((TextView) ((LinearLayout) ((CardView) thirdLine.getChildAt(0)).getChildAt(0)).getChildAt(1)).getText().toString();
                     Utils.savePlayerInSharedPreferences(this, new ActivePlayer(decksDb.getDeck(thirdName, thirdDeck), true, 40, 0, 0, 0, 0, 2));
                 }
 
                 if (totalPlayers >= 4) {
-                    String fourthName = ((TextView) ((LinearLayout) ((LinearLayout) ((CardView) fourthLine.getChildAt(0)).getChildAt(0)).getChildAt(1)).getChildAt(0)).getText().toString();
-                    String fourthDeck = ((TextView) ((LinearLayout) ((LinearLayout) ((CardView) fourthLine.getChildAt(0)).getChildAt(0)).getChildAt(1)).getChildAt(1)).getText().toString();
+                    String fourthName = ((TextView) ((LinearLayout) ((CardView) fourthLine.getChildAt(0)).getChildAt(0)).getChildAt(0)).getText().toString();
+                    String fourthDeck = ((TextView) ((LinearLayout) ((CardView) fourthLine.getChildAt(0)).getChildAt(0)).getChildAt(1)).getText().toString();
                     Utils.savePlayerInSharedPreferences(this, new ActivePlayer(decksDb.getDeck(fourthName, fourthDeck), true, 40, 0, 0, 0, 0, 3));
                 }
 
@@ -186,7 +182,7 @@ public class NewGame2Activity extends AppCompatActivity {
         createStatusBar();
         createToolbar();
         createLayout();
-        createPositionIndicators();
+//        createPositionIndicators();
         updateLayout();
     }
 
@@ -208,6 +204,22 @@ public class NewGame2Activity extends AppCompatActivity {
     private void createLayout() {
         Intent intent = getIntent();
         totalPlayers = intent.getIntExtra("NEW_GAME2_TOTAL_PLAYERS", 0);
+
+
+        //TODO
+        ViewStub xupeta2 = (ViewStub) findViewById(R.id.xupeta2);
+        ViewStub xupeta3 = (ViewStub) findViewById(R.id.xupeta3);
+        ViewStub xupeta4 = (ViewStub) findViewById(R.id.xupeta4);
+        if (totalPlayers == 2) {
+            xupeta2.setLayoutResource(R.layout.activity_new_game2_content_2p);
+            xupeta2.inflate();
+        } else if (totalPlayers == 3) {
+            xupeta3.setLayoutResource(R.layout.activity_new_game2_content_3p);
+            xupeta3.inflate();
+        } else if (totalPlayers == 4) {
+            xupeta4.setLayoutResource(R.layout.activity_new_game2_content_4p);
+            xupeta4.inflate();
+        }
 
         firstLine = (LinearLayout) findViewById(R.id.firstLine);
         firstLine.setOnDragListener(new MyDragListener());
@@ -263,138 +275,138 @@ public class NewGame2Activity extends AppCompatActivity {
             }
         }
 
-        scrollView = (ScrollView) findViewById(R.id.scrollNewGame2);
+//        scrollView = (ScrollView) findViewById(R.id.scrollNewGame2);
     }
 
-    private void createPositionIndicators() {
-        View indicator111 = findViewById(R.id.indicator111);
-        View indicator112 = findViewById(R.id.indicator112);
-        View indicator113 = findViewById(R.id.indicator113);
-        View indicator121 = findViewById(R.id.indicator121);
-        View indicator122 = findViewById(R.id.indicator122);
-        View indicator123 = findViewById(R.id.indicator123);
-
-        View indicator211 = findViewById(R.id.indicator211);
-        View indicator212 = findViewById(R.id.indicator212);
-        View indicator213 = findViewById(R.id.indicator213);
-        View indicator221 = findViewById(R.id.indicator221);
-        View indicator222 = findViewById(R.id.indicator222);
-        View indicator223 = findViewById(R.id.indicator223);
-
-
-        View indicator311 = findViewById(R.id.indicator311);
-        View indicator312 = findViewById(R.id.indicator312);
-        View indicator313 = findViewById(R.id.indicator313);
-        View indicator321 = findViewById(R.id.indicator321);
-        View indicator322 = findViewById(R.id.indicator322);
-        View indicator323 = findViewById(R.id.indicator323);
-
-
-        View indicator411 = findViewById(R.id.indicator411);
-        View indicator412 = findViewById(R.id.indicator412);
-        View indicator413 = findViewById(R.id.indicator413);
-        View indicator421 = findViewById(R.id.indicator421);
-        //View indicator422 = findViewById(R.id.indicator422);
-        View indicator423 = findViewById(R.id.indicator423);
-
-        assert indicator111 != null;
-        assert indicator112 != null;
-        assert indicator113 != null;
-        assert indicator121 != null;
-        assert indicator122 != null;
-        assert indicator123 != null;
-
-        assert indicator211 != null;
-        assert indicator212 != null;
-        assert indicator213 != null;
-        assert indicator221 != null;
-        assert indicator222 != null;
-        assert indicator223 != null;
-
-        assert indicator311 != null;
-        assert indicator312 != null;
-        assert indicator313 != null;
-        assert indicator321 != null;
-        assert indicator322 != null;
-        assert indicator323 != null;
-
-        assert indicator411 != null;
-        assert indicator412 != null;
-        assert indicator413 != null;
-        assert indicator421 != null;
-        assert indicator423 != null;
-
-        if (totalPlayers == 2) {
-            indicator112.setVisibility(View.VISIBLE);
-            indicator112.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.accent_color), PorterDuff.Mode.SRC_IN);
-            indicator122.setVisibility(View.VISIBLE);
-            indicator122.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.gray300), PorterDuff.Mode.SRC_IN);
-
-            indicator212.setVisibility(View.VISIBLE);
-            indicator212.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.gray300), PorterDuff.Mode.SRC_IN);
-            indicator222.setVisibility(View.VISIBLE);
-            indicator222.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.accent_color), PorterDuff.Mode.SRC_IN);
-
-        } else if (totalPlayers == 3) {
-            indicator111.setVisibility(View.VISIBLE);
-            indicator111.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.accent_color), PorterDuff.Mode.SRC_IN);
-            indicator113.setVisibility(View.VISIBLE);
-            indicator113.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.gray300), PorterDuff.Mode.SRC_IN);
-            indicator122.setVisibility(View.VISIBLE);
-            indicator122.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.gray300), PorterDuff.Mode.SRC_IN);
-
-            indicator211.setVisibility(View.VISIBLE);
-            indicator211.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.gray300), PorterDuff.Mode.SRC_IN);
-            indicator213.setVisibility(View.VISIBLE);
-            indicator213.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.accent_color), PorterDuff.Mode.SRC_IN);
-            indicator222.setVisibility(View.VISIBLE);
-            indicator222.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.gray300), PorterDuff.Mode.SRC_IN);
-
-            indicator311.setVisibility(View.VISIBLE);
-            indicator311.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.gray300), PorterDuff.Mode.SRC_IN);
-            indicator313.setVisibility(View.VISIBLE);
-            indicator313.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.gray300), PorterDuff.Mode.SRC_IN);
-            indicator322.setVisibility(View.VISIBLE);
-            indicator322.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.accent_color), PorterDuff.Mode.SRC_IN);
-
-        } else if (totalPlayers == 4) {
-            indicator111.setVisibility(View.VISIBLE);
-            indicator111.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.accent_color), PorterDuff.Mode.SRC_IN);
-            indicator113.setVisibility(View.VISIBLE);
-            indicator113.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.gray300), PorterDuff.Mode.SRC_IN);
-            indicator121.setVisibility(View.VISIBLE);
-            indicator121.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.gray300), PorterDuff.Mode.SRC_IN);
-            indicator123.setVisibility(View.VISIBLE);
-            indicator123.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.gray300), PorterDuff.Mode.SRC_IN);
-
-            indicator211.setVisibility(View.VISIBLE);
-            indicator211.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.gray300), PorterDuff.Mode.SRC_IN);
-            indicator213.setVisibility(View.VISIBLE);
-            indicator213.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.accent_color), PorterDuff.Mode.SRC_IN);
-            indicator221.setVisibility(View.VISIBLE);
-            indicator221.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.gray300), PorterDuff.Mode.SRC_IN);
-            indicator223.setVisibility(View.VISIBLE);
-            indicator223.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.gray300), PorterDuff.Mode.SRC_IN);
-
-            indicator311.setVisibility(View.VISIBLE);
-            indicator311.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.gray300), PorterDuff.Mode.SRC_IN);
-            indicator313.setVisibility(View.VISIBLE);
-            indicator313.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.gray300), PorterDuff.Mode.SRC_IN);
-            indicator321.setVisibility(View.VISIBLE);
-            indicator321.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.accent_color), PorterDuff.Mode.SRC_IN);
-            indicator323.setVisibility(View.VISIBLE);
-            indicator323.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.gray300), PorterDuff.Mode.SRC_IN);
-
-            indicator411.setVisibility(View.VISIBLE);
-            indicator411.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.gray300), PorterDuff.Mode.SRC_IN);
-            indicator413.setVisibility(View.VISIBLE);
-            indicator413.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.gray300), PorterDuff.Mode.SRC_IN);
-            indicator421.setVisibility(View.VISIBLE);
-            indicator421.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.gray300), PorterDuff.Mode.SRC_IN);
-            indicator423.setVisibility(View.VISIBLE);
-            indicator423.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.accent_color), PorterDuff.Mode.SRC_IN);
-        }
-    }
+//    private void createPositionIndicators() {
+//        View indicator111 = findViewById(R.id.indicator111);
+//        View indicator112 = findViewById(R.id.indicator112);
+//        View indicator113 = findViewById(R.id.indicator113);
+//        View indicator121 = findViewById(R.id.indicator121);
+//        View indicator122 = findViewById(R.id.indicator122);
+//        View indicator123 = findViewById(R.id.indicator123);
+//
+//        View indicator211 = findViewById(R.id.indicator211);
+//        View indicator212 = findViewById(R.id.indicator212);
+//        View indicator213 = findViewById(R.id.indicator213);
+//        View indicator221 = findViewById(R.id.indicator221);
+//        View indicator222 = findViewById(R.id.indicator222);
+//        View indicator223 = findViewById(R.id.indicator223);
+//
+//
+//        View indicator311 = findViewById(R.id.indicator311);
+//        View indicator312 = findViewById(R.id.indicator312);
+//        View indicator313 = findViewById(R.id.indicator313);
+//        View indicator321 = findViewById(R.id.indicator321);
+//        View indicator322 = findViewById(R.id.indicator322);
+//        View indicator323 = findViewById(R.id.indicator323);
+//
+//
+//        View indicator411 = findViewById(R.id.indicator411);
+//        View indicator412 = findViewById(R.id.indicator412);
+//        View indicator413 = findViewById(R.id.indicator413);
+//        View indicator421 = findViewById(R.id.indicator421);
+//        //View indicator422 = findViewById(R.id.indicator422);
+//        View indicator423 = findViewById(R.id.indicator423);
+//
+//        assert indicator111 != null;
+//        assert indicator112 != null;
+//        assert indicator113 != null;
+//        assert indicator121 != null;
+//        assert indicator122 != null;
+//        assert indicator123 != null;
+//
+//        assert indicator211 != null;
+//        assert indicator212 != null;
+//        assert indicator213 != null;
+//        assert indicator221 != null;
+//        assert indicator222 != null;
+//        assert indicator223 != null;
+//
+//        assert indicator311 != null;
+//        assert indicator312 != null;
+//        assert indicator313 != null;
+//        assert indicator321 != null;
+//        assert indicator322 != null;
+//        assert indicator323 != null;
+//
+//        assert indicator411 != null;
+//        assert indicator412 != null;
+//        assert indicator413 != null;
+//        assert indicator421 != null;
+//        assert indicator423 != null;
+//
+//        if (totalPlayers == 2) {
+//            indicator112.setVisibility(View.VISIBLE);
+//            indicator112.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.accent_color), PorterDuff.Mode.SRC_IN);
+//            indicator122.setVisibility(View.VISIBLE);
+//            indicator122.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.gray300), PorterDuff.Mode.SRC_IN);
+//
+//            indicator212.setVisibility(View.VISIBLE);
+//            indicator212.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.gray300), PorterDuff.Mode.SRC_IN);
+//            indicator222.setVisibility(View.VISIBLE);
+//            indicator222.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.accent_color), PorterDuff.Mode.SRC_IN);
+//
+//        } else if (totalPlayers == 3) {
+//            indicator111.setVisibility(View.VISIBLE);
+//            indicator111.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.accent_color), PorterDuff.Mode.SRC_IN);
+//            indicator113.setVisibility(View.VISIBLE);
+//            indicator113.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.gray300), PorterDuff.Mode.SRC_IN);
+//            indicator122.setVisibility(View.VISIBLE);
+//            indicator122.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.gray300), PorterDuff.Mode.SRC_IN);
+//
+//            indicator211.setVisibility(View.VISIBLE);
+//            indicator211.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.gray300), PorterDuff.Mode.SRC_IN);
+//            indicator213.setVisibility(View.VISIBLE);
+//            indicator213.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.accent_color), PorterDuff.Mode.SRC_IN);
+//            indicator222.setVisibility(View.VISIBLE);
+//            indicator222.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.gray300), PorterDuff.Mode.SRC_IN);
+//
+//            indicator311.setVisibility(View.VISIBLE);
+//            indicator311.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.gray300), PorterDuff.Mode.SRC_IN);
+//            indicator313.setVisibility(View.VISIBLE);
+//            indicator313.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.gray300), PorterDuff.Mode.SRC_IN);
+//            indicator322.setVisibility(View.VISIBLE);
+//            indicator322.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.accent_color), PorterDuff.Mode.SRC_IN);
+//
+//        } else if (totalPlayers == 4) {
+//            indicator111.setVisibility(View.VISIBLE);
+//            indicator111.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.accent_color), PorterDuff.Mode.SRC_IN);
+//            indicator113.setVisibility(View.VISIBLE);
+//            indicator113.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.gray300), PorterDuff.Mode.SRC_IN);
+//            indicator121.setVisibility(View.VISIBLE);
+//            indicator121.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.gray300), PorterDuff.Mode.SRC_IN);
+//            indicator123.setVisibility(View.VISIBLE);
+//            indicator123.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.gray300), PorterDuff.Mode.SRC_IN);
+//
+//            indicator211.setVisibility(View.VISIBLE);
+//            indicator211.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.gray300), PorterDuff.Mode.SRC_IN);
+//            indicator213.setVisibility(View.VISIBLE);
+//            indicator213.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.accent_color), PorterDuff.Mode.SRC_IN);
+//            indicator221.setVisibility(View.VISIBLE);
+//            indicator221.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.gray300), PorterDuff.Mode.SRC_IN);
+//            indicator223.setVisibility(View.VISIBLE);
+//            indicator223.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.gray300), PorterDuff.Mode.SRC_IN);
+//
+//            indicator311.setVisibility(View.VISIBLE);
+//            indicator311.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.gray300), PorterDuff.Mode.SRC_IN);
+//            indicator313.setVisibility(View.VISIBLE);
+//            indicator313.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.gray300), PorterDuff.Mode.SRC_IN);
+//            indicator321.setVisibility(View.VISIBLE);
+//            indicator321.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.accent_color), PorterDuff.Mode.SRC_IN);
+//            indicator323.setVisibility(View.VISIBLE);
+//            indicator323.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.gray300), PorterDuff.Mode.SRC_IN);
+//
+//            indicator411.setVisibility(View.VISIBLE);
+//            indicator411.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.gray300), PorterDuff.Mode.SRC_IN);
+//            indicator413.setVisibility(View.VISIBLE);
+//            indicator413.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.gray300), PorterDuff.Mode.SRC_IN);
+//            indicator421.setVisibility(View.VISIBLE);
+//            indicator421.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.gray300), PorterDuff.Mode.SRC_IN);
+//            indicator423.setVisibility(View.VISIBLE);
+//            indicator423.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.accent_color), PorterDuff.Mode.SRC_IN);
+//        }
+//    }
 
     private void createStatusBar() {
         statusBarBackground = findViewById(R.id.statusBarBackground);
@@ -476,22 +488,19 @@ public class NewGame2Activity extends AppCompatActivity {
                     break;
 
                 case DragEvent.ACTION_DRAG_LOCATION:
-                    Display display = getWindowManager().getDefaultDisplay();
-                    Point displaySize = new Point();
-                    display.getSize(displaySize);
-                    int displayMaxY = displaySize.y;
-
-                    Rect rect = new Rect();
-                    viewTarget.getGlobalVisibleRect(rect);
-                    Point touchPosition = new Point(rect.left + Math.round(event.getX()), rect.top + Math.round(event.getY()));
-
-                    int scrollTopThreshold = displayMaxY / 5 + mActionBar.getHeight() + statusBarBackground.getHeight();
-                    int scrollBottomThreshold = displayMaxY - (displayMaxY / 5);
-
-                    if (touchPosition.y < scrollTopThreshold)
-                        scrollView.smoothScrollBy(0, -15);
-                    if (touchPosition.y > scrollBottomThreshold)
-                        scrollView.smoothScrollBy(0, 15);
+//                    Display display = getWindowManager().getDefaultDisplay();
+//                    Point displaySize = new Point();
+//                    display.getSize(displaySize);
+//                    int displayMaxY = displaySize.y;
+//                    Rect rect = new Rect();
+//                    viewTarget.getGlobalVisibleRect(rect);
+//                    Point touchPosition = new Point(rect.left + Math.round(event.getX()), rect.top + Math.round(event.getY()));
+//                    int scrollTopThreshold = displayMaxY / 5 + mActionBar.getHeight() + statusBarBackground.getHeight();
+//                    int scrollBottomThreshold = displayMaxY - (displayMaxY / 5);
+//                    if (touchPosition.y < scrollTopThreshold)
+//                        scrollView.smoothScrollBy(0, -15);
+//                    if (touchPosition.y > scrollBottomThreshold)
+//                        scrollView.smoothScrollBy(0, 15);
                     break;
 
                 case DragEvent.ACTION_DROP:

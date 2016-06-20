@@ -31,10 +31,40 @@
                 android:layout_height="?attr/actionBarSize"
                 app:theme="@style/MyActionBar"/>
 
+            <!-- TODO -->
             <!-- Main content -->
-            <include
-                layout="@layout/activity_new_game2_content">
-            </include>
+            <ViewStub
+                android:id="@+id/xupeta2"
+                android:inflatedId="@+id/panel_import2"
+                android:layout="@layout/activity_new_game2_content_2p"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <ViewStub
+                android:id="@+id/xupeta3"
+                android:inflatedId="@+id/panel_import3"
+                android:layout="@layout/activity_new_game2_content_3p"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <ViewStub
+                android:id="@+id/xupeta4"
+                android:inflatedId="@+id/panel_import4"
+                android:layout="@layout/activity_new_game2_content_4p"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <!--<include-->
+                <!--android:id="@+id/activity_new_game2_content_2p"-->
+                <!--layout="@layout/activity_new_game2_content_2p">-->
+            <!--</include>-->
+            <!--<include-->
+                <!--android:id="@+id/activity_new_game2_content_3p"-->
+                <!--layout="@layout/activity_new_game2_content_3p">-->
+            <!--</include>-->
+            <!--<include-->
+                <!--android:id="@+id/activity_new_game2_content_4p"-->
+                <!--layout="@layout/activity_new_game2_content_4p">-->
+            <!--</include>-->
+
         </LinearLayout>
     </RelativeLayout>
 
