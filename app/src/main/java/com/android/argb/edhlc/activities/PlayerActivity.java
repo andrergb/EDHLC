@@ -1124,25 +1124,20 @@ public class PlayerActivity extends AppCompatActivity {
     private void updateLayout() {
         mActionBar.setTitle(mPlayerName);
 
-        //Deck info - Card
+        //Player info - Card
         if (mCardViewFullHeightPlayerInfo == 0) {
             cardViewPlayerInfo.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                 @Override
                 public boolean onPreDraw() {
                     cardViewPlayerInfo.getViewTreeObserver().removeOnPreDrawListener(this);
                     mCardViewFullHeightPlayerInfo = cardViewPlayerInfo.getHeight();
+
+                    ViewGroup.LayoutParams layoutParams = cardViewPlayerInfo.getLayoutParams();
+                    layoutParams.height = relativeTitlePlayerInfo.getHeight();
+                    cardViewPlayerInfo.setLayoutParams(layoutParams);
                     return true;
                 }
             });
-        }
-        //Deck info - title
-        if (cardViewPlayerInfo.getHeight() == mCardViewFullHeightPlayerInfo) {
-            textTitlePlayerInfo.setTextColor(ContextCompat.getColor(this, R.color.secondary_color));
-            iconIndicatorPlayerInfo.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.arrow_up));
-            iconIndicatorPlayerInfo.setColorFilter(ContextCompat.getColor(this, R.color.secondary_color));
-        } else {
-            textTitlePlayerInfo.setTextColor(ContextCompat.getColor(this, R.color.secondary_text));
-            iconIndicatorPlayerInfo.setColorFilter(ContextCompat.getColor(this, R.color.secondary_text));
         }
 
         List<Deck> allDecks = decksDB.getAllDeckByPlayerName(mPlayerName);

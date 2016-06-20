@@ -42,30 +42,33 @@
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="0.3"
-                            android:onClick="onClickOverview">
+                            android:onClick="onClickOverview"
+                            android:paddingLeft="12dp"
+                            android:paddingRight="12dp">
 
                             <TextView
                                 android:id="@+id/textViewOverviewP1Name"
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_centerHorizontal="true"
-                                android:layout_centerVertical="true"
-                                android:layout_margin="2dp"
+                                android:layout_centerInParent="true"
+                                android:layout_marginBottom="2dp"
+                                android:layout_marginEnd="20dp"
+                                android:layout_marginTop="2dp"
+                                android:layout_toEndOf="@+id/imageViewThroneP1"
+                                android:ellipsize="end"
                                 android:fontFamily="sans-serif-thin"
                                 android:gravity="center"
+                                android:maxLines="1"
                                 android:text="PlayerName"
                                 android:textSize="20sp"
                                 android:textStyle="bold"/>
 
                             <ImageView
                                 android:id="@+id/imageViewThroneP1"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:layout_margin="6dp"
-                                android:layout_toStartOf="@id/textViewOverviewP1Name"
-                                android:adjustViewBounds="true"
-                                android:padding="4dp"
+                                android:layout_width="15dp"
+                                android:layout_height="20dp"
+                                android:layout_alignParentStart="true"
+                                android:layout_centerInParent="true"
                                 android:src="@drawable/icon_crown"/>
                         </RelativeLayout>
 
@@ -212,30 +215,33 @@
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="0.3"
-                            android:onClick="onClickOverview">
+                            android:onClick="onClickOverview"
+                            android:paddingLeft="12dp"
+                            android:paddingRight="12dp">
 
                             <TextView
                                 android:id="@+id/textViewOverviewP2Name"
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_centerHorizontal="true"
-                                android:layout_centerVertical="true"
-                                android:layout_margin="2dp"
+                                android:layout_centerInParent="true"
+                                android:layout_marginBottom="2dp"
+                                android:layout_marginEnd="20dp"
+                                android:layout_marginTop="2dp"
+                                android:layout_toEndOf="@+id/imageViewThroneP2"
+                                android:ellipsize="end"
                                 android:fontFamily="sans-serif-thin"
                                 android:gravity="center"
+                                android:maxLines="1"
                                 android:text="PlayerName"
                                 android:textSize="20sp"
                                 android:textStyle="bold"/>
 
                             <ImageView
                                 android:id="@+id/imageViewThroneP2"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:layout_margin="6dp"
-                                android:layout_toStartOf="@id/textViewOverviewP2Name"
-                                android:adjustViewBounds="true"
-                                android:padding="4dp"
+                                android:layout_width="15dp"
+                                android:layout_height="20dp"
+                                android:layout_alignParentStart="true"
+                                android:layout_centerInParent="true"
                                 android:src="@drawable/icon_crown"/>
                         </RelativeLayout>
 
@@ -389,30 +395,33 @@
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="0.3"
-                            android:onClick="onClickOverview">
+                            android:onClick="onClickOverview"
+                            android:paddingLeft="12dp"
+                            android:paddingRight="12dp">
 
                             <TextView
                                 android:id="@+id/textViewOverviewP3Name"
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_centerHorizontal="true"
-                                android:layout_centerVertical="true"
-                                android:layout_margin="2dp"
+                                android:layout_centerInParent="true"
+                                android:layout_marginBottom="2dp"
+                                android:layout_marginEnd="20dp"
+                                android:layout_marginTop="2dp"
+                                android:layout_toEndOf="@+id/imageViewThroneP3"
+                                android:ellipsize="end"
                                 android:fontFamily="sans-serif-thin"
                                 android:gravity="center"
+                                android:maxLines="1"
                                 android:text="PlayerName"
                                 android:textSize="20sp"
                                 android:textStyle="bold"/>
 
                             <ImageView
                                 android:id="@+id/imageViewThroneP3"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:layout_margin="6dp"
-                                android:layout_toStartOf="@id/textViewOverviewP3Name"
-                                android:adjustViewBounds="true"
-                                android:padding="4dp"
+                                android:layout_width="15dp"
+                                android:layout_height="20dp"
+                                android:layout_alignParentStart="true"
+                                android:layout_centerInParent="true"
                                 android:src="@drawable/icon_crown"/>
                         </RelativeLayout>
 
@@ -558,30 +567,33 @@
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="0.3"
-                            android:onClick="onClickOverview">
+                            android:onClick="onClickOverview"
+                            android:paddingLeft="12dp"
+                            android:paddingRight="12dp">
 
                             <TextView
                                 android:id="@+id/textViewOverviewP4Name"
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_centerHorizontal="true"
-                                android:layout_centerVertical="true"
-                                android:layout_margin="2dp"
+                                android:layout_centerInParent="true"
+                                android:layout_marginBottom="2dp"
+                                android:layout_marginEnd="20dp"
+                                android:layout_marginTop="2dp"
+                                android:layout_toEndOf="@+id/imageViewThroneP4"
+                                android:ellipsize="end"
                                 android:fontFamily="sans-serif-thin"
                                 android:gravity="center"
+                                android:maxLines="1"
                                 android:text="PlayerName"
                                 android:textSize="20sp"
                                 android:textStyle="bold"/>
 
                             <ImageView
                                 android:id="@+id/imageViewThroneP4"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:layout_margin="6dp"
-                                android:layout_toStartOf="@id/textViewOverviewP4Name"
-                                android:adjustViewBounds="true"
-                                android:padding="4dp"
+                                android:layout_width="15dp"
+                                android:layout_height="20dp"
+                                android:layout_alignParentStart="true"
+                                android:layout_centerInParent="true"
                                 android:src="@drawable/icon_crown"/>
                         </RelativeLayout>
 

@@ -23,22 +23,22 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <!-- Card2: Last game played -->
-                <include
-                    layout="@layout/card_player_info">
-                </include>
-
-                <!-- Card deck info -->
+                <!-- Card1: Deck list -->
                 <include
                     layout="@layout/card_deck_list">
                 </include>
 
-                <!-- Card2: Last game played -->
+                <!-- Card2: Player info -->
+                <include
+                    layout="@layout/card_player_info">
+                </include>
+
+                <!-- Card3: Last game played -->
                 <include
                     layout="@layout/card_record">
                 </include>
 
-                <!-- Card3: History charts -->
+                <!-- Card4: History -->
                 <include
                     layout="@layout/card_history_charts">
                 </include>
@@ -89,7 +89,7 @@
                 android:onClick="onClickFabButton"
                 android:src="@drawable/icon_add_white"
                 app:backgroundTint="@color/accent_color"
-                app:elevation="6dp"
+                app:elevation="@dimen/elevationMiniFAB"
                 app:fabSize="mini"
                 app:layout_behavior="com.android.argb.edhlc.FABScrollBehavior"
                 app:pressedTranslationZ="12dp"/>
@@ -129,7 +129,7 @@
                 android:onClick="onClickFabButton"
                 android:src="@drawable/icon_edit_white"
                 app:backgroundTint="@color/accent_color"
-                app:elevation="6dp"
+                app:elevation="@dimen/elevationMiniFAB"
                 app:fabSize="mini"
                 app:layout_behavior="com.android.argb.edhlc.FABScrollBehavior"
                 app:pressedTranslationZ="12dp"/>
@@ -169,7 +169,7 @@
                 android:onClick="onClickFabButton"
                 android:src="@drawable/icon_delete_white"
                 app:backgroundTint="@color/accent_color"
-                app:elevation="6dp"
+                app:elevation="@dimen/elevationMiniFAB"
                 app:fabSize="mini"
                 app:layout_behavior="com.android.argb.edhlc.FABScrollBehavior"
                 app:pressedTranslationZ="12dp"/>
