@@ -7,6 +7,10 @@ public class Constants {
     public static final String PHASE3_TIMER = "PHASE3_TIMER";
     public static final String PHASE4_TIMER = "PHASE4_TIMER";
     public static final String PHASE5_TIMER = "PHASE5_TIMER";
+
+    public static final int EXPAND = 0;
+    public static final int COLLAPSE = 1;
+
     //    public static final int SWIPE_BOTTOM = 0;
 //    public static final int SWIPE_TOP = 1;
     public static String SCREEN_ON = "SCREEN_ON";

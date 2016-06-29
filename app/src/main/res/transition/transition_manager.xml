@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<transitionManager
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 4 Players -->
+    <transition
+        android:fromScene="@layout/scene_overview_4_players"
+        android:toScene="@layout/big11_4p"
+        android:transition="@transition/slow_auto_transition"/>
+    <transition
+        android:fromScene="@layout/big11_4p"
+        android:toScene="@layout/scene_overview_4_players"
+        android:transition="@transition/to_overview_transition"/>
+
+    <transition
+        android:fromScene="@layout/scene_overview_4_players"
+        android:toScene="@layout/big12_4p"
+        android:transition="@transition/slow_auto_transition"/>
+    <transition
+        android:fromScene="@layout/big12_4p"
+        android:toScene="@layout/scene_overview_4_players"
+        android:transition="@transition/to_overview_transition"/>
+
+    <transition
+        android:fromScene="@layout/scene_overview_4_players"
+        android:toScene="@layout/big21_4p"
+        android:transition="@transition/slow_auto_transition"/>
+    <transition
+        android:fromScene="@layout/big21_4p"
+        android:toScene="@layout/scene_overview_4_players"
+        android:transition="@transition/to_overview_transition"/>
+
+    <transition
+        android:fromScene="@layout/scene_overview_4_players"
+        android:toScene="@layout/big22_4p"
+        android:transition="@transition/slow_auto_transition"/>
+    <transition
+        android:fromScene="@layout/big22_4p"
+        android:toScene="@layout/scene_overview_4_players"
+        android:transition="@transition/to_overview_transition"/>
+
+    <!-- 3 Players -->
+    <transition
+        android:fromScene="@layout/scene_overview_3_players"
+        android:toScene="@layout/big11_3p"
+        android:transition="@transition/slow_auto_transition"/>
+    <transition
+        android:fromScene="@layout/big11_3p"
+        android:toScene="@layout/scene_overview_3_players"
+        android:transition="@transition/to_overview_transition"/>
+
+    <transition
+        android:fromScene="@layout/scene_overview_3_players"
+        android:toScene="@layout/big12_3p"
+        android:transition="@transition/slow_auto_transition"/>
+    <transition
+        android:fromScene="@layout/big12_3p"
+        android:toScene="@layout/scene_overview_3_players"
+        android:transition="@transition/to_overview_transition"/>
+
+    <transition
+        android:fromScene="@layout/scene_overview_3_players"
+        android:toScene="@layout/big21_3p"
+        android:transition="@transition/slow_auto_transition"/>
+    <transition
+        android:fromScene="@layout/big21_3p"
+        android:toScene="@layout/scene_overview_3_players"
+        android:transition="@transition/to_overview_transition"/>
+
+    <!-- 2 Players -->
+    <transition
+        android:fromScene="@layout/scene_overview_2_players"
+        android:toScene="@layout/big11_2p"
+        android:transition="@transition/slow_auto_transition"/>
+    <transition
+        android:fromScene="@layout/big11_2p"
+        android:toScene="@layout/scene_overview_2_players"
+        android:transition="@transition/to_overview_transition"/>
+
+    <transition
+        android:fromScene="@layout/scene_overview_2_players"
+        android:toScene="@layout/big12_2p"
+        android:transition="@transition/slow_auto_transition"/>
+    <transition
+        android:fromScene="@layout/big12_2p"
+        android:toScene="@layout/scene_overview_2_players"
+        android:transition="@transition/to_overview_transition"/>
+</transitionManager>

@@ -7,19 +7,20 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.transition.Scene;
+import android.transition.TransitionInflater;
+import android.transition.TransitionManager;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -30,14 +31,13 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
+import android.view.animation.ScaleAnimation;
 import android.widget.Chronometer;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -52,127 +52,139 @@ import com.android.argb.edhlc.objects.ActivePlayer;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /* Created by ARGB */
-public class MainActivity extends AppCompatActivity implements MainFragment.OnUpdateData {
+public class MainActivity extends AppCompatActivity {
 
-    private static final int MODE_INVALID = -1;
-    private static final int MODE_NEW_GAME = 0;
-    private static final int MODE_OVERVIEW = 1;
-    private static final int MODE_PLAYING = 2;
-
-    ///LAYOUT OVERVIEW
-    private static ImageView overview_ImageViewThroneP1;
-    private static ImageView overview_ImageViewThroneP2;
-    private static ImageView overview_ImageViewThroneP3;
-    private static ImageView overview_ImageViewThroneP4;
-    private static TextView overview_TextViewP1Name;
-    private static TextView overview_TextViewP1Life;
-    private static ImageView overview_lifePositiveP1;
-    private static ImageView overview_lifeNegativeP1;
-    private static TextView overview_TextViewP1EDH1;
-    private static TextView overview_TextViewP1EDH2;
-    private static TextView overview_TextViewP1EDH3;
-    private static TextView overview_TextViewP1EDH4;
-    private static TextView overview_TextViewP2Name;
-    private static TextView overview_TextViewP2Life;
-    private static ImageView overview_lifePositiveP2;
-    private static ImageView overview_lifeNegativeP2;
-    private static TextView overview_TextViewP2EDH1;
-    private static TextView overview_TextViewP2EDH2;
-    private static TextView overview_TextViewP2EDH3;
-    private static TextView overview_TextViewP2EDH4;
-    private static TextView overview_TextViewP3Name;
-    private static TextView overview_TextViewP3Life;
-    private static ImageView overview_lifePositiveP3;
-    private static ImageView overview_lifeNegativeP3;
-    private static TextView overview_TextViewP3EDH1;
-    private static TextView overview_TextViewP3EDH2;
-    private static TextView overview_TextViewP3EDH3;
-    private static TextView overview_TextViewP3EDH4;
-    private static TextView overview_TextViewP4Name;
-    private static TextView overview_TextViewP4Life;
-    private static ImageView overview_lifePositiveP4;
-    private static ImageView overview_lifeNegativeP4;
-    private static TextView overview_TextViewP4EDH1;
-    private static TextView overview_TextViewP4EDH2;
-    private static TextView overview_TextViewP4EDH3;
-    private static TextView overview_TextViewP4EDH4;
+    //HistoryThreads
     private static Thread mThreadLife1;
     private static Thread mThreadLife2;
     private static Thread mThreadLife3;
     private static Thread mThreadLife4;
+
     ///Drawer
     private DrawerLayout mPlayerDrawerLayout;
     private LinearLayout mPlayerDrawer;
     private ActionBarDrawerToggle mDrawerToggle;
     private Switch switchScreen;
-    private SharedPreferences mSharedPreferences;
-    private List<MainFragment> fragments;
-    private ActionBar mActionBar;
     private View statusBarBackground;
-    private ViewPager viewPager;
-    private TabLayout tabLayout;
-    private RelativeLayout viewNewGame;
-    private RelativeLayout viewOverview;
+    private ActionBar mActionBar;
+    private SharedPreferences mSharedPreferences;
+
     //Players
     private int totalPlayers;
     private ActivePlayer activePlayer1;
     private ActivePlayer activePlayer2;
     private ActivePlayer activePlayer3;
     private ActivePlayer activePlayer4;
+
     private boolean isInAnimation;
     private TextView textViewResult;
     private ProgressBar progressRandomBar;
     private TextView textViewDiceResult;
     private Menu optionMenu;
+    private FrameLayout container;
 
-    public float getPlayerLifeTextSize(ActivePlayer player, int limit) {
-        return (player.getPlayerLife() <= 99 && player.getPlayerLife() >= -9) ?
-                (totalPlayers == limit ? Constants.LIFE_TEXT_SIZE_2_DIGITS_HIGHLIGHT : Constants.LIFE_TEXT_SIZE_2_DIGITS) :
-                (totalPlayers == limit ? Constants.LIFE_TEXT_SIZE_3_DIGITS_HIGHLIGHT : Constants.LIFE_TEXT_SIZE_3_DIGITS);
-    }
+    private TransitionManager mTransitionManager;
 
-//    @Override
-//    public void iSwipe(int direction) {
-//        switch (direction) {
-//            case Constants.SWIPE_BOTTOM:
-//                setMode(MODE_OVERVIEW, getCurrentMode());
-//                break;
-//
-//            case Constants.SWIPE_TOP:
-//                displayBottomSheetsHistory();
-//                break;
-//        }
-//    }
+    private Scene overview_scene;
+    private Scene big11_scene;
+    private Scene big12_scene;
+    private Scene big21_scene;
+    private Scene big22_scene;
 
-    @Override
-    public void iUpdateActivePlayer(ActivePlayer activePlayer) {
-        switch (activePlayer.getPlayerTag()) {
-            case 0:
-                activePlayer1 = activePlayer;
-                break;
-            case 1:
-                activePlayer2 = activePlayer;
-                break;
-            case 2:
-                activePlayer3 = activePlayer;
-                break;
-            case 3:
-                activePlayer4 = activePlayer;
-                break;
+    private int currentSceneOverview = -1;
+    private int currentScene11 = 0;
+    private int currentScene12 = 1;
+    private int currentScene21 = 2;
+    private int currentScene22 = 3;
+
+    private int currentScene;
+
+    private ImageView layout11_throne;
+    private TextView layout11_name;
+    private TextView layout11_deck;
+    private TextView layout11_life;
+    private ImageView layout11_life_positive;
+    private ImageView layout11_life_negative;
+    private TextView layout11_edh1;
+    private TextView layout11_edh2;
+    private TextView layout11_edh3;
+    private TextView layout11_edh4;
+
+    private ImageView layout12_throne;
+    private TextView layout12_name;
+    private TextView layout12_deck;
+    private TextView layout12_life;
+    private ImageView layout12_life_positive;
+    private ImageView layout12_life_negative;
+    private TextView layout12_edh1;
+    private TextView layout12_edh2;
+    private TextView layout12_edh3;
+    private TextView layout12_edh4;
+
+    private ImageView layout21_throne;
+    private TextView layout21_name;
+    private TextView layout21_deck;
+    private TextView layout21_life;
+    private ImageView layout21_life_positive;
+    private ImageView layout21_life_negative;
+    private TextView layout21_edh1;
+    private TextView layout21_edh2;
+    private TextView layout21_edh3;
+    private TextView layout21_edh4;
+
+    private ImageView layout22_throne;
+    private TextView layout22_name;
+    private TextView layout22_deck;
+    private TextView layout22_life;
+    private ImageView layout22_life_positive;
+    private ImageView layout22_life_negative;
+    private TextView layout22_edh1;
+    private TextView layout22_edh2;
+    private TextView layout22_edh3;
+    private TextView layout22_edh4;
+
+    public void expandOverview(int player, int type) {
+        float fromSize = 1.0f;
+        float toSize = 1.0f;
+        float aux;
+        if (totalPlayers == 4 || (totalPlayers == 3 && (player == 0 || player == 1))) {
+            if (getActivePlayer(player).getPlayerLife() <= 99 && getActivePlayer(player).getPlayerLife() >= -9)
+                aux = getResources().getDimension(R.dimen.life_2_digits_expanded) / getResources().getDimension(R.dimen.life_2_digits_min);
+            else
+                aux = getResources().getDimension(R.dimen.life_3_digits_expanded) / getResources().getDimension(R.dimen.life_3_digits_min);
+        } else {
+            if (getActivePlayer(player).getPlayerLife() <= 99 && getActivePlayer(player).getPlayerLife() >= -9)
+                aux = getResources().getDimension(R.dimen.life_2_digits_expanded) / getResources().getDimension(R.dimen.life_2_digits_max);
+            else
+                aux = getResources().getDimension(R.dimen.life_3_digits_expanded) / getResources().getDimension(R.dimen.life_3_digits_max);
         }
-    }
 
-    @Override
-    public void iUpdateDethrone() {
-        for (int i = 0; i < fragments.size(); i++)
-            fragments.get(i).updateFragmentDethrone(isPlayerOnThrone(i));
-    }
+        if (type == Constants.EXPAND)
+            toSize = aux;
+        else
+            fromSize = aux;
 
-    @Override
-    public void iUpdateHistory() {
-        historyHandler(getActivePlayer(tabLayout.getSelectedTabPosition()));
+        Animation scale = new ScaleAnimation(fromSize, toSize, fromSize, toSize, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        scale.setDuration(getResources().getInteger(R.integer.animation_expand_text_duration));
+        scale.setStartOffset(type == Constants.EXPAND ? getResources().getInteger(R.integer.animation_expand_text_delay) : 0);
+        scale.setInterpolator(this, android.R.anim.overshoot_interpolator);
+        scale.setFillAfter(true);
+        if (player == 0) {
+            layout11_life.clearAnimation();
+            layout11_life.setAnimation(scale);
+        } else if (player == 1) {
+            layout12_life.clearAnimation();
+            layout12_life.setAnimation(scale);
+        } else if (player == 2) {
+            layout21_life.clearAnimation();
+            layout21_life.setAnimation(scale);
+        } else if (player == 3) {
+            layout22_life.clearAnimation();
+            layout22_life.setAnimation(scale);
+        }
     }
 
     public boolean isValidGame() {
@@ -209,8 +221,8 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
     public void onBackPressed() {
         if (mPlayerDrawerLayout.isDrawerOpen(mPlayerDrawer))
             mPlayerDrawerLayout.closeDrawers();
-        else if (getCurrentMode() != MODE_PLAYING && isValidGame())
-            setMode(MODE_PLAYING, getCurrentMode());
+        else if (currentScene != this.currentSceneOverview)
+            goToScene(this.currentSceneOverview);
         else
             super.onBackPressed();
     }
@@ -258,129 +270,363 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
         }
     }
 
+    public void onClickLayout(View view) {
+        if (!isInAnimation) {
+            switch (view.getId()) {
+                //Player 11
+                case R.id.layout11_header:
+                    if (view.getTag().toString().equalsIgnoreCase(getString(R.string.tag_big)))
+                        goToScene(this.currentSceneOverview);
+                    else
+                        goToScene(this.currentScene11);
+                    break;
+                case R.id.layout11_life_positive:
+                    if (activePlayer1.getPlayerLife() < Constants.MAX_LIFE) {
+                        activePlayer1.setPlayerLife(activePlayer1.getPlayerLife() + 1);
+                        historyHandler(activePlayer1);
+                        updateLayout11();
+                    }
+                    break;
+                case R.id.layout11_life_negative:
+                    if (activePlayer1.getPlayerLife() > Constants.MIN_LIFE) {
+                        activePlayer1.setPlayerLife(activePlayer1.getPlayerLife() - 1);
+                        historyHandler(activePlayer1);
+                        updateLayout11();
+                    }
+                    break;
+                case R.id.layout11_positive_EDH1:
+                    if (activePlayer1.getPlayerEDH1() < Constants.MAX_EDH) {
+                        activePlayer1.setPlayerLife(activePlayer1.getPlayerLife() - 1);
+                        activePlayer1.setPlayerEDH1(activePlayer1.getPlayerEDH1() + 1);
+                        historyHandler(activePlayer1);
+                        updateLayout11();
+                    }
+                    break;
+                case R.id.layout11_negative_EDH1:
+                    if (activePlayer1.getPlayerEDH1() > Constants.MIN_EDH) {
+                        activePlayer1.setPlayerLife(activePlayer1.getPlayerLife() + 1);
+                        activePlayer1.setPlayerEDH1(activePlayer1.getPlayerEDH1() - 1);
+                        historyHandler(activePlayer1);
+                        updateLayout11();
+                    }
+                    break;
+                case R.id.layout11_positive_EDH2:
+                    if (activePlayer1.getPlayerEDH2() < Constants.MAX_EDH) {
+                        activePlayer1.setPlayerLife(activePlayer1.getPlayerLife() - 1);
+                        activePlayer1.setPlayerEDH2(activePlayer1.getPlayerEDH2() + 1);
+                        historyHandler(activePlayer1);
+                        updateLayout11();
+                    }
+                    break;
+                case R.id.layout11_negative_EDH2:
+                    if (activePlayer1.getPlayerEDH2() > Constants.MIN_EDH) {
+                        activePlayer1.setPlayerLife(activePlayer1.getPlayerLife() + 1);
+                        activePlayer1.setPlayerEDH2(activePlayer1.getPlayerEDH2() - 1);
+                        historyHandler(activePlayer1);
+                        updateLayout11();
+                    }
+                    break;
+                case R.id.layout11_positive_EDH3:
+                    if (activePlayer1.getPlayerEDH3() < Constants.MAX_EDH) {
+                        activePlayer1.setPlayerLife(activePlayer1.getPlayerLife() - 1);
+                        activePlayer1.setPlayerEDH3(activePlayer1.getPlayerEDH3() + 1);
+                        historyHandler(activePlayer1);
+                        updateLayout11();
+                    }
+                    break;
+                case R.id.layout11_negative_EDH3:
+                    if (activePlayer1.getPlayerEDH3() > Constants.MIN_EDH) {
+                        activePlayer1.setPlayerLife(activePlayer1.getPlayerLife() + 1);
+                        activePlayer1.setPlayerEDH3(activePlayer1.getPlayerEDH3() - 1);
+                        historyHandler(activePlayer1);
+                        updateLayout11();
+                    }
+                    break;
+                case R.id.layout11_positive_EDH4:
+                    if (activePlayer1.getPlayerEDH4() < Constants.MAX_EDH) {
+                        activePlayer1.setPlayerLife(activePlayer1.getPlayerLife() - 1);
+                        activePlayer1.setPlayerEDH4(activePlayer1.getPlayerEDH4() + 1);
+                        historyHandler(activePlayer1);
+                        updateLayout11();
+                    }
+                    break;
+                case R.id.layout11_negative_EDH4:
+                    if (activePlayer1.getPlayerEDH4() > Constants.MIN_EDH) {
+                        activePlayer1.setPlayerLife(activePlayer1.getPlayerLife() + 1);
+                        activePlayer1.setPlayerEDH4(activePlayer1.getPlayerEDH4() - 1);
+                        historyHandler(activePlayer1);
+                        updateLayout11();
+                    }
+                    break;
+
+                //Player 12
+                case R.id.layout12_header:
+                    if (view.getTag().toString().equalsIgnoreCase(getString(R.string.tag_big)))
+                        goToScene(this.currentSceneOverview);
+                    else
+                        goToScene(this.currentScene12);
+                    break;
+                case R.id.layout12_life_positive:
+                    if (activePlayer2.getPlayerLife() < Constants.MAX_LIFE) {
+                        activePlayer2.setPlayerLife(activePlayer2.getPlayerLife() + 1);
+                        historyHandler(activePlayer2);
+                        updateLayout12();
+                    }
+                    break;
+                case R.id.layout12_life_negative:
+                    if (activePlayer2.getPlayerLife() > Constants.MIN_LIFE) {
+                        activePlayer2.setPlayerLife(activePlayer2.getPlayerLife() - 1);
+                        historyHandler(activePlayer2);
+                        updateLayout12();
+                    }
+                    break;
+                case R.id.layout12_positive_EDH1:
+                    if (activePlayer2.getPlayerEDH1() < Constants.MAX_EDH) {
+                        activePlayer2.setPlayerLife(activePlayer2.getPlayerLife() - 1);
+                        activePlayer2.setPlayerEDH1(activePlayer2.getPlayerEDH1() + 1);
+                        historyHandler(activePlayer2);
+                        updateLayout12();
+                    }
+                    break;
+                case R.id.layout12_negative_EDH1:
+                    if (activePlayer2.getPlayerEDH1() > Constants.MIN_EDH) {
+                        activePlayer2.setPlayerLife(activePlayer2.getPlayerLife() + 1);
+                        activePlayer2.setPlayerEDH1(activePlayer2.getPlayerEDH1() - 1);
+                        historyHandler(activePlayer2);
+                        updateLayout12();
+                    }
+                    break;
+                case R.id.layout12_positive_EDH2:
+                    if (activePlayer2.getPlayerEDH2() < Constants.MAX_EDH) {
+                        activePlayer2.setPlayerLife(activePlayer2.getPlayerLife() - 1);
+                        activePlayer2.setPlayerEDH2(activePlayer2.getPlayerEDH2() + 1);
+                        historyHandler(activePlayer2);
+                        updateLayout12();
+                    }
+                    break;
+                case R.id.layout12_negative_EDH2:
+                    if (activePlayer2.getPlayerEDH2() > Constants.MIN_EDH) {
+                        activePlayer2.setPlayerLife(activePlayer2.getPlayerLife() + 1);
+                        activePlayer2.setPlayerEDH2(activePlayer2.getPlayerEDH2() - 1);
+                        historyHandler(activePlayer2);
+                        updateLayout12();
+                    }
+                    break;
+                case R.id.layout12_positive_EDH3:
+                    if (activePlayer2.getPlayerEDH3() < Constants.MAX_EDH) {
+                        activePlayer2.setPlayerLife(activePlayer2.getPlayerLife() - 1);
+                        activePlayer2.setPlayerEDH3(activePlayer2.getPlayerEDH3() + 1);
+                        historyHandler(activePlayer2);
+                        updateLayout12();
+                    }
+                    break;
+                case R.id.layout12_negative_EDH3:
+                    if (activePlayer2.getPlayerEDH3() > Constants.MIN_EDH) {
+                        activePlayer2.setPlayerLife(activePlayer2.getPlayerLife() + 1);
+                        activePlayer2.setPlayerEDH3(activePlayer2.getPlayerEDH3() - 1);
+                        historyHandler(activePlayer2);
+                        updateLayout12();
+                    }
+                    break;
+                case R.id.layout12_positive_EDH4:
+                    if (activePlayer2.getPlayerEDH4() < Constants.MAX_EDH) {
+                        activePlayer2.setPlayerLife(activePlayer2.getPlayerLife() - 1);
+                        activePlayer2.setPlayerEDH4(activePlayer2.getPlayerEDH4() + 1);
+                        historyHandler(activePlayer2);
+                        updateLayout12();
+                    }
+                    break;
+                case R.id.layout12_negative_EDH4:
+                    if (activePlayer2.getPlayerEDH4() > Constants.MIN_EDH) {
+                        activePlayer2.setPlayerLife(activePlayer2.getPlayerLife() + 1);
+                        activePlayer2.setPlayerEDH4(activePlayer2.getPlayerEDH4() - 1);
+                        historyHandler(activePlayer2);
+                        updateLayout12();
+                    }
+                    break;
+
+                //Player 21
+                case R.id.layout21_header:
+                    if (view.getTag().toString().equalsIgnoreCase(getString(R.string.tag_big)))
+                        goToScene(this.currentSceneOverview);
+                    else
+                        goToScene(this.currentScene21);
+                    break;
+                case R.id.layout21_life_positive:
+                    if (activePlayer3.getPlayerLife() < Constants.MAX_LIFE) {
+                        activePlayer3.setPlayerLife(activePlayer3.getPlayerLife() + 1);
+                        historyHandler(activePlayer3);
+                        updateLayout21();
+                    }
+                    break;
+                case R.id.layout21_life_negative:
+                    if (activePlayer3.getPlayerLife() > Constants.MIN_LIFE) {
+                        activePlayer3.setPlayerLife(activePlayer3.getPlayerLife() - 1);
+                        historyHandler(activePlayer3);
+                        updateLayout21();
+                    }
+                    break;
+                case R.id.layout21_positive_EDH1:
+                    if (activePlayer3.getPlayerEDH1() < Constants.MAX_EDH) {
+                        activePlayer3.setPlayerLife(activePlayer3.getPlayerLife() - 1);
+                        activePlayer3.setPlayerEDH1(activePlayer3.getPlayerEDH1() + 1);
+                        historyHandler(activePlayer3);
+                        updateLayout21();
+                    }
+                    break;
+                case R.id.layout21_negative_EDH1:
+                    if (activePlayer3.getPlayerEDH1() > Constants.MIN_EDH) {
+                        activePlayer3.setPlayerLife(activePlayer3.getPlayerLife() + 1);
+                        activePlayer3.setPlayerEDH1(activePlayer3.getPlayerEDH1() - 1);
+                        historyHandler(activePlayer3);
+                        updateLayout21();
+                    }
+                    break;
+                case R.id.layout21_positive_EDH2:
+                    if (activePlayer3.getPlayerEDH2() < Constants.MAX_EDH) {
+                        activePlayer3.setPlayerLife(activePlayer3.getPlayerLife() - 1);
+                        activePlayer3.setPlayerEDH2(activePlayer3.getPlayerEDH2() + 1);
+                        historyHandler(activePlayer3);
+                        updateLayout21();
+                    }
+                    break;
+                case R.id.layout21_negative_EDH2:
+                    if (activePlayer3.getPlayerEDH2() > Constants.MIN_EDH) {
+                        activePlayer3.setPlayerLife(activePlayer3.getPlayerLife() + 1);
+                        activePlayer3.setPlayerEDH2(activePlayer3.getPlayerEDH2() - 1);
+                        historyHandler(activePlayer3);
+                        updateLayout21();
+                    }
+                    break;
+                case R.id.layout21_positive_EDH3:
+                    if (activePlayer3.getPlayerEDH3() < Constants.MAX_EDH) {
+                        activePlayer3.setPlayerLife(activePlayer3.getPlayerLife() - 1);
+                        activePlayer3.setPlayerEDH3(activePlayer3.getPlayerEDH3() + 1);
+                        historyHandler(activePlayer3);
+                        updateLayout21();
+                    }
+                    break;
+                case R.id.layout21_negative_EDH3:
+                    if (activePlayer3.getPlayerEDH3() > Constants.MIN_EDH) {
+                        activePlayer3.setPlayerLife(activePlayer3.getPlayerLife() + 1);
+                        activePlayer3.setPlayerEDH3(activePlayer3.getPlayerEDH3() - 1);
+                        historyHandler(activePlayer3);
+                        updateLayout21();
+                    }
+                    break;
+                case R.id.layout21_positive_EDH4:
+                    if (activePlayer3.getPlayerEDH4() < Constants.MAX_EDH) {
+                        activePlayer3.setPlayerLife(activePlayer3.getPlayerLife() - 1);
+                        activePlayer3.setPlayerEDH4(activePlayer3.getPlayerEDH4() + 1);
+                        historyHandler(activePlayer3);
+                        updateLayout21();
+                    }
+                    break;
+                case R.id.layout21_negative_EDH4:
+                    if (activePlayer3.getPlayerEDH4() > Constants.MIN_EDH) {
+                        activePlayer3.setPlayerLife(activePlayer3.getPlayerLife() + 1);
+                        activePlayer3.setPlayerEDH4(activePlayer3.getPlayerEDH4() - 1);
+                        historyHandler(activePlayer3);
+                        updateLayout21();
+                    }
+                    break;
+
+                //Player 22
+                case R.id.layout22_header:
+                    if (view.getTag().toString().equalsIgnoreCase(getString(R.string.tag_big)))
+                        goToScene(this.currentSceneOverview);
+                    else
+                        goToScene(this.currentScene22);
+                    break;
+                case R.id.layout22_life_positive:
+                    if (activePlayer4.getPlayerLife() < Constants.MAX_LIFE) {
+                        activePlayer4.setPlayerLife(activePlayer4.getPlayerLife() + 1);
+                        historyHandler(activePlayer4);
+                        updateLayout22();
+                    }
+                    break;
+                case R.id.layout22_life_negative:
+                    if (activePlayer4.getPlayerLife() > Constants.MIN_LIFE) {
+                        activePlayer4.setPlayerLife(activePlayer4.getPlayerLife() - 1);
+                        historyHandler(activePlayer4);
+                        updateLayout22();
+                    }
+                    break;
+                case R.id.layout22_positive_EDH1:
+                    if (activePlayer4.getPlayerEDH1() < Constants.MAX_EDH) {
+                        activePlayer4.setPlayerLife(activePlayer4.getPlayerLife() - 1);
+                        activePlayer4.setPlayerEDH1(activePlayer4.getPlayerEDH1() + 1);
+                        historyHandler(activePlayer4);
+                        updateLayout22();
+                    }
+                    break;
+                case R.id.layout22_negative_EDH1:
+                    if (activePlayer4.getPlayerEDH1() > Constants.MIN_EDH) {
+                        activePlayer4.setPlayerLife(activePlayer4.getPlayerLife() + 1);
+                        activePlayer4.setPlayerEDH1(activePlayer4.getPlayerEDH1() - 1);
+                        historyHandler(activePlayer4);
+                        updateLayout22();
+                    }
+                    break;
+                case R.id.layout22_positive_EDH2:
+                    if (activePlayer4.getPlayerEDH2() < Constants.MAX_EDH) {
+                        activePlayer4.setPlayerLife(activePlayer4.getPlayerLife() - 1);
+                        activePlayer4.setPlayerEDH2(activePlayer4.getPlayerEDH2() + 1);
+                        historyHandler(activePlayer4);
+                        updateLayout22();
+                    }
+                    break;
+                case R.id.layout22_negative_EDH2:
+                    if (activePlayer4.getPlayerEDH2() > Constants.MIN_EDH) {
+                        activePlayer4.setPlayerLife(activePlayer4.getPlayerLife() + 1);
+                        activePlayer4.setPlayerEDH2(activePlayer4.getPlayerEDH2() - 1);
+                        historyHandler(activePlayer4);
+                        updateLayout22();
+                    }
+                    break;
+                case R.id.layout22_positive_EDH3:
+                    if (activePlayer4.getPlayerEDH3() < Constants.MAX_EDH) {
+                        activePlayer4.setPlayerLife(activePlayer4.getPlayerLife() - 1);
+                        activePlayer4.setPlayerEDH3(activePlayer4.getPlayerEDH3() + 1);
+                        historyHandler(activePlayer4);
+                        updateLayout22();
+                    }
+                    break;
+                case R.id.layout22_negative_EDH3:
+                    if (activePlayer4.getPlayerEDH3() > Constants.MIN_EDH) {
+                        activePlayer4.setPlayerLife(activePlayer4.getPlayerLife() + 1);
+                        activePlayer4.setPlayerEDH3(activePlayer4.getPlayerEDH3() - 1);
+                        historyHandler(activePlayer4);
+                        updateLayout22();
+                    }
+                    break;
+                case R.id.layout22_positive_EDH4:
+                    if (activePlayer4.getPlayerEDH4() < Constants.MAX_EDH) {
+                        activePlayer4.setPlayerLife(activePlayer4.getPlayerLife() - 1);
+                        activePlayer4.setPlayerEDH4(activePlayer4.getPlayerEDH4() + 1);
+                        historyHandler(activePlayer4);
+                        updateLayout22();
+                    }
+                    break;
+                case R.id.layout22_negative_EDH4:
+                    if (activePlayer4.getPlayerEDH4() > Constants.MIN_EDH) {
+                        activePlayer4.setPlayerLife(activePlayer4.getPlayerLife() + 1);
+                        activePlayer4.setPlayerEDH4(activePlayer4.getPlayerEDH4() - 1);
+                        historyHandler(activePlayer4);
+                        updateLayout22();
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
+
+    //TODO 2
     public void onClickNewGame(View view) {
         startActivity(new Intent(this, NewGameActivity.class));
         this.finish();
-    }
-
-    public void onClickOverview(View view) {
-        switch (view.getId()) {
-            // PLAYER 1
-            case R.id.nameP1:
-                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 0).apply();
-                setMode(MODE_PLAYING, getCurrentMode());
-                break;
-            case R.id.textViewOverviewP1Life:
-//                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 0).apply();
-                break;
-            case R.id.lifePositiveP1:
-                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 0).apply();
-                if (activePlayer1.getPlayerLife() < Constants.MAX_LIFE) {
-                    activePlayer1.setPlayerLife(activePlayer1.getPlayerLife() + 1);
-                    overview_TextViewP1Life.setText(String.valueOf(activePlayer1.getPlayerLife()));
-                    overview_TextViewP1Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (getPlayerLifeTextSize(activePlayer1, 2)));
-                    updateOverviewDethroneIcon();
-                    historyHandler(activePlayer1);
-                }
-                break;
-            case R.id.lifeNegativeP1:
-                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 0).apply();
-                if (activePlayer1.getPlayerLife() > Constants.MIN_LIFE) {
-                    activePlayer1.setPlayerLife(activePlayer1.getPlayerLife() - 1);
-                    overview_TextViewP1Life.setText(String.valueOf(activePlayer1.getPlayerLife()));
-                    overview_TextViewP1Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (getPlayerLifeTextSize(activePlayer1, 2)));
-                    updateOverviewDethroneIcon();
-                    historyHandler(activePlayer1);
-                }
-                break;
-
-            // PLAYER 2
-            case R.id.nameP2:
-                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 1).apply();
-                setMode(MODE_PLAYING, getCurrentMode());
-                break;
-            case R.id.textViewOverviewP2Life:
-//                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 1).apply();
-                break;
-            case R.id.lifePositiveP2:
-                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 1).apply();
-                if (activePlayer2.getPlayerLife() < Constants.MAX_LIFE) {
-                    activePlayer2.setPlayerLife(activePlayer2.getPlayerLife() + 1);
-                    overview_TextViewP2Life.setText(String.valueOf(activePlayer2.getPlayerLife()));
-                    overview_TextViewP2Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (getPlayerLifeTextSize(activePlayer2, 2)));
-                    updateOverviewDethroneIcon();
-                    historyHandler(activePlayer2);
-                }
-                break;
-            case R.id.lifeNegativeP2:
-                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 1).apply();
-                if (activePlayer2.getPlayerLife() > Constants.MIN_LIFE) {
-                    activePlayer2.setPlayerLife(activePlayer2.getPlayerLife() - 1);
-                    overview_TextViewP2Life.setText(String.valueOf(activePlayer2.getPlayerLife()));
-                    overview_TextViewP2Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (getPlayerLifeTextSize(activePlayer2, 2)));
-                    updateOverviewDethroneIcon();
-                    historyHandler(activePlayer2);
-                }
-                break;
-
-            // PLAYER 3
-            case R.id.nameP3:
-                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 2).apply();
-                setMode(MODE_PLAYING, getCurrentMode());
-                break;
-            case R.id.textViewOverviewP3Life:
-//                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 2).apply();
-                break;
-            case R.id.lifePositiveP3:
-                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 2).apply();
-                if (activePlayer3.getPlayerLife() < Constants.MAX_LIFE) {
-                    activePlayer3.setPlayerLife(activePlayer3.getPlayerLife() + 1);
-                    overview_TextViewP3Life.setText(String.valueOf(activePlayer3.getPlayerLife()));
-                    overview_TextViewP3Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (getPlayerLifeTextSize(activePlayer3, 3)));
-                    updateOverviewDethroneIcon();
-                    historyHandler(activePlayer3);
-                }
-                break;
-            case R.id.lifeNegativeP3:
-                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 2).apply();
-                if (activePlayer3.getPlayerLife() > Constants.MIN_LIFE) {
-                    activePlayer3.setPlayerLife(activePlayer3.getPlayerLife() - 1);
-                    overview_TextViewP3Life.setText(String.valueOf(activePlayer3.getPlayerLife()));
-                    overview_TextViewP3Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (getPlayerLifeTextSize(activePlayer3, 3)));
-                    updateOverviewDethroneIcon();
-                    historyHandler(activePlayer3);
-                }
-                break;
-
-            // PLAYER 4
-            case R.id.nameP4:
-                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 3).apply();
-                setMode(MODE_PLAYING, getCurrentMode());
-                break;
-            case R.id.textViewOverviewP4Life:
-//                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 3).apply();
-                break;
-            case R.id.lifePositiveP4:
-                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 3).apply();
-                if (activePlayer4.getPlayerLife() < Constants.MAX_LIFE) {
-                    activePlayer4.setPlayerLife(activePlayer4.getPlayerLife() + 1);
-                    overview_TextViewP4Life.setText(String.valueOf(activePlayer4.getPlayerLife()));
-                    overview_TextViewP4Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (getPlayerLifeTextSize(activePlayer4, 3)));
-                    updateOverviewDethroneIcon();
-                    historyHandler(activePlayer4);
-                }
-                break;
-            case R.id.lifeNegativeP4:
-                getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, 3).apply();
-                if (activePlayer4.getPlayerLife() > Constants.MIN_LIFE) {
-                    activePlayer4.setPlayerLife(activePlayer4.getPlayerLife() - 1);
-                    overview_TextViewP4Life.setText(String.valueOf(activePlayer4.getPlayerLife()));
-                    overview_TextViewP4Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (getPlayerLifeTextSize(activePlayer4, 3)));
-                    updateOverviewDethroneIcon();
-                    historyHandler(activePlayer4);
-                }
-                break;
-        }
     }
 
     @Override
@@ -394,21 +640,12 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
         this.optionMenu = menu;
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
-        if (getCurrentMode() == MODE_NEW_GAME) {
+        if (currentScene == this.currentSceneOverview) {
             optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_history_index))).setEnabled(false);
             optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_history_index))).setVisible(false);
-            optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_overview_index))).setEnabled(false);
-            optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_overview_index))).setVisible(false);
-        } else if (getCurrentMode() == MODE_OVERVIEW) {
-            optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_history_index))).setEnabled(false);
-            optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_history_index))).setVisible(false);
-            optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_overview_index))).setEnabled(true);
-            optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_overview_index))).setVisible(true);
-        } else if (getCurrentMode() == MODE_PLAYING) {
+        } else {
             optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_history_index))).setEnabled(true);
             optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_history_index))).setVisible(true);
-            optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_overview_index))).setEnabled(true);
-            optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_overview_index))).setVisible(true);
         }
 
         return true;
@@ -416,96 +653,79 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
+        if (!isInAnimation) {
+            if (mDrawerToggle.onOptionsItemSelected(item)) {
+                return true;
+            }
 
-        //Option menu
-        switch (item.getItemId()) {
-            case R.id.action_overview:
-                if (!isInAnimation) {
-                    if (getCurrentMode() == MODE_PLAYING)
-                        getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, tabLayout.getSelectedTabPosition()).apply();
-                    if (getCurrentMode() == MODE_OVERVIEW)
-                        setMode(MODE_PLAYING, getCurrentMode());
-                    else
-                        setMode(MODE_OVERVIEW, getCurrentMode());
-                }
-                break;
+            //Option menu
+            switch (item.getItemId()) {
+                case R.id.action_history:
+                    if (currentScene != this.currentSceneOverview)
+                        displayBottomSheetsHistory();
+                    break;
 
-            case R.id.action_history:
-                displayBottomSheetsHistory();
+                case R.id.actions_new_game:
+                    Intent intent = new Intent(this, NewGameActivity.class);
+                    intent.putExtra("NEW_GAME_IS_VALID", isValidGame());
 
-//                if (!isInAnimation) {
-//                    if (getCurrentMode() == MODE_PLAYING)
-//                        getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, tabLayout.getSelectedTabPosition()).apply();
-//                    if (getCurrentMode() == MODE_HISTORY)
-//                        setMode(MODE_PLAYING, getCurrentMode());
-//                    else
-//                        setMode(MODE_HISTORY, getCurrentMode());
-//                }
-                break;
+                    if (isValidGame()) {
+                        intent.putExtra("NEW_GAME_TOTAL_PLAYER", totalPlayers);
 
-            case R.id.actions_new_game:
-                Intent intent = new Intent(this, NewGameActivity.class);
-                intent.putExtra("NEW_GAME_IS_VALID", isValidGame());
+                        intent.putExtra("NEW_GAME_PLAYER_1", activePlayer1.getPlayerDeck().getDeckOwnerName());
+                        intent.putExtra("NEW_GAME_DECK_1", activePlayer1.getPlayerDeck().getDeckName());
 
-                if (isValidGame()) {
-                    intent.putExtra("NEW_GAME_TOTAL_PLAYER", totalPlayers);
+                        intent.putExtra("NEW_GAME_PLAYER_2", activePlayer2.getPlayerDeck().getDeckOwnerName());
+                        intent.putExtra("NEW_GAME_DECK_2", activePlayer2.getPlayerDeck().getDeckName());
 
-                    intent.putExtra("NEW_GAME_PLAYER_1", activePlayer1.getPlayerDeck().getDeckOwnerName());
-                    intent.putExtra("NEW_GAME_DECK_1", activePlayer1.getPlayerDeck().getDeckName());
-
-                    intent.putExtra("NEW_GAME_PLAYER_2", activePlayer2.getPlayerDeck().getDeckOwnerName());
-                    intent.putExtra("NEW_GAME_DECK_2", activePlayer2.getPlayerDeck().getDeckName());
-
-                    if (totalPlayers >= 3) {
-                        intent.putExtra("NEW_GAME_PLAYER_3", activePlayer3.getPlayerDeck().getDeckOwnerName());
-                        intent.putExtra("NEW_GAME_DECK_3", activePlayer3.getPlayerDeck().getDeckName());
-                    }
-                    if (totalPlayers >= 4) {
-                        intent.putExtra("NEW_GAME_PLAYER_4", activePlayer4.getPlayerDeck().getDeckOwnerName());
-                        intent.putExtra("NEW_GAME_DECK_4", activePlayer4.getPlayerDeck().getDeckName());
-                    }
-                }
-
-                startActivity(intent);
-                this.finish();
-                break;
-
-            case R.id.actions_log_game:
-                if (isValidGame()) {
-                    Intent intentLog = new Intent(this, LogGameActivity.class);
-                    intentLog.putExtra("LOG_GAME_TOTAL_PLAYERS", totalPlayers);
-
-                    intentLog.putExtra("LOG_GAME_PLAYER_1", activePlayer1.getPlayerDeck().getDeckOwnerName());
-                    intentLog.putExtra("LOG_GAME_DECK_1", activePlayer1.getPlayerDeck().getDeckName());
-
-                    intentLog.putExtra("LOG_GAME_PLAYER_2", activePlayer2.getPlayerDeck().getDeckOwnerName());
-                    intentLog.putExtra("LOG_GAME_DECK_2", activePlayer2.getPlayerDeck().getDeckName());
-
-                    if (totalPlayers >= 3) {
-                        intentLog.putExtra("LOG_GAME_PLAYER_3", activePlayer3.getPlayerDeck().getDeckOwnerName());
-                        intentLog.putExtra("LOG_GAME_DECK_3", activePlayer3.getPlayerDeck().getDeckName());
-                    }
-                    if (totalPlayers >= 4) {
-                        intentLog.putExtra("LOG_GAME_PLAYER_4", activePlayer4.getPlayerDeck().getDeckOwnerName());
-                        intentLog.putExtra("LOG_GAME_DECK_4", activePlayer4.getPlayerDeck().getDeckName());
+                        if (totalPlayers >= 3) {
+                            intent.putExtra("NEW_GAME_PLAYER_3", activePlayer3.getPlayerDeck().getDeckOwnerName());
+                            intent.putExtra("NEW_GAME_DECK_3", activePlayer3.getPlayerDeck().getDeckName());
+                        }
+                        if (totalPlayers >= 4) {
+                            intent.putExtra("NEW_GAME_PLAYER_4", activePlayer4.getPlayerDeck().getDeckOwnerName());
+                            intent.putExtra("NEW_GAME_DECK_4", activePlayer4.getPlayerDeck().getDeckName());
+                        }
                     }
 
-                    startActivity(intentLog);
+                    startActivity(intent);
                     this.finish();
-                }
-                break;
+                    break;
 
-            case R.id.actions_roll_dice:
-                showDiceDialog();
-                break;
+                case R.id.actions_log_game:
+                    if (isValidGame()) {
+                        Intent intentLog = new Intent(this, LogGameActivity.class);
+                        intentLog.putExtra("LOG_GAME_TOTAL_PLAYERS", totalPlayers);
 
-            case R.id.actions_random_player:
-                if (isValidGame())
-                    showRandomPlayerDialog();
-                break;
+                        intentLog.putExtra("LOG_GAME_PLAYER_1", activePlayer1.getPlayerDeck().getDeckOwnerName());
+                        intentLog.putExtra("LOG_GAME_DECK_1", activePlayer1.getPlayerDeck().getDeckName());
+
+                        intentLog.putExtra("LOG_GAME_PLAYER_2", activePlayer2.getPlayerDeck().getDeckOwnerName());
+                        intentLog.putExtra("LOG_GAME_DECK_2", activePlayer2.getPlayerDeck().getDeckName());
+
+                        if (totalPlayers >= 3) {
+                            intentLog.putExtra("LOG_GAME_PLAYER_3", activePlayer3.getPlayerDeck().getDeckOwnerName());
+                            intentLog.putExtra("LOG_GAME_DECK_3", activePlayer3.getPlayerDeck().getDeckName());
+                        }
+                        if (totalPlayers >= 4) {
+                            intentLog.putExtra("LOG_GAME_PLAYER_4", activePlayer4.getPlayerDeck().getDeckOwnerName());
+                            intentLog.putExtra("LOG_GAME_DECK_4", activePlayer4.getPlayerDeck().getDeckName());
+                        }
+
+                        startActivity(intentLog);
+                        this.finish();
+                    }
+                    break;
+
+                case R.id.actions_roll_dice:
+                    showDiceDialog();
+                    break;
+
+                case R.id.actions_random_player:
+                    if (isValidGame())
+                        showRandomPlayerDialog();
+                    break;
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -524,16 +744,13 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
             if (totalPlayers >= 4 && activePlayer4 != null)
                 Utils.savePlayerInSharedPreferences(this, activePlayer4);
         }
-
-        if (tabLayout != null)
-            getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_VIEW_TAB, tabLayout.getSelectedTabPosition()).apply();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        System.out.println(14 & (~0 << 2));
         mSharedPreferences = getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE);
         totalPlayers = mSharedPreferences.getInt(Constants.CURRENT_GAME_TOTAL_PLAYERS, 0);
 
@@ -541,13 +758,9 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
         createToolbar();
         createDrawer();
 
-        viewNewGame = (RelativeLayout) findViewById(R.id.fragmentNewGame);
-
         createLayout();
 
         if (isValidGame()) {
-            createOverviewLayout();
-
             activePlayer1 = Utils.loadPlayerFromSharedPreferences(this, 0);
             activePlayer2 = Utils.loadPlayerFromSharedPreferences(this, 1);
             if (totalPlayers >= 3)
@@ -555,35 +768,11 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
             if (totalPlayers >= 4)
                 activePlayer4 = Utils.loadPlayerFromSharedPreferences(this, 3);
 
-            List<String> tabTitles = new ArrayList<>();
-            fragments = new ArrayList<>();
-            fragments.add(MainFragment.newInstance(activePlayer1, totalPlayers));
-            tabTitles.add(activePlayer1.getPlayerDeck().getDeckOwnerName());
-            fragments.add(MainFragment.newInstance(activePlayer2, totalPlayers));
-            tabTitles.add(activePlayer2.getPlayerDeck().getDeckOwnerName());
-            if (totalPlayers >= 3) {
-                fragments.add(MainFragment.newInstance(activePlayer3, totalPlayers));
-                tabTitles.add(activePlayer3.getPlayerDeck().getDeckOwnerName());
-            }
-            if (totalPlayers >= 4) {
-                fragments.add(MainFragment.newInstance(activePlayer4, totalPlayers));
-                tabTitles.add(activePlayer4.getPlayerDeck().getDeckOwnerName());
-            }
-            MainPagerAdapter mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager(), MainActivity.this, fragments, tabTitles);
-
-            viewPager.setAdapter(mPagerAdapter);
-            viewPager.setOffscreenPageLimit(fragments.size());
-
-            tabLayout.setupWithViewPager(viewPager);
-
-            int color = getActivePlayer(mSharedPreferences.getInt(Constants.CURRENT_VIEW_TAB, 0)).getPlayerDeck().getDeckShieldColor()[0];
-            if (color == 0)
-                color = getResources().getIntArray(R.array.edh_default)[0];
-            setActionBarColor(color);
-
-            setMode(MODE_PLAYING, MODE_INVALID);
+            createGameLayout();
+            updateLayout();
         } else {
-            setMode(MODE_NEW_GAME, MODE_INVALID);
+            //TODO 1 inflate newgame layout
+            startActivity(new Intent(this, NewGameActivity.class));
         }
     }
 
@@ -596,8 +785,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
     @Override
     protected void onResume() {
         super.onResume();
-        if (viewPager != null)
-            viewPager.setCurrentItem(mSharedPreferences.getInt(Constants.CURRENT_VIEW_TAB, 0));
 
         if (getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt(Constants.SCREEN_ON, 0) == 1) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -606,15 +793,12 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             switchScreen.setChecked(false);
         }
-
         if (isValidGame()) {
-            setMode(MODE_PLAYING, MODE_INVALID);
+            startTimerCounter();
         } else {
-            getSharedPreferences(Constants.PREFERENCE_NAME, Activity.MODE_PRIVATE).edit().putInt(Constants.CURRENT_GAME_TIMER, 0).apply();
-            setMode(MODE_NEW_GAME, MODE_INVALID);
+            //TODO 1 inflate newgame layout
+            startActivity(new Intent(this, NewGameActivity.class));
         }
-
-        startTimerCounter();
     }
 
     @Override
@@ -662,31 +846,40 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
         }
     }
 
+    private void createGameLayout() {
+        createLayout11();
+        createLayout12();
+        createLayout21();
+        createLayout22();
+    }
+
     private void createLayout() {
-        isInAnimation = false;
+        container = (FrameLayout) findViewById(R.id.container);
 
-        viewPager = (ViewPager) findViewById(R.id.fragmentViewPager);
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
+        TransitionInflater transitionInflater = TransitionInflater.from(this);
+        mTransitionManager = transitionInflater.inflateTransitionManager(R.transition.transition_manager, container);
 
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
+        if (totalPlayers == 2) {
+            getLayoutInflater().inflate(R.layout.scene_overview_2_players, container, true);
+            overview_scene = Scene.getSceneForLayout(container, R.layout.scene_overview_2_players, this);
+            big11_scene = Scene.getSceneForLayout(container, R.layout.big11_2p, this);
+            big12_scene = Scene.getSceneForLayout(container, R.layout.big12_2p, this);
+        } else if (totalPlayers == 3) {
+            getLayoutInflater().inflate(R.layout.scene_overview_3_players, container, true);
+            overview_scene = Scene.getSceneForLayout(container, R.layout.scene_overview_3_players, this);
+            big11_scene = Scene.getSceneForLayout(container, R.layout.big11_3p, this);
+            big12_scene = Scene.getSceneForLayout(container, R.layout.big12_3p, this);
+            big21_scene = Scene.getSceneForLayout(container, R.layout.big21_3p, this);
+        } else {
+            getLayoutInflater().inflate(R.layout.scene_overview_4_players, container, true);
+            overview_scene = Scene.getSceneForLayout(container, R.layout.scene_overview_4_players, this);
+            big11_scene = Scene.getSceneForLayout(container, R.layout.big11_4p, this);
+            big12_scene = Scene.getSceneForLayout(container, R.layout.big12_4p, this);
+            big21_scene = Scene.getSceneForLayout(container, R.layout.big21_4p, this);
+            big22_scene = Scene.getSceneForLayout(container, R.layout.big22_4p, this);
+        }
 
-            @Override
-            public void onPageSelected(int position) {
-                if (!isInAnimation) {
-                    int color = getActivePlayer(position).getPlayerDeck().getDeckShieldColor()[0];
-                    if (color == 0)
-                        color = getResources().getIntArray(R.array.edh_default)[0];
-                    setActionBarColor(color);
-                }
-            }
-        });
-
-        tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        currentScene = this.currentSceneOverview;
 
         //Drawer
         switchScreen = (Switch) findViewById(R.id.switchScreen);
@@ -702,91 +895,69 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
                 }
             }
         });
+
+        isInAnimation = false;
     }
 
-    private void createOverviewLayout() {
-        viewOverview = (RelativeLayout) findViewById(R.id.fragmentOverview);
+    private void createLayout11() {
+        layout11_throne = (ImageView) container.findViewById(R.id.layout11_throne);
+        layout11_name = (TextView) container.findViewById(R.id.layout11_name);
+        layout11_deck = (TextView) container.findViewById(R.id.layout11_deck);
+        layout11_life = (TextView) container.findViewById(R.id.layout11_life);
+        layout11_life_positive = (ImageView) container.findViewById(R.id.layout11_life_positive);
+        layout11_life_negative = (ImageView) container.findViewById(R.id.layout11_life_negative);
+        layout11_edh1 = (TextView) container.findViewById(R.id.layout11_edh1);
+        layout11_edh2 = (TextView) container.findViewById(R.id.layout11_edh2);
+        if (totalPlayers >= 3)
+            layout11_edh3 = (TextView) container.findViewById(R.id.layout11_edh3);
+        if (totalPlayers >= 4)
+            layout11_edh4 = (TextView) container.findViewById(R.id.layout11_edh4);
+    }
 
-        FrameLayout overview = (FrameLayout) findViewById(R.id.fragmentOverviewFrameLayout);
-        if (totalPlayers == 2)
-            getLayoutInflater().inflate(R.layout.fragment_overview_2p, overview, true);
-        else if (totalPlayers == 3)
-            getLayoutInflater().inflate(R.layout.fragment_overview_3p, overview, true);
-        else if (totalPlayers == 4)
-            getLayoutInflater().inflate(R.layout.fragment_overview_4p, overview, true);
+    private void createLayout12() {
+        layout12_throne = (ImageView) container.findViewById(R.id.layout12_throne);
+        layout12_name = (TextView) container.findViewById(R.id.layout12_name);
+        layout12_deck = (TextView) container.findViewById(R.id.layout12_deck);
+        layout12_life = (TextView) container.findViewById(R.id.layout12_life);
+        layout12_life_positive = (ImageView) container.findViewById(R.id.layout12_life_positive);
+        layout12_life_negative = (ImageView) container.findViewById(R.id.layout12_life_negative);
+        layout12_edh1 = (TextView) container.findViewById(R.id.layout12_edh1);
+        layout12_edh2 = (TextView) container.findViewById(R.id.layout12_edh2);
+        if (totalPlayers >= 3)
+            layout12_edh3 = (TextView) container.findViewById(R.id.layout12_edh3);
+        if (totalPlayers >= 4)
+            layout12_edh4 = (TextView) container.findViewById(R.id.layout12_edh4);
+    }
 
-        if (totalPlayers >= 1) {
-            overview_ImageViewThroneP1 = (ImageView) findViewById(R.id.imageViewThroneP1);
-            overview_ImageViewThroneP2 = (ImageView) findViewById(R.id.imageViewThroneP2);
-            overview_ImageViewThroneP3 = (ImageView) findViewById(R.id.imageViewThroneP3);
-            overview_ImageViewThroneP4 = (ImageView) findViewById(R.id.imageViewThroneP4);
-        }
-
-        if (totalPlayers >= 1) {
-            overview_TextViewP1Name = (TextView) findViewById(R.id.textViewOverviewP1Name);
-            overview_TextViewP1Life = (TextView) findViewById(R.id.textViewOverviewP1Life);
-            LinearLayout mLinearEDH1 = (LinearLayout) findViewById(R.id.linearEDH1);
-            if (mLinearEDH1 != null) {
-                mLinearEDH1.setWeightSum(totalPlayers);
-            }
-            overview_lifePositiveP1 = (ImageView) findViewById(R.id.lifePositiveP1);
-            overview_lifeNegativeP1 = (ImageView) findViewById(R.id.lifeNegativeP1);
-            overview_TextViewP1EDH1 = (TextView) findViewById(R.id.textViewOverviewP1EDH1);
-            overview_TextViewP1EDH2 = (TextView) findViewById(R.id.textViewOverviewP1EDH2);
-            if (totalPlayers >= 3)
-                overview_TextViewP1EDH3 = (TextView) findViewById(R.id.textViewOverviewP1EDH3);
-            if (totalPlayers >= 4)
-                overview_TextViewP1EDH4 = (TextView) findViewById(R.id.textViewOverviewP1EDH4);
-        }
-
-        if (totalPlayers >= 2) {
-            overview_TextViewP2Name = (TextView) findViewById(R.id.textViewOverviewP2Name);
-            overview_TextViewP2Life = (TextView) findViewById(R.id.textViewOverviewP2Life);
-            LinearLayout mLinearEDH2 = (LinearLayout) findViewById(R.id.linearEDH2);
-            if (mLinearEDH2 != null) {
-                mLinearEDH2.setWeightSum(totalPlayers);
-            }
-            overview_lifePositiveP2 = (ImageView) findViewById(R.id.lifePositiveP2);
-            overview_lifeNegativeP2 = (ImageView) findViewById(R.id.lifeNegativeP2);
-            overview_TextViewP2EDH1 = (TextView) findViewById(R.id.textViewOverviewP2EDH1);
-            overview_TextViewP2EDH2 = (TextView) findViewById(R.id.textViewOverviewP2EDH2);
-            if (totalPlayers >= 3)
-                overview_TextViewP2EDH3 = (TextView) findViewById(R.id.textViewOverviewP2EDH3);
-            if (totalPlayers >= 4)
-                overview_TextViewP2EDH4 = (TextView) findViewById(R.id.textViewOverviewP2EDH4);
-        }
-
+    private void createLayout21() {
         if (totalPlayers >= 3) {
-            overview_TextViewP3Name = (TextView) findViewById(R.id.textViewOverviewP3Name);
-            overview_TextViewP3Life = (TextView) findViewById(R.id.textViewOverviewP3Life);
-            LinearLayout mLinearEDH3 = (LinearLayout) findViewById(R.id.linearEDH3);
-            if (mLinearEDH3 != null) {
-                mLinearEDH3.setWeightSum(totalPlayers);
-            }
-            overview_lifePositiveP3 = (ImageView) findViewById(R.id.lifePositiveP3);
-            overview_lifeNegativeP3 = (ImageView) findViewById(R.id.lifeNegativeP3);
-            overview_TextViewP3EDH1 = (TextView) findViewById(R.id.textViewOverviewP3EDH1);
-            overview_TextViewP3EDH2 = (TextView) findViewById(R.id.textViewOverviewP3EDH2);
-            overview_TextViewP3EDH3 = (TextView) findViewById(R.id.textViewOverviewP3EDH3);
+            layout21_throne = (ImageView) container.findViewById(R.id.layout21_throne);
+            layout21_name = (TextView) container.findViewById(R.id.layout21_name);
+            layout21_deck = (TextView) container.findViewById(R.id.layout21_deck);
+            layout21_life = (TextView) container.findViewById(R.id.layout21_life);
+            layout21_life_positive = (ImageView) container.findViewById(R.id.layout21_life_positive);
+            layout21_life_negative = (ImageView) container.findViewById(R.id.layout21_life_negative);
+            layout21_edh1 = (TextView) container.findViewById(R.id.layout21_edh1);
+            layout21_edh2 = (TextView) container.findViewById(R.id.layout21_edh2);
+            layout21_edh3 = (TextView) container.findViewById(R.id.layout21_edh3);
             if (totalPlayers >= 4)
-                overview_TextViewP3EDH4 = (TextView) findViewById(R.id.textViewOverviewP3EDH4);
+                layout21_edh4 = (TextView) container.findViewById(R.id.layout21_edh4);
         }
+    }
 
+    private void createLayout22() {
         if (totalPlayers >= 4) {
-            overview_TextViewP4Name = (TextView) findViewById(R.id.textViewOverviewP4Name);
-            overview_TextViewP4Life = (TextView) findViewById(R.id.textViewOverviewP4Life);
-            LinearLayout mLinearEDH4 = (LinearLayout) findViewById(R.id.linearEDH4);
-            if (mLinearEDH4 != null) {
-                mLinearEDH4.setWeightSum(totalPlayers);
-            }
-            overview_lifePositiveP4 = (ImageView) findViewById(R.id.lifePositiveP4);
-            overview_lifeNegativeP4 = (ImageView) findViewById(R.id.lifeNegativeP4);
-            overview_TextViewP4EDH1 = (TextView) findViewById(R.id.textViewOverviewP4EDH1);
-            overview_TextViewP4EDH2 = (TextView) findViewById(R.id.textViewOverviewP4EDH2);
-            overview_TextViewP4EDH3 = (TextView) findViewById(R.id.textViewOverviewP4EDH3);
-            overview_TextViewP4EDH4 = (TextView) findViewById(R.id.textViewOverviewP4EDH4);
+            layout22_throne = (ImageView) container.findViewById(R.id.layout22_throne);
+            layout22_name = (TextView) container.findViewById(R.id.layout22_name);
+            layout22_deck = (TextView) container.findViewById(R.id.layout22_deck);
+            layout22_life = (TextView) container.findViewById(R.id.layout22_life);
+            layout22_life_positive = (ImageView) container.findViewById(R.id.layout22_life_positive);
+            layout22_life_negative = (ImageView) container.findViewById(R.id.layout22_life_negative);
+            layout22_edh1 = (TextView) container.findViewById(R.id.layout22_edh1);
+            layout22_edh2 = (TextView) container.findViewById(R.id.layout22_edh2);
+            layout22_edh3 = (TextView) container.findViewById(R.id.layout22_edh3);
+            layout22_edh4 = (TextView) container.findViewById(R.id.layout22_edh4);
         }
-
     }
 
     private void createStatusBar() {
@@ -827,7 +998,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
 
         HistoryBottomSheet bottomSheetDialogFragment = new HistoryBottomSheet();
         bottomSheetDialogFragment.setBottomSheetsHeight((int) (displaymetrics.heightPixels * 0.4));
-        bottomSheetDialogFragment.setPlayers(tabLayout.getSelectedTabPosition(), activePlayers);
+        bottomSheetDialogFragment.setPlayers(currentScene, activePlayers);
         bottomSheetDialogFragment.show(getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
     }
 
@@ -846,14 +1017,56 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
         }
     }
 
-    private int getCurrentMode() {
-        if (viewNewGame.getVisibility() == View.VISIBLE)
-            return MODE_NEW_GAME;
-        else if (viewOverview.getVisibility() == View.VISIBLE)
-            return MODE_OVERVIEW;
-        else if (viewPager.getVisibility() == View.VISIBLE)
-            return MODE_PLAYING;
-        return -1;
+    private void goToScene(int goTo) {
+        new animationHandler().execute();
+
+        if (goTo == this.currentSceneOverview) {
+            int auxActivePlayer = 0;
+            if (currentScene == this.currentScene11)
+                auxActivePlayer = 0;
+            else if (currentScene == this.currentScene12)
+                auxActivePlayer = 1;
+            else if (currentScene == this.currentScene21)
+                auxActivePlayer = 2;
+            else if (currentScene == this.currentScene22)
+                auxActivePlayer = 3;
+            mTransitionManager.transitionTo(overview_scene);
+            currentScene = this.currentSceneOverview;
+            createGameLayout();
+            updateLayout();
+            setActionBarColor(ContextCompat.getColor(MainActivity.this, R.color.primary_color));
+            expandOverview(auxActivePlayer, Constants.COLLAPSE);
+        } else if (goTo == this.currentScene11) {
+            mTransitionManager.transitionTo(big11_scene);
+            currentScene = this.currentScene11;
+            createLayout11();
+            updateLayout11();
+            setActionBarColor(activePlayer1.getPlayerDeck().getDeckShieldColor()[0]);
+            expandOverview(activePlayer1.getPlayerTag(), Constants.EXPAND);
+        } else if (goTo == this.currentScene12) {
+            mTransitionManager.transitionTo(big12_scene);
+            currentScene = this.currentScene12;
+            createLayout12();
+            updateLayout12();
+            setActionBarColor(activePlayer2.getPlayerDeck().getDeckShieldColor()[0]);
+            expandOverview(activePlayer2.getPlayerTag(), Constants.EXPAND);
+        } else if (goTo == this.currentScene21) {
+            mTransitionManager.transitionTo(big21_scene);
+            currentScene = this.currentScene21;
+            createLayout21();
+            updateLayout21();
+            setActionBarColor(activePlayer3.getPlayerDeck().getDeckShieldColor()[0]);
+            expandOverview(activePlayer3.getPlayerTag(), Constants.EXPAND);
+        } else if (goTo == this.currentScene22) {
+            mTransitionManager.transitionTo(big22_scene);
+            currentScene = this.currentScene22;
+            createLayout22();
+            updateLayout22();
+            setActionBarColor(activePlayer4.getPlayerDeck().getDeckShieldColor()[0]);
+            expandOverview(activePlayer4.getPlayerTag(), Constants.EXPAND);
+        }
+
+        setupOptionMenu();
     }
 
     private void historyHandler(final ActivePlayer player) {
@@ -953,298 +1166,28 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
         }
     }
 
-    private boolean isPlayerOnThrone(int playerTag) {
-        ActivePlayer auxPlayer = new ActivePlayer();
-        switch (playerTag) {
-            case 0:
-                auxPlayer = activePlayer1;
-                break;
-            case 1:
-                auxPlayer = activePlayer2;
-                break;
-            case 2:
-                auxPlayer = activePlayer3;
-                break;
-            case 3:
-                auxPlayer = activePlayer4;
-                break;
-        }
-
-        //P1
-        if (isPlayerActiveAndAlive(0) && !isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3))
-            if (auxPlayer.getPlayerTag() == 0)
-                return true;
-
-        //P2
-        if (!isPlayerActiveAndAlive(0) && isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3))
-            if (auxPlayer.getPlayerTag() == 1)
-                return true;
-
-        //P3
-        if (!isPlayerActiveAndAlive(0) && !isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3))
-            if (auxPlayer.getPlayerTag() == 2)
-                return true;
-
-        //P4
-        if (!isPlayerActiveAndAlive(0) && !isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3))
-            if (auxPlayer.getPlayerTag() == 3)
-                return true;
-
-        //P1 and P2
-        if (isPlayerActiveAndAlive(0) && isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3)) {
-            if (auxPlayer.getPlayerTag() == 0 && activePlayer1.getPlayerLife() >= activePlayer2.getPlayerLife())
-                return true;
-            if (auxPlayer.getPlayerTag() == 1 && activePlayer2.getPlayerLife() >= activePlayer1.getPlayerLife())
-                return true;
-        }
-
-        //P1 and P3
-        if (isPlayerActiveAndAlive(0) && !isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3)) {
-            if (auxPlayer.getPlayerTag() == 0 && activePlayer1.getPlayerLife() >= activePlayer3.getPlayerLife())
-                return true;
-            if (auxPlayer.getPlayerTag() == 2 && activePlayer3.getPlayerLife() >= activePlayer1.getPlayerLife())
-                return true;
-        }
-
-        //P1 and P4
-        if (isPlayerActiveAndAlive(0) && !isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3)) {
-            if (auxPlayer.getPlayerTag() == 0 && activePlayer1.getPlayerLife() >= activePlayer4.getPlayerLife())
-                return true;
-            if (auxPlayer.getPlayerTag() == 3 && activePlayer4.getPlayerLife() >= activePlayer1.getPlayerLife())
-                return true;
-        }
-
-        //P2 and P3
-        if (!isPlayerActiveAndAlive(0) && isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3)) {
-            if (auxPlayer.getPlayerTag() == 1 && activePlayer2.getPlayerLife() >= activePlayer3.getPlayerLife())
-                return true;
-            if (auxPlayer.getPlayerTag() == 2 && activePlayer3.getPlayerLife() >= activePlayer2.getPlayerLife())
-                return true;
-        }
-
-        //P2 and P4
-        if (!isPlayerActiveAndAlive(0) && isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3)) {
-            if (auxPlayer.getPlayerTag() == 1 && activePlayer2.getPlayerLife() >= activePlayer4.getPlayerLife())
-                return true;
-            if (auxPlayer.getPlayerTag() == 3 && activePlayer4.getPlayerLife() >= activePlayer2.getPlayerLife())
-                return true;
-        }
-
-        //P3 and P4
-        if (!isPlayerActiveAndAlive(0) && !isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3)) {
-            if (auxPlayer.getPlayerTag() == 2 && activePlayer3.getPlayerLife() >= activePlayer4.getPlayerLife())
-                return true;
-            if (auxPlayer.getPlayerTag() == 3 && activePlayer4.getPlayerLife() >= activePlayer3.getPlayerLife())
-                return true;
-        }
-
-        //P1, P2 and P3
-        if (isPlayerActiveAndAlive(0) && isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3)) {
-            if (auxPlayer.getPlayerTag() == 0 && activePlayer1.getPlayerLife() >= activePlayer2.getPlayerLife() && activePlayer1.getPlayerLife() >= activePlayer3.getPlayerLife())
-                return true;
-            if (auxPlayer.getPlayerTag() == 1 && activePlayer2.getPlayerLife() >= activePlayer1.getPlayerLife() && activePlayer2.getPlayerLife() >= activePlayer3.getPlayerLife())
-                return true;
-            if (auxPlayer.getPlayerTag() == 2 && activePlayer3.getPlayerLife() >= activePlayer1.getPlayerLife() && activePlayer3.getPlayerLife() >= activePlayer2.getPlayerLife())
-                return true;
-        }
-
-        //P1, P2 and P4
-        if (isPlayerActiveAndAlive(0) && isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3)) {
-            if (auxPlayer.getPlayerTag() == 0 && activePlayer1.getPlayerLife() >= activePlayer2.getPlayerLife() && activePlayer1.getPlayerLife() >= activePlayer4.getPlayerLife())
-                return true;
-            if (auxPlayer.getPlayerTag() == 1 && activePlayer2.getPlayerLife() >= activePlayer1.getPlayerLife() && activePlayer2.getPlayerLife() >= activePlayer4.getPlayerLife())
-                return true;
-            if (auxPlayer.getPlayerTag() == 3 && activePlayer4.getPlayerLife() >= activePlayer1.getPlayerLife() && activePlayer4.getPlayerLife() >= activePlayer2.getPlayerLife())
-                return true;
-        }
-
-        //P1, P3 and P4
-        if (isPlayerActiveAndAlive(0) && !isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3)) {
-            if (auxPlayer.getPlayerTag() == 0 && activePlayer1.getPlayerLife() >= activePlayer3.getPlayerLife() && activePlayer1.getPlayerLife() >= activePlayer4.getPlayerLife())
-                return true;
-            if (auxPlayer.getPlayerTag() == 2 && activePlayer3.getPlayerLife() >= activePlayer1.getPlayerLife() && activePlayer3.getPlayerLife() >= activePlayer4.getPlayerLife())
-                return true;
-            if (auxPlayer.getPlayerTag() == 3 && activePlayer4.getPlayerLife() >= activePlayer1.getPlayerLife() && activePlayer4.getPlayerLife() >= activePlayer3.getPlayerLife())
-                return true;
-        }
-
-        //P2, P3 and P4
-        if (!isPlayerActiveAndAlive(0) && isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3)) {
-            if (auxPlayer.getPlayerTag() == 1 && activePlayer2.getPlayerLife() >= activePlayer3.getPlayerLife() && activePlayer2.getPlayerLife() >= activePlayer4.getPlayerLife())
-                return true;
-            if (auxPlayer.getPlayerTag() == 2 && activePlayer3.getPlayerLife() >= activePlayer2.getPlayerLife() && activePlayer3.getPlayerLife() >= activePlayer4.getPlayerLife())
-                return true;
-            if (auxPlayer.getPlayerTag() == 3 && activePlayer4.getPlayerLife() >= activePlayer3.getPlayerLife() && activePlayer4.getPlayerLife() >= activePlayer2.getPlayerLife())
-                return true;
-        }
-
-        //P1, P2, P3 and P4
-        if (isPlayerActiveAndAlive(0) && isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3)) {
-            if (auxPlayer.getPlayerTag() == 0 && activePlayer1.getPlayerLife() >= activePlayer2.getPlayerLife() && activePlayer1.getPlayerLife() >= activePlayer3.getPlayerLife() && activePlayer1.getPlayerLife() >= activePlayer4.getPlayerLife())
-                return true;
-            if (auxPlayer.getPlayerTag() == 1 && activePlayer2.getPlayerLife() >= activePlayer1.getPlayerLife() && activePlayer2.getPlayerLife() >= activePlayer3.getPlayerLife() && activePlayer2.getPlayerLife() >= activePlayer4.getPlayerLife())
-                return true;
-            if (auxPlayer.getPlayerTag() == 2 && activePlayer3.getPlayerLife() >= activePlayer1.getPlayerLife() && activePlayer3.getPlayerLife() >= activePlayer2.getPlayerLife() && activePlayer3.getPlayerLife() >= activePlayer4.getPlayerLife())
-                return true;
-            if (auxPlayer.getPlayerTag() == 3 && activePlayer4.getPlayerLife() >= activePlayer1.getPlayerLife() && activePlayer4.getPlayerLife() >= activePlayer2.getPlayerLife() && activePlayer4.getPlayerLife() >= activePlayer3.getPlayerLife())
-                return true;
-        }
-
-        return false;
-    }
-
     private void setActionBarColor(int color) {
         mActionBar.setBackgroundDrawable(new ColorDrawable(color));
         statusBarBackground.setBackgroundColor(color);
     }
 
-    private void setMode(int mode, int previousMode) {
-        final Animation slide_in_top = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_in_top);
-        final Animation slide_in_bottom = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_in_bottom);
-        final Animation slide_out_top = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_out_top);
-        final Animation slide_out_bottom = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_out_bottom);
+    //TODO text size
+    private void setLife(int life, TextView lifeValue) {
+        if (lifeValue != null) {
+            lifeValue.setTextSize(TypedValue.COMPLEX_UNIT_SP, (life > 99 || life < -99) ? 120 : 180);
+            lifeValue.setText(String.format(Locale.US, "%d", life));
+        }
+    }
 
-        switch (mode) {
-            case MODE_NEW_GAME:
-                setActionBarColor(getResources().getIntArray(R.array.edh_default)[0]);
-
-                if (optionMenu != null) {
-                    optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_history_index))).setEnabled(false);
-                    optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_history_index))).setVisible(false);
-                    optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_overview_index))).setEnabled(false);
-                    optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_overview_index))).setVisible(false);
-                }
-
-                viewNewGame.setVisibility(View.VISIBLE);
-                if (viewOverview != null)
-                    viewOverview.setVisibility(View.GONE);
-                viewPager.setVisibility(View.GONE);
-                tabLayout.setVisibility(View.GONE);
-                break;
-
-            case MODE_OVERVIEW:
-                if (isValidGame()) {
-                    updateOverviewLayout();
-
-                    if (previousMode == MODE_PLAYING) {
-                        isInAnimation = true;
-
-                        viewOverview.startAnimation(slide_in_top);
-                        viewPager.startAnimation(slide_out_bottom);
-                        tabLayout.setVisibility(View.GONE);
-
-                        slide_in_top.setAnimationListener(new Animation.AnimationListener() {
-                            public void onAnimationEnd(Animation animation) {
-                                setActionBarColor(getResources().getIntArray(R.array.edh_default)[0]);
-
-                                viewNewGame.setVisibility(View.GONE);
-                                viewOverview.setVisibility(View.VISIBLE);
-                                viewPager.setVisibility(View.GONE);
-                                tabLayout.setVisibility(View.GONE);
-
-                                if (optionMenu != null) {
-                                    optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_history_index))).setEnabled(false);
-                                    optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_history_index))).setVisible(false);
-                                    optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_overview_index))).setEnabled(true);
-                                    optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_overview_index))).setVisible(true);
-                                }
-
-                                isInAnimation = false;
-                            }
-
-                            public void onAnimationRepeat(Animation animation) {
-                            }
-
-                            public void onAnimationStart(Animation animation) {
-                            }
-                        });
-                    } else if (previousMode == MODE_INVALID) {
-                        viewNewGame.setVisibility(View.GONE);
-                        viewOverview.setVisibility(View.VISIBLE);
-                        viewPager.setVisibility(View.GONE);
-                        tabLayout.setVisibility(View.GONE);
-                    }
-                }
-                break;
-
-            case MODE_PLAYING:
-                for (int i = 0; i < fragments.size(); i++) {
-                    if (i == 0)
-                        fragments.get(0).updateLife(activePlayer1.getPlayerLife());
-                    else if (i == 1)
-                        fragments.get(1).updateLife(activePlayer2.getPlayerLife());
-                    else if (i == 2)
-                        fragments.get(2).updateLife(activePlayer3.getPlayerLife());
-                    else if (i == 3)
-                        fragments.get(3).updateLife(activePlayer4.getPlayerLife());
-                }
-
-                if (previousMode == MODE_INVALID) {
-                    viewPager.setCurrentItem(mSharedPreferences.getInt(Constants.CURRENT_VIEW_TAB, 0), false);
-
-                    viewNewGame.setVisibility(View.GONE);
-                    viewOverview.setVisibility(View.GONE);
-                    viewPager.setVisibility(View.VISIBLE);
-                    tabLayout.setVisibility(View.VISIBLE);
-
-                    int color = getActivePlayer(mSharedPreferences.getInt(Constants.CURRENT_VIEW_TAB, 0)).getPlayerDeck().getDeckShieldColor()[0];
-                    if (color == 0)
-                        color = getResources().getIntArray(R.array.edh_default)[0];
-                    setActionBarColor(color);
-                } else {
-                    isInAnimation = true;
-                    viewPager.setCurrentItem(mSharedPreferences.getInt(Constants.CURRENT_VIEW_TAB, 0), false);
-
-                    iUpdateDethrone();
-
-                    Animation animationIn = null;
-                    if (previousMode == MODE_OVERVIEW) {
-                        animationIn = slide_in_bottom;
-                        viewOverview.startAnimation(slide_out_top);
-                    }
-
-                    assert viewPager != null;
-                    viewPager.startAnimation(animationIn);
-
-                    // (1/2) Workaround to avoid viewPager to pop to up when tabLayout gets visible
-                    final int paddingBottom = viewPager.getPaddingBottom();
-                    viewPager.setPadding(viewPager.getPaddingLeft(), viewPager.getPaddingTop(), viewPager.getPaddingRight(), tabLayout.getHeight());
-
-                    assert animationIn != null;
-                    animationIn.setAnimationListener(new Animation.AnimationListener() {
-                        public void onAnimationEnd(Animation animation) {
-                            int color = getActivePlayer(tabLayout.getSelectedTabPosition()).getPlayerDeck().getDeckShieldColor()[0];
-                            if (color == 0)
-                                color = getResources().getIntArray(R.array.edh_default)[0];
-                            setActionBarColor(color);
-
-                            viewNewGame.setVisibility(View.GONE);
-                            viewOverview.setVisibility(View.GONE);
-                            viewPager.setVisibility(View.VISIBLE);
-                            tabLayout.setVisibility(View.VISIBLE);
-
-                            if (optionMenu != null) {
-                                optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_history_index))).setEnabled(true);
-                                optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_history_index))).setVisible(true);
-                                optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_overview_index))).setEnabled(true);
-                                optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_overview_index))).setVisible(true);
-                            }
-
-                            // (2/2) Workaround to avoid viewPager to pop to up when tabLayout gets visible
-                            viewPager.setPadding(viewPager.getPaddingLeft(), viewPager.getPaddingTop(), viewPager.getPaddingRight(), paddingBottom);
-
-                            isInAnimation = false;
-                        }
-
-                        public void onAnimationRepeat(Animation animation) {
-                        }
-
-                        public void onAnimationStart(Animation animation) {
-                        }
-                    });
-
-                }
-                break;
+    private void setupOptionMenu() {
+        if (optionMenu != null) {
+            if (currentScene == this.currentSceneOverview) {
+                optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_history_index))).setEnabled(false);
+                optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_history_index))).setVisible(false);
+            } else {
+                optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_history_index))).setEnabled(true);
+                optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_history_index))).setVisible(true);
+            }
         }
     }
 
@@ -1405,231 +1348,196 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
         }
     }
 
-    private void updateOverviewDethroneIcon() {
-        overview_ImageViewThroneP1.setVisibility(View.INVISIBLE);
-        overview_ImageViewThroneP2.setVisibility(View.INVISIBLE);
+    private void updateDethroneIcon() {
+        layout11_throne.setVisibility(View.INVISIBLE);
+        layout12_throne.setVisibility(View.INVISIBLE);
         if (totalPlayers >= 3)
-            overview_ImageViewThroneP3.setVisibility(View.INVISIBLE);
+            layout21_throne.setVisibility(View.INVISIBLE);
         if (totalPlayers >= 4)
-            overview_ImageViewThroneP4.setVisibility(View.INVISIBLE);
+            layout22_throne.setVisibility(View.INVISIBLE);
 
         //P1
         if (isPlayerActiveAndAlive(0) && !isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3))
-            overview_ImageViewThroneP1.setVisibility(View.VISIBLE);
+            layout11_throne.setVisibility(View.VISIBLE);
 
         //P2
         if (!isPlayerActiveAndAlive(0) && isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3))
-            overview_ImageViewThroneP2.setVisibility(View.VISIBLE);
+            layout12_throne.setVisibility(View.VISIBLE);
 
         //P3
         if (!isPlayerActiveAndAlive(0) && !isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3))
-            overview_ImageViewThroneP3.setVisibility(View.VISIBLE);
+            layout21_throne.setVisibility(View.VISIBLE);
 
         //P4
         if (!isPlayerActiveAndAlive(0) && !isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3))
-            overview_ImageViewThroneP4.setVisibility(View.VISIBLE);
+            layout22_throne.setVisibility(View.VISIBLE);
 
         //P1 and P2
         if (isPlayerActiveAndAlive(0) && isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3)) {
             if (activePlayer1.getPlayerLife() >= activePlayer2.getPlayerLife())
-                overview_ImageViewThroneP1.setVisibility(View.VISIBLE);
+                layout11_throne.setVisibility(View.VISIBLE);
             if (activePlayer2.getPlayerLife() >= activePlayer1.getPlayerLife())
-                overview_ImageViewThroneP2.setVisibility(View.VISIBLE);
+                layout12_throne.setVisibility(View.VISIBLE);
         }
 
         //P1 and P3
         if (isPlayerActiveAndAlive(0) && !isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3)) {
             if (activePlayer1.getPlayerLife() >= activePlayer3.getPlayerLife())
-                overview_ImageViewThroneP1.setVisibility(View.VISIBLE);
+                layout11_throne.setVisibility(View.VISIBLE);
             if (activePlayer3.getPlayerLife() >= activePlayer1.getPlayerLife())
-                overview_ImageViewThroneP3.setVisibility(View.VISIBLE);
+                layout21_throne.setVisibility(View.VISIBLE);
         }
 
         //P1 and P4
         if (isPlayerActiveAndAlive(0) && !isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3)) {
             if (activePlayer1.getPlayerLife() >= activePlayer4.getPlayerLife())
-                overview_ImageViewThroneP1.setVisibility(View.VISIBLE);
+                layout11_throne.setVisibility(View.VISIBLE);
             if (activePlayer4.getPlayerLife() >= activePlayer1.getPlayerLife())
-                overview_ImageViewThroneP4.setVisibility(View.VISIBLE);
+                layout22_throne.setVisibility(View.VISIBLE);
         }
 
         //P2 and P3
         if (!isPlayerActiveAndAlive(0) && isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3)) {
             if (activePlayer2.getPlayerLife() >= activePlayer3.getPlayerLife())
-                overview_ImageViewThroneP2.setVisibility(View.VISIBLE);
+                layout12_throne.setVisibility(View.VISIBLE);
             if (activePlayer3.getPlayerLife() >= activePlayer2.getPlayerLife())
-                overview_ImageViewThroneP3.setVisibility(View.VISIBLE);
+                layout21_throne.setVisibility(View.VISIBLE);
         }
 
         //P2 and P4
         if (!isPlayerActiveAndAlive(0) && isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3)) {
             if (activePlayer2.getPlayerLife() >= activePlayer4.getPlayerLife())
-                overview_ImageViewThroneP2.setVisibility(View.VISIBLE);
+                layout12_throne.setVisibility(View.VISIBLE);
             if (activePlayer4.getPlayerLife() >= activePlayer2.getPlayerLife())
-                overview_ImageViewThroneP4.setVisibility(View.VISIBLE);
+                layout22_throne.setVisibility(View.VISIBLE);
         }
 
         //P3 and P4
         if (!isPlayerActiveAndAlive(0) && !isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3)) {
             if (activePlayer3.getPlayerLife() >= activePlayer4.getPlayerLife())
-                overview_ImageViewThroneP3.setVisibility(View.VISIBLE);
+                layout21_throne.setVisibility(View.VISIBLE);
             if (activePlayer4.getPlayerLife() >= activePlayer3.getPlayerLife())
-                overview_ImageViewThroneP4.setVisibility(View.VISIBLE);
+                layout22_throne.setVisibility(View.VISIBLE);
         }
 
         //P1, P2 and P3
         if (isPlayerActiveAndAlive(0) && isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3)) {
             if (activePlayer1.getPlayerLife() >= activePlayer2.getPlayerLife() && activePlayer1.getPlayerLife() >= activePlayer3.getPlayerLife())
-                overview_ImageViewThroneP1.setVisibility(View.VISIBLE);
+                layout11_throne.setVisibility(View.VISIBLE);
             if (activePlayer2.getPlayerLife() >= activePlayer1.getPlayerLife() && activePlayer2.getPlayerLife() >= activePlayer3.getPlayerLife())
-                overview_ImageViewThroneP2.setVisibility(View.VISIBLE);
+                layout12_throne.setVisibility(View.VISIBLE);
             if (activePlayer3.getPlayerLife() >= activePlayer1.getPlayerLife() && activePlayer3.getPlayerLife() >= activePlayer2.getPlayerLife())
-                overview_ImageViewThroneP3.setVisibility(View.VISIBLE);
+                layout21_throne.setVisibility(View.VISIBLE);
         }
 
         //P1, P2 and P4
         if (isPlayerActiveAndAlive(0) && isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3)) {
             if (activePlayer1.getPlayerLife() >= activePlayer2.getPlayerLife() && activePlayer1.getPlayerLife() >= activePlayer4.getPlayerLife())
-                overview_ImageViewThroneP1.setVisibility(View.VISIBLE);
+                layout11_throne.setVisibility(View.VISIBLE);
             if (activePlayer2.getPlayerLife() >= activePlayer1.getPlayerLife() && activePlayer2.getPlayerLife() >= activePlayer4.getPlayerLife())
-                overview_ImageViewThroneP2.setVisibility(View.VISIBLE);
+                layout12_throne.setVisibility(View.VISIBLE);
             if (activePlayer4.getPlayerLife() >= activePlayer1.getPlayerLife() && activePlayer4.getPlayerLife() >= activePlayer2.getPlayerLife())
-                overview_ImageViewThroneP4.setVisibility(View.VISIBLE);
+                layout22_throne.setVisibility(View.VISIBLE);
         }
 
         //P1, P3 and P4
         if (isPlayerActiveAndAlive(0) && !isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3)) {
             if (activePlayer1.getPlayerLife() >= activePlayer3.getPlayerLife() && activePlayer1.getPlayerLife() >= activePlayer4.getPlayerLife())
-                overview_ImageViewThroneP1.setVisibility(View.VISIBLE);
+                layout11_throne.setVisibility(View.VISIBLE);
             if (activePlayer3.getPlayerLife() >= activePlayer1.getPlayerLife() && activePlayer3.getPlayerLife() >= activePlayer4.getPlayerLife())
-                overview_ImageViewThroneP3.setVisibility(View.VISIBLE);
+                layout21_throne.setVisibility(View.VISIBLE);
             if (activePlayer4.getPlayerLife() >= activePlayer1.getPlayerLife() && activePlayer4.getPlayerLife() >= activePlayer3.getPlayerLife())
-                overview_ImageViewThroneP4.setVisibility(View.VISIBLE);
+                layout22_throne.setVisibility(View.VISIBLE);
         }
 
         //P2, P3 and P4
         if (!isPlayerActiveAndAlive(0) && isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3)) {
             if (activePlayer2.getPlayerLife() >= activePlayer3.getPlayerLife() && activePlayer2.getPlayerLife() >= activePlayer4.getPlayerLife())
-                overview_ImageViewThroneP2.setVisibility(View.VISIBLE);
+                layout12_throne.setVisibility(View.VISIBLE);
             if (activePlayer3.getPlayerLife() >= activePlayer2.getPlayerLife() && activePlayer3.getPlayerLife() >= activePlayer4.getPlayerLife())
-                overview_ImageViewThroneP3.setVisibility(View.VISIBLE);
+                layout21_throne.setVisibility(View.VISIBLE);
             if (activePlayer4.getPlayerLife() >= activePlayer3.getPlayerLife() && activePlayer4.getPlayerLife() >= activePlayer2.getPlayerLife())
-                overview_ImageViewThroneP4.setVisibility(View.VISIBLE);
+                layout22_throne.setVisibility(View.VISIBLE);
         }
 
         //P1, P2, P3 and P4
         if (isPlayerActiveAndAlive(0) && isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3)) {
             if (activePlayer1.getPlayerLife() >= activePlayer2.getPlayerLife() && activePlayer1.getPlayerLife() >= activePlayer3.getPlayerLife() && activePlayer1.getPlayerLife() >= activePlayer4.getPlayerLife())
-                overview_ImageViewThroneP1.setVisibility(View.VISIBLE);
+                layout11_throne.setVisibility(View.VISIBLE);
             if (activePlayer2.getPlayerLife() >= activePlayer1.getPlayerLife() && activePlayer2.getPlayerLife() >= activePlayer3.getPlayerLife() && activePlayer2.getPlayerLife() >= activePlayer4.getPlayerLife())
-                overview_ImageViewThroneP2.setVisibility(View.VISIBLE);
+                layout12_throne.setVisibility(View.VISIBLE);
             if (activePlayer3.getPlayerLife() >= activePlayer1.getPlayerLife() && activePlayer3.getPlayerLife() >= activePlayer2.getPlayerLife() && activePlayer3.getPlayerLife() >= activePlayer4.getPlayerLife())
-                overview_ImageViewThroneP3.setVisibility(View.VISIBLE);
+                layout21_throne.setVisibility(View.VISIBLE);
             if (activePlayer4.getPlayerLife() >= activePlayer1.getPlayerLife() && activePlayer4.getPlayerLife() >= activePlayer2.getPlayerLife() && activePlayer4.getPlayerLife() >= activePlayer3.getPlayerLife())
-                overview_ImageViewThroneP4.setVisibility(View.VISIBLE);
+                layout22_throne.setVisibility(View.VISIBLE);
         }
     }
 
-    private void updateOverviewLayout() {
-        if (totalPlayers >= 1)
-            updateOverviewDethroneIcon();
+    private void updateLayout() {
+        updateLayout11();
+        updateLayout12();
+        updateLayout21();
+        updateLayout22();
+    }
 
-        if (totalPlayers >= 1) {
-            overview_TextViewP1Name.setText(activePlayer1.getPlayerDeck().getDeckOwnerName());
-            overview_TextViewP1Name.setEnabled(activePlayer1.getPlayerIsAlive());
-            if (activePlayer1.getPlayerIsAlive()) overview_TextViewP1Name.setTextColor(activePlayer1.getPlayerDeck().getDeckShieldColor()[0]);
-            else overview_TextViewP1Name.setTextColor(Color.LTGRAY);
-            overview_TextViewP1Life.setText(String.valueOf(activePlayer1.getPlayerLife()));
-            overview_TextViewP1Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (getPlayerLifeTextSize(activePlayer1, 2)));
-            overview_TextViewP1Life.setEnabled(activePlayer1.getPlayerIsAlive());
-            if (activePlayer1.getPlayerIsAlive()) overview_TextViewP1Life.setTextColor(activePlayer1.getPlayerDeck().getDeckShieldColor()[0]);
-            else overview_TextViewP1Life.setTextColor(Color.LTGRAY);
-            overview_lifePositiveP1.setColorFilter(activePlayer1.getPlayerIsAlive() ? activePlayer1.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
-            overview_lifeNegativeP1.setColorFilter(activePlayer1.getPlayerIsAlive() ? activePlayer1.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
-            overview_TextViewP1EDH1.setText(String.valueOf(activePlayer1.getPlayerEDH1()));
-            overview_TextViewP1EDH1.setEnabled(activePlayer1.getPlayerIsAlive());
-            overview_TextViewP1EDH2.setText(String.valueOf(activePlayer1.getPlayerEDH2()));
-            overview_TextViewP1EDH2.setEnabled(activePlayer1.getPlayerIsAlive());
-            if (totalPlayers >= 3) {
-                overview_TextViewP1EDH3.setText(String.valueOf(activePlayer1.getPlayerEDH3()));
-                overview_TextViewP1EDH3.setEnabled(activePlayer1.getPlayerIsAlive());
-            }
-            if (totalPlayers >= 4) {
-                overview_TextViewP1EDH4.setText(String.valueOf(activePlayer1.getPlayerEDH4()));
-                overview_TextViewP1EDH4.setEnabled(activePlayer1.getPlayerIsAlive());
-            }
-        }
+    private void updateLayout11() {
+        updateDethroneIcon();
+        layout11_name.setText(activePlayer1.getPlayerDeck().getDeckOwnerName());
+        layout11_deck.setText(activePlayer1.getPlayerDeck().getDeckName());
+        layout11_life.setText(String.format(Locale.US, "%d", activePlayer1.getPlayerLife()));
+        layout11_life_positive.setColorFilter(activePlayer1.getPlayerDeck().getDeckShieldColor()[0], PorterDuff.Mode.SRC_IN);
+        layout11_life_negative.setColorFilter(activePlayer1.getPlayerDeck().getDeckShieldColor()[0], PorterDuff.Mode.SRC_IN);
+        layout11_edh1.setText(String.format(Locale.US, "%d", activePlayer1.getPlayerEDH1()));
+        layout11_edh2.setText(String.format(Locale.US, "%d", activePlayer1.getPlayerEDH2()));
+        if (totalPlayers >= 3)
+            layout11_edh3.setText(String.format(Locale.US, "%d", activePlayer1.getPlayerEDH3()));
+        if (totalPlayers == 4)
+            layout11_edh4.setText(String.format(Locale.US, "%d", activePlayer1.getPlayerEDH4()));
+    }
 
-        if (totalPlayers >= 2) {
-            overview_TextViewP2Name.setText(activePlayer2.getPlayerDeck().getDeckOwnerName());
-            overview_TextViewP2Name.setEnabled(activePlayer2.getPlayerIsAlive());
-            if (activePlayer2.getPlayerIsAlive()) overview_TextViewP2Name.setTextColor(activePlayer2.getPlayerDeck().getDeckShieldColor()[0]);
-            else overview_TextViewP2Name.setTextColor(Color.LTGRAY);
-            overview_TextViewP2Life.setText(String.valueOf(activePlayer2.getPlayerLife()));
-            overview_TextViewP2Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (getPlayerLifeTextSize(activePlayer2, 2)));
-            overview_TextViewP2Life.setEnabled(activePlayer2.getPlayerIsAlive());
-            if (activePlayer2.getPlayerIsAlive()) overview_TextViewP2Life.setTextColor(activePlayer2.getPlayerDeck().getDeckShieldColor()[0]);
-            else overview_TextViewP2Life.setTextColor(Color.LTGRAY);
-            overview_lifePositiveP2.setColorFilter(activePlayer1.getPlayerIsAlive() ? activePlayer2.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
-            overview_lifeNegativeP2.setColorFilter(activePlayer1.getPlayerIsAlive() ? activePlayer2.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
-            overview_TextViewP2EDH1.setText(String.valueOf(activePlayer2.getPlayerEDH1()));
-            overview_TextViewP2EDH1.setEnabled(activePlayer2.getPlayerIsAlive());
-            overview_TextViewP2EDH2.setText(String.valueOf(activePlayer2.getPlayerEDH2()));
-            overview_TextViewP2EDH2.setEnabled(activePlayer2.getPlayerIsAlive());
-            if (totalPlayers >= 3) {
-                overview_TextViewP2EDH3.setText(String.valueOf(activePlayer2.getPlayerEDH3()));
-                overview_TextViewP2EDH3.setEnabled(activePlayer2.getPlayerIsAlive());
-            }
-            if (totalPlayers >= 4) {
-                overview_TextViewP2EDH4.setText(String.valueOf(activePlayer2.getPlayerEDH4()));
-                overview_TextViewP2EDH4.setEnabled(activePlayer2.getPlayerIsAlive());
-            }
-        }
+    private void updateLayout12() {
+        updateDethroneIcon();
+        layout12_name.setText(activePlayer2.getPlayerDeck().getDeckOwnerName());
+        layout12_deck.setText(activePlayer2.getPlayerDeck().getDeckName());
+        layout12_life.setText(String.format(Locale.US, "%d", activePlayer2.getPlayerLife()));
+        layout12_life_positive.setColorFilter(activePlayer2.getPlayerDeck().getDeckShieldColor()[0], PorterDuff.Mode.SRC_IN);
+        layout12_life_negative.setColorFilter(activePlayer2.getPlayerDeck().getDeckShieldColor()[0], PorterDuff.Mode.SRC_IN);
+        layout12_edh1.setText(String.format(Locale.US, "%d", activePlayer2.getPlayerEDH1()));
+        layout12_edh2.setText(String.format(Locale.US, "%d", activePlayer2.getPlayerEDH2()));
+        if (totalPlayers >= 3)
+            layout12_edh3.setText(String.format(Locale.US, "%d", activePlayer2.getPlayerEDH3()));
+        if (totalPlayers == 4)
+            layout12_edh4.setText(String.format(Locale.US, "%d", activePlayer2.getPlayerEDH4()));
+    }
 
+    private void updateLayout21() {
         if (totalPlayers >= 3) {
-            overview_TextViewP3Name.setText(activePlayer3.getPlayerDeck().getDeckOwnerName());
-            overview_TextViewP3Name.setEnabled(activePlayer3.getPlayerIsAlive());
-            if (activePlayer3.getPlayerIsAlive()) overview_TextViewP3Name.setTextColor(activePlayer3.getPlayerDeck().getDeckShieldColor()[0]);
-            else overview_TextViewP3Name.setTextColor(Color.LTGRAY);
-            overview_TextViewP3Life.setText(String.valueOf(activePlayer3.getPlayerLife()));
-            overview_TextViewP3Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (getPlayerLifeTextSize(activePlayer3, 3)));
-            overview_TextViewP3Life.setEnabled(activePlayer3.getPlayerIsAlive());
-            if (activePlayer3.getPlayerIsAlive()) overview_TextViewP3Life.setTextColor(activePlayer3.getPlayerDeck().getDeckShieldColor()[0]);
-            else overview_TextViewP3Life.setTextColor(Color.LTGRAY);
-            overview_lifePositiveP3.setColorFilter(activePlayer1.getPlayerIsAlive() ? activePlayer3.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
-            overview_lifeNegativeP3.setColorFilter(activePlayer1.getPlayerIsAlive() ? activePlayer3.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
-            overview_TextViewP3EDH1.setText(String.valueOf(activePlayer3.getPlayerEDH1()));
-            overview_TextViewP3EDH1.setEnabled(activePlayer3.getPlayerIsAlive());
-            overview_TextViewP3EDH2.setText(String.valueOf(activePlayer3.getPlayerEDH2()));
-            overview_TextViewP3EDH2.setEnabled(activePlayer3.getPlayerIsAlive());
-            overview_TextViewP3EDH3.setText(String.valueOf(activePlayer3.getPlayerEDH3()));
-            overview_TextViewP3EDH3.setEnabled(activePlayer3.getPlayerIsAlive());
-            if (totalPlayers >= 4) {
-                overview_TextViewP3EDH4.setText(String.valueOf(activePlayer3.getPlayerEDH4()));
-                overview_TextViewP3EDH4.setEnabled(activePlayer3.getPlayerIsAlive());
-            }
+            updateDethroneIcon();
+            layout21_name.setText(activePlayer3.getPlayerDeck().getDeckOwnerName());
+            layout21_deck.setText(activePlayer3.getPlayerDeck().getDeckName());
+            layout21_life.setText(String.format(Locale.US, "%d", activePlayer3.getPlayerLife()));
+            layout21_life_positive.setColorFilter(activePlayer3.getPlayerDeck().getDeckShieldColor()[0], PorterDuff.Mode.SRC_IN);
+            layout21_life_negative.setColorFilter(activePlayer3.getPlayerDeck().getDeckShieldColor()[0], PorterDuff.Mode.SRC_IN);
+            layout21_edh1.setText(String.format(Locale.US, "%d", activePlayer3.getPlayerEDH1()));
+            layout21_edh2.setText(String.format(Locale.US, "%d", activePlayer3.getPlayerEDH2()));
+            layout21_edh3.setText(String.format(Locale.US, "%d", activePlayer3.getPlayerEDH3()));
+            if (totalPlayers == 4)
+                layout21_edh4.setText(String.format(Locale.US, "%d", activePlayer3.getPlayerEDH4()));
         }
+    }
 
+    private void updateLayout22() {
         if (totalPlayers >= 4) {
-            overview_TextViewP4Name.setText(activePlayer4.getPlayerDeck().getDeckOwnerName());
-            overview_TextViewP4Name.setEnabled(activePlayer4.getPlayerIsAlive());
-            if (activePlayer4.getPlayerIsAlive()) overview_TextViewP4Name.setTextColor(activePlayer4.getPlayerDeck().getDeckShieldColor()[0]);
-            else overview_TextViewP4Name.setTextColor(Color.LTGRAY);
-            overview_TextViewP4Life.setText(String.valueOf(activePlayer4.getPlayerLife()));
-            overview_TextViewP4Life.setTextSize(TypedValue.COMPLEX_UNIT_SP, (getPlayerLifeTextSize(activePlayer4, 3)));
-            overview_TextViewP4Life.setEnabled(activePlayer4.getPlayerIsAlive());
-            if (activePlayer4.getPlayerIsAlive()) overview_TextViewP4Life.setTextColor(activePlayer4.getPlayerDeck().getDeckShieldColor()[0]);
-            else overview_TextViewP4Life.setTextColor(Color.LTGRAY);
-            overview_lifePositiveP4.setColorFilter(activePlayer1.getPlayerIsAlive() ? activePlayer4.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
-            overview_lifeNegativeP4.setColorFilter(activePlayer1.getPlayerIsAlive() ? activePlayer4.getPlayerDeck().getDeckShieldColor()[0] : Color.LTGRAY);
-            overview_TextViewP4EDH1.setText(String.valueOf(activePlayer4.getPlayerEDH1()));
-            overview_TextViewP4EDH1.setEnabled(activePlayer4.getPlayerIsAlive());
-            overview_TextViewP4EDH2.setText(String.valueOf(activePlayer4.getPlayerEDH2()));
-            overview_TextViewP4EDH2.setEnabled(activePlayer4.getPlayerIsAlive());
-            overview_TextViewP4EDH3.setText(String.valueOf(activePlayer4.getPlayerEDH3()));
-            overview_TextViewP4EDH3.setEnabled(activePlayer4.getPlayerIsAlive());
-            overview_TextViewP4EDH4.setText(String.valueOf(activePlayer4.getPlayerEDH4()));
-            overview_TextViewP4EDH4.setEnabled(activePlayer4.getPlayerIsAlive());
+            updateDethroneIcon();
+            layout22_name.setText(activePlayer4.getPlayerDeck().getDeckOwnerName());
+            layout22_deck.setText(activePlayer4.getPlayerDeck().getDeckName());
+            layout22_life.setText(String.format(Locale.US, "%d", activePlayer4.getPlayerLife()));
+            layout22_life_positive.setColorFilter(activePlayer4.getPlayerDeck().getDeckShieldColor()[0], PorterDuff.Mode.SRC_IN);
+            layout22_life_negative.setColorFilter(activePlayer4.getPlayerDeck().getDeckShieldColor()[0], PorterDuff.Mode.SRC_IN);
+            layout22_edh1.setText(String.format(Locale.US, "%d", activePlayer4.getPlayerEDH1()));
+            layout22_edh2.setText(String.format(Locale.US, "%d", activePlayer4.getPlayerEDH2()));
+            layout22_edh3.setText(String.format(Locale.US, "%d", activePlayer4.getPlayerEDH3()));
+            layout22_edh4.setText(String.format(Locale.US, "%d", activePlayer4.getPlayerEDH4()));
         }
     }
 
@@ -1692,4 +1600,168 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnUp
             super.onPreExecute();
         }
     }
+
+    class animationHandler extends AsyncTask<Void, Void, String> {
+
+        @Override
+        protected String doInBackground(Void... params) {
+            try {
+                Thread.sleep(getResources().getInteger(R.integer.animation_expand_duration));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            isInAnimation = false;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            isInAnimation = true;
+        }
+    }
 }
+
+
+//    private boolean isPlayerOnThrone(int playerTag) {
+//        ActivePlayer auxPlayer = new ActivePlayer();
+//        switch (playerTag) {
+//            case 0:
+//                auxPlayer = activePlayer1;
+//                break;
+//            case 1:
+//                auxPlayer = activePlayer2;
+//                break;
+//            case 2:
+//                auxPlayer = activePlayer3;
+//                break;
+//            case 3:
+//                auxPlayer = activePlayer4;
+//                break;
+//        }
+//
+//        //P1
+//        if (isPlayerActiveAndAlive(0) && !isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3))
+//            if (auxPlayer.getPlayerTag() == 0)
+//                return true;
+//
+//        //P2
+//        if (!isPlayerActiveAndAlive(0) && isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3))
+//            if (auxPlayer.getPlayerTag() == 1)
+//                return true;
+//
+//        //P3
+//        if (!isPlayerActiveAndAlive(0) && !isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3))
+//            if (auxPlayer.getPlayerTag() == 2)
+//                return true;
+//
+//        //P4
+//        if (!isPlayerActiveAndAlive(0) && !isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3))
+//            if (auxPlayer.getPlayerTag() == 3)
+//                return true;
+//
+//        //P1 and P2
+//        if (isPlayerActiveAndAlive(0) && isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3)) {
+//            if (auxPlayer.getPlayerTag() == 0 && activePlayer1.getPlayerLife() >= activePlayer2.getPlayerLife())
+//                return true;
+//            if (auxPlayer.getPlayerTag() == 1 && activePlayer2.getPlayerLife() >= activePlayer1.getPlayerLife())
+//                return true;
+//        }
+//
+//        //P1 and P3
+//        if (isPlayerActiveAndAlive(0) && !isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3)) {
+//            if (auxPlayer.getPlayerTag() == 0 && activePlayer1.getPlayerLife() >= activePlayer3.getPlayerLife())
+//                return true;
+//            if (auxPlayer.getPlayerTag() == 2 && activePlayer3.getPlayerLife() >= activePlayer1.getPlayerLife())
+//                return true;
+//        }
+//
+//        //P1 and P4
+//        if (isPlayerActiveAndAlive(0) && !isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3)) {
+//            if (auxPlayer.getPlayerTag() == 0 && activePlayer1.getPlayerLife() >= activePlayer4.getPlayerLife())
+//                return true;
+//            if (auxPlayer.getPlayerTag() == 3 && activePlayer4.getPlayerLife() >= activePlayer1.getPlayerLife())
+//                return true;
+//        }
+//
+//        //P2 and P3
+//        if (!isPlayerActiveAndAlive(0) && isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3)) {
+//            if (auxPlayer.getPlayerTag() == 1 && activePlayer2.getPlayerLife() >= activePlayer3.getPlayerLife())
+//                return true;
+//            if (auxPlayer.getPlayerTag() == 2 && activePlayer3.getPlayerLife() >= activePlayer2.getPlayerLife())
+//                return true;
+//        }
+//
+//        //P2 and P4
+//        if (!isPlayerActiveAndAlive(0) && isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3)) {
+//            if (auxPlayer.getPlayerTag() == 1 && activePlayer2.getPlayerLife() >= activePlayer4.getPlayerLife())
+//                return true;
+//            if (auxPlayer.getPlayerTag() == 3 && activePlayer4.getPlayerLife() >= activePlayer2.getPlayerLife())
+//                return true;
+//        }
+//
+//        //P3 and P4
+//        if (!isPlayerActiveAndAlive(0) && !isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3)) {
+//            if (auxPlayer.getPlayerTag() == 2 && activePlayer3.getPlayerLife() >= activePlayer4.getPlayerLife())
+//                return true;
+//            if (auxPlayer.getPlayerTag() == 3 && activePlayer4.getPlayerLife() >= activePlayer3.getPlayerLife())
+//                return true;
+//        }
+//
+//        //P1, P2 and P3
+//        if (isPlayerActiveAndAlive(0) && isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && !isPlayerActiveAndAlive(3)) {
+//            if (auxPlayer.getPlayerTag() == 0 && activePlayer1.getPlayerLife() >= activePlayer2.getPlayerLife() && activePlayer1.getPlayerLife() >= activePlayer3.getPlayerLife())
+//                return true;
+//            if (auxPlayer.getPlayerTag() == 1 && activePlayer2.getPlayerLife() >= activePlayer1.getPlayerLife() && activePlayer2.getPlayerLife() >= activePlayer3.getPlayerLife())
+//                return true;
+//            if (auxPlayer.getPlayerTag() == 2 && activePlayer3.getPlayerLife() >= activePlayer1.getPlayerLife() && activePlayer3.getPlayerLife() >= activePlayer2.getPlayerLife())
+//                return true;
+//        }
+//
+//        //P1, P2 and P4
+//        if (isPlayerActiveAndAlive(0) && isPlayerActiveAndAlive(1) && !isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3)) {
+//            if (auxPlayer.getPlayerTag() == 0 && activePlayer1.getPlayerLife() >= activePlayer2.getPlayerLife() && activePlayer1.getPlayerLife() >= activePlayer4.getPlayerLife())
+//                return true;
+//            if (auxPlayer.getPlayerTag() == 1 && activePlayer2.getPlayerLife() >= activePlayer1.getPlayerLife() && activePlayer2.getPlayerLife() >= activePlayer4.getPlayerLife())
+//                return true;
+//            if (auxPlayer.getPlayerTag() == 3 && activePlayer4.getPlayerLife() >= activePlayer1.getPlayerLife() && activePlayer4.getPlayerLife() >= activePlayer2.getPlayerLife())
+//                return true;
+//        }
+//
+//        //P1, P3 and P4
+//        if (isPlayerActiveAndAlive(0) && !isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3)) {
+//            if (auxPlayer.getPlayerTag() == 0 && activePlayer1.getPlayerLife() >= activePlayer3.getPlayerLife() && activePlayer1.getPlayerLife() >= activePlayer4.getPlayerLife())
+//                return true;
+//            if (auxPlayer.getPlayerTag() == 2 && activePlayer3.getPlayerLife() >= activePlayer1.getPlayerLife() && activePlayer3.getPlayerLife() >= activePlayer4.getPlayerLife())
+//                return true;
+//            if (auxPlayer.getPlayerTag() == 3 && activePlayer4.getPlayerLife() >= activePlayer1.getPlayerLife() && activePlayer4.getPlayerLife() >= activePlayer3.getPlayerLife())
+//                return true;
+//        }
+//
+//        //P2, P3 and P4
+//        if (!isPlayerActiveAndAlive(0) && isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3)) {
+//            if (auxPlayer.getPlayerTag() == 1 && activePlayer2.getPlayerLife() >= activePlayer3.getPlayerLife() && activePlayer2.getPlayerLife() >= activePlayer4.getPlayerLife())
+//                return true;
+//            if (auxPlayer.getPlayerTag() == 2 && activePlayer3.getPlayerLife() >= activePlayer2.getPlayerLife() && activePlayer3.getPlayerLife() >= activePlayer4.getPlayerLife())
+//                return true;
+//            if (auxPlayer.getPlayerTag() == 3 && activePlayer4.getPlayerLife() >= activePlayer3.getPlayerLife() && activePlayer4.getPlayerLife() >= activePlayer2.getPlayerLife())
+//                return true;
+//        }
+//
+//        //P1, P2, P3 and P4
+//        if (isPlayerActiveAndAlive(0) && isPlayerActiveAndAlive(1) && isPlayerActiveAndAlive(2) && isPlayerActiveAndAlive(3)) {
+//            if (auxPlayer.getPlayerTag() == 0 && activePlayer1.getPlayerLife() >= activePlayer2.getPlayerLife() && activePlayer1.getPlayerLife() >= activePlayer3.getPlayerLife() && activePlayer1.getPlayerLife() >= activePlayer4.getPlayerLife())
+//                return true;
+//            if (auxPlayer.getPlayerTag() == 1 && activePlayer2.getPlayerLife() >= activePlayer1.getPlayerLife() && activePlayer2.getPlayerLife() >= activePlayer3.getPlayerLife() && activePlayer2.getPlayerLife() >= activePlayer4.getPlayerLife())
+//                return true;
+//            if (auxPlayer.getPlayerTag() == 2 && activePlayer3.getPlayerLife() >= activePlayer1.getPlayerLife() && activePlayer3.getPlayerLife() >= activePlayer2.getPlayerLife() && activePlayer3.getPlayerLife() >= activePlayer4.getPlayerLife())
+//                return true;
+//            if (auxPlayer.getPlayerTag() == 3 && activePlayer4.getPlayerLife() >= activePlayer1.getPlayerLife() && activePlayer4.getPlayerLife() >= activePlayer2.getPlayerLife() && activePlayer4.getPlayerLife() >= activePlayer3.getPlayerLife())
+//                return true;
+//        }
+//
+//        return false;
+//    }

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="animation_explode_out">300</integer>
+
+    <integer name="animation_change_bounds_expand">500</integer>
+    <integer name="animation_change_bounds_out_start_delay">200</integer>
+
+    <integer name="animation_fade_in">600</integer>
+    <integer name="animation_fade_in_start_delay">400</integer>
+
+    <integer name="animation_change_bounds_collapse">500</integer>
+    <integer name="animation_change_bounds_collapse_start_delay">100</integer>
+
+    <integer name="animation_fade_out">200</integer>
+
+    <integer name="animation_expand_duration">1000</integer>
+    <integer name="animation_collapse_duration">1000</integer>
+
+
+    <integer name="animation_expand_text_duration">400</integer>
+    <integer name="animation_expand_text_delay">800</integer>
+</resources>

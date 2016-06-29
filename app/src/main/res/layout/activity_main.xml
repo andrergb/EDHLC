@@ -43,18 +43,6 @@
             <include
                 layout="@layout/activity_main_content">
             </include>
-
-            <!-- Tabs -->
-            <android.support.design.widget.TabLayout
-                android:id="@+id/sliding_tabs"
-                android:layout_width="match_parent"
-                android:layout_height="32dp"
-                android:background="@color/white"
-                android:scrollIndicators="bottom"
-                app:tabGravity="fill"
-                app:tabIndicatorColor="@color/tab_selection_color"
-                app:tabIndicatorHeight="32dp"
-                app:tabMode="fixed"/>
         </LinearLayout>
     </RelativeLayout>
 

@@ -71,7 +71,6 @@
     <string name="delete_records">Delete Records</string>
 
     <string name="menu_main_history_index">1</string>
-    <string name="menu_main_overview_index">2</string>
     <string name="menu_new_game_next">1</string>
 
     <string name="cancel">Cancel</string>
@@ -84,4 +83,6 @@
     <string name="random">Random</string>
     <string name="dismiss">Dismiss</string>
     <string name="back">Back</string>
+    <string name="tag_big">big</string>
+    <string name="tag_small">small</string>
 </resources>

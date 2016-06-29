@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout android:id="@+id/grid"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alignmentMode="alignBounds"
+            android:columnCount="1"
+            android:rowCount="2">
+
+    <LinearLayout
+        android:id="@+id/grid11"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_columnSpan="1"
+        android:layout_columnWeight="1"
+        android:layout_rowSpan="1"
+        android:layout_rowWeight="1">
+
+        <include layout="@layout/small11_2p"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/grid12"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_columnSpan="1"
+        android:layout_columnWeight="1"
+        android:layout_rowSpan="1"
+        android:layout_rowWeight="1">
+
+        <include layout="@layout/small12_2p"/>
+    </LinearLayout>
+</GridLayout>
