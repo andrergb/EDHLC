@@ -93,16 +93,16 @@
                         android:fontFamily="sans-serif-light"
                         android:singleLine="true"
                         android:text="40"
-                        android:textSize="@dimen/life_2_digits_max"/>
+                        android:textSize="@dimen/player_life"/>
 
                     <!--LIFE BUTTONS-->
                     <LinearLayout
                         android:id="@+id/layout11_121"
-                        android:layout_width="70dp"
+                        android:layout_width="60dp"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:layout_margin="4dp"
+                        android:layout_margin="2dp"
                         android:orientation="vertical"
                         android:weightSum="2">
 
@@ -176,24 +176,33 @@
                             android:src="@drawable/icon_up2"/>
                     </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/layout11_edh1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/layout11_1312"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
                         android:layout_column="0"
                         android:layout_columnSpan="1"
                         android:layout_columnWeight="1"
-                        android:layout_gravity="center"
                         android:layout_row="1"
                         android:layout_rowSpan="1"
                         android:layout_rowWeight="1"
-                        android:fontFamily="sans-serif-light"
-                        android:maxLines="1"
-                        android:text="40"
-                        android:textSize="16sp"/>
+                        android:gravity="center">
+
+                        <TextView
+                            android:id="@+id/layout11_edh1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="1"
+                            android:layout_gravity="center"
+                            android:layout_rowWeight="1"
+                            android:fontFamily="sans-serif-light"
+                            android:maxLines="1"
+                            android:text="40"
+                            android:textSize="@dimen/edh_collapsed"/>
+                    </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/layout11_1312"
+                        android:id="@+id/layout11_1313"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_column="0"
@@ -216,7 +225,7 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/layout11_1313"
+                        android:id="@+id/layout11_1314"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_column="1"
@@ -238,24 +247,33 @@
                             android:src="@drawable/icon_up2"/>
                     </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/layout11_edh2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/layout11_1315"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
                         android:layout_column="1"
                         android:layout_columnSpan="1"
                         android:layout_columnWeight="1"
-                        android:layout_gravity="center"
                         android:layout_row="1"
                         android:layout_rowSpan="1"
                         android:layout_rowWeight="1"
-                        android:fontFamily="sans-serif-light"
-                        android:maxLines="1"
-                        android:text="40"
-                        android:textSize="16sp"/>
+                        android:gravity="center">
+
+                        <TextView
+                            android:id="@+id/layout11_edh2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="1"
+                            android:layout_gravity="center"
+                            android:layout_rowWeight="1"
+                            android:fontFamily="sans-serif-light"
+                            android:maxLines="1"
+                            android:text="40"
+                            android:textSize="@dimen/edh_collapsed"/>
+                    </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/layout11_1314"
+                        android:id="@+id/layout11_1316"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_column="1"

@@ -101,6 +101,8 @@ public class MainActivity extends AppCompatActivity {
     private int currentScene22 = 3;
 
     private int currentScene;
+    private int previousScene;
+    private float currentScaleLife = 1.0f;
 
     private ImageView layout11_throne;
     private TextView layout11_name;
@@ -146,85 +148,16 @@ public class MainActivity extends AppCompatActivity {
     private TextView layout22_edh3;
     private TextView layout22_edh4;
 
-    public void expandOverview(int player, int type) {
-        float fromSize = 1.0f;
-        float toSize = 1.0f;
-        float aux;
-        if (totalPlayers == 4 || (totalPlayers == 3 && (player == 0 || player == 1))) {
-            if (getActivePlayer(player).getPlayerLife() <= 99 && getActivePlayer(player).getPlayerLife() >= -9)
-                aux = getResources().getDimension(R.dimen.life_2_digits_expanded) / getResources().getDimension(R.dimen.life_2_digits_min);
-            else
-                aux = getResources().getDimension(R.dimen.life_3_digits_expanded) / getResources().getDimension(R.dimen.life_3_digits_min);
-        } else {
-            if (getActivePlayer(player).getPlayerLife() <= 99 && getActivePlayer(player).getPlayerLife() >= -9)
-                aux = getResources().getDimension(R.dimen.life_2_digits_expanded) / getResources().getDimension(R.dimen.life_2_digits_max);
-            else
-                aux = getResources().getDimension(R.dimen.life_3_digits_expanded) / getResources().getDimension(R.dimen.life_3_digits_max);
-        }
-
-        if (type == Constants.EXPAND)
-            toSize = aux;
-        else
-            fromSize = aux;
-
-        Animation scale = new ScaleAnimation(fromSize, toSize, fromSize, toSize, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        scale.setDuration(getResources().getInteger(R.integer.animation_expand_text_duration));
-        scale.setStartOffset(type == Constants.EXPAND ? getResources().getInteger(R.integer.animation_expand_text_delay) : 0);
-        scale.setInterpolator(this, android.R.anim.overshoot_interpolator);
-        scale.setFillAfter(true);
-        if (player == 0) {
-            layout11_life.clearAnimation();
-            layout11_life.setAnimation(scale);
-        } else if (player == 1) {
-            layout12_life.clearAnimation();
-            layout12_life.setAnimation(scale);
-        } else if (player == 2) {
-            layout21_life.clearAnimation();
-            layout21_life.setAnimation(scale);
-        } else if (player == 3) {
-            layout22_life.clearAnimation();
-            layout22_life.setAnimation(scale);
-        }
-    }
-
-    public boolean isValidGame() {
-        boolean isValid = true;
-        DecksDataAccessObject deckDb = new DecksDataAccessObject(this);
-        PlayersDataAccessObject playersDB = new PlayersDataAccessObject(this);
-
-        deckDb.open();
-        playersDB.open();
-
-        for (int i = 0; i < totalPlayers; i++) {
-            ActivePlayer auxPlayer = Utils.loadPlayerFromSharedPreferences(this, i);
-            if (!deckDb.hasDeck(auxPlayer.getPlayerDeck()) || !playersDB.hasPlayer(auxPlayer.getPlayerDeck().getDeckOwnerName()))
-                isValid = false;
-            if (auxPlayer.getPlayerDeck().getDeckOwnerName().equalsIgnoreCase("") || auxPlayer.getPlayerDeck().getDeckName().equalsIgnoreCase(""))
-                isValid = false;
-            try {
-                if (auxPlayer.getPlayerDeck().getDeckShieldColor()[0] != deckDb.getDeck(auxPlayer.getPlayerDeck().getDeckOwnerName(), auxPlayer.getPlayerDeck().getDeckName()).getDeckShieldColor()[0])
-                    isValid = false;
-            } catch (NullPointerException e) {
-                isValid = false;
-            }
-        }
-
-        if (totalPlayers < 2)
-            isValid = false;
-
-        playersDB.close();
-        deckDb.close();
-        return isValid;
-    }
-
     @Override
     public void onBackPressed() {
-        if (mPlayerDrawerLayout.isDrawerOpen(mPlayerDrawer))
-            mPlayerDrawerLayout.closeDrawers();
-        else if (currentScene != this.currentSceneOverview)
-            goToScene(this.currentSceneOverview);
-        else
-            super.onBackPressed();
+        if (!isInAnimation) {
+            if (mPlayerDrawerLayout.isDrawerOpen(mPlayerDrawer))
+                mPlayerDrawerLayout.closeDrawers();
+            else if (currentScene != this.currentSceneOverview)
+                goToScene(this.currentSceneOverview);
+            else
+                super.onBackPressed();
+        }
     }
 
     public void onClickDrawerItem(View view) {
@@ -285,6 +218,7 @@ public class MainActivity extends AppCompatActivity {
                         activePlayer1.setPlayerLife(activePlayer1.getPlayerLife() + 1);
                         historyHandler(activePlayer1);
                         updateLayout11();
+                        adjustLifeSize(activePlayer1.getPlayerTag(), layout11_life);
                     }
                     break;
                 case R.id.layout11_life_negative:
@@ -292,6 +226,7 @@ public class MainActivity extends AppCompatActivity {
                         activePlayer1.setPlayerLife(activePlayer1.getPlayerLife() - 1);
                         historyHandler(activePlayer1);
                         updateLayout11();
+                        adjustLifeSize(activePlayer1.getPlayerTag(), layout11_life);
                     }
                     break;
                 case R.id.layout11_positive_EDH1:
@@ -300,6 +235,7 @@ public class MainActivity extends AppCompatActivity {
                         activePlayer1.setPlayerEDH1(activePlayer1.getPlayerEDH1() + 1);
                         historyHandler(activePlayer1);
                         updateLayout11();
+                        adjustLifeSize(activePlayer1.getPlayerTag(), layout11_life);
                     }
                     break;
                 case R.id.layout11_negative_EDH1:
@@ -308,6 +244,7 @@ public class MainActivity extends AppCompatActivity {
                         activePlayer1.setPlayerEDH1(activePlayer1.getPlayerEDH1() - 1);
                         historyHandler(activePlayer1);
                         updateLayout11();
+                        adjustLifeSize(activePlayer1.getPlayerTag(), layout11_life);
                     }
                     break;
                 case R.id.layout11_positive_EDH2:
@@ -316,6 +253,7 @@ public class MainActivity extends AppCompatActivity {
                         activePlayer1.setPlayerEDH2(activePlayer1.getPlayerEDH2() + 1);
                         historyHandler(activePlayer1);
                         updateLayout11();
+                        adjustLifeSize(activePlayer1.getPlayerTag(), layout11_life);
                     }
                     break;
                 case R.id.layout11_negative_EDH2:
@@ -324,6 +262,7 @@ public class MainActivity extends AppCompatActivity {
                         activePlayer1.setPlayerEDH2(activePlayer1.getPlayerEDH2() - 1);
                         historyHandler(activePlayer1);
                         updateLayout11();
+                        adjustLifeSize(activePlayer1.getPlayerTag(), layout11_life);
                     }
                     break;
                 case R.id.layout11_positive_EDH3:
@@ -332,6 +271,7 @@ public class MainActivity extends AppCompatActivity {
                         activePlayer1.setPlayerEDH3(activePlayer1.getPlayerEDH3() + 1);
                         historyHandler(activePlayer1);
                         updateLayout11();
+                        adjustLifeSize(activePlayer1.getPlayerTag(), layout11_life);
                     }
                     break;
                 case R.id.layout11_negative_EDH3:
@@ -340,6 +280,7 @@ public class MainActivity extends AppCompatActivity {
                         activePlayer1.setPlayerEDH3(activePlayer1.getPlayerEDH3() - 1);
                         historyHandler(activePlayer1);
                         updateLayout11();
+                        adjustLifeSize(activePlayer1.getPlayerTag(), layout11_life);
                     }
                     break;
                 case R.id.layout11_positive_EDH4:
@@ -348,6 +289,7 @@ public class MainActivity extends AppCompatActivity {
                         activePlayer1.setPlayerEDH4(activePlayer1.getPlayerEDH4() + 1);
                         historyHandler(activePlayer1);
                         updateLayout11();
+                        adjustLifeSize(activePlayer1.getPlayerTag(), layout11_life);
                     }
                     break;
                 case R.id.layout11_negative_EDH4:
@@ -356,6 +298,7 @@ public class MainActivity extends AppCompatActivity {
                         activePlayer1.setPlayerEDH4(activePlayer1.getPlayerEDH4() - 1);
                         historyHandler(activePlayer1);
                         updateLayout11();
+                        adjustLifeSize(activePlayer1.getPlayerTag(), layout11_life);
                     }
                     break;
 
@@ -371,6 +314,7 @@ public class MainActivity extends AppCompatActivity {
                         activePlayer2.setPlayerLife(activePlayer2.getPlayerLife() + 1);
                         historyHandler(activePlayer2);
                         updateLayout12();
+                        adjustLifeSize(activePlayer2.getPlayerTag(), layout12_life);
                     }
                     break;
                 case R.id.layout12_life_negative:
@@ -378,6 +322,7 @@ public class MainActivity extends AppCompatActivity {
                         activePlayer2.setPlayerLife(activePlayer2.getPlayerLife() - 1);
                         historyHandler(activePlayer2);
                         updateLayout12();
+                        adjustLifeSize(activePlayer2.getPlayerTag(), layout12_life);
                     }
                     break;
                 case R.id.layout12_positive_EDH1:
@@ -386,6 +331,7 @@ public class MainActivity extends AppCompatActivity {
                         activePlayer2.setPlayerEDH1(activePlayer2.getPlayerEDH1() + 1);
                         historyHandler(activePlayer2);
                         updateLayout12();
+                        adjustLifeSize(activePlayer2.getPlayerTag(), layout12_life);
                     }
                     break;
                 case R.id.layout12_negative_EDH1:
@@ -394,6 +340,7 @@ public class MainActivity extends AppCompatActivity {
                         activePlayer2.setPlayerEDH1(activePlayer2.getPlayerEDH1() - 1);
                         historyHandler(activePlayer2);
                         updateLayout12();
+                        adjustLifeSize(activePlayer2.getPlayerTag(), layout12_life);
                     }
                     break;
                 case R.id.layout12_positive_EDH2:
@@ -402,6 +349,7 @@ public class MainActivity extends AppCompatActivity {
                         activePlayer2.setPlayerEDH2(activePlayer2.getPlayerEDH2() + 1);
                         historyHandler(activePlayer2);
                         updateLayout12();
+                        adjustLifeSize(activePlayer2.getPlayerTag(), layout12_life);
                     }
                     break;
                 case R.id.layout12_negative_EDH2:
@@ -410,6 +358,7 @@ public class MainActivity extends AppCompatActivity {
                         activePlayer2.setPlayerEDH2(activePlayer2.getPlayerEDH2() - 1);
                         historyHandler(activePlayer2);
                         updateLayout12();
+                        adjustLifeSize(activePlayer2.getPlayerTag(), layout12_life);
                     }
                     break;
                 case R.id.layout12_positive_EDH3:
@@ -418,6 +367,7 @@ public class MainActivity extends AppCompatActivity {
                         activePlayer2.setPlayerEDH3(activePlayer2.getPlayerEDH3() + 1);
                         historyHandler(activePlayer2);
                         updateLayout12();
+                        adjustLifeSize(activePlayer2.getPlayerTag(), layout12_life);
                     }
                     break;
                 case R.id.layout12_negative_EDH3:
@@ -426,6 +376,7 @@ public class MainActivity extends AppCompatActivity {
                         activePlayer2.setPlayerEDH3(activePlayer2.getPlayerEDH3() - 1);
                         historyHandler(activePlayer2);
                         updateLayout12();
+                        adjustLifeSize(activePlayer2.getPlayerTag(), layout12_life);
                     }
                     break;
                 case R.id.layout12_positive_EDH4:
@@ -434,6 +385,7 @@ public class MainActivity extends AppCompatActivity {
                         activePlayer2.setPlayerEDH4(activePlayer2.getPlayerEDH4() + 1);
                         historyHandler(activePlayer2);
                         updateLayout12();
+                        adjustLifeSize(activePlayer2.getPlayerTag(), layout12_life);
                     }
                     break;
                 case R.id.layout12_negative_EDH4:
@@ -442,6 +394,7 @@ public class MainActivity extends AppCompatActivity {
                         activePlayer2.setPlayerEDH4(activePlayer2.getPlayerEDH4() - 1);
                         historyHandler(activePlayer2);
                         updateLayout12();
+                        adjustLifeSize(activePlayer2.getPlayerTag(), layout12_life);
                     }
                     break;
 
@@ -457,6 +410,7 @@ public class MainActivity extends AppCompatActivity {
                         activePlayer3.setPlayerLife(activePlayer3.getPlayerLife() + 1);
                         historyHandler(activePlayer3);
                         updateLayout21();
+                        adjustLifeSize(activePlayer3.getPlayerTag(), layout21_life);
                     }
                     break;
                 case R.id.layout21_life_negative:
@@ -464,6 +418,7 @@ public class MainActivity extends AppCompatActivity {
                         activePlayer3.setPlayerLife(activePlayer3.getPlayerLife() - 1);
                         historyHandler(activePlayer3);
                         updateLayout21();
+                        adjustLifeSize(activePlayer3.getPlayerTag(), layout21_life);
                     }
                     break;
                 case R.id.layout21_positive_EDH1:
@@ -472,6 +427,7 @@ public class MainActivity extends AppCompatActivity {
                         activePlayer3.setPlayerEDH1(activePlayer3.getPlayerEDH1() + 1);
                         historyHandler(activePlayer3);
                         updateLayout21();
+                        adjustLifeSize(activePlayer3.getPlayerTag(), layout21_life);
                     }
                     break;
                 case R.id.layout21_negative_EDH1:
@@ -480,6 +436,7 @@ public class MainActivity extends AppCompatActivity {
                         activePlayer3.setPlayerEDH1(activePlayer3.getPlayerEDH1() - 1);
                         historyHandler(activePlayer3);
                         updateLayout21();
+                        adjustLifeSize(activePlayer3.getPlayerTag(), layout21_life);
                     }
                     break;
                 case R.id.layout21_positive_EDH2:
@@ -488,6 +445,7 @@ public class MainActivity extends AppCompatActivity {
                         activePlayer3.setPlayerEDH2(activePlayer3.getPlayerEDH2() + 1);
                         historyHandler(activePlayer3);
                         updateLayout21();
+                        adjustLifeSize(activePlayer3.getPlayerTag(), layout21_life);
                     }
                     break;
                 case R.id.layout21_negative_EDH2:
@@ -496,6 +454,7 @@ public class MainActivity extends AppCompatActivity {
                         activePlayer3.setPlayerEDH2(activePlayer3.getPlayerEDH2() - 1);
                         historyHandler(activePlayer3);
                         updateLayout21();
+                        adjustLifeSize(activePlayer3.getPlayerTag(), layout21_life);
                     }
                     break;
                 case R.id.layout21_positive_EDH3:
@@ -504,6 +463,7 @@ public class MainActivity extends AppCompatActivity {
                         activePlayer3.setPlayerEDH3(activePlayer3.getPlayerEDH3() + 1);
                         historyHandler(activePlayer3);
                         updateLayout21();
+                        adjustLifeSize(activePlayer3.getPlayerTag(), layout21_life);
                     }
                     break;
                 case R.id.layout21_negative_EDH3:
@@ -512,6 +472,7 @@ public class MainActivity extends AppCompatActivity {
                         activePlayer3.setPlayerEDH3(activePlayer3.getPlayerEDH3() - 1);
                         historyHandler(activePlayer3);
                         updateLayout21();
+                        adjustLifeSize(activePlayer3.getPlayerTag(), layout21_life);
                     }
                     break;
                 case R.id.layout21_positive_EDH4:
@@ -520,6 +481,7 @@ public class MainActivity extends AppCompatActivity {
                         activePlayer3.setPlayerEDH4(activePlayer3.getPlayerEDH4() + 1);
                         historyHandler(activePlayer3);
                         updateLayout21();
+                        adjustLifeSize(activePlayer3.getPlayerTag(), layout21_life);
                     }
                     break;
                 case R.id.layout21_negative_EDH4:
@@ -528,6 +490,7 @@ public class MainActivity extends AppCompatActivity {
                         activePlayer3.setPlayerEDH4(activePlayer3.getPlayerEDH4() - 1);
                         historyHandler(activePlayer3);
                         updateLayout21();
+                        adjustLifeSize(activePlayer3.getPlayerTag(), layout21_life);
                     }
                     break;
 
@@ -543,6 +506,7 @@ public class MainActivity extends AppCompatActivity {
                         activePlayer4.setPlayerLife(activePlayer4.getPlayerLife() + 1);
                         historyHandler(activePlayer4);
                         updateLayout22();
+                        adjustLifeSize(activePlayer4.getPlayerTag(), layout22_life);
                     }
                     break;
                 case R.id.layout22_life_negative:
@@ -550,6 +514,7 @@ public class MainActivity extends AppCompatActivity {
                         activePlayer4.setPlayerLife(activePlayer4.getPlayerLife() - 1);
                         historyHandler(activePlayer4);
                         updateLayout22();
+                        adjustLifeSize(activePlayer4.getPlayerTag(), layout22_life);
                     }
                     break;
                 case R.id.layout22_positive_EDH1:
@@ -558,6 +523,7 @@ public class MainActivity extends AppCompatActivity {
                         activePlayer4.setPlayerEDH1(activePlayer4.getPlayerEDH1() + 1);
                         historyHandler(activePlayer4);
                         updateLayout22();
+                        adjustLifeSize(activePlayer4.getPlayerTag(), layout22_life);
                     }
                     break;
                 case R.id.layout22_negative_EDH1:
@@ -566,6 +532,7 @@ public class MainActivity extends AppCompatActivity {
                         activePlayer4.setPlayerEDH1(activePlayer4.getPlayerEDH1() - 1);
                         historyHandler(activePlayer4);
                         updateLayout22();
+                        adjustLifeSize(activePlayer4.getPlayerTag(), layout22_life);
                     }
                     break;
                 case R.id.layout22_positive_EDH2:
@@ -574,6 +541,7 @@ public class MainActivity extends AppCompatActivity {
                         activePlayer4.setPlayerEDH2(activePlayer4.getPlayerEDH2() + 1);
                         historyHandler(activePlayer4);
                         updateLayout22();
+                        adjustLifeSize(activePlayer4.getPlayerTag(), layout22_life);
                     }
                     break;
                 case R.id.layout22_negative_EDH2:
@@ -582,6 +550,7 @@ public class MainActivity extends AppCompatActivity {
                         activePlayer4.setPlayerEDH2(activePlayer4.getPlayerEDH2() - 1);
                         historyHandler(activePlayer4);
                         updateLayout22();
+                        adjustLifeSize(activePlayer4.getPlayerTag(), layout22_life);
                     }
                     break;
                 case R.id.layout22_positive_EDH3:
@@ -590,6 +559,7 @@ public class MainActivity extends AppCompatActivity {
                         activePlayer4.setPlayerEDH3(activePlayer4.getPlayerEDH3() + 1);
                         historyHandler(activePlayer4);
                         updateLayout22();
+                        adjustLifeSize(activePlayer4.getPlayerTag(), layout22_life);
                     }
                     break;
                 case R.id.layout22_negative_EDH3:
@@ -598,6 +568,7 @@ public class MainActivity extends AppCompatActivity {
                         activePlayer4.setPlayerEDH3(activePlayer4.getPlayerEDH3() - 1);
                         historyHandler(activePlayer4);
                         updateLayout22();
+                        adjustLifeSize(activePlayer4.getPlayerTag(), layout22_life);
                     }
                     break;
                 case R.id.layout22_positive_EDH4:
@@ -606,6 +577,7 @@ public class MainActivity extends AppCompatActivity {
                         activePlayer4.setPlayerEDH4(activePlayer4.getPlayerEDH4() + 1);
                         historyHandler(activePlayer4);
                         updateLayout22();
+                        adjustLifeSize(activePlayer4.getPlayerTag(), layout22_life);
                     }
                     break;
                 case R.id.layout22_negative_EDH4:
@@ -614,6 +586,7 @@ public class MainActivity extends AppCompatActivity {
                         activePlayer4.setPlayerEDH4(activePlayer4.getPlayerEDH4() - 1);
                         historyHandler(activePlayer4);
                         updateLayout22();
+                        adjustLifeSize(activePlayer4.getPlayerTag(), layout22_life);
                     }
                     break;
 
@@ -769,10 +742,11 @@ public class MainActivity extends AppCompatActivity {
                 activePlayer4 = Utils.loadPlayerFromSharedPreferences(this, 3);
 
             createGameLayout();
+            adjustLifeSize(true);
             updateLayout();
         } else {
             //TODO 1 inflate newgame layout
-            startActivity(new Intent(this, NewGameActivity.class));
+            //startActivity(new Intent(this, NewGameActivity.class));
         }
     }
 
@@ -797,7 +771,7 @@ public class MainActivity extends AppCompatActivity {
             startTimerCounter();
         } else {
             //TODO 1 inflate newgame layout
-            startActivity(new Intent(this, NewGameActivity.class));
+            //startActivity(new Intent(this, NewGameActivity.class));
         }
     }
 
@@ -814,6 +788,195 @@ public class MainActivity extends AppCompatActivity {
                 Utils.savePlayerInSharedPreferences(this, activePlayer4);
         }
         super.onStop();
+    }
+
+    private void adjustLifeSize(boolean updateAll) {
+        if (updateAll) {
+            adjustLifeSize(0, layout11_life);
+            adjustLifeSize(1, layout12_life);
+            if (totalPlayers >= 3)
+                adjustLifeSize(2, layout21_life);
+            if (totalPlayers >= 4)
+                adjustLifeSize(3, layout22_life);
+        } else {
+            //Adjust every view, except the animated one that has been scaled on animationEnd
+            if (previousScene == this.currentScene11) {
+                adjustLifeSize(1, layout12_life);
+                if (totalPlayers >= 3)
+                    adjustLifeSize(2, layout21_life);
+                if (totalPlayers >= 4)
+                    adjustLifeSize(3, layout22_life);
+            } else if (previousScene == this.currentScene12) {
+                adjustLifeSize(0, layout11_life);
+                if (totalPlayers >= 3)
+                    adjustLifeSize(2, layout21_life);
+                if (totalPlayers >= 4)
+                    adjustLifeSize(3, layout22_life);
+            } else if (totalPlayers >= 3 && previousScene == this.currentScene21) {
+                adjustLifeSize(0, layout11_life);
+                adjustLifeSize(1, layout12_life);
+                if (totalPlayers >= 4)
+                    adjustLifeSize(3, layout22_life);
+            } else if (totalPlayers >= 4 && previousScene == this.currentScene22) {
+                adjustLifeSize(0, layout11_life);
+                adjustLifeSize(1, layout12_life);
+                adjustLifeSize(2, layout21_life);
+            }
+        }
+    }
+
+    private void adjustLifeSize(int player, TextView lifeValue) {
+        float toScale;
+        TypedValue outValue = new TypedValue();
+        //TWO DIGITS
+        if (getActivePlayer(player).getPlayerLife() <= 99 && getActivePlayer(player).getPlayerLife() >= -9) {
+            if (currentScene != this.currentSceneOverview) {
+                getResources().getValue(R.dimen.scale_single_view_2_digits, outValue, true);
+            } else {
+                if (totalPlayers == 4 || (totalPlayers == 3 && (player == 0 || player == 1))) {
+                    getResources().getValue(R.dimen.scale_overview_2_digits, outValue, true);
+                } else {
+                    getResources().getValue(R.dimen.scale_overview_2_digits_max, outValue, true);
+                }
+            }
+        }
+        //THREE DIGITS
+        else {
+            if (currentScene != this.currentSceneOverview) {
+                getResources().getValue(R.dimen.scale_single_view_3_digits, outValue, true);
+            } else {
+                if (totalPlayers == 4 || (totalPlayers == 3 && (player == 0 || player == 1))) {
+                    getResources().getValue(R.dimen.scale_overview_3_digits, outValue, true);
+                } else {
+                    getResources().getValue(R.dimen.scale_overview_3_digits_max, outValue, true);
+                }
+            }
+        }
+
+        toScale = outValue.getFloat();
+
+        lifeValue.setScaleX(toScale);
+        lifeValue.setScaleY(toScale);
+    }
+
+    private void animateEDHValue(int type) {
+        TypedValue outValue = new TypedValue();
+        if (type == Constants.EXPAND) {
+            getResources().getValue(R.dimen.scale_single_view_edh, outValue, true);
+        } else {
+            getResources().getValue(R.dimen.scale_overview_edh, outValue, true);
+        }
+
+        float toScale = outValue.getFloat();
+
+        //TODO name
+        layout11_name.clearAnimation();
+        layout11_name.setAnimation(getEDHScaleAnimation(layout11_name, toScale, type));
+        layout11_edh1.clearAnimation();
+        layout11_edh1.setAnimation(getEDHScaleAnimation(layout11_edh1, toScale, type));
+        layout11_edh2.clearAnimation();
+        layout11_edh2.setAnimation(getEDHScaleAnimation(layout11_edh2, toScale, type));
+        if (totalPlayers >= 3) {
+            layout11_edh3.clearAnimation();
+            layout11_edh3.setAnimation(getEDHScaleAnimation(layout11_edh3, toScale, type));
+        }
+        if (totalPlayers >= 4) {
+            layout11_edh4.clearAnimation();
+            layout11_edh4.setAnimation(getEDHScaleAnimation(layout11_edh4, toScale, type));
+        }
+
+        layout12_name.clearAnimation();
+        layout12_name.setAnimation(getEDHScaleAnimation(layout12_name, toScale, type));
+        layout12_edh1.clearAnimation();
+        layout12_edh1.setAnimation(getEDHScaleAnimation(layout12_edh1, toScale, type));
+        layout12_edh2.clearAnimation();
+        layout12_edh2.setAnimation(getEDHScaleAnimation(layout12_edh2, toScale, type));
+        if (totalPlayers >= 3) {
+            layout12_edh3.clearAnimation();
+            layout12_edh3.setAnimation(getEDHScaleAnimation(layout12_edh3, toScale, type));
+        }
+        if (totalPlayers >= 4) {
+            layout12_edh4.clearAnimation();
+            layout12_edh4.setAnimation(getEDHScaleAnimation(layout12_edh4, toScale, type));
+        }
+
+        if (totalPlayers >= 3) {
+            layout21_name.clearAnimation();
+            layout21_name.setAnimation(getEDHScaleAnimation(layout21_name, toScale, type));
+            layout21_edh1.clearAnimation();
+            layout21_edh1.setAnimation(getEDHScaleAnimation(layout21_edh1, toScale, type));
+            layout21_edh2.clearAnimation();
+            layout21_edh2.setAnimation(getEDHScaleAnimation(layout21_edh2, toScale, type));
+            layout21_edh3.clearAnimation();
+            layout21_edh3.setAnimation(getEDHScaleAnimation(layout21_edh3, toScale, type));
+            if (totalPlayers >= 4) {
+                layout21_edh4.clearAnimation();
+                layout21_edh4.setAnimation(getEDHScaleAnimation(layout21_edh4, toScale, type));
+            }
+        }
+
+        if (totalPlayers >= 4) {
+            layout22_name.clearAnimation();
+            layout22_name.setAnimation(getEDHScaleAnimation(layout22_name, toScale, type));
+            layout22_edh1.clearAnimation();
+            layout22_edh2.clearAnimation();
+            layout22_edh3.clearAnimation();
+            layout22_edh4.clearAnimation();
+            layout22_edh1.setAnimation(getEDHScaleAnimation(layout22_edh1, toScale, type));
+            layout22_edh2.setAnimation(getEDHScaleAnimation(layout22_edh2, toScale, type));
+            layout22_edh3.setAnimation(getEDHScaleAnimation(layout22_edh3, toScale, type));
+            layout22_edh4.setAnimation(getEDHScaleAnimation(layout22_edh4, toScale, type));
+        }
+    }
+
+    private void animateLifeValue(int player, int type) {
+        float toScale;
+        TypedValue outValue = new TypedValue();
+
+        //TWO DIGITS
+        if (getActivePlayer(player).getPlayerLife() <= 99 && getActivePlayer(player).getPlayerLife() >= -9) {
+            //EXPAND
+            if (type == Constants.EXPAND) {
+                getResources().getValue(R.dimen.scale_single_view_2_digits, outValue, true);
+            } else {
+                //COLLAPSE
+                if (totalPlayers == 4 || (totalPlayers == 3 && (player == 0 || player == 1))) {
+                    getResources().getValue(R.dimen.scale_overview_2_digits, outValue, true);
+                } else {
+                    getResources().getValue(R.dimen.scale_overview_2_digits_max, outValue, true);
+                }
+            }
+        }
+        //THREE DIGITS
+        else {
+            //EXPAND
+            if (type == Constants.EXPAND) {
+                getResources().getValue(R.dimen.scale_single_view_3_digits, outValue, true);
+            } else {
+                //COLLAPSE
+                if (totalPlayers == 4 || (totalPlayers == 3 && (player == 0 || player == 1))) {
+                    getResources().getValue(R.dimen.scale_overview_3_digits, outValue, true);
+                } else {
+                    getResources().getValue(R.dimen.scale_overview_3_digits_max, outValue, true);
+                }
+            }
+        }
+
+        toScale = outValue.getFloat();
+
+        if (player == 0) {
+            layout11_life.clearAnimation();
+            layout11_life.setAnimation(getLifeScaleAnimation(layout11_life, toScale, type));
+        } else if (player == 1) {
+            layout12_life.clearAnimation();
+            layout12_life.setAnimation(getLifeScaleAnimation(layout12_life, toScale, type));
+        } else if (player == 2) {
+            layout21_life.clearAnimation();
+            layout21_life.setAnimation(getLifeScaleAnimation(layout21_life, toScale, type));
+        } else if (player == 3) {
+            layout22_life.clearAnimation();
+            layout22_life.setAnimation(getLifeScaleAnimation(layout22_life, toScale, type));
+        }
     }
 
     private void createDrawer() {
@@ -1017,53 +1180,128 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void goToScene(int goTo) {
-        new animationHandler().execute();
+    private Animation getEDHScaleAnimation(final TextView tv, final float toScale, final int type) {
+        Animation scale = new ScaleAnimation(tv.getScaleX(), toScale, tv.getScaleX(), toScale, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        scale.setDuration(type == Constants.EXPAND ? getResources().getInteger(R.integer.animation_expand_text_duration) : getResources().getInteger(R.integer.animation_collapse_text_duration));
+        scale.setStartOffset(type == Constants.EXPAND ? getResources().getInteger(R.integer.animation_expand_text_delay) : 0);
+        scale.setInterpolator(this, android.R.anim.overshoot_interpolator);
+        scale.setFillAfter(false);
+        scale.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                tv.clearAnimation();
+                tv.setScaleX(toScale);
+                tv.setScaleY(toScale);
+                isInAnimation = false;
+            }
 
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationStart(Animation animation) {
+                isInAnimation = true;
+            }
+        });
+        return scale;
+    }
+
+    private Animation getLifeScaleAnimation(final TextView tv, final float toScale, final int type) {
+        Animation scale = new ScaleAnimation(currentScaleLife, toScale, currentScaleLife, toScale, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        scale.setDuration(type == Constants.EXPAND ? getResources().getInteger(R.integer.animation_expand_text_duration) : getResources().getInteger(R.integer.animation_collapse_text_duration));
+        scale.setStartOffset(type == Constants.EXPAND ? getResources().getInteger(R.integer.animation_expand_text_delay) : 0);
+        scale.setInterpolator(this, android.R.anim.overshoot_interpolator);
+        scale.setFillAfter(false);
+        scale.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                tv.clearAnimation();
+                tv.setScaleX(toScale);
+                tv.setScaleY(toScale);
+                isInAnimation = false;
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationStart(Animation animation) {
+                isInAnimation = true;
+                adjustLifeSize(false);
+            }
+        });
+        return scale;
+    }
+
+    private void goToScene(int goTo) {
+        isInAnimation = true;
         if (goTo == this.currentSceneOverview) {
             int auxActivePlayer = 0;
-            if (currentScene == this.currentScene11)
+            if (currentScene == this.currentScene11) {
+                currentScaleLife = layout11_life.getScaleX();
                 auxActivePlayer = 0;
-            else if (currentScene == this.currentScene12)
+            } else if (currentScene == this.currentScene12) {
+                currentScaleLife = layout12_life.getScaleX();
                 auxActivePlayer = 1;
-            else if (currentScene == this.currentScene21)
+            } else if (currentScene == this.currentScene21) {
+                currentScaleLife = layout21_life.getScaleX();
                 auxActivePlayer = 2;
-            else if (currentScene == this.currentScene22)
+            } else if (currentScene == this.currentScene22) {
+                currentScaleLife = layout22_life.getScaleX();
                 auxActivePlayer = 3;
+            }
             mTransitionManager.transitionTo(overview_scene);
+            previousScene = currentScene;
             currentScene = this.currentSceneOverview;
             createGameLayout();
             updateLayout();
             setActionBarColor(ContextCompat.getColor(MainActivity.this, R.color.primary_color));
-            expandOverview(auxActivePlayer, Constants.COLLAPSE);
+            animateLifeValue(auxActivePlayer, Constants.COLLAPSE);
+            animateEDHValue(Constants.COLLAPSE);
         } else if (goTo == this.currentScene11) {
+            currentScaleLife = layout11_life.getScaleX();
             mTransitionManager.transitionTo(big11_scene);
+            previousScene = currentScene;
             currentScene = this.currentScene11;
             createLayout11();
             updateLayout11();
             setActionBarColor(activePlayer1.getPlayerDeck().getDeckShieldColor()[0]);
-            expandOverview(activePlayer1.getPlayerTag(), Constants.EXPAND);
+            animateLifeValue(activePlayer1.getPlayerTag(), Constants.EXPAND);
+            animateEDHValue(Constants.EXPAND);
         } else if (goTo == this.currentScene12) {
+            currentScaleLife = layout12_life.getScaleX();
             mTransitionManager.transitionTo(big12_scene);
+            previousScene = currentScene;
             currentScene = this.currentScene12;
             createLayout12();
             updateLayout12();
             setActionBarColor(activePlayer2.getPlayerDeck().getDeckShieldColor()[0]);
-            expandOverview(activePlayer2.getPlayerTag(), Constants.EXPAND);
+            animateLifeValue(activePlayer2.getPlayerTag(), Constants.EXPAND);
+            animateEDHValue(Constants.EXPAND);
         } else if (goTo == this.currentScene21) {
+            currentScaleLife = layout21_life.getScaleX();
             mTransitionManager.transitionTo(big21_scene);
+            previousScene = currentScene;
             currentScene = this.currentScene21;
             createLayout21();
             updateLayout21();
             setActionBarColor(activePlayer3.getPlayerDeck().getDeckShieldColor()[0]);
-            expandOverview(activePlayer3.getPlayerTag(), Constants.EXPAND);
+            animateLifeValue(activePlayer3.getPlayerTag(), Constants.EXPAND);
+            animateEDHValue(Constants.EXPAND);
         } else if (goTo == this.currentScene22) {
+            currentScaleLife = layout22_life.getScaleX();
             mTransitionManager.transitionTo(big22_scene);
+            previousScene = currentScene;
             currentScene = this.currentScene22;
             createLayout22();
             updateLayout22();
             setActionBarColor(activePlayer4.getPlayerDeck().getDeckShieldColor()[0]);
-            expandOverview(activePlayer4.getPlayerTag(), Constants.EXPAND);
+            animateLifeValue(activePlayer4.getPlayerTag(), Constants.EXPAND);
+            animateEDHValue(Constants.EXPAND);
         }
 
         setupOptionMenu();
@@ -1166,17 +1404,39 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private boolean isValidGame() {
+        boolean isValid = true;
+        DecksDataAccessObject deckDb = new DecksDataAccessObject(this);
+        PlayersDataAccessObject playersDB = new PlayersDataAccessObject(this);
+
+        deckDb.open();
+        playersDB.open();
+
+        for (int i = 0; i < totalPlayers; i++) {
+            ActivePlayer auxPlayer = Utils.loadPlayerFromSharedPreferences(this, i);
+            if (!deckDb.hasDeck(auxPlayer.getPlayerDeck()) || !playersDB.hasPlayer(auxPlayer.getPlayerDeck().getDeckOwnerName()))
+                isValid = false;
+            if (auxPlayer.getPlayerDeck().getDeckOwnerName().equalsIgnoreCase("") || auxPlayer.getPlayerDeck().getDeckName().equalsIgnoreCase(""))
+                isValid = false;
+            try {
+                if (auxPlayer.getPlayerDeck().getDeckShieldColor()[0] != deckDb.getDeck(auxPlayer.getPlayerDeck().getDeckOwnerName(), auxPlayer.getPlayerDeck().getDeckName()).getDeckShieldColor()[0])
+                    isValid = false;
+            } catch (NullPointerException e) {
+                isValid = false;
+            }
+        }
+
+        if (totalPlayers < 2)
+            isValid = false;
+
+        playersDB.close();
+        deckDb.close();
+        return isValid;
+    }
+
     private void setActionBarColor(int color) {
         mActionBar.setBackgroundDrawable(new ColorDrawable(color));
         statusBarBackground.setBackgroundColor(color);
-    }
-
-    //TODO text size
-    private void setLife(int life, TextView lifeValue) {
-        if (lifeValue != null) {
-            lifeValue.setTextSize(TypedValue.COMPLEX_UNIT_SP, (life > 99 || life < -99) ? 120 : 180);
-            lifeValue.setText(String.format(Locale.US, "%d", life));
-        }
     }
 
     private void setupOptionMenu() {
@@ -1598,29 +1858,6 @@ public class MainActivity extends AppCompatActivity {
             progressRandomBar.setVisibility(View.VISIBLE);
             textViewResult.setVisibility(View.INVISIBLE);
             super.onPreExecute();
-        }
-    }
-
-    class animationHandler extends AsyncTask<Void, Void, String> {
-
-        @Override
-        protected String doInBackground(Void... params) {
-            try {
-                Thread.sleep(getResources().getInteger(R.integer.animation_expand_duration));
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            isInAnimation = false;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            isInAnimation = true;
         }
     }
 }

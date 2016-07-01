@@ -18,5 +18,6 @@
 
 
     <integer name="animation_expand_text_duration">400</integer>
+    <integer name="animation_collapse_text_duration">600</integer>
     <integer name="animation_expand_text_delay">800</integer>
 </resources>

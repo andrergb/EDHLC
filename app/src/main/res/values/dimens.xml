@@ -11,13 +11,18 @@
     <dimen name="crown_size_expanded">24dp</dimen>
     <dimen name="crown_size_collapsed">12dp</dimen>
 
-    <dimen name="life_2_digits_min">75sp</dimen>
-    <dimen name="life_2_digits_max">105sp</dimen>
+    <dimen name="player_life">74sp</dimen>
 
-    <dimen name="life_3_digits_min">60dp</dimen>
-    <dimen name="life_3_digits_max">80dp</dimen>
+    <dimen name="edh_collapsed">16sp</dimen>
 
-    <dimen name="life_2_digits_expanded">170sp</dimen>
-    <dimen name="life_3_digits_expanded">100sp</dimen>
+    <item name="scale_overview_2_digits" format="float" type="dimen">1.0</item>
+    <item name="scale_overview_2_digits_max" format="float" type="dimen">1.4</item>
+    <item name="scale_overview_3_digits" format="float" type="dimen">0.6</item>
+    <item name="scale_overview_3_digits_max" format="float" type="dimen">1.0</item>
+    <item name="scale_single_view_2_digits" format="float" type="dimen">2.0</item>
+    <item name="scale_single_view_3_digits" format="float" type="dimen">1.4</item>
 
+
+    <item name="scale_overview_edh" format="float" type="dimen">1.0</item>
+    <item name="scale_single_view_edh" format="float" type="dimen">1.6</item>
 </resources>
