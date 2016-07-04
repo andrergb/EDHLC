@@ -14,6 +14,7 @@
     <dimen name="player_life">74sp</dimen>
 
     <dimen name="edh_collapsed">16sp</dimen>
+    <dimen name="card_shield_size">3dp</dimen>
 
     <item name="scale_overview_2_digits" format="float" type="dimen">1.0</item>
     <item name="scale_overview_2_digits_max" format="float" type="dimen">1.4</item>
@@ -22,7 +23,9 @@
     <item name="scale_single_view_2_digits" format="float" type="dimen">2.0</item>
     <item name="scale_single_view_3_digits" format="float" type="dimen">1.4</item>
 
-
     <item name="scale_overview_edh" format="float" type="dimen">1.0</item>
     <item name="scale_single_view_edh" format="float" type="dimen">1.6</item>
+
+    <item name="scale_overview_name" format="float" type="dimen">1.0</item>
+    <item name="scale_single_view_name" format="float" type="dimen">1.4</item>
 </resources>

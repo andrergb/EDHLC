@@ -115,7 +115,8 @@
                                 <View
                                     android:layout_width="48dp"
                                     android:layout_height="48dp"
-                                    android:background="@drawable/place_log_game"/>
+                                    android:background="@drawable/place_log_game"
+                                    android:rotation="180"/>
 
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -231,7 +232,8 @@
                                 <View
                                     android:layout_width="48dp"
                                     android:layout_height="48dp"
-                                    android:background="@drawable/place_log_game"/>
+                                    android:background="@drawable/place_log_game"
+                                    android:rotation="180"/>
 
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -348,7 +350,8 @@
                                 <View
                                     android:layout_width="48dp"
                                     android:layout_height="48dp"
-                                    android:background="@drawable/place_log_game"/>
+                                    android:background="@drawable/place_log_game"
+                                    android:rotation="180"/>
 
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -465,7 +468,8 @@
                                 <View
                                     android:layout_width="48dp"
                                     android:layout_height="48dp"
-                                    android:background="@drawable/place_log_game"/>
+                                    android:background="@drawable/place_log_game"
+                                    android:rotation="180"/>
 
                                 <TextView
                                     android:layout_width="wrap_content"
