@@ -31,6 +31,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.ScaleAnimation;
 import android.widget.Chronometer;
 import android.widget.FrameLayout;
@@ -271,6 +272,7 @@ public class MainActivity extends AppCompatActivity {
                         historyHandler(activePlayer1);
                         updateLayout11();
                         adjustLifeSize(activePlayer1.getPlayerTag(), layout11_life);
+                        layout11_life.setAnimation(getBounceAnimation(true, 5));
                     }
                     break;
                 case R.id.layout11_life_negative:
@@ -279,6 +281,7 @@ public class MainActivity extends AppCompatActivity {
                         historyHandler(activePlayer1);
                         updateLayout11();
                         adjustLifeSize(activePlayer1.getPlayerTag(), layout11_life);
+                        layout11_life.setAnimation(getBounceAnimation(false, 5));
                     }
                     break;
                 case R.id.layout11_positive_EDH1:
@@ -288,6 +291,8 @@ public class MainActivity extends AppCompatActivity {
                         historyHandler(activePlayer1);
                         updateLayout11();
                         adjustLifeSize(activePlayer1.getPlayerTag(), layout11_life);
+                        layout11_life.setAnimation(getBounceAnimation(false, 5));
+                        layout11_edh1.setAnimation(getBounceAnimation(true, 10));
                     }
                     break;
                 case R.id.layout11_negative_EDH1:
@@ -297,6 +302,8 @@ public class MainActivity extends AppCompatActivity {
                         historyHandler(activePlayer1);
                         updateLayout11();
                         adjustLifeSize(activePlayer1.getPlayerTag(), layout11_life);
+                        layout11_life.setAnimation(getBounceAnimation(true, 5));
+                        layout11_edh1.setAnimation(getBounceAnimation(false, 10));
                     }
                     break;
                 case R.id.layout11_positive_EDH2:
@@ -306,6 +313,8 @@ public class MainActivity extends AppCompatActivity {
                         historyHandler(activePlayer1);
                         updateLayout11();
                         adjustLifeSize(activePlayer1.getPlayerTag(), layout11_life);
+                        layout11_life.setAnimation(getBounceAnimation(false, 5));
+                        layout11_edh2.setAnimation(getBounceAnimation(true, 10));
                     }
                     break;
                 case R.id.layout11_negative_EDH2:
@@ -315,6 +324,8 @@ public class MainActivity extends AppCompatActivity {
                         historyHandler(activePlayer1);
                         updateLayout11();
                         adjustLifeSize(activePlayer1.getPlayerTag(), layout11_life);
+                        layout11_life.setAnimation(getBounceAnimation(true, 5));
+                        layout11_edh2.setAnimation(getBounceAnimation(false, 10));
                     }
                     break;
                 case R.id.layout11_positive_EDH3:
@@ -324,6 +335,8 @@ public class MainActivity extends AppCompatActivity {
                         historyHandler(activePlayer1);
                         updateLayout11();
                         adjustLifeSize(activePlayer1.getPlayerTag(), layout11_life);
+                        layout11_life.setAnimation(getBounceAnimation(false, 5));
+                        layout11_edh3.setAnimation(getBounceAnimation(true, 10));
                     }
                     break;
                 case R.id.layout11_negative_EDH3:
@@ -333,6 +346,8 @@ public class MainActivity extends AppCompatActivity {
                         historyHandler(activePlayer1);
                         updateLayout11();
                         adjustLifeSize(activePlayer1.getPlayerTag(), layout11_life);
+                        layout11_life.setAnimation(getBounceAnimation(true, 5));
+                        layout11_edh3.setAnimation(getBounceAnimation(false, 10));
                     }
                     break;
                 case R.id.layout11_positive_EDH4:
@@ -342,6 +357,8 @@ public class MainActivity extends AppCompatActivity {
                         historyHandler(activePlayer1);
                         updateLayout11();
                         adjustLifeSize(activePlayer1.getPlayerTag(), layout11_life);
+                        layout11_life.setAnimation(getBounceAnimation(false, 5));
+                        layout11_edh4.setAnimation(getBounceAnimation(true, 10));
                     }
                     break;
                 case R.id.layout11_negative_EDH4:
@@ -351,6 +368,8 @@ public class MainActivity extends AppCompatActivity {
                         historyHandler(activePlayer1);
                         updateLayout11();
                         adjustLifeSize(activePlayer1.getPlayerTag(), layout11_life);
+                        layout11_life.setAnimation(getBounceAnimation(true, 5));
+                        layout11_edh4.setAnimation(getBounceAnimation(false, 10));
                     }
                     break;
 
@@ -367,6 +386,7 @@ public class MainActivity extends AppCompatActivity {
                         historyHandler(activePlayer2);
                         updateLayout12();
                         adjustLifeSize(activePlayer2.getPlayerTag(), layout12_life);
+                        layout12_life.setAnimation(getBounceAnimation(true, 5));
                     }
                     break;
                 case R.id.layout12_life_negative:
@@ -375,6 +395,7 @@ public class MainActivity extends AppCompatActivity {
                         historyHandler(activePlayer2);
                         updateLayout12();
                         adjustLifeSize(activePlayer2.getPlayerTag(), layout12_life);
+                        layout12_life.setAnimation(getBounceAnimation(false, 5));
                     }
                     break;
                 case R.id.layout12_positive_EDH1:
@@ -384,6 +405,8 @@ public class MainActivity extends AppCompatActivity {
                         historyHandler(activePlayer2);
                         updateLayout12();
                         adjustLifeSize(activePlayer2.getPlayerTag(), layout12_life);
+                        layout12_life.setAnimation(getBounceAnimation(false, 5));
+                        layout12_edh1.setAnimation(getBounceAnimation(true, 10));
                     }
                     break;
                 case R.id.layout12_negative_EDH1:
@@ -393,6 +416,8 @@ public class MainActivity extends AppCompatActivity {
                         historyHandler(activePlayer2);
                         updateLayout12();
                         adjustLifeSize(activePlayer2.getPlayerTag(), layout12_life);
+                        layout12_life.setAnimation(getBounceAnimation(true, 5));
+                        layout12_edh1.setAnimation(getBounceAnimation(false, 10));
                     }
                     break;
                 case R.id.layout12_positive_EDH2:
@@ -402,6 +427,8 @@ public class MainActivity extends AppCompatActivity {
                         historyHandler(activePlayer2);
                         updateLayout12();
                         adjustLifeSize(activePlayer2.getPlayerTag(), layout12_life);
+                        layout12_life.setAnimation(getBounceAnimation(false, 5));
+                        layout12_edh2.setAnimation(getBounceAnimation(true, 10));
                     }
                     break;
                 case R.id.layout12_negative_EDH2:
@@ -411,6 +438,8 @@ public class MainActivity extends AppCompatActivity {
                         historyHandler(activePlayer2);
                         updateLayout12();
                         adjustLifeSize(activePlayer2.getPlayerTag(), layout12_life);
+                        layout12_life.setAnimation(getBounceAnimation(true, 5));
+                        layout12_edh2.setAnimation(getBounceAnimation(false, 10));
                     }
                     break;
                 case R.id.layout12_positive_EDH3:
@@ -420,6 +449,8 @@ public class MainActivity extends AppCompatActivity {
                         historyHandler(activePlayer2);
                         updateLayout12();
                         adjustLifeSize(activePlayer2.getPlayerTag(), layout12_life);
+                        layout12_life.setAnimation(getBounceAnimation(false, 5));
+                        layout12_edh3.setAnimation(getBounceAnimation(true, 10));
                     }
                     break;
                 case R.id.layout12_negative_EDH3:
@@ -429,6 +460,8 @@ public class MainActivity extends AppCompatActivity {
                         historyHandler(activePlayer2);
                         updateLayout12();
                         adjustLifeSize(activePlayer2.getPlayerTag(), layout12_life);
+                        layout12_life.setAnimation(getBounceAnimation(true, 5));
+                        layout12_edh3.setAnimation(getBounceAnimation(false, 10));
                     }
                     break;
                 case R.id.layout12_positive_EDH4:
@@ -438,6 +471,8 @@ public class MainActivity extends AppCompatActivity {
                         historyHandler(activePlayer2);
                         updateLayout12();
                         adjustLifeSize(activePlayer2.getPlayerTag(), layout12_life);
+                        layout12_life.setAnimation(getBounceAnimation(false, 5));
+                        layout12_edh4.setAnimation(getBounceAnimation(true, 10));
                     }
                     break;
                 case R.id.layout12_negative_EDH4:
@@ -447,6 +482,8 @@ public class MainActivity extends AppCompatActivity {
                         historyHandler(activePlayer2);
                         updateLayout12();
                         adjustLifeSize(activePlayer2.getPlayerTag(), layout12_life);
+                        layout12_life.setAnimation(getBounceAnimation(true, 5));
+                        layout12_edh4.setAnimation(getBounceAnimation(false, 10));
                     }
                     break;
 
@@ -463,6 +500,7 @@ public class MainActivity extends AppCompatActivity {
                         historyHandler(activePlayer3);
                         updateLayout21();
                         adjustLifeSize(activePlayer3.getPlayerTag(), layout21_life);
+                        layout21_life.setAnimation(getBounceAnimation(true, 5));
                     }
                     break;
                 case R.id.layout21_life_negative:
@@ -471,6 +509,7 @@ public class MainActivity extends AppCompatActivity {
                         historyHandler(activePlayer3);
                         updateLayout21();
                         adjustLifeSize(activePlayer3.getPlayerTag(), layout21_life);
+                        layout21_life.setAnimation(getBounceAnimation(false, 5));
                     }
                     break;
                 case R.id.layout21_positive_EDH1:
@@ -480,6 +519,8 @@ public class MainActivity extends AppCompatActivity {
                         historyHandler(activePlayer3);
                         updateLayout21();
                         adjustLifeSize(activePlayer3.getPlayerTag(), layout21_life);
+                        layout21_life.setAnimation(getBounceAnimation(false, 5));
+                        layout21_edh1.setAnimation(getBounceAnimation(true, 10));
                     }
                     break;
                 case R.id.layout21_negative_EDH1:
@@ -489,6 +530,8 @@ public class MainActivity extends AppCompatActivity {
                         historyHandler(activePlayer3);
                         updateLayout21();
                         adjustLifeSize(activePlayer3.getPlayerTag(), layout21_life);
+                        layout21_life.setAnimation(getBounceAnimation(true, 5));
+                        layout21_edh1.setAnimation(getBounceAnimation(false, 10));
                     }
                     break;
                 case R.id.layout21_positive_EDH2:
@@ -498,6 +541,8 @@ public class MainActivity extends AppCompatActivity {
                         historyHandler(activePlayer3);
                         updateLayout21();
                         adjustLifeSize(activePlayer3.getPlayerTag(), layout21_life);
+                        layout21_life.setAnimation(getBounceAnimation(false, 5));
+                        layout21_edh2.setAnimation(getBounceAnimation(true, 10));
                     }
                     break;
                 case R.id.layout21_negative_EDH2:
@@ -507,6 +552,8 @@ public class MainActivity extends AppCompatActivity {
                         historyHandler(activePlayer3);
                         updateLayout21();
                         adjustLifeSize(activePlayer3.getPlayerTag(), layout21_life);
+                        layout21_life.setAnimation(getBounceAnimation(true, 5));
+                        layout21_edh2.setAnimation(getBounceAnimation(false, 10));
                     }
                     break;
                 case R.id.layout21_positive_EDH3:
@@ -516,6 +563,8 @@ public class MainActivity extends AppCompatActivity {
                         historyHandler(activePlayer3);
                         updateLayout21();
                         adjustLifeSize(activePlayer3.getPlayerTag(), layout21_life);
+                        layout21_life.setAnimation(getBounceAnimation(false, 5));
+                        layout21_edh3.setAnimation(getBounceAnimation(true, 10));
                     }
                     break;
                 case R.id.layout21_negative_EDH3:
@@ -525,6 +574,8 @@ public class MainActivity extends AppCompatActivity {
                         historyHandler(activePlayer3);
                         updateLayout21();
                         adjustLifeSize(activePlayer3.getPlayerTag(), layout21_life);
+                        layout21_life.setAnimation(getBounceAnimation(true, 5));
+                        layout21_edh3.setAnimation(getBounceAnimation(false, 10));
                     }
                     break;
                 case R.id.layout21_positive_EDH4:
@@ -534,6 +585,8 @@ public class MainActivity extends AppCompatActivity {
                         historyHandler(activePlayer3);
                         updateLayout21();
                         adjustLifeSize(activePlayer3.getPlayerTag(), layout21_life);
+                        layout21_life.setAnimation(getBounceAnimation(false, 5));
+                        layout21_edh4.setAnimation(getBounceAnimation(true, 10));
                     }
                     break;
                 case R.id.layout21_negative_EDH4:
@@ -543,6 +596,8 @@ public class MainActivity extends AppCompatActivity {
                         historyHandler(activePlayer3);
                         updateLayout21();
                         adjustLifeSize(activePlayer3.getPlayerTag(), layout21_life);
+                        layout21_life.setAnimation(getBounceAnimation(true, 5));
+                        layout21_edh4.setAnimation(getBounceAnimation(false, 10));
                     }
                     break;
 
@@ -559,6 +614,7 @@ public class MainActivity extends AppCompatActivity {
                         historyHandler(activePlayer4);
                         updateLayout22();
                         adjustLifeSize(activePlayer4.getPlayerTag(), layout22_life);
+                        layout22_life.setAnimation(getBounceAnimation(true, 5));
                     }
                     break;
                 case R.id.layout22_life_negative:
@@ -567,6 +623,7 @@ public class MainActivity extends AppCompatActivity {
                         historyHandler(activePlayer4);
                         updateLayout22();
                         adjustLifeSize(activePlayer4.getPlayerTag(), layout22_life);
+                        layout22_life.setAnimation(getBounceAnimation(false, 5));
                     }
                     break;
                 case R.id.layout22_positive_EDH1:
@@ -576,6 +633,8 @@ public class MainActivity extends AppCompatActivity {
                         historyHandler(activePlayer4);
                         updateLayout22();
                         adjustLifeSize(activePlayer4.getPlayerTag(), layout22_life);
+                        layout22_life.setAnimation(getBounceAnimation(false, 5));
+                        layout22_edh1.setAnimation(getBounceAnimation(true, 10));
                     }
                     break;
                 case R.id.layout22_negative_EDH1:
@@ -585,6 +644,8 @@ public class MainActivity extends AppCompatActivity {
                         historyHandler(activePlayer4);
                         updateLayout22();
                         adjustLifeSize(activePlayer4.getPlayerTag(), layout22_life);
+                        layout22_life.setAnimation(getBounceAnimation(true, 5));
+                        layout22_edh1.setAnimation(getBounceAnimation(false, 10));
                     }
                     break;
                 case R.id.layout22_positive_EDH2:
@@ -594,6 +655,8 @@ public class MainActivity extends AppCompatActivity {
                         historyHandler(activePlayer4);
                         updateLayout22();
                         adjustLifeSize(activePlayer4.getPlayerTag(), layout22_life);
+                        layout22_life.setAnimation(getBounceAnimation(false, 5));
+                        layout22_edh2.setAnimation(getBounceAnimation(true, 10));
                     }
                     break;
                 case R.id.layout22_negative_EDH2:
@@ -603,6 +666,8 @@ public class MainActivity extends AppCompatActivity {
                         historyHandler(activePlayer4);
                         updateLayout22();
                         adjustLifeSize(activePlayer4.getPlayerTag(), layout22_life);
+                        layout22_life.setAnimation(getBounceAnimation(true, 5));
+                        layout22_edh2.setAnimation(getBounceAnimation(false, 10));
                     }
                     break;
                 case R.id.layout22_positive_EDH3:
@@ -612,6 +677,8 @@ public class MainActivity extends AppCompatActivity {
                         historyHandler(activePlayer4);
                         updateLayout22();
                         adjustLifeSize(activePlayer4.getPlayerTag(), layout22_life);
+                        layout22_life.setAnimation(getBounceAnimation(false, 5));
+                        layout22_edh3.setAnimation(getBounceAnimation(true, 10));
                     }
                     break;
                 case R.id.layout22_negative_EDH3:
@@ -621,6 +688,8 @@ public class MainActivity extends AppCompatActivity {
                         historyHandler(activePlayer4);
                         updateLayout22();
                         adjustLifeSize(activePlayer4.getPlayerTag(), layout22_life);
+                        layout22_life.setAnimation(getBounceAnimation(true, 5));
+                        layout22_edh3.setAnimation(getBounceAnimation(false, 10));
                     }
                     break;
                 case R.id.layout22_positive_EDH4:
@@ -630,6 +699,8 @@ public class MainActivity extends AppCompatActivity {
                         historyHandler(activePlayer4);
                         updateLayout22();
                         adjustLifeSize(activePlayer4.getPlayerTag(), layout22_life);
+                        layout22_life.setAnimation(getBounceAnimation(false, 5));
+                        layout22_edh4.setAnimation(getBounceAnimation(true, 10));
                     }
                     break;
                 case R.id.layout22_negative_EDH4:
@@ -639,6 +710,8 @@ public class MainActivity extends AppCompatActivity {
                         historyHandler(activePlayer4);
                         updateLayout22();
                         adjustLifeSize(activePlayer4.getPlayerTag(), layout22_life);
+                        layout22_life.setAnimation(getBounceAnimation(true, 5));
+                        layout22_edh4.setAnimation(getBounceAnimation(false, 10));
                     }
                     break;
 
@@ -1365,6 +1438,17 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return new ActivePlayer();
         }
+    }
+
+    private Animation getBounceAnimation(boolean up, int percentage) {
+        if (percentage == 5) {
+            if (up)
+                return AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bounce_up_5);
+            return AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bounce_down_5);
+        }
+        if (up)
+            return AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bounce_up_10);
+        return AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bounce_down_10);
     }
 
     private Animation getLifeScaleAnimation(final TextView tv, final float toScale, final int type) {
