@@ -3,6 +3,7 @@ package com.android.argb.edhlc.activities;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -297,18 +298,22 @@ public class NewGame2Activity extends AppCompatActivity {
 
     private void updateLayout() {
         Intent intent = getIntent();
+        DecksDataAccessObject decksDb = new DecksDataAccessObject(this);
+        decksDb.open();
 
         p1Name = intent.getStringExtra("NEW_GAME2_PLAYER_1");
         p1Deck = intent.getStringExtra("NEW_GAME2_DECK_1");
         playerFirstNameNewGame2.setText(p1Name);
         playerFirstDeckNewGame2.setText(p1Deck);
         avatarFirstNewGame2.setImageDrawable(Utils.getRoundedImage(this, p1Name, p1Deck));
+        avatarFirstNewGame2.setColorFilter(decksDb.getDeck(p1Name, p1Deck).getDeckShieldColor()[0], PorterDuff.Mode.DST_OVER);
 
         p2Name = intent.getStringExtra("NEW_GAME2_PLAYER_2");
         p2Deck = intent.getStringExtra("NEW_GAME2_DECK_2");
         playerSecondNameNewGame2.setText(p2Name);
         playerSecondDeckNewGame2.setText(p2Deck);
         avatarSecondNewGame2.setImageDrawable(Utils.getRoundedImage(this, p2Name, p2Deck));
+        avatarSecondNewGame2.setColorFilter(decksDb.getDeck(p2Name, p2Deck).getDeckShieldColor()[0], PorterDuff.Mode.DST_OVER);
 
         if (totalPlayers >= 3) {
             p3Name = intent.getStringExtra("NEW_GAME2_PLAYER_3");
@@ -316,6 +321,7 @@ public class NewGame2Activity extends AppCompatActivity {
             playerThirdNameNewGame2.setText(p3Name);
             playerThirdDeckNewGame2.setText(p3Deck);
             avatarThirdNewGame2.setImageDrawable(Utils.getRoundedImage(this, p3Name, p3Deck));
+            avatarThirdNewGame2.setColorFilter(decksDb.getDeck(p3Name, p3Deck).getDeckShieldColor()[0], PorterDuff.Mode.DST_OVER);
         }
 
         if (totalPlayers >= 4) {
@@ -324,9 +330,12 @@ public class NewGame2Activity extends AppCompatActivity {
             playerFourthNameNewGame2.setText(p4Name);
             playerFourthDeckNewGame2.setText(p4Deck);
             avatarFourthNewGame2.setImageDrawable(Utils.getRoundedImage(this, p4Name, p4Deck));
+            avatarFourthNewGame2.setColorFilter(decksDb.getDeck(p4Name, p4Deck).getDeckShieldColor()[0], PorterDuff.Mode.DST_OVER);
         }
 
         isDragging = false;
+
+        decksDb.close();
     }
 
     class MyDragListener implements View.OnDragListener {
@@ -397,11 +406,11 @@ public class NewGame2Activity extends AppCompatActivity {
     private final class MyTouchListener implements View.OnTouchListener {
         public boolean onTouch(View view, MotionEvent motionEvent) {
             if (motionEvent.getAction() == MotionEvent.ACTION_DOWN && !isDragging) {
-                isDragging = true;
                 ClipData data = ClipData.newPlainText("", "");
                 View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
-                view.startDrag(data, shadowBuilder, view, 0);
-                view.setVisibility(View.INVISIBLE);
+                isDragging = view.startDrag(data, shadowBuilder, view, 0);
+                if (isDragging)
+                    view.setVisibility(View.INVISIBLE);
                 return true;
             } else {
                 return false;

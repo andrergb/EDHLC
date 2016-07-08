@@ -5,6 +5,7 @@ import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -30,6 +31,7 @@ import android.widget.TextView;
 
 import com.android.argb.edhlc.R;
 import com.android.argb.edhlc.Utils;
+import com.android.argb.edhlc.database.deck.DecksDataAccessObject;
 import com.android.argb.edhlc.database.record.RecordsDataAccessObject;
 import com.android.argb.edhlc.objects.Deck;
 import com.android.argb.edhlc.objects.Record;
@@ -270,17 +272,22 @@ public class LogGameActivity extends AppCompatActivity {
     private void updateLayout() {
         Intent intent = getIntent();
 
+        DecksDataAccessObject decksDb = new DecksDataAccessObject(this);
+        decksDb.open();
+
         String p1Name = intent.getStringExtra("LOG_GAME_PLAYER_1");
         String p1Deck = intent.getStringExtra("LOG_GAME_DECK_1");
         playerFirstNameLogGame.setText(p1Name);
         playerFirstDeckLogGame.setText(p1Deck);
         avatarFirstLogGame.setImageDrawable(Utils.getRoundedImage(this, p1Name, p1Deck));
+        avatarFirstLogGame.setColorFilter(decksDb.getDeck(p1Name, p1Deck).getDeckShieldColor()[0], PorterDuff.Mode.DST_OVER);
 
         String p2Name = intent.getStringExtra("LOG_GAME_PLAYER_2");
         String p2Deck = intent.getStringExtra("LOG_GAME_DECK_2");
         playerSecondNameLogGame.setText(p2Name);
         playerSecondDeckLogGame.setText(p2Deck);
         avatarSecondLogGame.setImageDrawable(Utils.getRoundedImage(this, p2Name, p2Deck));
+        avatarSecondLogGame.setColorFilter(decksDb.getDeck(p2Name, p2Deck).getDeckShieldColor()[0], PorterDuff.Mode.DST_OVER);
 
         if (totalPlayers >= 3) {
             String p3Name = intent.getStringExtra("LOG_GAME_PLAYER_3");
@@ -288,6 +295,7 @@ public class LogGameActivity extends AppCompatActivity {
             playerThirdNameLogGame.setText(p3Name);
             playerThirdDeckLogGame.setText(p3Deck);
             avatarThirdLogGame.setImageDrawable(Utils.getRoundedImage(this, p3Name, p3Deck));
+            avatarThirdLogGame.setColorFilter(decksDb.getDeck(p3Name, p3Deck).getDeckShieldColor()[0], PorterDuff.Mode.DST_OVER);
         }
 
         if (totalPlayers >= 4) {
@@ -296,7 +304,10 @@ public class LogGameActivity extends AppCompatActivity {
             playerFourthNameLogGame.setText(p4Name);
             playerFourthDeckLogGame.setText(p4Deck);
             avatarFourthLogGame.setImageDrawable(Utils.getRoundedImage(this, p4Name, p4Deck));
+            avatarFourthLogGame.setColorFilter(decksDb.getDeck(p4Name, p4Deck).getDeckShieldColor()[0], PorterDuff.Mode.DST_OVER);
         }
+
+        decksDb.close();
 
         isDragging = false;
     }
@@ -372,11 +383,11 @@ public class LogGameActivity extends AppCompatActivity {
     private final class MyTouchListener implements View.OnTouchListener {
         public boolean onTouch(View view, MotionEvent motionEvent) {
             if (motionEvent.getAction() == MotionEvent.ACTION_DOWN && !isDragging) {
-                isDragging = true;
                 ClipData data = ClipData.newPlainText("", "");
                 View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
-                view.startDrag(data, shadowBuilder, view, 0);
-                view.setVisibility(View.INVISIBLE);
+                isDragging = view.startDrag(data, shadowBuilder, view, 0);
+                if (isDragging)
+                    view.setVisibility(View.INVISIBLE);
                 return true;
             } else {
                 return false;

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.PorterDuff;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +29,14 @@ public class DeckListAdapter extends BaseAdapter {
 
     private static LayoutInflater inflater = null;
     Context context;
-    List<String[]> data; // 0 imagePath - 1 title - 2 subTitle - 3 identity - 4 selection
+    List<String[]> data; // 0 imagePath - 1 ShieldColor - 2 title - 3 subTitle - 4 identity - 5 selection
+    int dataImagePath = 0;
+    int dataShieldColor = 1;
+    int dataTitle = 2;
+    int dataSubTitle = 3;
+    int dataIdentity = 4;
+    int dataSelection = 5;
+
     private boolean isInEditMode = false;
 
     public DeckListAdapter(Context context, List<String[]> data) {
@@ -39,7 +47,7 @@ public class DeckListAdapter extends BaseAdapter {
 
     public void checkBoxClearAllSelections() {
         for (int i = 0; i < data.size(); i++) {
-            data.set(i, new String[]{data.get(i)[0], data.get(i)[1], data.get(i)[2], data.get(i)[3], "false"});
+            data.set(i, new String[]{data.get(i)[dataImagePath], data.get(i)[dataShieldColor], data.get(i)[dataTitle], data.get(i)[dataSubTitle], data.get(i)[dataIdentity], "false"});
         }
     }
 
@@ -48,7 +56,7 @@ public class DeckListAdapter extends BaseAdapter {
     }
 
     public void checkBoxSetSelection(int position, String mode) {
-        data.set(position, new String[]{data.get(position)[0], data.get(position)[1], data.get(position)[2], data.get(position)[3], mode});
+        data.set(position, new String[]{data.get(position)[dataImagePath], data.get(position)[dataShieldColor], data.get(position)[dataTitle], data.get(position)[dataSubTitle], data.get(position)[dataIdentity], mode});
     }
 
     @Override
@@ -59,7 +67,7 @@ public class DeckListAdapter extends BaseAdapter {
     public List<String> getDataChecked() {
         ArrayList<String> dataChecked = new ArrayList<>();
         for (int i = 0; i < data.size(); i++)
-            dataChecked.add(data.get(i)[4]);
+            dataChecked.add(data.get(i)[dataSelection]);
 
         return dataChecked;
     }
@@ -81,7 +89,7 @@ public class DeckListAdapter extends BaseAdapter {
     public int getTotalDataChecked() {
         int total = 0;
         for (int i = 0; i < data.size(); i++)
-            if (data.get(i)[4].equalsIgnoreCase("true"))
+            if (data.get(i)[dataSelection].equalsIgnoreCase("true"))
                 total++;
         return total;
     }
@@ -101,7 +109,7 @@ public class DeckListAdapter extends BaseAdapter {
 
         //Avatar
         ImageView imageViewAvatarDeckListCard = (ImageView) vi.findViewById(R.id.imageViewAvatarDeckListCard);
-        File croppedImageFile = new File(context.getFilesDir(), data.get(position)[0]);
+        File croppedImageFile = new File(context.getFilesDir(), data.get(position)[dataImagePath]);
         Bitmap bitmap;
         if (croppedImageFile.isFile())
             bitmap = BitmapFactory.decodeFile(croppedImageFile.getAbsolutePath());
@@ -110,6 +118,7 @@ public class DeckListAdapter extends BaseAdapter {
         RoundedAvatarDrawable roundedImage = new RoundedAvatarDrawable(Utils.getSquareBitmap(bitmap));
         roundedImage.setAntiAlias(true);
         imageViewAvatarDeckListCard.setImageDrawable(roundedImage);
+        imageViewAvatarDeckListCard.setColorFilter(Integer.valueOf(data.get(position)[dataShieldColor]), PorterDuff.Mode.DST_OVER);
 
         //Avatar checkbox
         CheckBox checkBox = (CheckBox) vi.findViewById(R.id.checkboxAvatarDeckListCard);
@@ -124,11 +133,11 @@ public class DeckListAdapter extends BaseAdapter {
 
         //Deck name
         TextView textViewDeckNameDeckListCard = (TextView) vi.findViewById(R.id.textViewDeckNameDeckListCard);
-        textViewDeckNameDeckListCard.setText(data.get(position)[1]);
+        textViewDeckNameDeckListCard.setText(data.get(position)[dataTitle]);
 
         //Deck description
         TextView textViewDeckDescriptionDeckListCard = (TextView) vi.findViewById(R.id.textViewDeckDescriptionDeckListCard);
-        textViewDeckDescriptionDeckListCard.setText(data.get(position)[2]);
+        textViewDeckDescriptionDeckListCard.setText(data.get(position)[dataSubTitle]);
 
         //Deck identity
         List<ImageView> listIdentityHolder = new ArrayList<>();
@@ -154,7 +163,7 @@ public class DeckListAdapter extends BaseAdapter {
         listIdentityHolder.add(imageViewMana1);
 
         int index = 0;
-        final String footerIdentity = data.get(position)[3];
+        final String footerIdentity = data.get(position)[dataIdentity];
         if (footerIdentity.charAt(0) == '1') {
             listIdentityHolder.get(index).setBackground(ContextCompat.getDrawable(vi.getContext(), R.drawable.mana_white));
             listIdentityHolder.get(index).setVisibility(View.VISIBLE);

@@ -96,7 +96,13 @@ public class PlayerActivity extends AppCompatActivity {
     private TextView textTitleDeckListCard;
     private ImageView indicatorDeckListCard;
     private ListView listDeckListCard;
-    private List<String[]> deckList;  // 0 imagePath - 1 title - 2 subTitle - 3 identity - 4 selection
+    private List<String[]> deckList;  // 0 imagePath - 1 shield - 2 title - 3 subTitle - 4 identity - 5 selection
+    private int deckListImagePathIndex = 0;
+    private int deckListShieldColorIndex = 1;
+    private int deckListTitleIndex = 2;
+    private int deckListSubTitleIndex = 3;
+    private int deckListIdentityIndex = 4;
+    private int deckListSelectionIndex = 5;
     private DeckListAdapter mDeckListAdapter;
 
     //Card - History charts
@@ -379,8 +385,8 @@ public class PlayerActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_edit_deck:
                 for (int i = 0; i < deckList.size(); i++)
-                    if (deckList.get(i)[4].equalsIgnoreCase("true"))
-                        dialogEditDeck(decksDB.getDeck(mPlayerName, deckList.get(i)[1]));
+                    if (deckList.get(i)[deckListSelectionIndex].equalsIgnoreCase("true"))
+                        dialogEditDeck(decksDB.getDeck(mPlayerName, deckList.get(i)[deckListTitleIndex]));
                 return true;
             case R.id.action_delete_deck:
                 dialogRemoveDeck();
@@ -589,8 +595,8 @@ public class PlayerActivity extends AppCompatActivity {
                 if (!mIsInEditMode) {
                     Intent intent = new Intent(PlayerActivity.this, DeckActivity.class);
                     intent.putExtra("PLAYER_NAME", mPlayerName);
-                    intent.putExtra("DECK_NAME", deckList.get(position)[1]);
-                    intent.putExtra("DECK_IDENTITY", deckList.get(position)[3]);
+                    intent.putExtra("DECK_NAME", deckList.get(position)[deckListTitleIndex]);
+                    intent.putExtra("DECK_IDENTITY", deckList.get(position)[deckListIdentityIndex]);
                     startActivity(intent);
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 } else {
@@ -852,6 +858,7 @@ public class PlayerActivity extends AppCompatActivity {
                     //Shield color
                     if (editShieldColor[0] != mCurrentDeck.getDeckShieldColor()[0] && editShieldColor[1] != mCurrentDeck.getDeckShieldColor()[1]) {
                         decksDB.updateDeckShieldColor(mCurrentDeck, editShieldColor);
+                        updateLayout();
                     }
 
                     //Deck name
@@ -940,8 +947,8 @@ public class PlayerActivity extends AppCompatActivity {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         for (int i = 0; i < deckList.size(); i++)
-                            if (deckList.get(i)[4].equalsIgnoreCase("true"))
-                                decksDB.removeDeck(new Deck(mPlayerName, deckList.get(i)[1]));
+                            if (deckList.get(i)[deckListSelectionIndex].equalsIgnoreCase("true"))
+                                decksDB.removeDeck(new Deck(mPlayerName, deckList.get(i)[deckListTitleIndex]));
 
                         //Set card to wrap_content
                         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -1199,8 +1206,8 @@ public class PlayerActivity extends AppCompatActivity {
             Deck auxDeck = new Deck(mPlayerName, allDecks.get(i).getDeckName());
 
             String imagePath = "image_" + mPlayerName + "_" + allDecks.get(i).getDeckName() + ".png";
-
             String title = auxDeck.getDeckName();
+            String shieldColor = String.valueOf(decksDB.getDeck(mPlayerName, title).getDeckShieldColor()[0]);
 
             int auxTotalVictories = 0;
             auxTotalVictories = auxTotalVictories + recordsDB.getRecordsByPosition(auxDeck, 1, 2).size();
@@ -1210,7 +1217,7 @@ public class PlayerActivity extends AppCompatActivity {
 
             String identity = allDecks.get(i).getDeckIdentity();
 
-            deckList.add(new String[]{imagePath, title, subTitle, identity, "false"});
+            deckList.add(new String[]{imagePath, shieldColor, title, subTitle, identity, "false"});
         }
         mDeckListAdapter.notifyDataSetChanged();
         Utils.justifyListViewHeightBasedOnChildren(listDeckListCard);
