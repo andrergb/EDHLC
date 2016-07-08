@@ -4,7 +4,7 @@
     android:shape="oval">
 
     <solid
-        android:color="@color/second"/>
+        android:color="@color/podium_second"/>
 
     <size
         android:width="140dp"

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -106,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
     private float currentScaleLife = 1.0f;
 
     private ImageView layout11_throne;
-    private View layout11_shield;
     private TextView layout11_name;
     private TextView layout11_deck;
     private TextView layout11_life;
@@ -130,7 +130,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView layout11_edh4_name;
 
     private ImageView layout12_throne;
-    private View layout12_shield;
     private TextView layout12_name;
     private TextView layout12_deck;
     private TextView layout12_life;
@@ -154,7 +153,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView layout12_edh4_name;
 
     private ImageView layout21_throne;
-    private View layout21_shield;
     private TextView layout21_name;
     private TextView layout21_deck;
     private TextView layout21_life;
@@ -178,7 +176,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView layout21_edh4_name;
 
     private ImageView layout22_throne;
-    private View layout22_shield;
     private TextView layout22_name;
     private TextView layout22_deck;
     private TextView layout22_life;
@@ -1152,6 +1149,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if (drawerItemTextHome != null) {
             drawerItemTextHome.setTextColor(ContextCompat.getColor(this, R.color.accent_color));
+            drawerItemTextHome.setTypeface(null, Typeface.BOLD);
         }
 
         switchScreen = (Switch) findViewById(R.id.switchScreen);
@@ -1178,7 +1176,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void createLayout11() {
         layout11_throne = (ImageView) container.findViewById(R.id.layout11_throne);
-        layout11_shield = container.findViewById(R.id.layout11_shield);
+        layout11_throne.setColorFilter(ContextCompat.getColor(this, R.color.accent_color), PorterDuff.Mode.SRC_IN);
         layout11_name = (TextView) container.findViewById(R.id.layout11_name);
         layout11_deck = (TextView) container.findViewById(R.id.layout11_deck);
         layout11_life = (TextView) container.findViewById(R.id.layout11_life);
@@ -1226,7 +1224,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void createLayout12() {
         layout12_throne = (ImageView) container.findViewById(R.id.layout12_throne);
-        layout12_shield = container.findViewById(R.id.layout12_shield);
+        layout12_throne.setColorFilter(ContextCompat.getColor(this, R.color.accent_color), PorterDuff.Mode.SRC_IN);
         layout12_name = (TextView) container.findViewById(R.id.layout12_name);
         layout12_deck = (TextView) container.findViewById(R.id.layout12_deck);
         layout12_life = (TextView) container.findViewById(R.id.layout12_life);
@@ -1275,7 +1273,7 @@ public class MainActivity extends AppCompatActivity {
     private void createLayout21() {
         if (totalPlayers >= 3) {
             layout21_throne = (ImageView) container.findViewById(R.id.layout21_throne);
-            layout21_shield = container.findViewById(R.id.layout21_shield);
+            layout21_throne.setColorFilter(ContextCompat.getColor(this, R.color.accent_color), PorterDuff.Mode.SRC_IN);
             layout21_name = (TextView) container.findViewById(R.id.layout21_name);
             layout21_deck = (TextView) container.findViewById(R.id.layout21_deck);
             layout21_life = (TextView) container.findViewById(R.id.layout21_life);
@@ -1319,7 +1317,7 @@ public class MainActivity extends AppCompatActivity {
     private void createLayout22() {
         if (totalPlayers >= 4) {
             layout22_throne = (ImageView) container.findViewById(R.id.layout22_throne);
-            layout22_shield = container.findViewById(R.id.layout22_shield);
+            layout22_throne.setColorFilter(ContextCompat.getColor(this, R.color.accent_color), PorterDuff.Mode.SRC_IN);
             layout22_name = (TextView) container.findViewById(R.id.layout22_name);
             layout22_deck = (TextView) container.findViewById(R.id.layout22_deck);
             layout22_life = (TextView) container.findViewById(R.id.layout22_life);
@@ -2019,7 +2017,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateLayout11() {
         updateDethroneIcon();
-        layout11_shield.setBackgroundColor(activePlayer1.getPlayerDeck().getDeckShieldColor()[0]);
         layout11_name.setText(activePlayer1.getPlayerDeck().getDeckOwnerName());
         layout11_deck.setText(activePlayer1.getPlayerDeck().getDeckName());
         layout11_life.setText(String.format(Locale.US, "%d", activePlayer1.getPlayerLife()));
@@ -2064,7 +2061,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateLayout12() {
         updateDethroneIcon();
-        layout12_shield.setBackgroundColor(activePlayer2.getPlayerDeck().getDeckShieldColor()[0]);
         layout12_name.setText(activePlayer2.getPlayerDeck().getDeckOwnerName());
         layout12_deck.setText(activePlayer2.getPlayerDeck().getDeckName());
         layout12_life.setText(String.format(Locale.US, "%d", activePlayer2.getPlayerLife()));
@@ -2111,8 +2107,6 @@ public class MainActivity extends AppCompatActivity {
     private void updateLayout21() {
         if (totalPlayers >= 3) {
             updateDethroneIcon();
-
-            layout21_shield.setBackgroundColor(activePlayer3.getPlayerDeck().getDeckShieldColor()[0]);
             layout21_name.setText(activePlayer3.getPlayerDeck().getDeckOwnerName());
             layout21_deck.setText(activePlayer3.getPlayerDeck().getDeckName());
             layout21_life.setText(String.format(Locale.US, "%d", activePlayer3.getPlayerLife()));
@@ -2154,8 +2148,6 @@ public class MainActivity extends AppCompatActivity {
     private void updateLayout22() {
         if (totalPlayers >= 4) {
             updateDethroneIcon();
-
-            layout22_shield.setBackgroundColor(activePlayer4.getPlayerDeck().getDeckShieldColor()[0]);
             layout22_name.setText(activePlayer4.getPlayerDeck().getDeckOwnerName());
             layout22_deck.setText(activePlayer4.getPlayerDeck().getDeckName());
             layout22_life.setText(String.format(Locale.US, "%d", activePlayer4.getPlayerLife()));

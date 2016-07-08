@@ -424,13 +424,13 @@ public class Utils {
     }
 
     public static void expand(Context context, final CardView card, TextView title, ImageView selector, int minHeight, int maxHeight) {
-        title.setTextColor(ContextCompat.getColor(context, R.color.secondary_color));
+        title.setTextColor(ContextCompat.getColor(context, R.color.accent_color_dark));
 
         Animation rotation = AnimationUtils.loadAnimation(context, R.anim.rotate_180_anticlockwise);
         selector.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.arrow_up));
         selector.setRotation(0);
         selector.startAnimation(rotation);
-        selector.setColorFilter(ContextCompat.getColor(context, R.color.secondary_color));
+        selector.setColorFilter(ContextCompat.getColor(context, R.color.accent_color_dark));
 
         ValueAnimator anim = ValueAnimator.ofInt(minHeight, maxHeight);
         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {

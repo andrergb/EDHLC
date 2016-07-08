@@ -15,33 +15,25 @@
     <!--<item name="gray800" type="color">#424242</item>-->
     <!--<item name="gray900" type="color">#212121</item>-->
 
-    <item name="tab_selection_color" type="color">#a2b7b7b7</item>
-
     <!-- LEGENDS -->
-    <item name="first" type="color">#f5dd5b</item>
-    <item name="second" type="color">#d4dcdf</item>
-    <item name="third" type="color">#cd7f32</item>
-    <item name="fourth" type="color">#878787</item>
+    <item name="podium_first" type="color">#f5dd5b</item>
+    <item name="podium_second" type="color">#d4dcdf</item>
+    <item name="podium_third" type="color">#cd7f32</item>
+    <item name="podium_fourth" type="color">#878787</item>
 
-    <item name="primary_color" type="color">#FF3F51B5</item>
-    <item name="secondary_color" type="color">#FF303F9F</item>
-    <item name="light_primary_color" type="color">#FFC5CAE9</item>
-    <item name="accent_color" type="color">#FFFF3D00</item>
-    <item name="accent_secondary_black_color" type="color">#b62b00</item>
+    <!--<item name="primary_color" type="color">#FF3F51B5</item>-->
+    <!--<item name="secondary_color" type="color">#FF303F9F</item>-->
+    <!--<item name="accent_color" type="color">#FFFF3D00</item>-->
+    <!--<item name="accent_color_dark" type="color">#b62b00</item>-->
+
+    <item name="primary_color" type="color">#FF303945</item>
+    <item name="secondary_color" type="color">#FF1C2127</item>
+    <item name="accent_color" type="color">#FFD0AE80</item>
+    <item name="accent_color_dark" type="color">#977e5d</item>
 
     <item name="primary_text" type="color">#FF212121</item>
     <item name="secondary_text" type="color">#FF727272</item>
     <item name="divider" type="color">#FFB6B6B6</item>
-
-    <integer-array name="edh_default">
-        <item>@color/primary_color</item>
-        <item>@color/secondary_color</item>
-        <item>@color/light_primary_color</item>
-    </integer-array>
-
-    <!--<item name="edh_default_primary_aplha" type="color">#32348cac</item>-->
-
-    <!-- MANA -->
 
     <!-- SHIELDS -->
     <item name="edh_shield_turquoise_main" type="color">#ff00c5ce</item>

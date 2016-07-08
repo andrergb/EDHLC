@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -180,7 +181,7 @@ public class DeckActivity extends AppCompatActivity {
             fabDismissView.setVisibility(View.VISIBLE);
 
             fabMain.startAnimation(rotate45Clockwise);
-            fabMain.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.accent_secondary_black_color)));
+            fabMain.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.accent_color_dark)));
 
             fabEdit.setClickable(true);
             fabContentEdit.setVisibility(View.VISIBLE);
@@ -510,6 +511,7 @@ public class DeckActivity extends AppCompatActivity {
         }
         if (drawerItemTextPlayers != null) {
             drawerItemTextPlayers.setTextColor(ContextCompat.getColor(this, R.color.accent_color));
+            drawerItemTextPlayers.setTypeface(null, Typeface.BOLD);
         }
     }
 
@@ -796,9 +798,9 @@ public class DeckActivity extends AppCompatActivity {
         }
         //Deck info - title
         if (cardViewDeckInfo.getHeight() == mCardViewFullHeightDeckInfo) {
-            textTitleDeckInfo.setTextColor(ContextCompat.getColor(this, R.color.secondary_color));
+            textTitleDeckInfo.setTextColor(ContextCompat.getColor(this, R.color.accent_color_dark));
             iconIndicatorDeckInfo.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.arrow_up));
-            iconIndicatorDeckInfo.setColorFilter(ContextCompat.getColor(this, R.color.secondary_color));
+            iconIndicatorDeckInfo.setColorFilter(ContextCompat.getColor(this, R.color.accent_color_dark));
         } else {
             textTitleDeckInfo.setTextColor(ContextCompat.getColor(this, R.color.secondary_text));
             iconIndicatorDeckInfo.setColorFilter(ContextCompat.getColor(this, R.color.secondary_text));

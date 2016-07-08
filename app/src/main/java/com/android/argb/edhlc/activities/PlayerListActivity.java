@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -283,6 +284,7 @@ public class PlayerListActivity extends AppCompatActivity {
         }
         if (drawerItemTextPlayers != null) {
             drawerItemTextPlayers.setTextColor(ContextCompat.getColor(this, R.color.accent_color));
+            drawerItemTextPlayers.setTypeface(null, Typeface.BOLD);
         }
     }
 

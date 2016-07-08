@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -398,6 +399,7 @@ public class RecordsActivity extends AppCompatActivity {
         }
         if (drawerItemTextPlayers != null) {
             drawerItemTextPlayers.setTextColor(ContextCompat.getColor(this, R.color.accent_color));
+            drawerItemTextPlayers.setTypeface(null, Typeface.BOLD);
         }
     }
 
@@ -593,11 +595,11 @@ public class RecordsActivity extends AppCompatActivity {
                             layoutParams.height = relativeCardTitleRecords2List.getHeight();
                             cardViewRecords2List.setLayoutParams(layoutParams);
                         } else {
-                            textTitleRecords2List.setTextColor(ContextCompat.getColor(RecordsActivity.this, R.color.secondary_color));
+                            textTitleRecords2List.setTextColor(ContextCompat.getColor(RecordsActivity.this, R.color.accent_color_dark));
                             iconIndicatorRecords2List.setImageDrawable(ContextCompat.getDrawable(RecordsActivity.this, R.drawable.arrow_up));
                             iconIndicatorRecords2List.setRotation(0);
                             iconIndicatorRecords2List.startAnimation(AnimationUtils.loadAnimation(RecordsActivity.this, R.anim.rotate_180_anticlockwise_instant));
-                            iconIndicatorRecords2List.setColorFilter(ContextCompat.getColor(RecordsActivity.this, R.color.secondary_color));
+                            iconIndicatorRecords2List.setColorFilter(ContextCompat.getColor(RecordsActivity.this, R.color.accent_color_dark));
                         }
                         return true;
                     }
@@ -622,11 +624,11 @@ public class RecordsActivity extends AppCompatActivity {
                             layoutParams.height = relativeCardTitleRecords3List.getHeight();
                             cardViewRecords3List.setLayoutParams(layoutParams);
                         } else {
-                            textTitleRecords3List.setTextColor(ContextCompat.getColor(RecordsActivity.this, R.color.secondary_color));
+                            textTitleRecords3List.setTextColor(ContextCompat.getColor(RecordsActivity.this, R.color.accent_color_dark));
                             iconIndicatorRecords3List.setImageDrawable(ContextCompat.getDrawable(RecordsActivity.this, R.drawable.arrow_up));
                             iconIndicatorRecords3List.setRotation(0);
                             iconIndicatorRecords3List.startAnimation(AnimationUtils.loadAnimation(RecordsActivity.this, R.anim.rotate_180_anticlockwise_instant));
-                            iconIndicatorRecords3List.setColorFilter(ContextCompat.getColor(RecordsActivity.this, R.color.secondary_color));
+                            iconIndicatorRecords3List.setColorFilter(ContextCompat.getColor(RecordsActivity.this, R.color.accent_color_dark));
                         }
                         return true;
                     }
@@ -651,11 +653,11 @@ public class RecordsActivity extends AppCompatActivity {
                             layoutParams.height = relativeCardTitleRecords4List.getHeight();
                             cardViewRecords4List.setLayoutParams(layoutParams);
                         } else {
-                            textTitleRecords4List.setTextColor(ContextCompat.getColor(RecordsActivity.this, R.color.secondary_color));
+                            textTitleRecords4List.setTextColor(ContextCompat.getColor(RecordsActivity.this, R.color.accent_color_dark));
                             iconIndicatorRecords4List.setImageDrawable(ContextCompat.getDrawable(RecordsActivity.this, R.drawable.arrow_up));
                             iconIndicatorRecords4List.setRotation(0);
                             iconIndicatorRecords4List.startAnimation(AnimationUtils.loadAnimation(RecordsActivity.this, R.anim.rotate_180_anticlockwise_instant));
-                            iconIndicatorRecords4List.setColorFilter(ContextCompat.getColor(RecordsActivity.this, R.color.secondary_color));
+                            iconIndicatorRecords4List.setColorFilter(ContextCompat.getColor(RecordsActivity.this, R.color.accent_color_dark));
                         }
                         return true;
                     }

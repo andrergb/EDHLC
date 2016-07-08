@@ -49,9 +49,9 @@ public class DonutChart {
         TextView textFirstChart2Slots = (TextView) context.findViewById(R.id.textFirstChart2Slots);
         TextView textSecondChart2Slots = (TextView) context.findViewById(R.id.textSecondChart2Slots);
         LinearLayout linearChart2Slots = (LinearLayout) context.findViewById(R.id.linearChart2Slots);
-        int[] COLORS = new int[]{ContextCompat.getColor(context, R.color.first),
+        int[] COLORS = new int[]{ContextCompat.getColor(context, R.color.podium_first),
                 ContextCompat.getColor(context, android.R.color.transparent),
-                ContextCompat.getColor(context, R.color.second),
+                ContextCompat.getColor(context, R.color.podium_second),
                 ContextCompat.getColor(context, android.R.color.transparent)};
         int first = data[0];
         int second = data[1];
@@ -111,11 +111,11 @@ public class DonutChart {
         TextView textSecondChart3Slots = (TextView) context.findViewById(R.id.textSecondChart3Slots);
         TextView textThirdChart3Slots = (TextView) context.findViewById(R.id.textThirdChart3Slots);
         LinearLayout linearChart3Slots = (LinearLayout) context.findViewById(R.id.linearChart3Slots);
-        int[] COLORS = new int[]{ContextCompat.getColor(context, R.color.first),
+        int[] COLORS = new int[]{ContextCompat.getColor(context, R.color.podium_first),
                 ContextCompat.getColor(context, android.R.color.transparent),
-                ContextCompat.getColor(context, R.color.second),
+                ContextCompat.getColor(context, R.color.podium_second),
                 ContextCompat.getColor(context, android.R.color.transparent),
-                ContextCompat.getColor(context, R.color.third),
+                ContextCompat.getColor(context, R.color.podium_third),
                 ContextCompat.getColor(context, android.R.color.transparent)};
         int first = data[0];
         int second = data[1];
@@ -180,13 +180,13 @@ public class DonutChart {
         TextView textThirdChart4Slots = (TextView) context.findViewById(R.id.textThirdChart4Slots);
         TextView textFourthChart4Slots = (TextView) context.findViewById(R.id.textFourthChart4Slots);
         LinearLayout linearChart4Slots = (LinearLayout) context.findViewById(R.id.linearChart4Slots);
-        int[] COLORS = new int[]{ContextCompat.getColor(context, R.color.first),
+        int[] COLORS = new int[]{ContextCompat.getColor(context, R.color.podium_first),
                 ContextCompat.getColor(context, android.R.color.transparent),
-                ContextCompat.getColor(context, R.color.second),
+                ContextCompat.getColor(context, R.color.podium_second),
                 ContextCompat.getColor(context, android.R.color.transparent),
-                ContextCompat.getColor(context, R.color.third),
+                ContextCompat.getColor(context, R.color.podium_third),
                 ContextCompat.getColor(context, android.R.color.transparent),
-                ContextCompat.getColor(context, R.color.fourth),
+                ContextCompat.getColor(context, R.color.podium_fourth),
                 ContextCompat.getColor(context, android.R.color.transparent)};
         int first = data[0];
         int second = data[1];

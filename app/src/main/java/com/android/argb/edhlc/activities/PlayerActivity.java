@@ -192,7 +192,7 @@ public class PlayerActivity extends AppCompatActivity {
             fabDismissView.setVisibility(View.VISIBLE);
 
             fabMain.startAnimation(rotate45Clockwise);
-            fabMain.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.accent_secondary_black_color)));
+            fabMain.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.accent_color_dark)));
 
             fabAdd.setClickable(true);
             fabContentAdd.setVisibility(View.VISIBLE);
@@ -511,6 +511,7 @@ public class PlayerActivity extends AppCompatActivity {
         }
         if (drawerItemTextPlayers != null) {
             drawerItemTextPlayers.setTextColor(ContextCompat.getColor(this, R.color.accent_color));
+            drawerItemTextPlayers.setTypeface(null, Typeface.BOLD);
         }
     }
 
@@ -1232,11 +1233,11 @@ public class PlayerActivity extends AppCompatActivity {
                         cardViewDeckList.getViewTreeObserver().removeOnPreDrawListener(this);
                         mCardViewFullHeightDeckList = cardViewDeckList.getHeight();
 
-                        textTitleDeckListCard.setTextColor(ContextCompat.getColor(PlayerActivity.this, R.color.secondary_color));
+                        textTitleDeckListCard.setTextColor(ContextCompat.getColor(PlayerActivity.this, R.color.accent_color_dark));
                         indicatorDeckListCard.setImageDrawable(ContextCompat.getDrawable(PlayerActivity.this, R.drawable.arrow_up));
                         indicatorDeckListCard.setRotation(0);
                         indicatorDeckListCard.startAnimation(AnimationUtils.loadAnimation(PlayerActivity.this, R.anim.rotate_180_anticlockwise_instant));
-                        indicatorDeckListCard.setColorFilter(ContextCompat.getColor(PlayerActivity.this, R.color.secondary_color));
+                        indicatorDeckListCard.setColorFilter(ContextCompat.getColor(PlayerActivity.this, R.color.accent_color_dark));
                         return true;
                     }
                 });
