@@ -13,7 +13,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
@@ -36,9 +35,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.argb.edhlc.Constants;
-import com.android.argb.edhlc.adapters.PlayerListAdapter;
 import com.android.argb.edhlc.R;
+import com.android.argb.edhlc.SmoothActionBarDrawerToggle;
 import com.android.argb.edhlc.Utils;
+import com.android.argb.edhlc.adapters.PlayerListAdapter;
 import com.android.argb.edhlc.database.deck.DecksDataAccessObject;
 import com.android.argb.edhlc.database.player.PlayersDataAccessObject;
 import com.android.argb.edhlc.database.record.RecordsDataAccessObject;
@@ -71,9 +71,10 @@ public class PlayerListActivity extends AppCompatActivity {
     private PlayerListAdapter mPlayerListAdapter;
 
     ///Drawer
+    private RelativeLayout pBar;
     private DrawerLayout mPlayerDrawerLayout;
     private LinearLayout mPlayerDrawer;
-    private ActionBarDrawerToggle mDrawerToggle;
+    private SmoothActionBarDrawerToggle mDrawerToggle;
     private Switch switchScreen;
 
     private boolean mIsInEditMode;
@@ -110,10 +111,16 @@ public class PlayerListActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.drawerItemHome:
                 mPlayerDrawerLayout.closeDrawers();
-                Intent intentHome = new Intent(this, MainActivity.class);
-                intentHome.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intentHome);
-                this.finish();
+                pBar.setVisibility(View.VISIBLE);
+                mDrawerToggle.runWhenIdle(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intentHome = new Intent(PlayerListActivity.this, MainActivity.class);
+                        intentHome.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intentHome);
+                        PlayerListActivity.this.finish();
+                    }
+                });
                 break;
 
             case R.id.drawerItemPlayers:
@@ -122,8 +129,14 @@ public class PlayerListActivity extends AppCompatActivity {
 
             case R.id.drawerItemRecords:
                 mPlayerDrawerLayout.closeDrawers();
-                startActivity(new Intent(this, RecordsActivity.class));
-                finish();
+                pBar.setVisibility(View.VISIBLE);
+                mDrawerToggle.runWhenIdle(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(PlayerListActivity.this, RecordsActivity.class));
+                        PlayerListActivity.this.finish();
+                    }
+                });
                 break;
 
             case R.id.drawerItemScreen:
@@ -139,8 +152,14 @@ public class PlayerListActivity extends AppCompatActivity {
 
             case R.id.drawerItemSettings:
                 mPlayerDrawerLayout.closeDrawers();
-                startActivity(new Intent(this, SettingsActivity.class));
-                finish();
+                pBar.setVisibility(View.VISIBLE);
+                mDrawerToggle.runWhenIdle(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(PlayerListActivity.this, SettingsActivity.class));
+                        PlayerListActivity.this.finish();
+                    }
+                });
                 break;
 
             case R.id.drawerItemAbout:
@@ -246,6 +265,8 @@ public class PlayerListActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if (pBar != null)
+            pBar.setVisibility(View.GONE);
         if (getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt(Constants.SCREEN_ON, 0) == 1) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             switchScreen.setChecked(true);
@@ -258,19 +279,11 @@ public class PlayerListActivity extends AppCompatActivity {
     }
 
     private void createDrawer() {
+        pBar = (RelativeLayout) findViewById(R.id.loading_progress);
+
         mPlayerDrawer = (LinearLayout) findViewById(R.id.player_list_drawer);
         mPlayerDrawerLayout = (DrawerLayout) findViewById(R.id.player_list_drawer_layout);
-        mDrawerToggle = new ActionBarDrawerToggle(this, mPlayerDrawerLayout, R.string.app_name, R.string.app_name) {
-            public void onDrawerClosed(View view) {
-                super.onDrawerClosed(view);
-                invalidateOptionsMenu();
-            }
-
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                invalidateOptionsMenu();
-            }
-        };
+        mDrawerToggle = new SmoothActionBarDrawerToggle(this, mPlayerDrawerLayout, R.string.app_name, R.string.app_name);
         mPlayerDrawerLayout.addDrawerListener(mDrawerToggle);
 
         LinearLayout drawerItemPlayers = (LinearLayout) findViewById(R.id.drawerItemPlayers);

@@ -19,7 +19,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
@@ -46,6 +45,7 @@ import android.widget.Toast;
 
 import com.android.argb.edhlc.Constants;
 import com.android.argb.edhlc.R;
+import com.android.argb.edhlc.SmoothActionBarDrawerToggle;
 import com.android.argb.edhlc.Utils;
 import com.android.argb.edhlc.chart.DonutChart;
 import com.android.argb.edhlc.colorpicker.ColorPickerDialog;
@@ -125,9 +125,10 @@ public class DeckActivity extends AppCompatActivity {
     private ImageView imageViewBanner;
 
     ///Drawer
+    private RelativeLayout pBar;
     private DrawerLayout mDeckDrawerLayout;
     private LinearLayout mDeckDrawer;
-    private ActionBarDrawerToggle mDrawerToggle;
+    private SmoothActionBarDrawerToggle mDrawerToggle;
     private Switch switchScreen;
 
     //Fab
@@ -226,24 +227,42 @@ public class DeckActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.drawerItemHome:
                 mDeckDrawerLayout.closeDrawers();
-                Intent intentHome = new Intent(this, MainActivity.class);
-                intentHome.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intentHome);
-                this.finish();
+                pBar.setVisibility(View.VISIBLE);
+                mDrawerToggle.runWhenIdle(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intentHome = new Intent(DeckActivity.this, MainActivity.class);
+                        intentHome.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intentHome);
+                        DeckActivity.this.finish();
+                    }
+                });
                 break;
 
             case R.id.drawerItemPlayers:
                 mDeckDrawerLayout.closeDrawers();
-                Intent intentPlayerList = new Intent(this, PlayerListActivity.class);
-                intentPlayerList.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intentPlayerList);
-                this.finish();
+                pBar.setVisibility(View.VISIBLE);
+                mDrawerToggle.runWhenIdle(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intentPlayerList = new Intent(DeckActivity.this, PlayerListActivity.class);
+                        intentPlayerList.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intentPlayerList);
+                        DeckActivity.this.finish();
+                    }
+                });
                 break;
 
             case R.id.drawerItemRecords:
                 mDeckDrawerLayout.closeDrawers();
-                startActivity(new Intent(this, RecordsActivity.class));
-                finish();
+                pBar.setVisibility(View.VISIBLE);
+                mDrawerToggle.runWhenIdle(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(DeckActivity.this, RecordsActivity.class));
+                        DeckActivity.this.finish();
+                    }
+                });
                 break;
 
             case R.id.drawerItemScreen:
@@ -259,8 +278,14 @@ public class DeckActivity extends AppCompatActivity {
 
             case R.id.drawerItemSettings:
                 mDeckDrawerLayout.closeDrawers();
-                startActivity(new Intent(this, SettingsActivity.class));
-                finish();
+                pBar.setVisibility(View.VISIBLE);
+                mDrawerToggle.runWhenIdle(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(DeckActivity.this, SettingsActivity.class));
+                        DeckActivity.this.finish();
+                    }
+                });
                 break;
 
             case R.id.drawerItemAbout:
@@ -460,6 +485,8 @@ public class DeckActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if (pBar != null)
+            pBar.setVisibility(View.GONE);
         if (getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt(Constants.SCREEN_ON, 0) == 1) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             switchScreen.setChecked(true);
@@ -485,19 +512,10 @@ public class DeckActivity extends AppCompatActivity {
     }
 
     private void createDrawer() {
+        pBar = (RelativeLayout) findViewById(R.id.loading_progress);
         mDeckDrawer = (LinearLayout) findViewById(R.id.deck_drawer);
         mDeckDrawerLayout = (DrawerLayout) findViewById(R.id.deck_drawer_layout);
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDeckDrawerLayout, R.string.app_name, R.string.app_name) {
-            public void onDrawerClosed(View view) {
-                super.onDrawerClosed(view);
-                invalidateOptionsMenu();
-            }
-
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                invalidateOptionsMenu();
-            }
-        };
+        mDrawerToggle = new SmoothActionBarDrawerToggle(this, mDeckDrawerLayout, R.string.app_name, R.string.app_name);
         mDeckDrawerLayout.addDrawerListener(mDrawerToggle);
 
         LinearLayout drawerItemPlayers = (LinearLayout) findViewById(R.id.drawerItemPlayers);

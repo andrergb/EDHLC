@@ -12,7 +12,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
@@ -34,6 +33,7 @@ import android.widget.TextView;
 
 import com.android.argb.edhlc.Constants;
 import com.android.argb.edhlc.R;
+import com.android.argb.edhlc.SmoothActionBarDrawerToggle;
 import com.android.argb.edhlc.Utils;
 import com.android.argb.edhlc.adapters.RecordListAdapter;
 import com.android.argb.edhlc.database.record.RecordsDataAccessObject;
@@ -77,9 +77,10 @@ public class RecordsActivity extends AppCompatActivity {
     private RecordListAdapter mRecord4ListAdapter;
 
     ///Drawer
+    private RelativeLayout pBar;
     private DrawerLayout mDrawerLayout;
     private LinearLayout mDrawer;
-    private ActionBarDrawerToggle mDrawerToggle;
+    private SmoothActionBarDrawerToggle mDrawerToggle;
     private Switch switchScreen;
 
     private String mRecordHighlightName;
@@ -233,28 +234,48 @@ public class RecordsActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.drawerItemHome:
                 mDrawerLayout.closeDrawers();
-                Intent intentHome = new Intent(this, MainActivity.class);
-                intentHome.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intentHome);
-                this.finish();
+                pBar.setVisibility(View.VISIBLE);
+                mDrawerToggle.runWhenIdle(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intentHome = new Intent(RecordsActivity.this, MainActivity.class);
+                        intentHome.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intentHome);
+                        RecordsActivity.this.finish();
+                    }
+                });
                 break;
 
             case R.id.drawerItemPlayers:
                 mDrawerLayout.closeDrawers();
-                Intent intentPlayers = new Intent(this, PlayerListActivity.class);
-                intentPlayers.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intentPlayers);
-                this.finish();
+                pBar.setVisibility(View.VISIBLE);
+                mDrawerToggle.runWhenIdle(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intentPlayers = new Intent(RecordsActivity.this, PlayerListActivity.class);
+                        intentPlayers.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intentPlayers);
+                        RecordsActivity.this.finish();
+                    }
+                });
                 break;
 
             case R.id.drawerItemRecords:
                 mDrawerLayout.closeDrawers();
-                if (mRecordHighlightName != null || mRecordHighlightDeck != null) {
-                    Intent intentRecords = new Intent(this, RecordsActivity.class);
-                    intentRecords.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intentRecords);
-                    this.finish();
-                }
+                pBar.setVisibility(View.VISIBLE);
+                mDrawerToggle.runWhenIdle(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mRecordHighlightName != null || mRecordHighlightDeck != null) {
+                            Intent intentRecords = new Intent(RecordsActivity.this, RecordsActivity.class);
+                            intentRecords.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intentRecords);
+                            RecordsActivity.this.finish();
+                        } else {
+                            pBar.setVisibility(View.GONE);
+                        }
+                    }
+                });
                 break;
 
             case R.id.drawerItemScreen:
@@ -270,8 +291,14 @@ public class RecordsActivity extends AppCompatActivity {
 
             case R.id.drawerItemSettings:
                 mDrawerLayout.closeDrawers();
-                startActivity(new Intent(this, SettingsActivity.class));
-                this.finish();
+                pBar.setVisibility(View.VISIBLE);
+                mDrawerToggle.runWhenIdle(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(RecordsActivity.this, SettingsActivity.class));
+                        RecordsActivity.this.finish();
+                    }
+                });
                 break;
 
             case R.id.drawerItemAbout:
@@ -361,6 +388,8 @@ public class RecordsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if (pBar != null)
+            pBar.setVisibility(View.GONE);
         if (getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt(Constants.SCREEN_ON, 0) == 1) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             switchScreen.setChecked(true);
@@ -373,19 +402,11 @@ public class RecordsActivity extends AppCompatActivity {
     }
 
     private void createDrawer() {
+        pBar = (RelativeLayout) findViewById(R.id.loading_progress);
+
         mDrawer = (LinearLayout) findViewById(R.id.records_drawer);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.records_drawer_layout);
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.app_name, R.string.app_name) {
-            public void onDrawerClosed(View view) {
-                super.onDrawerClosed(view);
-                invalidateOptionsMenu();
-            }
-
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                invalidateOptionsMenu();
-            }
-        };
+        mDrawerToggle = new SmoothActionBarDrawerToggle(this, mDrawerLayout, R.string.app_name, R.string.app_name);
         mDrawerLayout.addDrawerListener(mDrawerToggle);
 
         LinearLayout drawerItemPlayers = (LinearLayout) findViewById(R.id.drawerItemRecords);

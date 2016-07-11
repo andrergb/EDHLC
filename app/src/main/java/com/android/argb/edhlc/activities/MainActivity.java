@@ -16,7 +16,6 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.transition.Scene;
@@ -40,12 +39,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import com.android.argb.edhlc.Constants;
 import com.android.argb.edhlc.HistoryBottomSheet;
 import com.android.argb.edhlc.R;
+import com.android.argb.edhlc.SmoothActionBarDrawerToggle;
 import com.android.argb.edhlc.Utils;
 import com.android.argb.edhlc.database.deck.DecksDataAccessObject;
 import com.android.argb.edhlc.database.player.PlayersDataAccessObject;
@@ -66,9 +67,10 @@ public class MainActivity extends AppCompatActivity {
     private static Thread mThreadLife4;
 
     ///Drawer
-    private DrawerLayout mPlayerDrawerLayout;
+    private RelativeLayout pBar;
+    private DrawerLayout mDrawerLayout;
     private LinearLayout mPlayerDrawer;
-    private ActionBarDrawerToggle mDrawerToggle;
+    private SmoothActionBarDrawerToggle mDrawerToggle;
     private Switch switchScreen;
     private View statusBarBackground;
     private ActionBar mActionBar;
@@ -201,8 +203,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (!isInAnimation) {
-            if (mPlayerDrawerLayout.isDrawerOpen(mPlayerDrawer))
-                mPlayerDrawerLayout.closeDrawers();
+            if (mDrawerLayout.isDrawerOpen(mPlayerDrawer))
+                mDrawerLayout.closeDrawers();
             else if (currentScene != this.currentSceneOverview)
                 goToScene(this.currentSceneOverview);
             else
@@ -213,22 +215,31 @@ public class MainActivity extends AppCompatActivity {
     public void onClickDrawerItem(View view) {
         switch (view.getId()) {
             case R.id.drawerItemHome:
-                mPlayerDrawerLayout.closeDrawers();
-                Intent intentHome = new Intent(this, MainActivity.class);
-                intentHome.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intentHome);
+                mDrawerLayout.closeDrawers();
                 break;
 
             case R.id.drawerItemPlayers:
-                mPlayerDrawerLayout.closeDrawers();
-                Intent intentPlayerList = new Intent(this, PlayerListActivity.class);
-                intentPlayerList.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intentPlayerList);
+                mDrawerLayout.closeDrawers();
+                pBar.setVisibility(View.VISIBLE);
+                mDrawerToggle.runWhenIdle(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intentPlayerList = new Intent(MainActivity.this, PlayerListActivity.class);
+                        intentPlayerList.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intentPlayerList);
+                    }
+                });
                 break;
 
             case R.id.drawerItemRecords:
-                mPlayerDrawerLayout.closeDrawers();
-                startActivity(new Intent(this, RecordsActivity.class));
+                mDrawerLayout.closeDrawers();
+                pBar.setVisibility(View.VISIBLE);
+                mDrawerToggle.runWhenIdle(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(MainActivity.this, RecordsActivity.class));
+                    }
+                });
                 break;
 
             case R.id.drawerItemScreen:
@@ -243,12 +254,18 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case R.id.drawerItemSettings:
-                mPlayerDrawerLayout.closeDrawers();
-                startActivity(new Intent(this, SettingsActivity.class));
+                mDrawerLayout.closeDrawers();
+                pBar.setVisibility(View.VISIBLE);
+                mDrawerToggle.runWhenIdle(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                    }
+                });
                 break;
 
             case R.id.drawerItemAbout:
-                mPlayerDrawerLayout.closeDrawers();
+                mDrawerLayout.closeDrawers();
                 break;
         }
     }
@@ -884,6 +901,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        if (pBar != null)
+            pBar.setVisibility(View.GONE);
+
         if (getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt(Constants.SCREEN_ON, 0) == 1) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             switchScreen.setChecked(true);
@@ -1123,20 +1143,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void createDrawer() {
-        mPlayerDrawer = (LinearLayout) findViewById(R.id.main_drawer);
-        mPlayerDrawerLayout = (DrawerLayout) findViewById(R.id.main_drawer_layout);
-        mDrawerToggle = new ActionBarDrawerToggle(this, mPlayerDrawerLayout, R.string.app_name, R.string.app_name) {
-            public void onDrawerClosed(View view) {
-                super.onDrawerClosed(view);
-                invalidateOptionsMenu();
-            }
+        pBar = (RelativeLayout) findViewById(R.id.loading_progress);
 
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                invalidateOptionsMenu();
-            }
-        };
-        mPlayerDrawerLayout.addDrawerListener(mDrawerToggle);
+        mPlayerDrawer = (LinearLayout) findViewById(R.id.main_drawer);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.main_drawer_layout);
+        mDrawerToggle = new SmoothActionBarDrawerToggle(this, mDrawerLayout, R.string.app_name, R.string.app_name);
+        mDrawerLayout.addDrawerListener(mDrawerToggle);
 
         LinearLayout drawerItemHome = (LinearLayout) findViewById(R.id.drawerItemHome);
         ImageView drawerItemIconHome = (ImageView) findViewById(R.id.drawerItemIconHome);
