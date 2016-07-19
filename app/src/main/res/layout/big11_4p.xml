@@ -86,6 +86,18 @@
                     android:layout_weight="1.1">
 
                     <TextView
+                        android:id="@+id/layout11_splash_plus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@+id/layout11_life"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="30dp"
+                        android:fontFamily="sans-serif-light"
+                        android:singleLine="true"
+                        android:textSize="@dimen/player_damage2"
+                        android:visibility="invisible"/>
+
+                    <TextView
                         android:id="@+id/layout11_life"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

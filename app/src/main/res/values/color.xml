@@ -21,6 +21,10 @@
     <item name="podium_third" type="color">#cd7f32</item>
     <item name="podium_fourth" type="color">#878787</item>
 
+    <!-- DAMAGE -->
+    <item name="damage_red" type="color">#8e1619</item>
+    <item name="damage_green" type="color">#1a7b1f</item>
+
     <!--<item name="primary_color" type="color">#FF3F51B5</item>-->
     <!--<item name="secondary_color" type="color">#FF303F9F</item>-->
     <!--<item name="accent_color" type="color">#FFFF3D00</item>-->

@@ -65,6 +65,10 @@ public class MainActivity extends AppCompatActivity {
     private static Thread mThreadLife2;
     private static Thread mThreadLife3;
     private static Thread mThreadLife4;
+    private static AsyncTask mAsyncTaskLife1;
+    private static AsyncTask mAsyncTaskLife2;
+    private static AsyncTask mAsyncTaskLife3;
+    private static AsyncTask mAsyncTaskLife4;
 
     ///Drawer
     private RelativeLayout pBar;
@@ -112,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView layout11_name;
     private TextView layout11_deck;
     private TextView layout11_life;
+    private TextView layout11_damage;
     private ImageView layout11_life_positive;
     private ImageView layout11_life_negative;
     private TextView layout11_edh1;
@@ -135,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView layout12_name;
     private TextView layout12_deck;
     private TextView layout12_life;
+    private TextView layout12_damage;
     private ImageView layout12_life_positive;
     private ImageView layout12_life_negative;
     private TextView layout12_edh1;
@@ -158,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView layout21_name;
     private TextView layout21_deck;
     private TextView layout21_life;
+    private TextView layout21_damage;
     private ImageView layout21_life_positive;
     private ImageView layout21_life_negative;
     private TextView layout21_edh1;
@@ -181,6 +188,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView layout22_name;
     private TextView layout22_deck;
     private TextView layout22_life;
+    private TextView layout22_damage;
     private ImageView layout22_life_positive;
     private ImageView layout22_life_negative;
     private TextView layout22_edh1;
@@ -283,7 +291,8 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.layout11_life_positive:
                     if (activePlayer1.getPlayerLife() < Constants.MAX_LIFE) {
                         activePlayer1.setPlayerLife(activePlayer1.getPlayerLife() + 1);
-                        historyHandler(activePlayer1);
+//                        historyHandler(activePlayer1);
+                        new HistoryHandler(activePlayer1).execute();
                         updateLayout11();
                         adjustLifeSize(activePlayer1.getPlayerTag(), layout11_life);
                         layout11_life.setAnimation(getBounceAnimation(true, 5));
@@ -292,7 +301,8 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.layout11_life_negative:
                     if (activePlayer1.getPlayerLife() > Constants.MIN_LIFE) {
                         activePlayer1.setPlayerLife(activePlayer1.getPlayerLife() - 1);
-                        historyHandler(activePlayer1);
+//                        historyHandler(activePlayer1);
+                        new HistoryHandler(activePlayer1).execute();
                         updateLayout11();
                         adjustLifeSize(activePlayer1.getPlayerTag(), layout11_life);
                         layout11_life.setAnimation(getBounceAnimation(false, 5));
@@ -397,7 +407,8 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.layout12_life_positive:
                     if (activePlayer2.getPlayerLife() < Constants.MAX_LIFE) {
                         activePlayer2.setPlayerLife(activePlayer2.getPlayerLife() + 1);
-                        historyHandler(activePlayer2);
+//                        historyHandler(activePlayer2);
+                        new HistoryHandler(activePlayer2).execute();
                         updateLayout12();
                         adjustLifeSize(activePlayer2.getPlayerTag(), layout12_life);
                         layout12_life.setAnimation(getBounceAnimation(true, 5));
@@ -406,7 +417,8 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.layout12_life_negative:
                     if (activePlayer2.getPlayerLife() > Constants.MIN_LIFE) {
                         activePlayer2.setPlayerLife(activePlayer2.getPlayerLife() - 1);
-                        historyHandler(activePlayer2);
+//                        historyHandler(activePlayer2);
+                        new HistoryHandler(activePlayer2).execute();
                         updateLayout12();
                         adjustLifeSize(activePlayer2.getPlayerTag(), layout12_life);
                         layout12_life.setAnimation(getBounceAnimation(false, 5));
@@ -511,7 +523,8 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.layout21_life_positive:
                     if (activePlayer3.getPlayerLife() < Constants.MAX_LIFE) {
                         activePlayer3.setPlayerLife(activePlayer3.getPlayerLife() + 1);
-                        historyHandler(activePlayer3);
+//                        historyHandler(activePlayer3);
+                        new HistoryHandler(activePlayer3).execute();
                         updateLayout21();
                         adjustLifeSize(activePlayer3.getPlayerTag(), layout21_life);
                         layout21_life.setAnimation(getBounceAnimation(true, 5));
@@ -520,7 +533,8 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.layout21_life_negative:
                     if (activePlayer3.getPlayerLife() > Constants.MIN_LIFE) {
                         activePlayer3.setPlayerLife(activePlayer3.getPlayerLife() - 1);
-                        historyHandler(activePlayer3);
+//                        historyHandler(activePlayer3);
+                        new HistoryHandler(activePlayer3).execute();
                         updateLayout21();
                         adjustLifeSize(activePlayer3.getPlayerTag(), layout21_life);
                         layout21_life.setAnimation(getBounceAnimation(false, 5));
@@ -625,19 +639,23 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.layout22_life_positive:
                     if (activePlayer4.getPlayerLife() < Constants.MAX_LIFE) {
                         activePlayer4.setPlayerLife(activePlayer4.getPlayerLife() + 1);
-                        historyHandler(activePlayer4);
+//                        historyHandler(activePlayer4);
+                        new HistoryHandler(activePlayer4).execute();
                         updateLayout22();
                         adjustLifeSize(activePlayer4.getPlayerTag(), layout22_life);
                         layout22_life.setAnimation(getBounceAnimation(true, 5));
+                        layout22_damage.setAnimation(getDamageAnimation());
                     }
                     break;
                 case R.id.layout22_life_negative:
                     if (activePlayer4.getPlayerLife() > Constants.MIN_LIFE) {
                         activePlayer4.setPlayerLife(activePlayer4.getPlayerLife() - 1);
-                        historyHandler(activePlayer4);
+//                        historyHandler(activePlayer4);
+                        new HistoryHandler(activePlayer4).execute();
                         updateLayout22();
                         adjustLifeSize(activePlayer4.getPlayerTag(), layout22_life);
                         layout22_life.setAnimation(getBounceAnimation(false, 5));
+                        layout22_damage.setAnimation(getDamageAnimation());
                     }
                     break;
                 case R.id.layout22_positive_EDH1:
@@ -1192,6 +1210,7 @@ public class MainActivity extends AppCompatActivity {
         layout11_name = (TextView) container.findViewById(R.id.layout11_name);
         layout11_deck = (TextView) container.findViewById(R.id.layout11_deck);
         layout11_life = (TextView) container.findViewById(R.id.layout11_life);
+        layout11_damage = (TextView) container.findViewById(R.id.layout11_splash_plus);
         layout11_life_positive = (ImageView) container.findViewById(R.id.layout11_life_positive);
         layout11_life_negative = (ImageView) container.findViewById(R.id.layout11_life_negative);
 
@@ -1240,6 +1259,7 @@ public class MainActivity extends AppCompatActivity {
         layout12_name = (TextView) container.findViewById(R.id.layout12_name);
         layout12_deck = (TextView) container.findViewById(R.id.layout12_deck);
         layout12_life = (TextView) container.findViewById(R.id.layout12_life);
+        layout12_damage = (TextView) container.findViewById(R.id.layout12_splash_plus);
         layout12_life_positive = (ImageView) container.findViewById(R.id.layout12_life_positive);
         layout12_life_negative = (ImageView) container.findViewById(R.id.layout12_life_negative);
 
@@ -1289,6 +1309,7 @@ public class MainActivity extends AppCompatActivity {
             layout21_name = (TextView) container.findViewById(R.id.layout21_name);
             layout21_deck = (TextView) container.findViewById(R.id.layout21_deck);
             layout21_life = (TextView) container.findViewById(R.id.layout21_life);
+            layout21_damage = (TextView) container.findViewById(R.id.layout21_splash_plus);
             layout21_life_positive = (ImageView) container.findViewById(R.id.layout21_life_positive);
             layout21_life_negative = (ImageView) container.findViewById(R.id.layout21_life_negative);
 
@@ -1333,6 +1354,7 @@ public class MainActivity extends AppCompatActivity {
             layout22_name = (TextView) container.findViewById(R.id.layout22_name);
             layout22_deck = (TextView) container.findViewById(R.id.layout22_deck);
             layout22_life = (TextView) container.findViewById(R.id.layout22_life);
+            layout22_damage = (TextView) container.findViewById(R.id.layout22_splash_plus);
             layout22_life_positive = (ImageView) container.findViewById(R.id.layout22_life_positive);
             layout22_life_negative = (ImageView) container.findViewById(R.id.layout22_life_negative);
 
@@ -1459,6 +1481,10 @@ public class MainActivity extends AppCompatActivity {
         if (up)
             return AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bounce_up_10);
         return AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bounce_down_10);
+    }
+
+    private Animation getDamageAnimation() {
+        return AnimationUtils.loadAnimation(getApplicationContext(), R.anim.damage);
     }
 
     private Animation getLifeScaleAnimation(final TextView tv, final float toScale, final int type) {
@@ -1593,6 +1619,7 @@ public class MainActivity extends AppCompatActivity {
         setupOptionMenu();
     }
 
+    //TODO
     private void historyHandler(final ActivePlayer player) {
         Thread threadLife;
         final int playerTag;
@@ -1618,6 +1645,7 @@ public class MainActivity extends AppCompatActivity {
             threadLife.interrupt();
         }
 
+
         threadLife = new Thread(
                 new Runnable() {
                     @SuppressWarnings("ConstantConditions")
@@ -1631,6 +1659,9 @@ public class MainActivity extends AppCompatActivity {
                             } else {
                                 latestSavedLife = player.getPlayerLife();
                             }
+
+//                            tv.clearAnimation();
+//                            tv.setText("" + (player.getPlayerLife() - latestSavedLife));
 
                             String latestSavedEDH;
                             String latestSavedEDHPreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString(Constants.PLAYER_EDH_PREFIX + playerTag, "0@0@0@0");
@@ -2188,6 +2219,136 @@ public class MainActivity extends AppCompatActivity {
                 layout22_edh3_name.setText(activePlayer3.getPlayerDeck().getDeckOwnerName());
                 layout22_edh4_name.setText(activePlayer4.getPlayerDeck().getDeckOwnerName());
             }
+        }
+    }
+
+    class HistoryHandler extends AsyncTask<Void, ActivePlayer, Void> {
+        ActivePlayer player;
+        int playerTag;
+
+        int latestSavedLife;
+        String latestSavedEDH;
+        String latestSavedEDHPreferences;
+
+        AsyncTask asyncTaskLifeLife;
+
+        public HistoryHandler(ActivePlayer player) {
+            super();
+
+            this.player = player;
+
+            if (player.getPlayerTag() == 0) {
+                asyncTaskLifeLife = mAsyncTaskLife1;
+                playerTag = 0;
+            } else if (player.getPlayerTag() == 1) {
+                asyncTaskLifeLife = mAsyncTaskLife2;
+                playerTag = 1;
+            } else if (player.getPlayerTag() == 2) {
+                asyncTaskLifeLife = mAsyncTaskLife3;
+                playerTag = 2;
+            } else if (player.getPlayerTag() == 3) {
+                asyncTaskLifeLife = mAsyncTaskLife4;
+                playerTag = 3;
+            } else {
+                asyncTaskLifeLife = null;
+                playerTag = -1;
+            }
+
+            if (asyncTaskLifeLife != null) {
+                asyncTaskLifeLife.cancel(true);
+            }
+
+            asyncTaskLifeLife = this;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            int currentLife = player.getPlayerLife();
+            String currentEdh = player.getPlayerEDH1() + "@" + player.getPlayerEDH2() + "@" + player.getPlayerEDH3() + "@" + player.getPlayerEDH4();
+
+            if ((currentLife - latestSavedLife) != 0 || !currentEdh.equalsIgnoreCase(latestSavedEDH)) {
+                String lifeToBeSaved = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString(Constants.PLAYER_HISTORY_LIFE + playerTag, Constants.INITIAL_PLAYER_LIFE);
+                lifeToBeSaved = lifeToBeSaved + "_" + currentLife;
+                getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString(Constants.PLAYER_HISTORY_LIFE + playerTag, lifeToBeSaved).apply();
+
+                String edhToBeSaved = latestSavedEDHPreferences + "_" + currentEdh;
+                getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString(Constants.PLAYER_EDH_PREFIX + playerTag, edhToBeSaved).apply();
+            }
+        }
+
+        @Override
+        protected void onPreExecute() {
+            if (player.getPlayerTag() == 0)
+                mAsyncTaskLife1 = asyncTaskLifeLife;
+            else if (player.getPlayerTag() == 1)
+                mAsyncTaskLife2 = asyncTaskLifeLife;
+            else if (player.getPlayerTag() == 2)
+                mAsyncTaskLife3 = asyncTaskLifeLife;
+            else if (player.getPlayerTag() == 3)
+                mAsyncTaskLife4 = asyncTaskLifeLife;
+
+            String latestSavedLifePreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString(Constants.PLAYER_HISTORY_LIFE + playerTag, Constants.INITIAL_PLAYER_LIFE);
+            if (!latestSavedLifePreferences.isEmpty()) {
+                String[] latestSavedLifeArray = latestSavedLifePreferences.split("_");
+                latestSavedLife = Integer.valueOf(latestSavedLifeArray[latestSavedLifeArray.length - 1]);
+            } else {
+                latestSavedLife = player.getPlayerLife();
+            }
+
+            latestSavedEDHPreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString(Constants.PLAYER_EDH_PREFIX + playerTag, "0@0@0@0");
+            if (!latestSavedEDHPreferences.isEmpty()) {
+                String[] latestSavedLifeArray = latestSavedEDHPreferences.split("_");
+                latestSavedEDH = latestSavedLifeArray[latestSavedLifeArray.length - 1];
+            } else {
+                latestSavedEDH = player.getPlayerEDH1() + "@" + player.getPlayerEDH2() + "@" + player.getPlayerEDH3() + "@" + player.getPlayerEDH4();
+            }
+
+            int diff = player.getPlayerLife() - latestSavedLife;
+            if (player.getPlayerTag() == 0) {
+                if (diff != 0) {
+                    layout11_damage.setText(String.format(Locale.ROOT, diff > 0 ? "+%d" : "%d", diff));
+                    layout11_damage.setTextColor(ContextCompat.getColor(MainActivity.this, diff > 0 ? R.color.damage_green : R.color.damage_red));
+                    layout11_damage.setAnimation(getDamageAnimation());
+                } else {
+                    layout11_damage.clearAnimation();
+                }
+            } else if (player.getPlayerTag() == 1) {
+                if (diff != 0) {
+                    layout12_damage.setText(String.format(Locale.ROOT, diff > 0 ? "+%d" : "%d", diff));
+                    layout12_damage.setTextColor(ContextCompat.getColor(MainActivity.this, diff > 0 ? R.color.damage_green : R.color.damage_red));
+                    layout12_damage.setAnimation(getDamageAnimation());
+                } else {
+                    layout12_damage.clearAnimation();
+                }
+            } else if (player.getPlayerTag() == 2) {
+                if (diff != 0) {
+                    layout21_damage.setText(String.format(Locale.ROOT, diff > 0 ? "+%d" : "%d", diff));
+                    layout21_damage.setTextColor(ContextCompat.getColor(MainActivity.this, diff > 0 ? R.color.damage_green : R.color.damage_red));
+                    layout21_damage.setAnimation(getDamageAnimation());
+                } else {
+                    layout21_damage.clearAnimation();
+                }
+            } else if (player.getPlayerTag() == 3) {
+                if (diff != 0) {
+                    layout22_damage.setText(String.format(Locale.ROOT, diff > 0 ? "+%d" : "%d", diff));
+                    layout22_damage.setTextColor(ContextCompat.getColor(MainActivity.this, diff > 0 ? R.color.damage_green : R.color.damage_red));
+                    layout22_damage.setAnimation(getDamageAnimation());
+                } else {
+                    layout22_damage.clearAnimation();
+                }
+            }
+
+            super.onPreExecute();
         }
     }
 
