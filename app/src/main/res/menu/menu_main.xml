@@ -15,31 +15,31 @@
     <item
         android:id="@+id/action_history"
         android:icon="@drawable/icon_history"
-        android:orderInCategory="@string/menu_main_history_index"
+        android:orderInCategory="@string/menu_main_history"
         android:title="@string/actions_history"
         app:showAsAction="always"/>
 
     <item
         android:id="@+id/actions_new_game"
-        android:orderInCategory="2"
+        android:orderInCategory="@string/menu_main_new_game"
         android:title="@string/actions_new_game"
         app:showAsAction="never"/>
 
     <item
         android:id="@+id/actions_log_game"
-        android:orderInCategory="3"
+        android:orderInCategory="@string/menu_main_log_game"
         android:title="@string/actions_log_game"
         app:showAsAction="never"/>
 
     <item
         android:id="@+id/actions_roll_dice"
-        android:orderInCategory="4"
+        android:orderInCategory="@string/menu_main_roll_dice"
         android:title="@string/actions_roll_dice"
         app:showAsAction="never"/>
 
     <item
         android:id="@+id/actions_random_player"
-        android:orderInCategory="5"
+        android:orderInCategory="@string/menu_main_random_player"
         android:title="@string/actions_random_player"
         app:showAsAction="never"/>
 </menu>

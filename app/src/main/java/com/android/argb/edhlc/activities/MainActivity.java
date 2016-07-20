@@ -107,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
     private int currentScene12 = 1;
     private int currentScene21 = 2;
     private int currentScene22 = 3;
+    private int currentSceneInvalid = Integer.MIN_VALUE;
 
     private int currentScene;
     private int previousScene;
@@ -769,13 +770,26 @@ public class MainActivity extends AppCompatActivity {
         this.optionMenu = menu;
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
-        if (currentScene == this.currentSceneOverview) {
-            optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_history_index))).setEnabled(false);
-            optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_history_index))).setVisible(false);
-        } else {
-            optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_history_index))).setEnabled(true);
-            optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_history_index))).setVisible(true);
-        }
+        optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_history))).setEnabled(currentScene == this.currentScene11
+                || currentScene == this.currentScene12
+                || currentScene == this.currentScene21
+                || currentScene == this.currentScene22);
+        optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_history))).setVisible(currentScene == this.currentScene11
+                || currentScene == this.currentScene12
+                || currentScene == this.currentScene21
+                || currentScene == this.currentScene22);
+
+        optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_new_game))).setEnabled(currentScene != currentSceneInvalid);
+        optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_new_game))).setVisible(currentScene != currentSceneInvalid);
+
+        optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_log_game))).setEnabled(currentScene != currentSceneInvalid);
+        optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_log_game))).setVisible(currentScene != currentSceneInvalid);
+
+        optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_roll_dice))).setEnabled(currentScene != currentSceneInvalid);
+        optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_roll_dice))).setVisible(currentScene != currentSceneInvalid);
+
+        optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_random_player))).setEnabled(currentScene != currentSceneInvalid);
+        optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_random_player))).setVisible(currentScene != currentSceneInvalid);
 
         return true;
     }
@@ -888,6 +902,7 @@ public class MainActivity extends AppCompatActivity {
         createToolbar();
         createDrawer();
         isInAnimation = false;
+        currentScene = currentSceneInvalid;
 
         if (isValidGame()) {
             createScenes();
@@ -932,6 +947,8 @@ public class MainActivity extends AppCompatActivity {
         if (isValidGame()) {
             startTimerCounter();
         } else {
+            currentScene = currentSceneInvalid;
+            setupOptionMenu();
             container.removeAllViews();
             setActionBarColor(ContextCompat.getColor(MainActivity.this, R.color.primary_color));
             getLayoutInflater().inflate(R.layout.scene_new_game, container, true);
@@ -1759,13 +1776,26 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupOptionMenu() {
         if (optionMenu != null) {
-            if (currentScene == this.currentSceneOverview) {
-                optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_history_index))).setEnabled(false);
-                optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_history_index))).setVisible(false);
-            } else {
-                optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_history_index))).setEnabled(true);
-                optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_history_index))).setVisible(true);
-            }
+            optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_history))).setEnabled(currentScene == this.currentScene11
+                    || currentScene == this.currentScene12
+                    || currentScene == this.currentScene21
+                    || currentScene == this.currentScene22);
+            optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_history))).setVisible(currentScene == this.currentScene11
+                    || currentScene == this.currentScene12
+                    || currentScene == this.currentScene21
+                    || currentScene == this.currentScene22);
+
+            optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_new_game))).setEnabled(currentScene != currentSceneInvalid);
+            optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_new_game))).setVisible(currentScene != currentSceneInvalid);
+
+            optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_log_game))).setEnabled(currentScene != currentSceneInvalid);
+            optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_log_game))).setVisible(currentScene != currentSceneInvalid);
+
+            optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_roll_dice))).setEnabled(currentScene != currentSceneInvalid);
+            optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_roll_dice))).setVisible(currentScene != currentSceneInvalid);
+
+            optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_random_player))).setEnabled(currentScene != currentSceneInvalid);
+            optionMenu.getItem(Integer.valueOf(getString(R.string.menu_main_random_player))).setVisible(currentScene != currentSceneInvalid);
         }
     }
 

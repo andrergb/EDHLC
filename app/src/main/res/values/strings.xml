@@ -70,8 +70,12 @@
     <string name="fourth">4th</string>
     <string name="delete_records">Delete Records</string>
 
-    <string name="menu_main_history_index">1</string>
     <string name="menu_new_game_next">1</string>
+    <string name="menu_main_history">1</string>
+    <string name="menu_main_new_game">2</string>
+    <string name="menu_main_log_game">3</string>
+    <string name="menu_main_roll_dice">4</string>
+    <string name="menu_main_random_player">5</string>
 
     <string name="cancel">Cancel</string>
     <string name="edit">Edit</string>
