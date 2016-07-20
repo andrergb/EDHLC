@@ -12,14 +12,37 @@
         android:toYScale="1.4"/>
 
     <translate
-        android:duration="500"
+        android:duration="400"
         android:fromYDelta="70%"
         android:interpolator="@android:anim/overshoot_interpolator"
+        android:startOffset="50"
         android:toYDelta="-10%"/>
 
-    <alpha
-        android:duration="900"
-        android:fromAlpha="1.0"
-        android:startOffset="1100"
-        android:toAlpha="0.0"/>
+    <!--<alpha-->
+    <!--android:duration="900"-->
+    <!--android:fromAlpha="1.0"-->
+    <!--android:startOffset="1100"-->
+    <!--android:toAlpha="0.0"/>-->
+
+    <scale
+        android:duration="300"
+        android:fromXScale="1.0"
+        android:fromYScale="1.0"
+        android:interpolator="@android:anim/overshoot_interpolator"
+        android:pivotX="50%"
+        android:pivotY="50%"
+        android:startOffset="1550"
+        android:toXScale="1.4"
+        android:toYScale="1.4"/>
+
+    <scale
+        android:duration="150"
+        android:fromXScale="1.0"
+        android:fromYScale="1.0"
+        android:interpolator="@android:anim/overshoot_interpolator"
+        android:pivotX="50%"
+        android:pivotY="50%"
+        android:startOffset="1850"
+        android:toXScale="0"
+        android:toYScale="0"/>
 </set>
