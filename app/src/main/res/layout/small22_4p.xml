@@ -91,7 +91,9 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:fontFamily="sans-serif-light"
+                android:onClick="onClickLayout"
                 android:singleLine="true"
+                android:tag="@string/tag_small"
                 android:text="40"
                 android:textSize="@dimen/player_life"/>
 
@@ -120,6 +122,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:adjustViewBounds="true"
+                        android:background="?attr/selectableItemBackgroundBorderless"
                         android:onClick="onClickLayout"
                         android:src="@drawable/icon_up1"/>
                 </LinearLayout>
@@ -138,6 +141,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:adjustViewBounds="true"
+                        android:background="?attr/selectableItemBackgroundBorderless"
                         android:onClick="onClickLayout"
                         android:src="@drawable/icon_down1"/>
                 </LinearLayout>

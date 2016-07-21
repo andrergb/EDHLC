@@ -289,10 +289,15 @@ public class MainActivity extends AppCompatActivity {
                     else
                         goToScene(this.currentScene11);
                     break;
+                case R.id.layout11_life:
+                    if (view.getTag().toString().equalsIgnoreCase(getString(R.string.tag_big)))
+                        goToScene(this.currentSceneOverview);
+                    else
+                        goToScene(this.currentScene11);
+                    break;
                 case R.id.layout11_life_positive:
                     if (activePlayer1.getPlayerLife() < Constants.MAX_LIFE) {
                         activePlayer1.setPlayerLife(activePlayer1.getPlayerLife() + 1);
-//                        historyHandler(activePlayer1);
                         new HistoryHandler(activePlayer1).execute();
                         updateLayout11();
                         adjustLifeSize(activePlayer1.getPlayerTag(), layout11_life);
@@ -302,7 +307,6 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.layout11_life_negative:
                     if (activePlayer1.getPlayerLife() > Constants.MIN_LIFE) {
                         activePlayer1.setPlayerLife(activePlayer1.getPlayerLife() - 1);
-//                        historyHandler(activePlayer1);
                         new HistoryHandler(activePlayer1).execute();
                         updateLayout11();
                         adjustLifeSize(activePlayer1.getPlayerTag(), layout11_life);
@@ -405,10 +409,15 @@ public class MainActivity extends AppCompatActivity {
                     else
                         goToScene(this.currentScene12);
                     break;
+                case R.id.layout12_life:
+                    if (view.getTag().toString().equalsIgnoreCase(getString(R.string.tag_big)))
+                        goToScene(this.currentSceneOverview);
+                    else
+                        goToScene(this.currentScene12);
+                    break;
                 case R.id.layout12_life_positive:
                     if (activePlayer2.getPlayerLife() < Constants.MAX_LIFE) {
                         activePlayer2.setPlayerLife(activePlayer2.getPlayerLife() + 1);
-//                        historyHandler(activePlayer2);
                         new HistoryHandler(activePlayer2).execute();
                         updateLayout12();
                         adjustLifeSize(activePlayer2.getPlayerTag(), layout12_life);
@@ -418,7 +427,6 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.layout12_life_negative:
                     if (activePlayer2.getPlayerLife() > Constants.MIN_LIFE) {
                         activePlayer2.setPlayerLife(activePlayer2.getPlayerLife() - 1);
-//                        historyHandler(activePlayer2);
                         new HistoryHandler(activePlayer2).execute();
                         updateLayout12();
                         adjustLifeSize(activePlayer2.getPlayerTag(), layout12_life);
@@ -521,10 +529,15 @@ public class MainActivity extends AppCompatActivity {
                     else
                         goToScene(this.currentScene21);
                     break;
+                case R.id.layout21_life:
+                    if (view.getTag().toString().equalsIgnoreCase(getString(R.string.tag_big)))
+                        goToScene(this.currentSceneOverview);
+                    else
+                        goToScene(this.currentScene21);
+                    break;
                 case R.id.layout21_life_positive:
                     if (activePlayer3.getPlayerLife() < Constants.MAX_LIFE) {
                         activePlayer3.setPlayerLife(activePlayer3.getPlayerLife() + 1);
-//                        historyHandler(activePlayer3);
                         new HistoryHandler(activePlayer3).execute();
                         updateLayout21();
                         adjustLifeSize(activePlayer3.getPlayerTag(), layout21_life);
@@ -534,7 +547,6 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.layout21_life_negative:
                     if (activePlayer3.getPlayerLife() > Constants.MIN_LIFE) {
                         activePlayer3.setPlayerLife(activePlayer3.getPlayerLife() - 1);
-//                        historyHandler(activePlayer3);
                         new HistoryHandler(activePlayer3).execute();
                         updateLayout21();
                         adjustLifeSize(activePlayer3.getPlayerTag(), layout21_life);
@@ -637,10 +649,15 @@ public class MainActivity extends AppCompatActivity {
                     else
                         goToScene(this.currentScene22);
                     break;
+                case R.id.layout22_life:
+                    if (view.getTag().toString().equalsIgnoreCase(getString(R.string.tag_big)))
+                        goToScene(this.currentSceneOverview);
+                    else
+                        goToScene(this.currentScene22);
+                    break;
                 case R.id.layout22_life_positive:
                     if (activePlayer4.getPlayerLife() < Constants.MAX_LIFE) {
                         activePlayer4.setPlayerLife(activePlayer4.getPlayerLife() + 1);
-//                        historyHandler(activePlayer4);
                         new HistoryHandler(activePlayer4).execute();
                         updateLayout22();
                         adjustLifeSize(activePlayer4.getPlayerTag(), layout22_life);
@@ -651,7 +668,6 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.layout22_life_negative:
                     if (activePlayer4.getPlayerLife() > Constants.MIN_LIFE) {
                         activePlayer4.setPlayerLife(activePlayer4.getPlayerLife() - 1);
-//                        historyHandler(activePlayer4);
                         new HistoryHandler(activePlayer4).execute();
                         updateLayout22();
                         adjustLifeSize(activePlayer4.getPlayerTag(), layout22_life);

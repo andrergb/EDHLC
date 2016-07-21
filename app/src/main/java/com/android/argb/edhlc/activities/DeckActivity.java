@@ -198,9 +198,11 @@ public class DeckActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (mDeckDrawerLayout.isDrawerOpen(mDeckDrawer))
+        if (mDeckDrawerLayout.isDrawerOpen(mDeckDrawer)) {
             mDeckDrawerLayout.closeDrawers();
-        else {
+        } else if (isFabOpen) {
+            animateFAB();
+        } else {
             super.onBackPressed();
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         }

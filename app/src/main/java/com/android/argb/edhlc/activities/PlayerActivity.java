@@ -218,6 +218,8 @@ public class PlayerActivity extends AppCompatActivity {
         else if (mIsInEditMode) {
             mIsInEditMode = false;
             updateEditMode();
+        } else if (isFabOpen) {
+            animateFAB();
         } else {
             super.onBackPressed();
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
