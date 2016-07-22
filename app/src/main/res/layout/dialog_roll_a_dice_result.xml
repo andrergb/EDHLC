@@ -21,5 +21,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="12dp"
         android:indeterminate="true"
+        android:indeterminateTint="@color/accent_color"
+        android:indeterminateTintMode="src_atop"
         android:visibility="gone"/>
 </RelativeLayout>

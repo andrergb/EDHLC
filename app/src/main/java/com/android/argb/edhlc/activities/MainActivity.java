@@ -1652,7 +1652,6 @@ public class MainActivity extends AppCompatActivity {
         setupOptionMenu();
     }
 
-    //TODO
     private void historyHandler(final ActivePlayer player) {
         Thread threadLife;
         final int playerTag;
@@ -1692,9 +1691,6 @@ public class MainActivity extends AppCompatActivity {
                             } else {
                                 latestSavedLife = player.getPlayerLife();
                             }
-
-//                            tv.clearAnimation();
-//                            tv.setText("" + (player.getPlayerLife() - latestSavedLife));
 
                             String latestSavedEDH;
                             String latestSavedEDHPreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString(Constants.PLAYER_EDH_PREFIX + playerTag, "0@0@0@0");
@@ -1857,10 +1853,11 @@ public class MainActivity extends AppCompatActivity {
                         @SuppressLint("InflateParams")
                         View logView = LayoutInflater.from(MainActivity.this).inflate(R.layout.dialog_roll_a_dice_result, null);
                         textViewDiceResult = (TextView) logView.findViewById(R.id.textViewDiceResult);
-                        textViewDiceResult.setText(MessageFormat.format("{0}", Utils.getRandomInt(minValue, maxValue)));
 
                         progressRandomBar = (ProgressBar) logView.findViewById(R.id.randomProgress);
                         progressRandomBar.setVisibility(View.INVISIBLE);
+
+                        new RandomDiceTask().execute(minValue, maxValue);
 
                         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
                         alertDialogBuilder.setView(logView);
@@ -1913,11 +1910,12 @@ public class MainActivity extends AppCompatActivity {
         View logView = LayoutInflater.from(this).inflate(R.layout.dialog_roll_a_dice_result, null);
         textViewResult = (TextView) logView.findViewById(R.id.textViewDiceResult);
         textViewResult.setTextSize(42);
-        textViewResult.setText("...");
         textViewResult.setVisibility(View.VISIBLE);
 
         progressRandomBar = (ProgressBar) logView.findViewById(R.id.randomProgress);
         progressRandomBar.setVisibility(View.INVISIBLE);
+
+        new RandomPlayerTask().execute();
 
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setView(logView);
@@ -2403,7 +2401,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(Integer... params) {
             try {
-                Thread.sleep(300);
+                Thread.sleep(800);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -2433,7 +2431,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(Void... params) {
             try {
-                Thread.sleep(500);
+                Thread.sleep(800);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
