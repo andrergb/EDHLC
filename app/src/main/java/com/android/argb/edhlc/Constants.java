@@ -36,11 +36,6 @@ public class Constants {
 
     public static String[] MONTH = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
 
-    public static int LIFE_TEXT_SIZE_2_DIGITS_HIGHLIGHT = 120;
-    public static int LIFE_TEXT_SIZE_2_DIGITS = 100;
-    public static int LIFE_TEXT_SIZE_3_DIGITS_HIGHLIGHT = 100;
-    public static int LIFE_TEXT_SIZE_3_DIGITS = 60;
-
     public static String INITIAL_PLAYER_LIFE = "40";
 
     public static int MAX_LIFE = 999;

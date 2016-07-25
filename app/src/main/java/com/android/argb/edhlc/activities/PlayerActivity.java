@@ -97,10 +97,10 @@ public class PlayerActivity extends AppCompatActivity {
     private ImageView indicatorDeckListCard;
     private ListView listDeckListCard;
     private List<String[]> deckList;  // 0 imagePath - 1 shield - 2 title - 3 subTitle - 4 identity - 5 selection
-    private int deckListImagePathIndex = 0;
-    private int deckListShieldColorIndex = 1;
+//    private int deckListImagePathIndex = 0;
+//    private int deckListShieldColorIndex = 1;
     private int deckListTitleIndex = 2;
-    private int deckListSubTitleIndex = 3;
+//    private int deckListSubTitleIndex = 3;
     private int deckListIdentityIndex = 4;
     private int deckListSelectionIndex = 5;
     private DeckListAdapter mDeckListAdapter;

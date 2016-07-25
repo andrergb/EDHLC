@@ -34,9 +34,6 @@ import com.android.argb.edhlc.objects.ActivePlayer;
 /* Created by ARGB */
 public class NewGame2Activity extends AppCompatActivity {
 
-    private ActionBar mActionBar;
-    private View statusBarBackground;
-
     private String p1Name;
     private String p1Deck;
     private LinearLayout firstLine;
@@ -268,7 +265,7 @@ public class NewGame2Activity extends AppCompatActivity {
     }
 
     private void createStatusBar() {
-        statusBarBackground = findViewById(R.id.statusBarBackground);
+        View statusBarBackground = findViewById(R.id.statusBarBackground);
         if (statusBarBackground != null) {
             ViewGroup.LayoutParams params = statusBarBackground.getLayoutParams();
             params.height = Utils.getStatusBarHeight(this);
@@ -288,7 +285,7 @@ public class NewGame2Activity extends AppCompatActivity {
         assert getSupportActionBar() != null;
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
-        mActionBar = getSupportActionBar();
+        ActionBar mActionBar = getSupportActionBar();
         mActionBar.setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(this, R.color.primary_color)));
         mActionBar.setDisplayShowTitleEnabled(true);
         mActionBar.setDisplayHomeAsUpEnabled(true);

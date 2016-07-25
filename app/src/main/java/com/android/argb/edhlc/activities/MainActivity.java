@@ -34,6 +34,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.ScaleAnimation;
 import android.widget.Chronometer;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -58,7 +59,7 @@ import java.util.List;
 import java.util.Locale;
 
 /* Created by ARGB */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnLongClickListener {
 
     //HistoryThreads
     private static Thread mThreadLife1;
@@ -208,6 +209,71 @@ public class MainActivity extends AppCompatActivity {
     private ImageView layout22_negative_EDH4;
     private ImageView layout22_positive_EDH4;
     private TextView layout22_edh4_name;
+
+    public void createLifeDialog(final View view, final ActivePlayer player) {
+        @SuppressLint("InflateParams")
+        View playerLifeView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_player_life, null);
+        final EditText userInput = (EditText) playerLifeView.findViewById(R.id.editTextPlayerLife);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
+        alertDialogBuilder.setView(playerLifeView);
+        alertDialogBuilder.setTitle(player.getPlayerDeck().getDeckOwnerName() + ": " + player.getPlayerLife());
+
+        alertDialogBuilder.setPositiveButton(R.string.ok,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        String stringLife = userInput.getText().toString();
+                        try {
+                            if (!stringLife.equalsIgnoreCase("")) {
+                                int intLife = Integer.valueOf(stringLife);
+                                if (intLife > Constants.MAX_LIFE)
+                                    intLife = Constants.MAX_LIFE;
+                                else if (intLife < Constants.MIN_LIFE)
+                                    intLife = Constants.MIN_LIFE;
+
+                                player.setPlayerLife(intLife);
+                                new HistoryHandler(player).execute();
+
+                                if (player.getPlayerTag() == 0) {
+                                    updateLayout11();
+                                    adjustLifeSize(player.getPlayerTag(), layout11_life);
+                                    layout11_damage.setAnimation(getDamageAnimation());
+                                    layout11_life.setAnimation(getBounceAnimation(true, 5));
+                                } else if (player.getPlayerTag() == 1) {
+                                    updateLayout12();
+                                    adjustLifeSize(player.getPlayerTag(), layout12_life);
+                                    layout12_damage.setAnimation(getDamageAnimation());
+                                    layout12_life.setAnimation(getBounceAnimation(true, 5));
+                                }
+                                if (player.getPlayerTag() == 2) {
+                                    updateLayout21();
+                                    adjustLifeSize(player.getPlayerTag(), layout21_life);
+                                    layout21_damage.setAnimation(getDamageAnimation());
+                                    layout21_life.setAnimation(getBounceAnimation(true, 5));
+                                }
+                                if (player.getPlayerTag() == 3) {
+                                    updateLayout22();
+                                    adjustLifeSize(player.getPlayerTag(), layout22_life);
+                                    layout22_damage.setAnimation(getDamageAnimation());
+                                    layout22_life.setAnimation(getBounceAnimation(true, 5));
+                                }
+                            }
+                        } catch (NumberFormatException ignored) {
+                        }
+                    }
+                }
+        );
+        alertDialogBuilder.setNegativeButton(R.string.cancel,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                }
+        );
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
+        alertDialog.show();
+    }
 
     @Override
     public void onBackPressed() {
@@ -811,6 +877,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onLongClick(View v) {
+        switch (v.getId()) {
+            case R.id.layout11_life:
+                createLifeDialog(v, activePlayer1);
+                return true;
+            case R.id.layout12_life:
+                createLifeDialog(v, activePlayer2);
+                return true;
+            case R.id.layout21_life:
+                createLifeDialog(v, activePlayer3);
+                return true;
+            case R.id.layout22_life:
+                createLifeDialog(v, activePlayer4);
+                return true;
+        }
+        return false;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (!isInAnimation) {
             if (mDrawerToggle.onOptionsItemSelected(item)) {
@@ -1243,6 +1328,7 @@ public class MainActivity extends AppCompatActivity {
         layout11_name = (TextView) container.findViewById(R.id.layout11_name);
         layout11_deck = (TextView) container.findViewById(R.id.layout11_deck);
         layout11_life = (TextView) container.findViewById(R.id.layout11_life);
+        layout11_life.setOnLongClickListener(this);
         layout11_damage = (TextView) container.findViewById(R.id.layout11_splash_plus);
         layout11_life_positive = (ImageView) container.findViewById(R.id.layout11_life_positive);
         layout11_life_negative = (ImageView) container.findViewById(R.id.layout11_life_negative);
@@ -1292,6 +1378,7 @@ public class MainActivity extends AppCompatActivity {
         layout12_name = (TextView) container.findViewById(R.id.layout12_name);
         layout12_deck = (TextView) container.findViewById(R.id.layout12_deck);
         layout12_life = (TextView) container.findViewById(R.id.layout12_life);
+        layout12_life.setOnLongClickListener(this);
         layout12_damage = (TextView) container.findViewById(R.id.layout12_splash_plus);
         layout12_life_positive = (ImageView) container.findViewById(R.id.layout12_life_positive);
         layout12_life_negative = (ImageView) container.findViewById(R.id.layout12_life_negative);
@@ -1342,6 +1429,7 @@ public class MainActivity extends AppCompatActivity {
             layout21_name = (TextView) container.findViewById(R.id.layout21_name);
             layout21_deck = (TextView) container.findViewById(R.id.layout21_deck);
             layout21_life = (TextView) container.findViewById(R.id.layout21_life);
+            layout21_life.setOnLongClickListener(this);
             layout21_damage = (TextView) container.findViewById(R.id.layout21_splash_plus);
             layout21_life_positive = (ImageView) container.findViewById(R.id.layout21_life_positive);
             layout21_life_negative = (ImageView) container.findViewById(R.id.layout21_life_negative);
@@ -1387,6 +1475,7 @@ public class MainActivity extends AppCompatActivity {
             layout22_name = (TextView) container.findViewById(R.id.layout22_name);
             layout22_deck = (TextView) container.findViewById(R.id.layout22_deck);
             layout22_life = (TextView) container.findViewById(R.id.layout22_life);
+            layout22_life.setOnLongClickListener(this);
             layout22_damage = (TextView) container.findViewById(R.id.layout22_splash_plus);
             layout22_life_positive = (ImageView) container.findViewById(R.id.layout22_life_positive);
             layout22_life_negative = (ImageView) container.findViewById(R.id.layout22_life_negative);
