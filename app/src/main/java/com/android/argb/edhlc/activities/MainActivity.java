@@ -341,6 +341,7 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
 
             case R.id.drawerItemAbout:
                 mDrawerLayout.closeDrawers();
+                Utils.createAboutDialog(view);
                 break;
         }
     }

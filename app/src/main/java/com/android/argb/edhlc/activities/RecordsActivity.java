@@ -303,6 +303,7 @@ public class RecordsActivity extends AppCompatActivity {
 
             case R.id.drawerItemAbout:
                 mDrawerLayout.closeDrawers();
+                Utils.createAboutDialog(view);
                 break;
         }
     }

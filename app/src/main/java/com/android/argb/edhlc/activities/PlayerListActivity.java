@@ -164,6 +164,7 @@ public class PlayerListActivity extends AppCompatActivity {
 
             case R.id.drawerItemAbout:
                 mPlayerDrawerLayout.closeDrawers();
+                Utils.createAboutDialog(view);
                 break;
         }
     }

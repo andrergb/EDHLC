@@ -89,4 +89,5 @@
     <string name="back">Back</string>
     <string name="tag_big">big</string>
     <string name="tag_small">small</string>
+    <string name="version">1.0</string>
 </resources>

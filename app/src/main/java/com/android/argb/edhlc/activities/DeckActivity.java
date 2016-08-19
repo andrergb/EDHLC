@@ -292,6 +292,7 @@ public class DeckActivity extends AppCompatActivity {
 
             case R.id.drawerItemAbout:
                 mDeckDrawerLayout.closeDrawers();
+                Utils.createAboutDialog(view);
                 break;
         }
     }

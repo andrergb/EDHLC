@@ -3,16 +3,22 @@ package com.android.argb.edhlc;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.CardView;
+import android.text.Html;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,7 +71,6 @@ public class Utils {
         listView.setLayoutParams(par);
         listView.requestLayout();
     }
-
 
     public static void toggleCardExpansion(Context context, final CardView card, TextView title, ImageView selector, int minHeight, int maxHeight) {
         if (card.getHeight() == minHeight) {
@@ -575,6 +580,70 @@ public class Utils {
         RoundedAvatarDrawable roundedImage = new RoundedAvatarDrawable(Utils.getSquareBitmap(bitmap));
         roundedImage.setAntiAlias(true);
         return roundedImage;
+    }
+
+    public static void createAboutDialog(final View view) {
+        @SuppressLint("InflateParams")
+        View aboutDialog = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_about, null);
+
+        TextView version = (TextView) aboutDialog.findViewById(R.id.version);
+        TextView aChart = (TextView) aboutDialog.findViewById(R.id.thirdPartyAChartEngine);
+        TextView crop = (TextView) aboutDialog.findViewById(R.id.thirdPartyCrop);
+        TextView picker = (TextView) aboutDialog.findViewById(R.id.thirdColorPicker);
+        TextView apache = (TextView) aboutDialog.findViewById(R.id.apache);
+
+        try {
+            PackageInfo pInfo = pInfo = view.getContext().getPackageManager().getPackageInfo(view.getContext().getPackageName(), 0);
+            version.setText(pInfo.versionName);
+        } catch (PackageManager.NameNotFoundException e) {
+            version.setText("");
+        }
+
+        aChart.setText(Html.fromHtml("<u>AChartEngine</u>"));
+        aChart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri uriUrl = Uri.parse("http://www.achartengine.org/index.html");
+                Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+                view.getContext().startActivity(launchBrowser);
+            }
+        });
+
+        crop.setText(Html.fromHtml("<u>Android CropImage</u>"));
+        crop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri uriUrl = Uri.parse("https://github.com/lvillani/android-cropimage");
+                Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+                view.getContext().startActivity(launchBrowser);
+            }
+        });
+
+        picker.setText(Html.fromHtml("<u>Android Stock Color Picker Library</u>"));
+        picker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri uriUrl = Uri.parse("https://github.com/woalk/android-colorpicker");
+                Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+                view.getContext().startActivity(launchBrowser);
+            }
+        });
+
+        apache.setText(Html.fromHtml("Licensed under Apache License v2.0.<br>You can obtain a copy of the license <u>here</u>."));
+        apache.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri uriUrl = Uri.parse("http://www.apache.org/licenses/LICENSE-2.0");
+                Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+                view.getContext().startActivity(launchBrowser);
+            }
+        });
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
+        alertDialogBuilder.setView(aboutDialog);
+        alertDialogBuilder.setTitle("");
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
     public static class customHistoryListViewAdapter extends BaseAdapter {
