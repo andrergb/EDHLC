@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -642,7 +643,37 @@ public class Utils {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
         alertDialogBuilder.setView(aboutDialog);
         alertDialogBuilder.setTitle("");
-        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        alertDialogBuilder.setNeutralButton("MORE", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+
+                AlertDialog.Builder alertDialogBuilder2 = new AlertDialog.Builder(view.getContext());
+                alertDialogBuilder2.setView(LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_about2, null));
+                alertDialogBuilder2.setTitle("");
+                alertDialogBuilder2.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                alertDialogBuilder2.setNegativeButton("BACK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        createAboutDialog(view);
+                    }
+                });
+                final AlertDialog alertDialog2 = alertDialogBuilder2.create();
+                alertDialog2.show();
+            }
+        });
+        final AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
 
