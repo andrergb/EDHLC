@@ -90,4 +90,8 @@
     <string name="tag_big">big</string>
     <string name="tag_small">small</string>
     <string name="version">1.0</string>
+    <string name="argb">ARGB</string>
+    <string name="starting_new_game">Starting New Game</string>
+    <string name="question_log_main">Do you want to log the current game before start a new game?</string>
+    <string name="question_log_log">Do you want to log the current setting?</string>
 </resources>

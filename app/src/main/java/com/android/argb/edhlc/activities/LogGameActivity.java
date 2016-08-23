@@ -222,7 +222,8 @@ public class LogGameActivity extends AppCompatActivity {
     private void showConfirmDialog() {
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setTitle("Log game");
-        alertDialogBuilder.setPositiveButton(R.string.ok,
+        alertDialogBuilder.setMessage(getString(R.string.question_log_log));
+        alertDialogBuilder.setPositiveButton("LOG",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         RecordsDataAccessObject recordDB = new RecordsDataAccessObject(LogGameActivity.this);
@@ -251,11 +252,33 @@ public class LogGameActivity extends AppCompatActivity {
                         recordDB.addRecord(new Record(records, Utils.getCurrentDate()));
                         recordDB.close();
 
-                        Intent intent = new Intent(LogGameActivity.this, MainActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
-                        LogGameActivity.this.finish();
+                        if (getIntent().getBooleanExtra("LOG_GAME_GO_TO_NEW_GAME", false)) {
+                            Intent intent = new Intent(LogGameActivity.this, NewGameActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            intent.putExtra("NEW_GAME_IS_VALID", true);
+                            intent.putExtra("NEW_GAME_TOTAL_PLAYER", totalPlayers);
 
+                            Intent intent2 = getIntent();
+                            intent.putExtra("NEW_GAME_PLAYER_1", intent2.getStringExtra("LOG_GAME_PLAYER_1"));
+                            intent.putExtra("NEW_GAME_DECK_1", intent2.getStringExtra("LOG_GAME_DECK_1"));
+                            intent.putExtra("NEW_GAME_PLAYER_2", intent2.getStringExtra("LOG_GAME_PLAYER_2"));
+                            intent.putExtra("NEW_GAME_DECK_2", intent2.getStringExtra("LOG_GAME_DECK_2"));
+                            if (totalPlayers >= 3) {
+                                intent.putExtra("NEW_GAME_PLAYER_3", intent2.getStringExtra("LOG_GAME_PLAYER_3"));
+                                intent.putExtra("NEW_GAME_DECK_3", intent2.getStringExtra("LOG_GAME_DECK_3"));
+                            }
+                            if (totalPlayers >= 4) {
+                                intent.putExtra("NEW_GAME_PLAYER_4", intent2.getStringExtra("LOG_GAME_PLAYER_4"));
+                                intent.putExtra("NEW_GAME_DECK_4", intent2.getStringExtra("LOG_GAME_DECK_4"));
+                            }
+                            startActivity(intent);
+                            LogGameActivity.this.finish();
+                        } else {
+                            Intent intent = new Intent(LogGameActivity.this, MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                            LogGameActivity.this.finish();
+                        }
                         dialog.cancel();
                     }
                 });

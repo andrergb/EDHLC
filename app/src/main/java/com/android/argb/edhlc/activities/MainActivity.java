@@ -911,30 +911,73 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
                     break;
 
                 case R.id.actions_new_game:
-                    Intent intent = new Intent(this, NewGameActivity.class);
-                    intent.putExtra("NEW_GAME_IS_VALID", isValidGame());
-
                     if (isValidGame()) {
-                        intent.putExtra("NEW_GAME_TOTAL_PLAYER", totalPlayers);
+                        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                        alertDialogBuilder.setTitle(getString(R.string.starting_new_game));
+                        alertDialogBuilder.setMessage(getString(R.string.question_log_main));
+                        alertDialogBuilder.setPositiveButton("NEW GAME",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
 
-                        intent.putExtra("NEW_GAME_PLAYER_1", activePlayer1.getPlayerDeck().getDeckOwnerName());
-                        intent.putExtra("NEW_GAME_DECK_1", activePlayer1.getPlayerDeck().getDeckName());
+                                        Intent intent = new Intent(MainActivity.this, NewGameActivity.class);
+                                        intent.putExtra("NEW_GAME_IS_VALID", isValidGame());
 
-                        intent.putExtra("NEW_GAME_PLAYER_2", activePlayer2.getPlayerDeck().getDeckOwnerName());
-                        intent.putExtra("NEW_GAME_DECK_2", activePlayer2.getPlayerDeck().getDeckName());
+                                        intent.putExtra("NEW_GAME_TOTAL_PLAYER", totalPlayers);
 
-                        if (totalPlayers >= 3) {
-                            intent.putExtra("NEW_GAME_PLAYER_3", activePlayer3.getPlayerDeck().getDeckOwnerName());
-                            intent.putExtra("NEW_GAME_DECK_3", activePlayer3.getPlayerDeck().getDeckName());
-                        }
-                        if (totalPlayers >= 4) {
-                            intent.putExtra("NEW_GAME_PLAYER_4", activePlayer4.getPlayerDeck().getDeckOwnerName());
-                            intent.putExtra("NEW_GAME_DECK_4", activePlayer4.getPlayerDeck().getDeckName());
-                        }
+                                        intent.putExtra("NEW_GAME_PLAYER_1", activePlayer1.getPlayerDeck().getDeckOwnerName());
+                                        intent.putExtra("NEW_GAME_DECK_1", activePlayer1.getPlayerDeck().getDeckName());
+
+                                        intent.putExtra("NEW_GAME_PLAYER_2", activePlayer2.getPlayerDeck().getDeckOwnerName());
+                                        intent.putExtra("NEW_GAME_DECK_2", activePlayer2.getPlayerDeck().getDeckName());
+
+                                        if (totalPlayers >= 3) {
+                                            intent.putExtra("NEW_GAME_PLAYER_3", activePlayer3.getPlayerDeck().getDeckOwnerName());
+                                            intent.putExtra("NEW_GAME_DECK_3", activePlayer3.getPlayerDeck().getDeckName());
+                                        }
+                                        if (totalPlayers >= 4) {
+                                            intent.putExtra("NEW_GAME_PLAYER_4", activePlayer4.getPlayerDeck().getDeckOwnerName());
+                                            intent.putExtra("NEW_GAME_DECK_4", activePlayer4.getPlayerDeck().getDeckName());
+                                        }
+
+                                        startActivity(intent);
+                                        MainActivity.this.finish();
+                                    }
+                                });
+                        alertDialogBuilder.setNegativeButton("LOG GAME",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        Intent intentLog = new Intent(MainActivity.this, LogGameActivity.class);
+                                        intentLog.putExtra("LOG_GAME_TOTAL_PLAYERS", totalPlayers);
+                                        intentLog.putExtra("LOG_GAME_GO_TO_NEW_GAME", true);
+
+                                        intentLog.putExtra("LOG_GAME_PLAYER_1", activePlayer1.getPlayerDeck().getDeckOwnerName());
+                                        intentLog.putExtra("LOG_GAME_DECK_1", activePlayer1.getPlayerDeck().getDeckName());
+
+                                        intentLog.putExtra("LOG_GAME_PLAYER_2", activePlayer2.getPlayerDeck().getDeckOwnerName());
+                                        intentLog.putExtra("LOG_GAME_DECK_2", activePlayer2.getPlayerDeck().getDeckName());
+
+                                        if (totalPlayers >= 3) {
+                                            intentLog.putExtra("LOG_GAME_PLAYER_3", activePlayer3.getPlayerDeck().getDeckOwnerName());
+                                            intentLog.putExtra("LOG_GAME_DECK_3", activePlayer3.getPlayerDeck().getDeckName());
+                                        }
+                                        if (totalPlayers >= 4) {
+                                            intentLog.putExtra("LOG_GAME_PLAYER_4", activePlayer4.getPlayerDeck().getDeckOwnerName());
+                                            intentLog.putExtra("LOG_GAME_DECK_4", activePlayer4.getPlayerDeck().getDeckName());
+                                        }
+
+                                        startActivity(intentLog);
+                                        MainActivity.this.finish();
+                                    }
+                                });
+                        final AlertDialog alertDialog = alertDialogBuilder.create();
+                        alertDialog.show();
+                    } else {
+                        Intent intent = new Intent(MainActivity.this, NewGameActivity.class);
+                        intent.putExtra("NEW_GAME_IS_VALID", isValidGame());
+                        startActivity(intent);
+                        this.finish();
                     }
-
-                    startActivity(intent);
-                    this.finish();
                     break;
 
                 case R.id.actions_log_game:

@@ -9,7 +9,7 @@
     <dimen name="elevationMiniFAB">4dp</dimen>
 
     <dimen name="crown_size_expanded">24dp</dimen>
-    <dimen name="crown_size_collapsed">12dp</dimen>
+    <dimen name="crown_size_collapsed">14dp</dimen>
 
     <dimen name="player_life">74sp</dimen>
     <dimen name="player_damage">14sp</dimen>
