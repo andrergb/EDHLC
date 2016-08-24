@@ -17,6 +17,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.transition.Scene;
 import android.transition.TransitionInflater;
@@ -32,6 +33,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.RotateAnimation;
 import android.view.animation.ScaleAnimation;
 import android.widget.Chronometer;
 import android.widget.EditText;
@@ -113,7 +115,10 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
     private int currentScene;
     private int previousScene;
     private float currentScaleLife = 1.0f;
+    private float currentRotation11 = 0f;
+    private float currentRotation12 = 0f;
 
+    private CardView layout11_card_view;
     private ImageView layout11_throne;
     private TextView layout11_name;
     private TextView layout11_deck;
@@ -138,6 +143,7 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
     private ImageView layout11_positive_EDH4;
     private TextView layout11_edh4_name;
 
+    private CardView layout12_card_view;
     private ImageView layout12_throne;
     private TextView layout12_name;
     private TextView layout12_deck;
@@ -351,10 +357,12 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
             switch (view.getId()) {
                 //Player 11
                 case R.id.layout11_header:
-                    if (view.getTag().toString().equalsIgnoreCase(getString(R.string.tag_big)))
-                        goToScene(this.currentSceneOverview);
-                    else
-                        goToScene(this.currentScene11);
+//                    if (view.getTag().toString().equalsIgnoreCase(getString(R.string.tag_big)))
+//                        goToScene(this.currentSceneOverview);
+//                    else
+//                        goToScene(this.currentScene11);
+                    currentRotation11 = (container.findViewById(R.id.layout11_card_view).getRotation() + 180f) % 360;
+                    animateRotation(layout11_card_view);
                     break;
                 case R.id.layout11_life:
                     if (view.getTag().toString().equalsIgnoreCase(getString(R.string.tag_big)))
@@ -471,10 +479,14 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
 
                 //Player 12
                 case R.id.layout12_header:
-                    if (view.getTag().toString().equalsIgnoreCase(getString(R.string.tag_big)))
-                        goToScene(this.currentSceneOverview);
-                    else
-                        goToScene(this.currentScene12);
+//                    if (view.getTag().toString().equalsIgnoreCase(getString(R.string.tag_big)))
+//                        goToScene(this.currentSceneOverview);
+//                    else
+//                        goToScene(this.currentScene12);
+                    if (totalPlayers > 2) {
+                        currentRotation12 = (container.findViewById(R.id.layout12_card_view).getRotation() + 180f) % 360;
+                        animateRotation(layout12_card_view);
+                    }
                     break;
                 case R.id.layout12_life:
                     if (view.getTag().toString().equalsIgnoreCase(getString(R.string.tag_big)))
@@ -591,10 +603,10 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
 
                 //Player 21
                 case R.id.layout21_header:
-                    if (view.getTag().toString().equalsIgnoreCase(getString(R.string.tag_big)))
-                        goToScene(this.currentSceneOverview);
-                    else
-                        goToScene(this.currentScene21);
+//                    if (view.getTag().toString().equalsIgnoreCase(getString(R.string.tag_big)))
+//                        goToScene(this.currentSceneOverview);
+//                    else
+//                        goToScene(this.currentScene21);
                     break;
                 case R.id.layout21_life:
                     if (view.getTag().toString().equalsIgnoreCase(getString(R.string.tag_big)))
@@ -711,10 +723,10 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
 
                 //Player 22
                 case R.id.layout22_header:
-                    if (view.getTag().toString().equalsIgnoreCase(getString(R.string.tag_big)))
-                        goToScene(this.currentSceneOverview);
-                    else
-                        goToScene(this.currentScene22);
+//                    if (view.getTag().toString().equalsIgnoreCase(getString(R.string.tag_big)))
+//                        goToScene(this.currentSceneOverview);
+//                    else
+//                        goToScene(this.currentScene22);
                     break;
                 case R.id.layout22_life:
                     if (view.getTag().toString().equalsIgnoreCase(getString(R.string.tag_big)))
@@ -1322,6 +1334,11 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
         }
     }
 
+    private void animateRotation(CardView ln) {
+        ln.clearAnimation();
+        ln.setAnimation(getRotationAnimation(ln));
+    }
+
     private void createDrawer() {
         pBar = (RelativeLayout) findViewById(R.id.loading_progress);
 
@@ -1367,6 +1384,7 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
     }
 
     private void createLayout11() {
+        layout11_card_view = (CardView) container.findViewById(R.id.layout11_card_view);
         layout11_throne = (ImageView) container.findViewById(R.id.layout11_throne);
         layout11_throne.setColorFilter(ContextCompat.getColor(this, R.color.accent_color), PorterDuff.Mode.SRC_IN);
         layout11_name = (TextView) container.findViewById(R.id.layout11_name);
@@ -1417,6 +1435,7 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
     }
 
     private void createLayout12() {
+        layout12_card_view = (CardView) container.findViewById(R.id.layout12_card_view);
         layout12_throne = (ImageView) container.findViewById(R.id.layout12_throne);
         layout12_throne.setColorFilter(ContextCompat.getColor(this, R.color.accent_color), PorterDuff.Mode.SRC_IN);
         layout12_name = (TextView) container.findViewById(R.id.layout12_name);
@@ -1680,6 +1699,32 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
             }
         });
         return scale;
+    }
+
+    private Animation getRotationAnimation(final CardView cardView) {
+        Animation rotation = new RotateAnimation(0f, 180f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        rotation.setDuration(500);
+        rotation.setInterpolator(this, android.R.anim.overshoot_interpolator);
+        rotation.setFillAfter(false);
+        rotation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                cardView.clearAnimation();
+                cardView.setRotation((cardView.getRotation() + 180f) % 360);
+                isInAnimation = false;
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationStart(Animation animation) {
+                isInAnimation = true;
+            }
+        });
+        return rotation;
     }
 
     private Animation getScaleAnimation(final TextView tv, final float toScale, final int type) {
@@ -2237,6 +2282,7 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
 
     private void updateLayout11() {
         updateDethroneIcon();
+        layout11_card_view.setRotation(currentRotation11);
         layout11_name.setText(activePlayer1.getPlayerDeck().getDeckOwnerName());
         layout11_deck.setText(activePlayer1.getPlayerDeck().getDeckName());
         layout11_life.setText(String.format(Locale.US, "%d", activePlayer1.getPlayerLife()));
@@ -2281,6 +2327,7 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
 
     private void updateLayout12() {
         updateDethroneIcon();
+        layout12_card_view.setRotation(currentRotation12);
         layout12_name.setText(activePlayer2.getPlayerDeck().getDeckOwnerName());
         layout12_deck.setText(activePlayer2.getPlayerDeck().getDeckName());
         layout12_life.setText(String.format(Locale.US, "%d", activePlayer2.getPlayerLife()));
