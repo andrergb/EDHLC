@@ -19,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.argb.edhlc.Constants;
 import com.android.argb.edhlc.R;
 import com.android.argb.edhlc.Utils;
 import com.android.argb.edhlc.adapters.NewGameListAdapter;
@@ -134,6 +135,7 @@ public class NewGameActivity extends AppCompatActivity {
         createStatusBar();
         createToolbar();
         createLayout();
+        updateLayout();
     }
 
     @Override
@@ -152,8 +154,13 @@ public class NewGameActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        updateLayout();
         mActionBar.setTitle("New Game (" + getCurrentTotalPlayers() + ")");
+
+        if (getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getInt(Constants.SCREEN_ON, 0) == 1) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        } else {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
     }
 
 

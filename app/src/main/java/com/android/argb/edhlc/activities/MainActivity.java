@@ -64,10 +64,6 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity implements View.OnLongClickListener {
 
     //HistoryThreads
-    private static Thread mThreadLife1;
-    private static Thread mThreadLife2;
-    private static Thread mThreadLife3;
-    private static Thread mThreadLife4;
     private static AsyncTask mAsyncTaskLife1;
     private static AsyncTask mAsyncTaskLife2;
     private static AsyncTask mAsyncTaskLife3;
@@ -392,7 +388,7 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
                     if (activePlayer1.getPlayerEDH1() < Constants.MAX_EDH) {
                         activePlayer1.setPlayerLife(activePlayer1.getPlayerLife() - 1);
                         activePlayer1.setPlayerEDH1(activePlayer1.getPlayerEDH1() + 1);
-                        historyHandler(activePlayer1);
+                        new HistoryHandler(activePlayer1).execute();
                         updateLayout11();
                         adjustLifeSize(activePlayer1.getPlayerTag(), layout11_life);
                         layout11_life.setAnimation(getBounceAnimation(false, 5));
@@ -403,7 +399,7 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
                     if (activePlayer1.getPlayerEDH1() > Constants.MIN_EDH) {
                         activePlayer1.setPlayerLife(activePlayer1.getPlayerLife() + 1);
                         activePlayer1.setPlayerEDH1(activePlayer1.getPlayerEDH1() - 1);
-                        historyHandler(activePlayer1);
+                        new HistoryHandler(activePlayer1).execute();
                         updateLayout11();
                         adjustLifeSize(activePlayer1.getPlayerTag(), layout11_life);
                         layout11_life.setAnimation(getBounceAnimation(true, 5));
@@ -414,7 +410,7 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
                     if (activePlayer1.getPlayerEDH2() < Constants.MAX_EDH) {
                         activePlayer1.setPlayerLife(activePlayer1.getPlayerLife() - 1);
                         activePlayer1.setPlayerEDH2(activePlayer1.getPlayerEDH2() + 1);
-                        historyHandler(activePlayer1);
+                        new HistoryHandler(activePlayer1).execute();
                         updateLayout11();
                         adjustLifeSize(activePlayer1.getPlayerTag(), layout11_life);
                         layout11_life.setAnimation(getBounceAnimation(false, 5));
@@ -425,7 +421,7 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
                     if (activePlayer1.getPlayerEDH2() > Constants.MIN_EDH) {
                         activePlayer1.setPlayerLife(activePlayer1.getPlayerLife() + 1);
                         activePlayer1.setPlayerEDH2(activePlayer1.getPlayerEDH2() - 1);
-                        historyHandler(activePlayer1);
+                        new HistoryHandler(activePlayer1).execute();
                         updateLayout11();
                         adjustLifeSize(activePlayer1.getPlayerTag(), layout11_life);
                         layout11_life.setAnimation(getBounceAnimation(true, 5));
@@ -436,7 +432,7 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
                     if (activePlayer1.getPlayerEDH3() < Constants.MAX_EDH) {
                         activePlayer1.setPlayerLife(activePlayer1.getPlayerLife() - 1);
                         activePlayer1.setPlayerEDH3(activePlayer1.getPlayerEDH3() + 1);
-                        historyHandler(activePlayer1);
+                        new HistoryHandler(activePlayer1).execute();
                         updateLayout11();
                         adjustLifeSize(activePlayer1.getPlayerTag(), layout11_life);
                         layout11_life.setAnimation(getBounceAnimation(false, 5));
@@ -447,7 +443,7 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
                     if (activePlayer1.getPlayerEDH3() > Constants.MIN_EDH) {
                         activePlayer1.setPlayerLife(activePlayer1.getPlayerLife() + 1);
                         activePlayer1.setPlayerEDH3(activePlayer1.getPlayerEDH3() - 1);
-                        historyHandler(activePlayer1);
+                        new HistoryHandler(activePlayer1).execute();
                         updateLayout11();
                         adjustLifeSize(activePlayer1.getPlayerTag(), layout11_life);
                         layout11_life.setAnimation(getBounceAnimation(true, 5));
@@ -458,7 +454,7 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
                     if (activePlayer1.getPlayerEDH4() < Constants.MAX_EDH) {
                         activePlayer1.setPlayerLife(activePlayer1.getPlayerLife() - 1);
                         activePlayer1.setPlayerEDH4(activePlayer1.getPlayerEDH4() + 1);
-                        historyHandler(activePlayer1);
+                        new HistoryHandler(activePlayer1).execute();
                         updateLayout11();
                         adjustLifeSize(activePlayer1.getPlayerTag(), layout11_life);
                         layout11_life.setAnimation(getBounceAnimation(false, 5));
@@ -469,7 +465,7 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
                     if (activePlayer1.getPlayerEDH4() > Constants.MIN_EDH) {
                         activePlayer1.setPlayerLife(activePlayer1.getPlayerLife() + 1);
                         activePlayer1.setPlayerEDH4(activePlayer1.getPlayerEDH4() - 1);
-                        historyHandler(activePlayer1);
+                        new HistoryHandler(activePlayer1).execute();
                         updateLayout11();
                         adjustLifeSize(activePlayer1.getPlayerTag(), layout11_life);
                         layout11_life.setAnimation(getBounceAnimation(true, 5));
@@ -516,7 +512,7 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
                     if (activePlayer2.getPlayerEDH1() < Constants.MAX_EDH) {
                         activePlayer2.setPlayerLife(activePlayer2.getPlayerLife() - 1);
                         activePlayer2.setPlayerEDH1(activePlayer2.getPlayerEDH1() + 1);
-                        historyHandler(activePlayer2);
+                        new HistoryHandler(activePlayer2).execute();
                         updateLayout12();
                         adjustLifeSize(activePlayer2.getPlayerTag(), layout12_life);
                         layout12_life.setAnimation(getBounceAnimation(false, 5));
@@ -527,7 +523,7 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
                     if (activePlayer2.getPlayerEDH1() > Constants.MIN_EDH) {
                         activePlayer2.setPlayerLife(activePlayer2.getPlayerLife() + 1);
                         activePlayer2.setPlayerEDH1(activePlayer2.getPlayerEDH1() - 1);
-                        historyHandler(activePlayer2);
+                        new HistoryHandler(activePlayer2).execute();
                         updateLayout12();
                         adjustLifeSize(activePlayer2.getPlayerTag(), layout12_life);
                         layout12_life.setAnimation(getBounceAnimation(true, 5));
@@ -538,7 +534,7 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
                     if (activePlayer2.getPlayerEDH2() < Constants.MAX_EDH) {
                         activePlayer2.setPlayerLife(activePlayer2.getPlayerLife() - 1);
                         activePlayer2.setPlayerEDH2(activePlayer2.getPlayerEDH2() + 1);
-                        historyHandler(activePlayer2);
+                        new HistoryHandler(activePlayer2).execute();
                         updateLayout12();
                         adjustLifeSize(activePlayer2.getPlayerTag(), layout12_life);
                         layout12_life.setAnimation(getBounceAnimation(false, 5));
@@ -549,7 +545,7 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
                     if (activePlayer2.getPlayerEDH2() > Constants.MIN_EDH) {
                         activePlayer2.setPlayerLife(activePlayer2.getPlayerLife() + 1);
                         activePlayer2.setPlayerEDH2(activePlayer2.getPlayerEDH2() - 1);
-                        historyHandler(activePlayer2);
+                        new HistoryHandler(activePlayer2).execute();
                         updateLayout12();
                         adjustLifeSize(activePlayer2.getPlayerTag(), layout12_life);
                         layout12_life.setAnimation(getBounceAnimation(true, 5));
@@ -560,7 +556,7 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
                     if (activePlayer2.getPlayerEDH3() < Constants.MAX_EDH) {
                         activePlayer2.setPlayerLife(activePlayer2.getPlayerLife() - 1);
                         activePlayer2.setPlayerEDH3(activePlayer2.getPlayerEDH3() + 1);
-                        historyHandler(activePlayer2);
+                        new HistoryHandler(activePlayer2).execute();
                         updateLayout12();
                         adjustLifeSize(activePlayer2.getPlayerTag(), layout12_life);
                         layout12_life.setAnimation(getBounceAnimation(false, 5));
@@ -571,7 +567,7 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
                     if (activePlayer2.getPlayerEDH3() > Constants.MIN_EDH) {
                         activePlayer2.setPlayerLife(activePlayer2.getPlayerLife() + 1);
                         activePlayer2.setPlayerEDH3(activePlayer2.getPlayerEDH3() - 1);
-                        historyHandler(activePlayer2);
+                        new HistoryHandler(activePlayer2).execute();
                         updateLayout12();
                         adjustLifeSize(activePlayer2.getPlayerTag(), layout12_life);
                         layout12_life.setAnimation(getBounceAnimation(true, 5));
@@ -582,7 +578,7 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
                     if (activePlayer2.getPlayerEDH4() < Constants.MAX_EDH) {
                         activePlayer2.setPlayerLife(activePlayer2.getPlayerLife() - 1);
                         activePlayer2.setPlayerEDH4(activePlayer2.getPlayerEDH4() + 1);
-                        historyHandler(activePlayer2);
+                        new HistoryHandler(activePlayer2).execute();
                         updateLayout12();
                         adjustLifeSize(activePlayer2.getPlayerTag(), layout12_life);
                         layout12_life.setAnimation(getBounceAnimation(false, 5));
@@ -593,7 +589,7 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
                     if (activePlayer2.getPlayerEDH4() > Constants.MIN_EDH) {
                         activePlayer2.setPlayerLife(activePlayer2.getPlayerLife() + 1);
                         activePlayer2.setPlayerEDH4(activePlayer2.getPlayerEDH4() - 1);
-                        historyHandler(activePlayer2);
+                        new HistoryHandler(activePlayer2).execute();
                         updateLayout12();
                         adjustLifeSize(activePlayer2.getPlayerTag(), layout12_life);
                         layout12_life.setAnimation(getBounceAnimation(true, 5));
@@ -636,7 +632,7 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
                     if (activePlayer3.getPlayerEDH1() < Constants.MAX_EDH) {
                         activePlayer3.setPlayerLife(activePlayer3.getPlayerLife() - 1);
                         activePlayer3.setPlayerEDH1(activePlayer3.getPlayerEDH1() + 1);
-                        historyHandler(activePlayer3);
+                        new HistoryHandler(activePlayer3).execute();
                         updateLayout21();
                         adjustLifeSize(activePlayer3.getPlayerTag(), layout21_life);
                         layout21_life.setAnimation(getBounceAnimation(false, 5));
@@ -647,7 +643,7 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
                     if (activePlayer3.getPlayerEDH1() > Constants.MIN_EDH) {
                         activePlayer3.setPlayerLife(activePlayer3.getPlayerLife() + 1);
                         activePlayer3.setPlayerEDH1(activePlayer3.getPlayerEDH1() - 1);
-                        historyHandler(activePlayer3);
+                        new HistoryHandler(activePlayer3).execute();
                         updateLayout21();
                         adjustLifeSize(activePlayer3.getPlayerTag(), layout21_life);
                         layout21_life.setAnimation(getBounceAnimation(true, 5));
@@ -658,7 +654,7 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
                     if (activePlayer3.getPlayerEDH2() < Constants.MAX_EDH) {
                         activePlayer3.setPlayerLife(activePlayer3.getPlayerLife() - 1);
                         activePlayer3.setPlayerEDH2(activePlayer3.getPlayerEDH2() + 1);
-                        historyHandler(activePlayer3);
+                        new HistoryHandler(activePlayer3).execute();
                         updateLayout21();
                         adjustLifeSize(activePlayer3.getPlayerTag(), layout21_life);
                         layout21_life.setAnimation(getBounceAnimation(false, 5));
@@ -669,7 +665,7 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
                     if (activePlayer3.getPlayerEDH2() > Constants.MIN_EDH) {
                         activePlayer3.setPlayerLife(activePlayer3.getPlayerLife() + 1);
                         activePlayer3.setPlayerEDH2(activePlayer3.getPlayerEDH2() - 1);
-                        historyHandler(activePlayer3);
+                        new HistoryHandler(activePlayer3).execute();
                         updateLayout21();
                         adjustLifeSize(activePlayer3.getPlayerTag(), layout21_life);
                         layout21_life.setAnimation(getBounceAnimation(true, 5));
@@ -680,7 +676,7 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
                     if (activePlayer3.getPlayerEDH3() < Constants.MAX_EDH) {
                         activePlayer3.setPlayerLife(activePlayer3.getPlayerLife() - 1);
                         activePlayer3.setPlayerEDH3(activePlayer3.getPlayerEDH3() + 1);
-                        historyHandler(activePlayer3);
+                        new HistoryHandler(activePlayer3).execute();
                         updateLayout21();
                         adjustLifeSize(activePlayer3.getPlayerTag(), layout21_life);
                         layout21_life.setAnimation(getBounceAnimation(false, 5));
@@ -691,7 +687,7 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
                     if (activePlayer3.getPlayerEDH3() > Constants.MIN_EDH) {
                         activePlayer3.setPlayerLife(activePlayer3.getPlayerLife() + 1);
                         activePlayer3.setPlayerEDH3(activePlayer3.getPlayerEDH3() - 1);
-                        historyHandler(activePlayer3);
+                        new HistoryHandler(activePlayer3).execute();
                         updateLayout21();
                         adjustLifeSize(activePlayer3.getPlayerTag(), layout21_life);
                         layout21_life.setAnimation(getBounceAnimation(true, 5));
@@ -702,7 +698,7 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
                     if (activePlayer3.getPlayerEDH4() < Constants.MAX_EDH) {
                         activePlayer3.setPlayerLife(activePlayer3.getPlayerLife() - 1);
                         activePlayer3.setPlayerEDH4(activePlayer3.getPlayerEDH4() + 1);
-                        historyHandler(activePlayer3);
+                        new HistoryHandler(activePlayer3).execute();
                         updateLayout21();
                         adjustLifeSize(activePlayer3.getPlayerTag(), layout21_life);
                         layout21_life.setAnimation(getBounceAnimation(false, 5));
@@ -713,7 +709,7 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
                     if (activePlayer3.getPlayerEDH4() > Constants.MIN_EDH) {
                         activePlayer3.setPlayerLife(activePlayer3.getPlayerLife() + 1);
                         activePlayer3.setPlayerEDH4(activePlayer3.getPlayerEDH4() - 1);
-                        historyHandler(activePlayer3);
+                        new HistoryHandler(activePlayer3).execute();
                         updateLayout21();
                         adjustLifeSize(activePlayer3.getPlayerTag(), layout21_life);
                         layout21_life.setAnimation(getBounceAnimation(true, 5));
@@ -758,7 +754,7 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
                     if (activePlayer4.getPlayerEDH1() < Constants.MAX_EDH) {
                         activePlayer4.setPlayerLife(activePlayer4.getPlayerLife() - 1);
                         activePlayer4.setPlayerEDH1(activePlayer4.getPlayerEDH1() + 1);
-                        historyHandler(activePlayer4);
+                        new HistoryHandler(activePlayer4).execute();
                         updateLayout22();
                         adjustLifeSize(activePlayer4.getPlayerTag(), layout22_life);
                         layout22_life.setAnimation(getBounceAnimation(false, 5));
@@ -769,7 +765,7 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
                     if (activePlayer4.getPlayerEDH1() > Constants.MIN_EDH) {
                         activePlayer4.setPlayerLife(activePlayer4.getPlayerLife() + 1);
                         activePlayer4.setPlayerEDH1(activePlayer4.getPlayerEDH1() - 1);
-                        historyHandler(activePlayer4);
+                        new HistoryHandler(activePlayer4).execute();
                         updateLayout22();
                         adjustLifeSize(activePlayer4.getPlayerTag(), layout22_life);
                         layout22_life.setAnimation(getBounceAnimation(true, 5));
@@ -780,7 +776,7 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
                     if (activePlayer4.getPlayerEDH2() < Constants.MAX_EDH) {
                         activePlayer4.setPlayerLife(activePlayer4.getPlayerLife() - 1);
                         activePlayer4.setPlayerEDH2(activePlayer4.getPlayerEDH2() + 1);
-                        historyHandler(activePlayer4);
+                        new HistoryHandler(activePlayer4).execute();
                         updateLayout22();
                         adjustLifeSize(activePlayer4.getPlayerTag(), layout22_life);
                         layout22_life.setAnimation(getBounceAnimation(false, 5));
@@ -791,7 +787,7 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
                     if (activePlayer4.getPlayerEDH2() > Constants.MIN_EDH) {
                         activePlayer4.setPlayerLife(activePlayer4.getPlayerLife() + 1);
                         activePlayer4.setPlayerEDH2(activePlayer4.getPlayerEDH2() - 1);
-                        historyHandler(activePlayer4);
+                        new HistoryHandler(activePlayer4).execute();
                         updateLayout22();
                         adjustLifeSize(activePlayer4.getPlayerTag(), layout22_life);
                         layout22_life.setAnimation(getBounceAnimation(true, 5));
@@ -802,7 +798,7 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
                     if (activePlayer4.getPlayerEDH3() < Constants.MAX_EDH) {
                         activePlayer4.setPlayerLife(activePlayer4.getPlayerLife() - 1);
                         activePlayer4.setPlayerEDH3(activePlayer4.getPlayerEDH3() + 1);
-                        historyHandler(activePlayer4);
+                        new HistoryHandler(activePlayer4).execute();
                         updateLayout22();
                         adjustLifeSize(activePlayer4.getPlayerTag(), layout22_life);
                         layout22_life.setAnimation(getBounceAnimation(false, 5));
@@ -813,7 +809,7 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
                     if (activePlayer4.getPlayerEDH3() > Constants.MIN_EDH) {
                         activePlayer4.setPlayerLife(activePlayer4.getPlayerLife() + 1);
                         activePlayer4.setPlayerEDH3(activePlayer4.getPlayerEDH3() - 1);
-                        historyHandler(activePlayer4);
+                        new HistoryHandler(activePlayer4).execute();
                         updateLayout22();
                         adjustLifeSize(activePlayer4.getPlayerTag(), layout22_life);
                         layout22_life.setAnimation(getBounceAnimation(true, 5));
@@ -824,7 +820,7 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
                     if (activePlayer4.getPlayerEDH4() < Constants.MAX_EDH) {
                         activePlayer4.setPlayerLife(activePlayer4.getPlayerLife() - 1);
                         activePlayer4.setPlayerEDH4(activePlayer4.getPlayerEDH4() + 1);
-                        historyHandler(activePlayer4);
+                        new HistoryHandler(activePlayer4).execute();
                         updateLayout22();
                         adjustLifeSize(activePlayer4.getPlayerTag(), layout22_life);
                         layout22_life.setAnimation(getBounceAnimation(false, 5));
@@ -835,7 +831,7 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
                     if (activePlayer4.getPlayerEDH4() > Constants.MIN_EDH) {
                         activePlayer4.setPlayerLife(activePlayer4.getPlayerLife() + 1);
                         activePlayer4.setPlayerEDH4(activePlayer4.getPlayerEDH4() - 1);
-                        historyHandler(activePlayer4);
+                        new HistoryHandler(activePlayer4).execute();
                         updateLayout22();
                         adjustLifeSize(activePlayer4.getPlayerTag(), layout22_life);
                         layout22_life.setAnimation(getBounceAnimation(true, 5));
@@ -1828,86 +1824,6 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
         }
 
         setupOptionMenu();
-    }
-
-    private void historyHandler(final ActivePlayer player) {
-        Thread threadLife;
-        final int playerTag;
-
-        if (player.getPlayerTag() == 0) {
-            threadLife = mThreadLife1;
-            playerTag = 0;
-        } else if (player.getPlayerTag() == 1) {
-            threadLife = mThreadLife2;
-            playerTag = 1;
-        } else if (player.getPlayerTag() == 2) {
-            threadLife = mThreadLife3;
-            playerTag = 2;
-        } else if (player.getPlayerTag() == 3) {
-            threadLife = mThreadLife4;
-            playerTag = 3;
-        } else {
-            threadLife = null;
-            playerTag = -1;
-        }
-
-        if (threadLife != null) {
-            threadLife.interrupt();
-        }
-
-
-        threadLife = new Thread(
-                new Runnable() {
-                    @SuppressWarnings("ConstantConditions")
-                    public void run() {
-                        try {
-                            int latestSavedLife;
-                            String latestSavedLifePreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString(Constants.PLAYER_HISTORY_LIFE + playerTag, Constants.INITIAL_PLAYER_LIFE);
-                            if (!latestSavedLifePreferences.isEmpty()) {
-                                String[] latestSavedLifeArray = latestSavedLifePreferences.split("_");
-                                latestSavedLife = Integer.valueOf(latestSavedLifeArray[latestSavedLifeArray.length - 1]);
-                            } else {
-                                latestSavedLife = player.getPlayerLife();
-                            }
-
-                            String latestSavedEDH;
-                            String latestSavedEDHPreferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString(Constants.PLAYER_EDH_PREFIX + playerTag, "0@0@0@0");
-                            if (!latestSavedEDHPreferences.isEmpty()) {
-                                String[] latestSavedLifeArray = latestSavedEDHPreferences.split("_");
-                                latestSavedEDH = latestSavedLifeArray[latestSavedLifeArray.length - 1];
-                            } else {
-                                latestSavedEDH = player.getPlayerEDH1() + "@" + player.getPlayerEDH2() + "@" + player.getPlayerEDH3() + "@" + player.getPlayerEDH4();
-                            }
-
-                            Thread.sleep(2000);
-
-                            int currentLife = player.getPlayerLife();
-                            String currentEdh = player.getPlayerEDH1() + "@" + player.getPlayerEDH2() + "@" + player.getPlayerEDH3() + "@" + player.getPlayerEDH4();
-
-                            if ((currentLife - latestSavedLife) != 0 || !currentEdh.equalsIgnoreCase(latestSavedEDH)) {
-                                String lifeToBeSaved = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).getString(Constants.PLAYER_HISTORY_LIFE + playerTag, Constants.INITIAL_PLAYER_LIFE);
-                                lifeToBeSaved = lifeToBeSaved + "_" + currentLife;
-                                getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString(Constants.PLAYER_HISTORY_LIFE + playerTag, lifeToBeSaved).apply();
-
-                                String edhToBeSaved = latestSavedEDHPreferences + "_" + currentEdh;
-                                getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE).edit().putString(Constants.PLAYER_EDH_PREFIX + playerTag, edhToBeSaved).apply();
-                            }
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-        );
-        threadLife.start();
-
-        if (player.getPlayerTag() == 0)
-            mThreadLife1 = threadLife;
-        else if (player.getPlayerTag() == 1)
-            mThreadLife2 = threadLife;
-        else if (player.getPlayerTag() == 2)
-            mThreadLife3 = threadLife;
-        else if (player.getPlayerTag() == 3)
-            mThreadLife4 = threadLife;
     }
 
     private boolean isPlayerActiveAndAlive(int playerTag) {
