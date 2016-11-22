@@ -1159,6 +1159,19 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
     }
 
     private void adjustLifeSize(int player, TextView lifeValue) {
+
+        /*lifeValue.setOnTouchListener(new View.OnTouchListener(){
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                    //restartSliderMenuTimer();
+                } else {
+                    //stopSliderMenuTimer();
+                }
+                return false;
+            }
+        });*/
+
         float toScale;
         TypedValue outValue = new TypedValue();
         //TWO DIGITS

@@ -163,7 +163,6 @@ public class NewGameActivity extends AppCompatActivity {
         }
     }
 
-
     private void createLayout() {
         TextView atLeast2 = (TextView) findViewById(R.id.atLeast2);
         assert atLeast2 != null;
@@ -188,7 +187,6 @@ public class NewGameActivity extends AppCompatActivity {
             listViewNewGame.setVisibility(View.VISIBLE);
             atLeast2.setVisibility(View.GONE);
         }
-
 
         playersList = new ArrayList<>();
         mPlayersAdapter = new NewGameListAdapter(this, playersList);
@@ -336,7 +334,7 @@ public class NewGameActivity extends AppCompatActivity {
 
             playersList.add(new String[]{"PLAYER", currentPlayer, playerCheck});
 
-            List<Deck> allDeckCurrentPlayer = decksDb.getAllDeckByPlayerName(allPlayers.get(i).getPlayerName());
+            List<Deck> allDeckCurrentPlayer = decksDb.getAllDeckByPlayerName(currentPlayer);
             for (int j = 0; j < allDeckCurrentPlayer.size(); j++) {
 
                 String currentDeck = allDeckCurrentPlayer.get(j).getDeckName();
@@ -350,15 +348,15 @@ public class NewGameActivity extends AppCompatActivity {
                     String deck3 = totalPlayers >= 3 ? intent.getStringExtra("NEW_GAME_DECK_3") : "";
                     String deck4 = totalPlayers >= 4 ? intent.getStringExtra("NEW_GAME_DECK_4") : "";
 
-                    if (currentDeck.equalsIgnoreCase(deck1))
+                    if (currentDeck.equalsIgnoreCase(deck1) && currentPlayer.equalsIgnoreCase(intent.getStringExtra("NEW_GAME_PLAYER_1")))
                         deckCheck = "TRUE";
-                    if (currentDeck.equalsIgnoreCase(deck2))
+                    if (currentDeck.equalsIgnoreCase(deck2) && currentPlayer.equalsIgnoreCase(intent.getStringExtra("NEW_GAME_PLAYER_2")))
                         deckCheck = "TRUE";
                     if (totalPlayers >= 3)
-                        if (currentDeck.equalsIgnoreCase(deck3))
+                        if (currentDeck.equalsIgnoreCase(deck3) && currentPlayer.equalsIgnoreCase(intent.getStringExtra("NEW_GAME_PLAYER_3")))
                             deckCheck = "TRUE";
                     if (totalPlayers >= 4)
-                        if (currentDeck.equalsIgnoreCase(deck4))
+                        if (currentDeck.equalsIgnoreCase(deck4) && currentPlayer.equalsIgnoreCase(intent.getStringExtra("NEW_GAME_PLAYER_4")))
                             deckCheck = "TRUE";
 
                 }

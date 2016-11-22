@@ -73,7 +73,6 @@
 
             <!-- Header 2 players -->
             <TextView
-                android:id="@+id/textDateRecordCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
@@ -201,7 +200,6 @@
 
             <!-- Header 3 players -->
             <TextView
-                android:id="@+id/textDateRecordCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
@@ -352,7 +350,6 @@
 
             <!-- Header 4 players -->
             <TextView
-                android:id="@+id/textDateRecordCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"

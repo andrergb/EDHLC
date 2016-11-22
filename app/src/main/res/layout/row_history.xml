@@ -10,9 +10,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="0.6"
-        android:gravity="start"
-        android:paddingEnd="0dp"
-        android:paddingStart="4dp"
+        android:gravity="center"
         android:textSize="18sp"/>
 
     <TextView
