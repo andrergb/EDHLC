@@ -282,7 +282,7 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
         if (!isInAnimation) {
             if (mDrawerLayout.isDrawerOpen(mPlayerDrawer))
                 mDrawerLayout.closeDrawers();
-            else if (currentScene != this.currentSceneOverview)
+            else if (currentScene != this.currentSceneOverview && currentScene != currentSceneInvalid)
                 goToScene(this.currentSceneOverview);
             else
                 super.onBackPressed();
@@ -353,12 +353,10 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
             switch (view.getId()) {
                 //Player 11
                 case R.id.layout11_header:
-//                    if (view.getTag().toString().equalsIgnoreCase(getString(R.string.tag_big)))
-//                        goToScene(this.currentSceneOverview);
-//                    else
-//                        goToScene(this.currentScene11);
-                    currentRotation11 = (container.findViewById(R.id.layout11_card_view).getRotation() + 180f) % 360;
-                    animateRotation(layout11_card_view);
+                    if (view.getTag().toString().equalsIgnoreCase(getString(R.string.tag_big)))
+                        goToScene(this.currentSceneOverview);
+                    else
+                        goToScene(this.currentScene11);
                     break;
                 case R.id.layout11_life:
                     if (view.getTag().toString().equalsIgnoreCase(getString(R.string.tag_big)))
@@ -475,14 +473,10 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
 
                 //Player 12
                 case R.id.layout12_header:
-//                    if (view.getTag().toString().equalsIgnoreCase(getString(R.string.tag_big)))
-//                        goToScene(this.currentSceneOverview);
-//                    else
-//                        goToScene(this.currentScene12);
-                    if (totalPlayers > 2) {
-                        currentRotation12 = (container.findViewById(R.id.layout12_card_view).getRotation() + 180f) % 360;
-                        animateRotation(layout12_card_view);
-                    }
+                    if (view.getTag().toString().equalsIgnoreCase(getString(R.string.tag_big)))
+                        goToScene(this.currentSceneOverview);
+                    else
+                        goToScene(this.currentScene12);
                     break;
                 case R.id.layout12_life:
                     if (view.getTag().toString().equalsIgnoreCase(getString(R.string.tag_big)))
@@ -599,10 +593,10 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
 
                 //Player 21
                 case R.id.layout21_header:
-//                    if (view.getTag().toString().equalsIgnoreCase(getString(R.string.tag_big)))
-//                        goToScene(this.currentSceneOverview);
-//                    else
-//                        goToScene(this.currentScene21);
+                    if (view.getTag().toString().equalsIgnoreCase(getString(R.string.tag_big)))
+                        goToScene(this.currentSceneOverview);
+                    else
+                        goToScene(this.currentScene21);
                     break;
                 case R.id.layout21_life:
                     if (view.getTag().toString().equalsIgnoreCase(getString(R.string.tag_big)))
@@ -719,10 +713,10 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
 
                 //Player 22
                 case R.id.layout22_header:
-//                    if (view.getTag().toString().equalsIgnoreCase(getString(R.string.tag_big)))
-//                        goToScene(this.currentSceneOverview);
-//                    else
-//                        goToScene(this.currentScene22);
+                    if (view.getTag().toString().equalsIgnoreCase(getString(R.string.tag_big)))
+                        goToScene(this.currentSceneOverview);
+                    else
+                        goToScene(this.currentScene22);
                     break;
                 case R.id.layout22_life:
                     if (view.getTag().toString().equalsIgnoreCase(getString(R.string.tag_big)))
@@ -888,8 +882,18 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
     @Override
     public boolean onLongClick(View v) {
         switch (v.getId()) {
+            case R.id.layout11_header:
+                currentRotation11 = (container.findViewById(R.id.layout11_card_view).getRotation() + 180f) % 360;
+                animateRotation(layout11_card_view);
+                return true;
             case R.id.layout11_life:
                 createLifeDialog(v, activePlayer1);
+                return true;
+            case R.id.layout12_header:
+                if (totalPlayers > 2) {
+                    currentRotation12 = (container.findViewById(R.id.layout12_card_view).getRotation() + 180f) % 360;
+                    animateRotation(layout12_card_view);
+                }
                 return true;
             case R.id.layout12_life:
                 createLifeDialog(v, activePlayer2);
@@ -1398,6 +1402,8 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
         layout11_throne.setColorFilter(ContextCompat.getColor(this, R.color.accent_color), PorterDuff.Mode.SRC_IN);
         layout11_name = (TextView) container.findViewById(R.id.layout11_name);
         layout11_deck = (TextView) container.findViewById(R.id.layout11_deck);
+        RelativeLayout layout11_header = (RelativeLayout) container.findViewById(R.id.layout11_header);
+        layout11_header.setOnLongClickListener(this);
         layout11_life = (TextView) container.findViewById(R.id.layout11_life);
         layout11_life.setOnLongClickListener(this);
         layout11_damage = (TextView) container.findViewById(R.id.layout11_splash_plus);
@@ -1449,6 +1455,8 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
         layout12_throne.setColorFilter(ContextCompat.getColor(this, R.color.accent_color), PorterDuff.Mode.SRC_IN);
         layout12_name = (TextView) container.findViewById(R.id.layout12_name);
         layout12_deck = (TextView) container.findViewById(R.id.layout12_deck);
+        RelativeLayout layout12_header = (RelativeLayout) container.findViewById(R.id.layout12_header);
+        layout12_header.setOnLongClickListener(this);
         layout12_life = (TextView) container.findViewById(R.id.layout12_life);
         layout12_life.setOnLongClickListener(this);
         layout12_damage = (TextView) container.findViewById(R.id.layout12_splash_plus);

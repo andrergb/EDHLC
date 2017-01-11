@@ -166,7 +166,7 @@
                 android:layout_columnWeight="1"
                 android:layout_row="0"
                 android:layout_rowSpan="1"
-                android:layout_rowWeight="1"/>
+                android:layout_rowWeight="0.8"/>
 
             <LinearLayout
                 android:id="@+id/layout12_1312"
@@ -177,7 +177,7 @@
                 android:layout_columnWeight="1"
                 android:layout_row="1"
                 android:layout_rowSpan="1"
-                android:layout_rowWeight="1"
+                android:layout_rowWeight="1.4"
                 android:gravity="center">
 
                 <TextView
@@ -202,7 +202,7 @@
                 android:layout_columnWeight="1"
                 android:layout_row="2"
                 android:layout_rowSpan="1"
-                android:layout_rowWeight="1"/>
+                android:layout_rowWeight="0.8"/>
 
             <Space
                 android:id="@+id/layout12_1314"
@@ -213,7 +213,7 @@
                 android:layout_columnWeight="1"
                 android:layout_row="0"
                 android:layout_rowSpan="1"
-                android:layout_rowWeight="1"/>
+                android:layout_rowWeight="0.8"/>
 
             <LinearLayout
                 android:id="@+id/layout12_1315"
@@ -224,7 +224,7 @@
                 android:layout_columnWeight="1"
                 android:layout_row="1"
                 android:layout_rowSpan="1"
-                android:layout_rowWeight="1"
+                android:layout_rowWeight="1.4"
                 android:gravity="center">
 
                 <TextView
@@ -249,7 +249,7 @@
                 android:layout_columnWeight="1"
                 android:layout_row="2"
                 android:layout_rowSpan="1"
-                android:layout_rowWeight="1"/>
+                android:layout_rowWeight="0.8"/>
 
             <Space
                 android:id="@+id/layout12_1317"
@@ -260,7 +260,7 @@
                 android:layout_columnWeight="1"
                 android:layout_row="0"
                 android:layout_rowSpan="1"
-                android:layout_rowWeight="1"/>
+                android:layout_rowWeight="0.8"/>
 
             <LinearLayout
                 android:id="@+id/layout12_1318"
@@ -271,7 +271,7 @@
                 android:layout_columnWeight="1"
                 android:layout_row="1"
                 android:layout_rowSpan="1"
-                android:layout_rowWeight="1"
+                android:layout_rowWeight="1.4"
                 android:gravity="center">
 
                 <TextView
@@ -296,7 +296,7 @@
                 android:layout_columnWeight="1"
                 android:layout_row="2"
                 android:layout_rowSpan="1"
-                android:layout_rowWeight="1"/>
+                android:layout_rowWeight="0.8"/>
         </GridLayout>
 
     </LinearLayout>
