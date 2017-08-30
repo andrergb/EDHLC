@@ -788,7 +788,11 @@ public class DeckActivity extends AppCompatActivity {
 
     private void updateLayout() {
         List<Record> allRecords = recordsDB.getAllRecordsByDeck(mCurrentDeck);
-        List<Record> allFirstRecords = recordsDB.getRecordsByPosition(mPlayerName, 1);
+
+        int allFirstRecords = 0;
+        allFirstRecords = allFirstRecords + recordsDB.getRecordsByPosition(mCurrentDeck, 1, 2).size();
+        allFirstRecords = allFirstRecords + recordsDB.getRecordsByPosition(mCurrentDeck, 1, 3).size();
+        allFirstRecords = allFirstRecords + recordsDB.getRecordsByPosition(mCurrentDeck, 1, 4).size();
 
         //ToolBar - DeckName
         mCollapsingToolbarLayout.setTitle(mDeckName);
@@ -881,7 +885,7 @@ public class DeckActivity extends AppCompatActivity {
         //Deck info - Total Games
         textViewTotalGames.setText(String.format(Locale.US, "%d", allRecords.size()));
         //Deck info - Wins
-        textViewWins.setText(String.format(Locale.US, "%d", allFirstRecords.size()));
+        textViewWins.setText(String.format(Locale.US, "%d", allFirstRecords));
 
 
         //Record card

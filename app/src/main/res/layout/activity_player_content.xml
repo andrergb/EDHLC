@@ -92,7 +92,7 @@
                 app:elevation="@dimen/elevationMiniFAB"
                 app:fabSize="mini"
                 app:layout_behavior="com.android.argb.edhlc.FABScrollBehavior"
-                app:pressedTranslationZ="12dp"/>
+                app:pressedTranslationZ="@dimen/elevationMiniFABPressedTranslationZ"/>
         </LinearLayout>
 
         <!-- FAB edit player -->
@@ -132,7 +132,7 @@
                 app:elevation="@dimen/elevationMiniFAB"
                 app:fabSize="mini"
                 app:layout_behavior="com.android.argb.edhlc.FABScrollBehavior"
-                app:pressedTranslationZ="12dp"/>
+                app:pressedTranslationZ="@dimen/elevationMiniFABPressedTranslationZ"/>
         </LinearLayout>
 
         <!-- FAB delete player -->
@@ -172,7 +172,7 @@
                 app:elevation="@dimen/elevationMiniFAB"
                 app:fabSize="mini"
                 app:layout_behavior="com.android.argb.edhlc.FABScrollBehavior"
-                app:pressedTranslationZ="12dp"/>
+                app:pressedTranslationZ="@dimen/elevationMiniFABPressedTranslationZ"/>
         </LinearLayout>
 
         <android.support.design.widget.FloatingActionButton
@@ -183,11 +183,11 @@
             android:onClick="onClickFabButton"
             android:src="@drawable/icon_add_white"
             app:backgroundTint="@color/accent_color"
-            app:elevation="6dp"
+            app:elevation="@dimen/elevationFAB"
             app:fabSize="normal"
             app:layout_anchor="@id/nestedScrollView"
             app:layout_anchorGravity="bottom|right|end"
             app:layout_behavior="com.android.argb.edhlc.FABScrollBehavior"
-            app:pressedTranslationZ="12dp"/>
+            app:pressedTranslationZ="@dimen/elevationFABPressedTranslationZ"/>
     </android.support.design.widget.CoordinatorLayout>
 </android.support.v4.widget.DrawerLayout>

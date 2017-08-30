@@ -883,7 +883,12 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
     public boolean onLongClick(View v) {
         switch (v.getId()) {
             case R.id.layout11_header:
-                currentRotation11 = (container.findViewById(R.id.layout11_card_view).getRotation() + 180f) % 360;
+                float currentRotation = container.findViewById(R.id.layout11_card_view).getRotation();
+                if (currentRotation == 0 || currentRotation == 90)
+                    currentRotation = (currentRotation + 90f) % 360;
+                else if (currentRotation == 180)
+                    currentRotation = (currentRotation + 180f) % 360;
+                currentRotation11 = currentRotation;
                 animateRotation(layout11_card_view);
                 return true;
             case R.id.layout11_life:
